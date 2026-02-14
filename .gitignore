@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+data/
+cache/
+results/
+checkpoints/
+*.pt
+*.pth
+EOF
