@@ -425,7 +425,7 @@ NUM_CLASSES = 3             # Ransomware, Benign, Other Malware
 LEARNING_RATE = 1e-4
 WEIGHT_DECAY = 1e-5
 BATCH_SIZE = 32
-EPOCHS = 55
+EPOCHS = 70
 MAX_EPOCHS = 100
 
 # Early stopping
