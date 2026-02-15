@@ -459,14 +459,14 @@ PIN_MEMORY = True if DEVICE == 'cuda' else False
 # Focal Loss
 USE_FOCAL_LOSS = True
 FOCAL_GAMMA = 2.0
-FOCAL_ALPHA = [0.40, 0.45, 0.30]  # [Ransomware, Benign, Other Malware]
+FOCAL_ALPHA = [0.40, 0.45, 0.35]  # [Ransomware, Benign, Other Malware]
 
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True
 OVERSAMPLE_WEIGHTS = {
     0: 25.0,   # Ransomware: 35x oversampling
-    1: 64.5,   # Benign: 63x oversampling
-    2: 1.2     # Other Malware: 1.2x oversampling
+    1: 55,   # Benign: 63x oversampling
+    2: 1.1     # Other Malware: 1.2x oversampling
 }
 
 # Class weights for loss function (alternative to Focal Loss)
