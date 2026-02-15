@@ -464,7 +464,7 @@ FOCAL_ALPHA = [0.40, 0.45, 0.30]  # [Ransomware, Benign, Other Malware]
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True
 OVERSAMPLE_WEIGHTS = {
-    0: 34.0,   # Ransomware: 35x oversampling
+    0: 25.0,   # Ransomware: 35x oversampling
     1: 64.5,   # Benign: 63x oversampling
     2: 1.2     # Other Malware: 1.2x oversampling
 }
