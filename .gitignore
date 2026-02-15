@@ -4,8 +4,8 @@ __pycache__/
 *.pyc
 data/
 cache/
-results/
-checkpoints/
+# results/
+# checkpoints/
 enriched_graphs.zip
 *.pt
 *.pth
