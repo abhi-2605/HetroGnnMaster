@@ -435,6 +435,183 @@ def validate(model, loader, criterion, device):
 # MAIN TRAINING LOOP
 # ============================================
 
+# def train():
+#     """Main training function."""
+    
+#     start_time = time.time()
+    
+#     # Device
+#     device = torch.device(config.DEVICE)
+#     print(f"\n{'='*70}")
+#     print(f"Device: {device}")
+    
+#     # Create dataloaders
+#     train_loader, val_loader, test_loader = create_dataloaders(
+#         use_weighted_sampling=config.USE_WEIGHTED_SAMPLING
+#     )
+    
+#     # Create model
+#     model = create_hetero_tgnn()
+#     model = model.to(device)
+    
+#     print(f"\n🚀 Model architecture:")
+#     print(f" API output per layer: {model.api_out_dim_per_layer}")
+#     print(f" Resource output per layer: {model.resource_out_dim_per_layer}")
+#     print(f" LSTM output: {model.lstm_output_dim}")
+#     print(f" Total embedding: {model.total_embedding_dim}")
+#     print(f" Classifier hidden: {model.classifier_hidden_dim}")
+    
+#     # Loss function (Focal Loss)
+#     criterion = FocalLoss(
+#         alpha=config.FOCAL_ALPHA,
+#         gamma=config.FOCAL_GAMMA
+#     )
+    
+#     # Optimizer
+#     optimizer = AdamW(
+#         model.parameters(),
+#         lr=config.LEARNING_RATE,
+#         weight_decay=config.WEIGHT_DECAY
+#     )
+    
+#     # Learning rate scheduler
+#     if config.USE_LR_SCHEDULER:
+#         print(f" Using {config.LR_SCHEDULER_TYPE} scheduler")
+#         if config.LR_SCHEDULER_TYPE == 'ReduceLROnPlateau':
+#             scheduler = ReduceLROnPlateau(
+#                 optimizer,
+#                 mode='max',
+#                 factor=config.LR_SCHEDULER_FACTOR,
+#                 patience=config.LR_SCHEDULER_PATIENCE,
+#                 min_lr=config.LR_MIN,
+#             )
+#         else:
+#             scheduler = None
+#     else:
+#         scheduler = None
+    
+#     # Training state
+#     best_metric = 0.0
+#     patience_counter = 0
+#     history = defaultdict(list)
+    
+#     # Training log file
+#     log_file = config.LOGS_DIR / f"training_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+    
+#     def log(msg):
+#         """Log to console and file."""
+#         print(msg)
+#         with open(log_file, 'a') as f:
+#             f.write(msg + '\n')
+    
+#     log(f"{'='*70}")
+#     log(f"TRAINING START")
+#     log(f"{'='*70}\n")
+    
+#     # Training loop
+#     for epoch in range(1, config.EPOCHS + 1):
+#         log(f"\n{'='*70}")
+#         log(f"Epoch {epoch}/{config.EPOCHS}")
+#         log(f"{'='*70}")
+        
+#         # Warmup
+#         warmup = epoch <= config.WARMUP_EPOCHS
+        
+#         # Train
+#         train_metrics = train_epoch(model, train_loader, criterion, optimizer, device, epoch, warmup=warmup)
+#         log(f"\nTrain Loss: {train_metrics['loss']:.4f}, Macro F1: {train_metrics['macro_f1']:.4f}")
+        
+#         # Validate
+#         val_metrics = validate(model, val_loader, criterion, device)
+#         log(f"Val   Loss: {val_metrics['loss']:.4f}, Macro F1: {val_metrics['macro_f1']:.4f}")
+        
+#         # Log metrics
+#         for key, value in train_metrics.items():
+#             if key != 'confusion_matrix':
+#                 history[f'train_{key}'].append(float(value) if not isinstance(value, np.ndarray) else value.tolist())
+        
+#         for key, value in val_metrics.items():
+#             if key != 'confusion_matrix':
+#                 history[f'val_{key}'].append(float(value) if not isinstance(value, np.ndarray) else value.tolist())
+        
+#         # Learning rate scheduling
+#         if scheduler is not None:
+#             scheduler.step(val_metrics[config.CHECKPOINT_METRIC])
+        
+#         # Checkpoint
+#         current_metric = val_metrics[config.CHECKPOINT_METRIC]
+#         if current_metric > best_metric:
+#             best_metric = current_metric
+#             patience_counter = 0
+            
+#             # Save checkpoint
+#             checkpoint_path = config.CHECKPOINTS_DIR / 'best_model.pt'
+#             torch.save({
+#                 'epoch': epoch,
+#                 'model_state_dict': model.state_dict(),
+#                 'optimizer_state_dict': optimizer.state_dict(),
+#                 'best_metric': best_metric,
+#                 'val_metrics': val_metrics,
+#                 # 'config': {k: v for k, v in vars(config).items() if not k.startswith('__')},
+#             }, checkpoint_path)
+            
+#             log(f"\n✅ New best {config.CHECKPOINT_METRIC}: {current_metric:.4f} (saved)")
+#         else:
+#             patience_counter += 1
+#             log(f"\n⏳ No improvement ({patience_counter}/{config.EARLY_STOPPING_PATIENCE})")
+        
+#         # Check early stopping
+#         if patience_counter > config.EARLY_STOPPING_PATIENCE:
+#             log(f"\n🛑 Early stopping triggered after {epoch} epochs")
+#             break
+    
+#     log(f"\n{'='*70}")
+#     log(f"TRAINING COMPLETE")
+#     log(f"{'='*70}")
+#     log(f"Best {config.CHECKPOINT_METRIC}: {best_metric:.4f}")
+    
+#     # Load best model
+#     checkpoint = torch.load(config.CHECKPOINTS_DIR / 'best_model.pt')
+#     model.load_state_dict(checkpoint['model_state_dict'])
+    
+#     # Final test evaluation
+#     log(f"\n{'='*70}")
+#     log("FINAL TEST EVALUATION")
+#     log(f"{'='*70}\n")
+    
+#     test_metrics = validate(model, test_loader, criterion, device)
+#     print_metrics(test_metrics, split="Test")
+    
+#     # Save history
+#     history_path = config.METRICS_DIR / 'training_history.json'
+#     with open(history_path, 'w') as f:
+#         json.dump(history, f, indent=2)
+    
+#     log(f"\n📊 Training history saved to {history_path}")
+    
+#     # FINAL EVALUATION
+#     total_time = time.time() - start_time
+#     log(f"\n⏱️  Total training time: {total_time / 60:.2f} minutes")
+#     log(f"📁 Best model saved to {config.CHECKPOINTS_DIR / 'best_model.pt'}")
+#     log(f"📝 Training log saved to {log_file}")
+    
+#     return model, history, test_metrics
+
+
+# # ============================================
+# # ENTRY POINT
+# # ============================================
+
+# if __name__ == '__main__':
+#     # Set reproducibility
+#     config.set_seed()
+    
+#     # Train
+#     model, history, test_metrics = train()
+    
+#     print("\n🎉 Training pipeline complete!")
+
+
 def train():
     """Main training function."""
     
@@ -494,6 +671,26 @@ def train():
     best_metric = 0.0
     patience_counter = 0
     history = defaultdict(list)
+
+    # ✅ Resume from existing checkpoint ONCE before epoch 1
+    checkpoint_path = config.CHECKPOINTS_DIR / 'best_model.pt'
+    start_epoch = 1
+
+    if checkpoint_path.exists():
+        checkpoint = torch.load(checkpoint_path, map_location=device,weights_only=False)
+        model.load_state_dict(checkpoint['model_state_dict'])
+
+        # optional but recommended if you want true resume (keeps AdamW momentum, etc.)
+        if 'optimizer_state_dict' in checkpoint:
+            optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+
+        best_metric = float(checkpoint.get('best_metric', 0.0))
+        start_epoch = int(checkpoint.get('epoch', 0)) + 1
+
+        print(f"🔁 Loaded checkpoint: {checkpoint_path}")
+        print(f"✅ Resuming from epoch {start_epoch} | best {config.CHECKPOINT_METRIC}={best_metric:.4f}")
+    else:
+        print("ℹ️ No checkpoint found. Training from scratch.")
     
     # Training log file
     log_file = config.LOGS_DIR / f"training_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
@@ -509,7 +706,7 @@ def train():
     log(f"{'='*70}\n")
     
     # Training loop
-    for epoch in range(1, config.EPOCHS + 1):
+    for epoch in range(start_epoch, config.EPOCHS + 1):
         log(f"\n{'='*70}")
         log(f"Epoch {epoch}/{config.EPOCHS}")
         log(f"{'='*70}")
@@ -598,9 +795,9 @@ def train():
     return model, history, test_metrics
 
 
-# ============================================
-# ENTRY POINT
-# ============================================
+# # ============================================
+# # ENTRY POINT
+# # ============================================
 
 if __name__ == '__main__':
     # Set reproducibility

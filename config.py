@@ -447,9 +447,15 @@ DEVICE = (
     else 'cpu'
 )
 # DataLoader
-NUM_WORKERS = 4
+NUM_WORKERS = 0 # -- was 4
 PIN_MEMORY = True if DEVICE == 'cuda' else False
 
+RESUME_FROM_CHECKPOINT = True  # 🔥 Set to True to resume!
+
+# ═══════════════════════════════════════════════════════════
+# DATALOADER (macOS FIX)
+# ═══════════════════════════════════════════════════════════
+# NUM_WORKERS = 0  # 🔥 MUST be 0 on macOS!
 
 # ============================================
 # CLASS IMBALANCE HANDLING
