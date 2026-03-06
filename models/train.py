@@ -1085,7 +1085,8 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
         # ── MEMORY (3): write new knowledge into memory bank ─────────────────
         model.update_memory(                             # ← MEMORY (3)
             api_indices   = api_indices,
-            node_features = batch_data['api'].x,        # raw 775-dim, before enrichment
+            # node_features = batch_data['api'].x,        # raw 775-dim, before enrichment
+            node_features=batch_data['api'].x.detach(),
             momentum      = config.MEMORY_MOMENTUM,
         )
         # raw_mem_norm = model.memory.norm().item() 
