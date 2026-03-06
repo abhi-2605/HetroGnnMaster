@@ -425,7 +425,7 @@ NUM_CLASSES = 3             # Ransomware, Benign, Other Malware
 LEARNING_RATE = 1e-4
 WEIGHT_DECAY = 1e-5
 BATCH_SIZE = 32
-EPOCHS = 70
+EPOCHS = 100
 MAX_EPOCHS = 100
 
 # Early stopping
@@ -443,7 +443,7 @@ WARMUP_LR = 1e-5
 # Device
 DEVICE = (
     'cuda' if torch.cuda.is_available() 
-    else 'mps' if torch.backends.mps.is_available() 
+    # else 'mps' if torch.backends.mps.is_available() 
     else 'cpu'
 )
 # DataLoader
@@ -499,7 +499,7 @@ LR_MIN = 1e-6                  # Minimum learning rate
 # ============================================
 # ADVANCED TRAINING (OPTIONAL)
 # ============================================
-# Two-Stage Training
+# Two-Stage Training # currently not used
 USE_TWO_STAGE_TRAINING = False
 STAGE1_EPOCHS = 30             # Balanced oversampling
 STAGE2_EPOCHS = 50             # Original distribution
@@ -537,3 +537,12 @@ PREDICTION_THRESHOLDS = {
 # ============================================
 LOG_INTERVAL = 10           # Log every N batches
 SAVE_BEST_ONLY = True       # Only save best validation model
+
+
+# config.py — confirm / add these lines
+MAX_VOCAB_SIZE  = 5000      # already there ✅
+VOCAB_SAVE_PATH = PROJECT_ROOT / "results" / "api_vocabulary.json"  # ADD if missing
+USE_MEMORY    = True
+MEMORY_DIM    = 128
+MEMORY_MOMENTUM = 0.9
+MEMORY_LAMBDA   = 1e-4

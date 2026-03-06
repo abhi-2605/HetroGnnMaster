@@ -36,7 +36,7 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from collections import defaultdict, Counter
 import hashlib
-
+from graph_construction.vocabulary import GLOBAL_API_VOCAB
 try:
     from torch_geometric.data import HeteroData
 except ImportError:
@@ -78,40 +78,40 @@ def safe_str(value: Any, default: str = '') -> str:
 # API VOCABULARY (For embedding lookup)
 # =============================================================================
 
-class APIVocabulary:
-    """
-    Vocabulary for API name to index mapping.
+# class APIVocabulary:
+#     """
+#     Vocabulary for API name to index mapping.
     
-    Used for embedding lookup in the model.
-    """
+#     Used for embedding lookup in the model.
+#     """
     
-    def __init__(self, max_vocab_size: int = MAX_VOCAB_SIZE):
-        self.max_vocab_size = max_vocab_size
-        self.api_to_idx = {'<UNK>': 0, '<PAD>': 1}  # Special tokens
-        self.idx_to_api = {0: '<UNK>', 1: '<PAD>'}
-        self.api_counts = Counter()
-        self.next_idx = 2
+#     def __init__(self, max_vocab_size: int = MAX_VOCAB_SIZE):
+#         self.max_vocab_size = max_vocab_size
+#         self.api_to_idx = {'<UNK>': 0, '<PAD>': 1}  # Special tokens
+#         self.idx_to_api = {0: '<UNK>', 1: '<PAD>'}
+#         self.api_counts = Counter()
+#         self.next_idx = 2
     
-    def add_api(self, api_name: str):
-        """Add API to vocabulary."""
-        self.api_counts[api_name] += 1
+#     def add_api(self, api_name: str):
+#         """Add API to vocabulary."""
+#         self.api_counts[api_name] += 1
         
-        if api_name not in self.api_to_idx and self.next_idx < self.max_vocab_size:
-            self.api_to_idx[api_name] = self.next_idx
-            self.idx_to_api[self.next_idx] = api_name
-            self.next_idx += 1
+#         if api_name not in self.api_to_idx and self.next_idx < self.max_vocab_size:
+#             self.api_to_idx[api_name] = self.next_idx
+#             self.idx_to_api[self.next_idx] = api_name
+#             self.next_idx += 1
     
-    def get_idx(self, api_name: str) -> int:
-        """Get index for API name."""
-        return self.api_to_idx.get(api_name, 0)  # 0 = <UNK>
+#     def get_idx(self, api_name: str) -> int:
+#         """Get index for API name."""
+#         return self.api_to_idx.get(api_name, 0)  # 0 = <UNK>
     
-    def size(self) -> int:
-        """Get vocabulary size."""
-        return len(self.api_to_idx)
+#     def size(self) -> int:
+#         """Get vocabulary size."""
+#         return len(self.api_to_idx)
 
 
-# Global vocabulary (will be populated during first pass)
-GLOBAL_API_VOCAB = APIVocabulary()
+# # Global vocabulary (will be populated during first pass)
+# GLOBAL_API_VOCAB = APIVocabulary()
 
 
 # =============================================================================

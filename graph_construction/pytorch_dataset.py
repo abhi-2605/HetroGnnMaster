@@ -171,7 +171,10 @@ def hetero_collate(batch):
     """Collate function for HeteroData batching with automatic cleanup."""
     graphs = [item[0] for item in batch]
     labels = torch.tensor([item[1] for item in batch], dtype=torch.long)
-    
+    all_api_names = []
+    for graph in graphs:
+        if hasattr(graph['api'], 'api_names'):
+            all_api_names.extend(graph['api'].api_names)
     # Collect timestamps from all graphs
     timestamps_dict = {}
     if len(graphs) > 0:
@@ -249,7 +252,8 @@ def hetero_collate(batch):
     
     # Now batch the graphs
     batched_graph = Batch.from_data_list(graphs)
-    
+    if all_api_names:
+        batched_graph['api'].api_names = all_api_names  # Keep api_names for vocab indexing 
     # ALWAYS attach timestamps_dict (even if empty) to avoid KeyError
     batched_graph.timestamps_dict = timestamps_dict if timestamps_dict else None
     
@@ -392,13 +396,15 @@ def validate_dataset(data_dir: str = 'data', cache_dir: str = 'cache/enriched'):
             num_workers=0
         )
         
-        batch = next(iter(train_loader))
+        # batch = next(iter(train_loader))
+        batch, labels = next(iter(train_loader))
         logger.info(f"\nBatch info:")
         logger.info(f"  Batch size: {batch.num_graphs}")
         logger.info(f"  Type: {type(batch)}")
         logger.info(f"  Node types: {batch.node_types}")
-        logger.info(f"  Labels: {batch.y.tolist()}")
-        logger.info(f"  Class distribution: {[CLASS_NAMES[l] for l in batch.y.tolist()]}")
+
+        logger.info(f"  Labels: {labels.tolist()}")
+        logger.info(f"  Class distribution: {[CLASS_NAMES[l] for l in labels.tolist()]}")
         
         # Show batched node counts
         for node_type in batch.node_types:
