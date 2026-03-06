@@ -1083,12 +1083,13 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
         optimizer.step()
 
         # ── MEMORY (3): write new knowledge into memory bank ─────────────────
-        model.update_memory(                             # ← MEMORY (3)
-            api_indices   = api_indices,
-            # node_features = batch_data['api'].x,        # raw 775-dim, before enrichment
-            node_features=batch_data['api'].x.detach(),
-            momentum      = config.MEMORY_MOMENTUM,
-        )
+        with torch.no_grad(): 
+            model.update_memory(                             # ← MEMORY (3)
+                api_indices   = api_indices,
+                # node_features = batch_data['api'].x,        # raw 775-dim, before enrichment
+                node_features=batch_data['api'].x.detach(),
+                momentum      = config.MEMORY_MOMENTUM,
+            )
         # raw_mem_norm = model.memory.norm().item() 
         # raw_mem_norm = model.memory.memory_bank.norm().item()
         raw_mem_norm = model.memory.memory_bank.weight.norm().item()
@@ -1319,3 +1320,35 @@ if __name__ == '__main__':
     config.set_seed()
     model, history, test_metrics = train()
     print("\n🎉 Training pipeline complete!")
+
+
+
+
+
+
+
+
+
+
+
+
+# Batch arrives
+#      │
+#      ▼
+# Forward pass  ──────────────────────────────────────────────┐
+# (GNN + LSTM + Memory attention)                             │
+#      │                                              gradient path
+#      ▼                                              stays 100% intact
+#   logits                                                    │
+#      │                                                      │
+#   task_loss + mem_reg                                       │
+#      │                                                      │
+#   loss.backward() ◄──────────────────────────────────────── ┘
+#   optimizer.step()
+#      │
+#      ▼
+# update_memory(node_features.detach())   ← VALUES flow in ✅
+#      │                                    GRAD GRAPH stops here ✅
+#      ▼                                    (we don't want/need it here)
+# memory_bank slot updated with
+# new real feature values ✅
