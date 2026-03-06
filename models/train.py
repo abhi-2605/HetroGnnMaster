@@ -1088,14 +1088,15 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
             node_features = batch_data['api'].x,        # raw 775-dim, before enrichment
             momentum      = config.MEMORY_MOMENTUM,
         )
-        raw_mem_norm = model.memory.norm().item() 
+        # raw_mem_norm = model.memory.norm().item() 
+        # raw_mem_norm = model.memory.memory_bank.norm().item()
+        raw_mem_norm = model.memory.memory_bank.weight.norm().item()
+        # print(dict(model.memory.named_parameters()))
         pbar.set_postfix(
-            # 'loss':    f"{task_loss.item():.4f}",
-            # 'mem_reg': f"{mem_reg.item():.6f}",\
-            loss=f"{loss.item():.4f}",
-            mem_reg=f"{mem_reg.item():.2e}",
-            mem_norm=f"{raw_mem_norm:.6f}",   # ← scientific: shows 5.00e-05 instead of 0.0000
-            lr=f"{optimizer.param_groups[0]['lr']:.2e}"
+            loss=f"{task_loss.item():.4f}",
+            mem_reg=f"{mem_reg.item():.1e}",
+            mem_norm=f"{raw_mem_norm:.1e}",
+            lr=f"{optimizer.param_groups[0]['lr']:.1e}"
         )
     
 
