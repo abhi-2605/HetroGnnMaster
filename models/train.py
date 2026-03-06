@@ -1066,7 +1066,7 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
 
         # ── MEMORY (2): add memory regularisation to task loss ────────────────
         task_loss = criterion(logits, labels)
-        mem_reg   = model.memory_loss(lambda_reg=1e-4)   # ← MEMORY (2)
+        mem_reg   = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)   # ← MEMORY (2)
         loss      = task_loss + mem_reg                  # ← MEMORY (2)
 
         total_loss    += task_loss.item()
@@ -1086,7 +1086,7 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
         model.update_memory(                             # ← MEMORY (3)
             api_indices   = api_indices,
             node_features = batch_data['api'].x,        # raw 775-dim, before enrichment
-            momentum      = 0.9,
+            momentum      = config.MEMORY_MOMENTUM,
         )
         raw_mem_norm = model.memory.norm().item() 
         pbar.set_postfix(
@@ -1171,7 +1171,7 @@ def train():
     print(f"\n{'='*70}\nDevice: {device}")
 
     # ── vocab (needed for api_indices) ───────────────────────────────────────
-    vocab = load_vocab("results/api_vocabulary.json")   # ← MEMORY (1)
+    vocab = load_vocab(config.RESULTS_DIR / "api_vocabulary.json")   # ← MEMORY (1)
     print(f"[Train] Vocabulary loaded: {vocab.size()} APIs")
 
     # ── data ─────────────────────────────────────────────────────────────────
