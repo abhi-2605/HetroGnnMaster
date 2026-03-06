@@ -1032,7 +1032,7 @@ def _extract_api_indices(batch_data, vocab, device) -> torch.LongTensor:
 #  train_epoch
 # ══════════════════════════════════════════════════════════════════════════════
 
-def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmup=False):
+def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmup=False, scaler=None):
     """Train for one epoch — with memory write after every optimizer step."""
     model.train()
 
@@ -1055,17 +1055,18 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
         optimizer.zero_grad()
 
         # ── forward ───────────────────────────────────────────────────────────
-        logits = model(
-            x_dict          = batch_data.x_dict,
-            edge_index_dict = batch_data.edge_index_dict,
-            edge_attr_dict  = batch_data.edge_attr_dict,
-            batch_dict      = batch_data.batch_dict,
-            timestamps_dict = timestamps_dict,
-            api_indices     = api_indices,           # ← MEMORY (1)
-        )
+        with torch.amp.autocast(device_type='cuda'):
+            logits = model(
+                x_dict          = batch_data.x_dict,
+                edge_index_dict = batch_data.edge_index_dict,
+                edge_attr_dict  = batch_data.edge_attr_dict,
+                batch_dict      = batch_data.batch_dict,
+                timestamps_dict = timestamps_dict,
+                api_indices     = api_indices,           # ← MEMORY (1)
+            )
+            task_loss = criterion(logits, labels)
 
         # ── MEMORY (2): add memory regularisation to task loss ────────────────
-        task_loss = criterion(logits, labels)
         mem_reg   = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)   # ← MEMORY (2)
         loss      = task_loss + mem_reg                  # ← MEMORY (2)
 
@@ -1077,10 +1078,12 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
         all_labels.extend(labels.cpu().numpy())
 
         # ── backward + clip ───────────────────────────────────────────────────
-        loss.backward()
+        scaler.scale(loss).backward()
+        scaler.unscale_(optimizer)
         if config.GRAD_CLIP > 0:
             torch.nn.utils.clip_grad_norm_(model.parameters(), config.GRAD_CLIP)
-        optimizer.step()
+        scaler.step(optimizer)
+        scaler.update()
 
         # ── MEMORY (3): write new knowledge into memory bank ─────────────────
         with torch.no_grad(): 
@@ -1204,6 +1207,8 @@ def train():
             min_lr=config.LR_MIN,
         )
 
+    scaler = torch.amp.GradScaler()
+
     # ── resume checkpoint ─────────────────────────────────────────────────────
     checkpoint_path = config.CHECKPOINTS_DIR / 'best_model.pt'
     best_metric     = 0.0
@@ -1242,7 +1247,7 @@ def train():
         # train
         train_metrics = train_epoch(
             model, train_loader, criterion, optimizer,
-            vocab, device, epoch, warmup=warmup,       # ← MEMORY: vocab passed
+            vocab, device, epoch, warmup=warmup, scaler=scaler,       # ← MEMORY: vocab passed
         )
         log(f"\nTrain  loss={train_metrics['loss']:.4f}  "
             f"macro_f1={train_metrics['macro_f1']:.4f}  "
