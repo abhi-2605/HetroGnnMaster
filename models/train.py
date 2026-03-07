@@ -1041,7 +1041,6 @@ def _extract_api_indices(batch_data, vocab, device) -> torch.LongTensor:
 # ══════════════════════════════════════════════════════════════════════════════
 
 def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmup=False):
-    """Train for one epoch — with memory write after every optimizer step."""
     model.train()
 
     total_loss    = 0.0
@@ -1049,66 +1048,82 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
     all_preds     = []
     all_labels    = []
 
+    # Bug 1 fix: safe defaults so pbar.set_postfix never hits NameError
+    task_loss_val = 0.0
+    mem_reg_val   = 0.0
+
     pbar = tqdm(loader, desc=f"{'WARMUP ' if warmup else ''}Epoch {epoch}")
 
-    for batch_data, labels in pbar:
+    for batch_idx, (batch_data, labels) in enumerate(pbar):
         labels     = labels.to(device)
         batch_data = batch_data.to(device)
 
-        timestamps_dict = _extract_timestamps(batch_data)
+        batch_skipped = False
 
-        # ── MEMORY (1): build api_indices from API name strings ───────────────
-        api_indices = _extract_api_indices(batch_data, vocab, device)
+        for attempt in range(2):
+            try:
+                timestamps_dict = _extract_timestamps(batch_data)
+                api_indices     = _extract_api_indices(batch_data, vocab, device)
 
-        optimizer.zero_grad(set_to_none=True)
+                optimizer.zero_grad(set_to_none=True)
 
-        # ── forward ───────────────────────────────────────────────────────────
-        logits = model(
-            x_dict          = batch_data.x_dict,
-            edge_index_dict = batch_data.edge_index_dict,
-            edge_attr_dict  = batch_data.edge_attr_dict,
-            batch_dict      = batch_data.batch_dict,
-            timestamps_dict = timestamps_dict,
-            api_indices     = api_indices,           # ← MEMORY (1)
-        )
+                logits = model(
+                    x_dict          = batch_data.x_dict,
+                    edge_index_dict = batch_data.edge_index_dict,
+                    edge_attr_dict  = batch_data.edge_attr_dict,
+                    batch_dict      = batch_data.batch_dict,
+                    timestamps_dict = timestamps_dict,
+                    api_indices     = api_indices,
+                )
 
-        # ── MEMORY (2): add memory regularisation to task loss ────────────────
-        task_loss = criterion(logits, labels)
-        mem_reg   = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)   # ← MEMORY (2)
-        loss      = task_loss + mem_reg                  # ← MEMORY (2)
+                task_loss = criterion(logits, labels)
+                mem_reg   = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)
+                loss      = task_loss + mem_reg
 
-        total_loss    += task_loss.item()
-        total_mem_reg += mem_reg.item()
+                loss.backward()
+                if config.GRAD_CLIP > 0:
+                    torch.nn.utils.clip_grad_norm_(model.parameters(), config.GRAD_CLIP)
+                optimizer.step()
 
-        preds = logits.argmax(dim=1).cpu().numpy()
-        all_preds.extend(preds)
-        all_labels.extend(labels.cpu().numpy())
+                # Bug 3 fix: accumulate ONLY after full forward+backward succeeds
+                task_loss_val  = task_loss.item()
+                mem_reg_val    = mem_reg.item()
+                total_loss    += task_loss_val
+                total_mem_reg += mem_reg_val
 
-        # ── backward + clip ───────────────────────────────────────────────────
-        loss.backward()
-        if config.GRAD_CLIP > 0:
-            torch.nn.utils.clip_grad_norm_(model.parameters(), config.GRAD_CLIP)
-        optimizer.step()
+                preds = logits.argmax(dim=1).cpu().numpy()
+                all_preds.extend(preds)
+                all_labels.extend(labels.cpu().numpy())
 
-        # ── MEMORY (3): write new knowledge into memory bank ─────────────────
-        with torch.no_grad(): 
-            model.update_memory(                             # ← MEMORY (3)
-                api_indices   = api_indices,
-                # node_features = batch_data['api'].x,        # raw 775-dim, before enrichment
-                node_features=batch_data['api'].x.detach(),
-                momentum      = config.MEMORY_MOMENTUM,
+                with torch.no_grad():
+                    model.update_memory(
+                        api_indices   = api_indices,
+                        node_features = batch_data['api'].x.detach(),
+                        momentum      = config.MEMORY_MOMENTUM,
+                    )
+                break  # IF success THEN it moves out to next batch
+
+            except torch.cuda.OutOfMemoryError:
+                optimizer.zero_grad(set_to_none=True)
+                torch.cuda.empty_cache()   # Bug 2 fix: inline — no cleanup_cuda()
+                gc.collect()
+                if attempt == 0:
+                    print(f"⚠️  OOM batch {batch_idx} — cleared cache, retrying...")
+                else:
+                    print(f"❌  OOM batch {batch_idx} — retry failed, skipping.")
+                    batch_skipped = True
+                    break
+
+        # Bug 1 + Bug 4 fix: only update postfix on successful batches
+        if not batch_skipped:
+            pbar.set_postfix(
+                loss    = f"{task_loss_val:.4f}",
+                mem_reg = f"{mem_reg_val:.1e}",
+                lr      = f"{optimizer.param_groups[0]['lr']:.1e}",
             )
-        # raw_mem_norm = model.memory.norm().item() 
-        # raw_mem_norm = model.memory.memory_bank.norm().item()
-        # raw_mem_norm = model.memory.memory_bank.weight.norm().item()
-        # print(dict(model.memory.named_parameters()))
-        pbar.set_postfix(
-            loss=f"{task_loss.item():.4f}",
-            mem_reg=f"{mem_reg.item():.1e}",
-            # mem_norm=f"{raw_mem_norm:.1e}",
-            lr=f"{optimizer.param_groups[0]['lr']:.1e}"
-        )
-    
+
+        if batch_idx % 10 == 0:
+            torch.cuda.empty_cache()
 
     avg_loss    = total_loss    / len(loader)
     avg_mem_reg = total_mem_reg / len(loader)
@@ -1117,6 +1132,7 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
     metrics['mem_reg'] = avg_mem_reg
 
     return metrics
+
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -1222,6 +1238,8 @@ def train():
         model.load_state_dict(ckpt['model_state_dict'])
         if 'optimizer_state_dict' in ckpt:
             optimizer.load_state_dict(ckpt['optimizer_state_dict'])
+        if 'scheduler_state_dict' in ckpt:
+            scheduler.load_state_dict(ckpt['scheduler_state_dict'])
         best_metric = float(ckpt.get('best_metric', 0.0))
         start_epoch = int(ckpt.get('epoch', 0)) + 1
         print(f"🔁 Checkpoint loaded — resuming epoch {start_epoch} "
@@ -1286,6 +1304,7 @@ def train():
                 'epoch':                epoch,
                 'model_state_dict':     model.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
+                'scheduler_state_dict': scheduler.state_dict(),
                 'best_metric':          best_metric,
                 'val_metrics':          val_metrics,
             }, checkpoint_path)
