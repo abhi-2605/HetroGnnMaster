@@ -843,7 +843,7 @@ warnings.filterwarnings('ignore')
 
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.append(str(PROJECT_ROOT))
-
+import gc
 import config
 from models.tgnn_model import create_hetero_tgnn
 from models.memory_utils import get_api_indices                  # ← MEMORY (1)
@@ -874,6 +874,9 @@ class FocalLoss(nn.Module):
             self.alpha = torch.tensor(alpha) if isinstance(alpha, list) else alpha
         else:
             self.alpha = None
+    import gc
+
+    
 
     def forward(self, inputs, targets):
         probs      = F.softmax(inputs, dim=1)
@@ -894,7 +897,12 @@ class FocalLoss(nn.Module):
 # ══════════════════════════════════════════════════════════════════════════════
 #  Metrics
 # ══════════════════════════════════════════════════════════════════════════════
-
+def cleanup_cuda():
+        """Free Python refs + unused CUDA cached memory."""
+        gc.collect()
+        if torch.cuda.is_available():
+            torch.cuda.reset_peak_memory_stats()
+            torch.cuda.empty_cache()
 def compute_metrics(predictions, labels):
     acc = accuracy_score(labels, predictions)
     precision, recall, f1, support = precision_recall_fscore_support(
@@ -1052,7 +1060,7 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
         # ── MEMORY (1): build api_indices from API name strings ───────────────
         api_indices = _extract_api_indices(batch_data, vocab, device)
 
-        optimizer.zero_grad()
+        optimizer.zero_grad(set_to_none=True)
 
         # ── forward ───────────────────────────────────────────────────────────
         logits = model(
@@ -1092,12 +1100,12 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
             )
         # raw_mem_norm = model.memory.norm().item() 
         # raw_mem_norm = model.memory.memory_bank.norm().item()
-        raw_mem_norm = model.memory.memory_bank.weight.norm().item()
+        # raw_mem_norm = model.memory.memory_bank.weight.norm().item()
         # print(dict(model.memory.named_parameters()))
         pbar.set_postfix(
             loss=f"{task_loss.item():.4f}",
             mem_reg=f"{mem_reg.item():.1e}",
-            mem_norm=f"{raw_mem_norm:.1e}",
+            # mem_norm=f"{raw_mem_norm:.1e}",
             lr=f"{optimizer.param_groups[0]['lr']:.1e}"
         )
     
@@ -1282,14 +1290,17 @@ def train():
                 'val_metrics':          val_metrics,
             }, checkpoint_path)
             log(f"\n✅ New best {config.CHECKPOINT_METRIC}: {current:.4f} (saved)")
+            
         else:
             patience_counter += 1
             log(f"\n⏳ No improvement ({patience_counter}/{config.EARLY_STOPPING_PATIENCE})")
+        cleanup_cuda()
 
         if patience_counter > config.EARLY_STOPPING_PATIENCE:
             log(f"\n🛑 Early stopping at epoch {epoch}")
             break
-
+        
+    
     # ── final test eval ───────────────────────────────────────────────────────
     log(f"\n{'='*70}\nTRAINING COMPLETE\nBest {config.CHECKPOINT_METRIC}: {best_metric:.4f}")
 
