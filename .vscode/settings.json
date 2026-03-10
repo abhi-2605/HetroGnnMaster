@@ -1,0 +1,6 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "git rev-parse": true,
+        "/Volumes/SSD/TGNN/ransomware_tgnn/venv/bin/python": true
+    }
+}

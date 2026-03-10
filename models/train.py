@@ -1297,7 +1297,13 @@ def train():
 
         # checkpoint
         current = val_metrics[config.CHECKPOINT_METRIC]
-        if current > best_metric:
+        ransomware_recall = val_metrics['per_class_recall'][0]
+        benign_recall     = val_metrics['per_class_recall'][1]
+        recall_floors = (
+            ransomware_recall >= config.MIN_RANSOMWARE_RECALL *.80 and
+            benign_recall     >= config.MIN_BENIGN_RECALL     *.60
+        )
+        if current > best_metric and recall_floors:   # ← MEMORY: only save if recall floors are met
             best_metric      = current
             patience_counter = 0
             torch.save({
@@ -1308,8 +1314,14 @@ def train():
                 'best_metric':          best_metric,
                 'val_metrics':          val_metrics,
             }, checkpoint_path)
-            log(f"\n✅ New best {config.CHECKPOINT_METRIC}: {current:.4f} (saved)")
+            log(f"New best {config.CHECKPOINT_METRIC}: {current:.4f} "
+        f"| Ransom recall: {ransomware_recall:.3f} "
+        f"| Benign recall: {benign_recall:.3f} — saved")
             
+        elif current > best_metric and not recall_floors:
+            patience_counter += 1
+            log(f"⚠️  macro_f1={current:.4f} but recall floors NOT met "
+            f"(ransom={ransomware_recall:.3f}, benign={benign_recall:.3f}) — skipped")
         else:
             patience_counter += 1
             log(f"\n⏳ No improvement ({patience_counter}/{config.EARLY_STOPPING_PATIENCE})")
