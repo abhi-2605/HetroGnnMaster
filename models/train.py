@@ -31,7 +31,6 @@ from tqdm import tqdm
 from collections import defaultdict
 import warnings
 warnings.filterwarnings('ignore')
-
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.append(str(PROJECT_ROOT))
 import gc
@@ -65,7 +64,7 @@ class FocalLoss(nn.Module):
             self.alpha = torch.tensor(alpha) if isinstance(alpha, list) else alpha
         else:
             self.alpha = None
-    import gc
+    
 
     
 
