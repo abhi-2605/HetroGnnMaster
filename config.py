@@ -156,8 +156,7 @@ DEVICE = (
 NUM_WORKERS = 0 # -- was 4
 PIN_MEMORY = True if DEVICE == 'cuda' else False
 
-RESUME_FROM_CHECKPOINT = True  # 🔥 Set to True to resume!
-
+RESUME_FROM_CHECKPOINT = True  
 # ═══════════════════════════════════════════════════════════
 # DATALOADER (macOS FIX)
 # ═══════════════════════════════════════════════════════════
@@ -252,3 +251,7 @@ USE_MEMORY    = True
 MEMORY_DIM    = 128
 MEMORY_MOMENTUM = 0.9
 MEMORY_LAMBDA   = 1e-4
+
+USE_EMA    = True
+EMA_DECAY  = 0.999
+OOM_ABORT_THRESHOLD = 12
