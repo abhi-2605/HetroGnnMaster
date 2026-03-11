@@ -298,15 +298,18 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
 
             except torch.cuda.OutOfMemoryError:
                 optimizer.zero_grad(set_to_none=True)
-                torch.cuda.empty_cache()   # Bug 2 fix: inline — no cleanup_cuda()
+                torch.cuda.empty_cache()
                 gc.collect()
                 oom_skip_count += 1
+
+                if oom_skip_count > config.OOM_ABORT_THRESHOLD:
+                    print(f"⛔ Epoch {epoch} aborted — {oom_skip_count} OOM skips")
+                    return None
+
                 if attempt == 0:
                     print(f"⚠️  OOM batch {batch_idx} — cleared cache, retrying...")
-                if oom_skip_count > config.OOM_ABORT_THRESHOLD:
-                    print(f"⛔ Epoch {epoch} aborted — {oom_skip_count} OOM skips, restoring checkpoint")
-                    return None
-                else:
+                    # NO break here — falls through to attempt=1
+                else:  # attempt == 1, retry also OOM'd
                     print(f"❌  OOM batch {batch_idx} — retry failed, skipping.")
                     batch_skipped = True
                     break
