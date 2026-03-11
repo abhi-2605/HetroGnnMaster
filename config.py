@@ -196,7 +196,7 @@ CLASS_WEIGHTS = {k: v/total for k, v in CLASS_WEIGHTS.items()}
 # ============================================
 USE_LR_SCHEDULER = True
 LR_SCHEDULER_TYPE = 'ReduceLROnPlateau'
-LR_SCHEDULER_PATIENCE = 7      # Reduce LR if no improvement for 7 epochs
+LR_SCHEDULER_PATIENCE = 5      # Reduce LR if no improvement for 5 epochs
 LR_SCHEDULER_FACTOR = 0.5      # LR = LR * 0.5
 LR_MIN = 1e-6                  # Minimum learning rate
 
