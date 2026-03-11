@@ -303,7 +303,7 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
                 oom_skip_count += 1
                 if attempt == 0:
                     print(f"⚠️  OOM batch {batch_idx} — cleared cache, retrying...")
-                if oom_skip_count > config.OOM_SKIP_THRESHOLD:
+                if oom_skip_count > config.OOM_ABORT_THRESHOLD:
                     print(f"⛔ Epoch {epoch} aborted — {oom_skip_count} OOM skips, restoring checkpoint")
                     return None
                 else:
