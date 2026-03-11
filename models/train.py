@@ -20,7 +20,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader, WeightedRandomSampler
 from torch.optim import AdamW
 from torch.optim.lr_scheduler import ReduceLROnPlateau
-from torch.optim.swa_utils import AveragedModel, get_ema_multi_avg_fn
+# from torch.optim.swa_utils import AveragedModel, get_ema_multi_avg_fn
 import numpy as np
 from pathlib import Path
 import sys
@@ -231,7 +231,7 @@ def _extract_api_indices(batch_data, vocab, device) -> torch.LongTensor:
 #  train_epoch
 # ══════════════════════════════════════════════════════════════════════════════
 
-def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmup=False,ema_model=None):
+def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmup=False):
     model.train()
     oom_skip_count = 0
     total_loss    = 0.0
@@ -275,8 +275,8 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
                 if config.GRAD_CLIP > 0:
                     torch.nn.utils.clip_grad_norm_(model.parameters(), config.GRAD_CLIP)
                 optimizer.step()
-                if ema_model is not None:
-                        ema_model.update_parameters(model)
+                # if ema_model is not None:
+                #         ema_model.update_parameters(model)
 
                 # Bug 3 fix: accumulate ONLY after full forward+backward succeeds
                 task_loss_val  = task_loss.item()
@@ -408,9 +408,9 @@ def train():
 
     # ── model ─────────────────────────────────────────────────────────────────
     model = create_hetero_tgnn(use_memory=True).to(device)
-    ema_model = None
-    if config.USE_EMA:
-        ema_model=  AveragedModel(model, multi_avg_fn=get_ema_multi_avg_fn(config.EMA_DECAY))
+    # ema_model = None
+    # if config.USE_EMA:
+    #     ema_model=  AveragedModel(model, multi_avg_fn=get_ema_multi_avg_fn(config.EMA_DECAY))
     print(f"\n🚀 Model architecture:")
     print(f"  API output per layer   : {model.api_out_dim_per_layer}")
     print(f"  Resource output / layer: {model.resource_out_dim_per_layer}")
@@ -443,12 +443,12 @@ def train():
             optimizer.load_state_dict(ckpt['optimizer_state_dict'])
         if 'scheduler_state_dict' in ckpt:
             scheduler.load_state_dict(ckpt['scheduler_state_dict'])
-        if config.USE_EMA and ema_model is not None:
-            if 'ema_state_dict' in ckpt and ckpt['ema_state_dict'] is not None:
-                ema_model.load_state_dict(ckpt['ema_state_dict'])
-                print("✅ EMA shadow loaded from checkpoint")
-            else:
-                print("ℹ️  No EMA state found — initialising shadow from current weights")
+        # if config.USE_EMA and ema_model is not None:
+        #     if 'ema_state_dict' in ckpt and ckpt['ema_state_dict'] is not None:
+        #         ema_model.load_state_dict(ckpt['ema_state_dict'])
+        #         print("✅ EMA shadow loaded from checkpoint")
+        #     else:
+        #         print("ℹ️  No EMA state found — initialising shadow from current weights")
 
         best_metric = float(ckpt.get('best_metric', 0.0))
         start_epoch = int(ckpt.get('epoch', 0)) + 1
@@ -478,14 +478,12 @@ def train():
         # train
         train_metrics = train_epoch(
             model, train_loader, criterion, optimizer,
-            vocab, device, epoch, warmup=warmup,  ema_model=ema_model     # ← MEMORY: vocab passed
+            vocab, device, epoch, warmup=warmup # ← MEMORY: vocab passed
         )
         if train_metrics is None:
             print("⚠️  Epoch aborted — reloading weights from last good checkpoint")
             ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
             model.load_state_dict(ckpt['model_state_dict'])
-            if config.USE_EMA and ema_model is not None and 'ema_state_dict' in ckpt and ckpt['ema_state_dict'] is not None:
-                ema_model.load_state_dict(ckpt['ema_state_dict'])
             continue  # skip to next epoch without validating or checkpointing
 
         log(f"\nTrain  loss={train_metrics['loss']:.4f}  "
@@ -494,8 +492,8 @@ def train():
         
 
         # validate (no memory write)
-        eval_model = ema_model if (config.USE_EMA and ema_model is not None) else model
-        val_metrics = validate(eval_model, val_loader, criterion, vocab, device)
+
+        val_metrics = validate(model, val_loader, criterion, vocab, device)
         log(f"Val    loss={val_metrics['loss']:.4f}  "
             f"macro_f1={val_metrics['macro_f1']:.4f}")
 
@@ -529,7 +527,6 @@ def train():
             torch.save({
                 'epoch':                epoch,
                 'model_state_dict':     model.state_dict(),
-                'ema_state_dict':       ema_model.state_dict() if ema_model is not None else None,
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
                 'best_metric':          best_metric,
