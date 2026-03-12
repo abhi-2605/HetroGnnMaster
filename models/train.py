@@ -514,10 +514,10 @@ def train():
 
         # checkpoint
         current = val_metrics[config.CHECKPOINT_METRIC]
-        ransomware_recall = val_metrics['per_class_recall'][0]
+        malware_recall = val_metrics['per_class_recall'][0]
         benign_recall     = val_metrics['per_class_recall'][1]
         recall_floors = (
-            ransomware_recall >= config.MIN_RANSOMWARE_RECALL *.80 and
+            malware_recall >= config.MIN_MALWARE_RECALL *.80 and
             benign_recall     >= config.MIN_BENIGN_RECALL     *.58
         )
         if current > best_metric and recall_floors:   # ← MEMORY: only save if recall floors are met
@@ -532,13 +532,13 @@ def train():
                 'val_metrics':          val_metrics,
             }, checkpoint_path)
             log(f"New best {config.CHECKPOINT_METRIC}: {current:.4f} "
-        f"| Ransom recall: {ransomware_recall:.3f} "
+        f"| Malware recall: {malware_recall:.3f} "
         f"| Benign recall: {benign_recall:.3f} — saved")
             
         elif current > best_metric and not recall_floors:
-            patience_counter += 1
+            # patience_counter += 1
             log(f"⚠️  macro_f1={current:.4f} but recall floors NOT met "
-            f"(ransom={ransomware_recall:.3f}, benign={benign_recall:.3f}) — skipped")
+            f"(malware={malware_recall:.3f}, benign={benign_recall:.3f}) — skipped")
         else:
             patience_counter += 1
             log(f"\n⏳ No improvement ({patience_counter}/{config.EARLY_STOPPING_PATIENCE})")

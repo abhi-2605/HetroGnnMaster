@@ -121,7 +121,7 @@ LSTM_DROPOUT = 0.2          # LSTM dropout
 TEMPORAL_HEADS = 6          # Multi-head attention (temporal)
 
 # Output
-NUM_CLASSES = 3             # Ransomware, Benign, Other Malware
+NUM_CLASSES = 2             # Ransomware, Benign, Other Malware
 
 
 # ============================================
@@ -169,26 +169,29 @@ RESUME_FROM_CHECKPOINT = True
 
 # Focal Loss
 USE_FOCAL_LOSS = True
-FOCAL_GAMMA = 3.2
-FOCAL_ALPHA = [0.45, 0.35, 0.20]  # [Ransomware, Benign, Other Malware]
+FOCAL_GAMMA = 2.2
+# FOCAL_ALPHA = [0.45, 0.35, 0.20]  # [Ransomware, Benign, Other Malware]
+FOCAL_ALPHA = [0.40, 0.60]
 
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True
+# OVERSAMPLE_WEIGHTS = {
+#     0: 20.0,   # Ransomware: 35x oversampling
+#     1: 30.0,   # Benign: 63x oversampling
+#     2: 1.0    # Other Malware: 1.2x oversampling
+# }
 OVERSAMPLE_WEIGHTS = {
-    0: 20.0,   # Ransomware: 35x oversampling
-    1: 30.0,   # Benign: 63x oversampling
-    2: 1.0    # Other Malware: 1.2x oversampling
+    0: 1.0,    # Malware (majority)
+    1: 66.0,   # Benign (4529 / 68 ≈ 66)
 }
-
 # Class weights for loss function (alternative to Focal Loss)
+Malware = 4529, Benign = 68
 CLASS_WEIGHTS = {
-    0: 1.0 / (173 ** 0.5),   # Ransomware: ~0.076
-    1: 1.0 / (68 ** 0.5),    # Benign: ~0.121
-    2: 1.0 / (4356 ** 0.5),  # Other: ~0.015
+    0: 1.0 / (4529 ** 0.5),
+    1: 1.0 / (68   ** 0.5),
 }
-# Normalize
 total = sum(CLASS_WEIGHTS.values())
-CLASS_WEIGHTS = {k: v/total for k, v in CLASS_WEIGHTS.items()}
+CLASS_WEIGHTS = {k: v / total for k, v in CLASS_WEIGHTS.items()}
 
 
 # ============================================
@@ -219,22 +222,21 @@ METRICS = ['accuracy', 'precision', 'recall', 'f1', 'confusion_matrix', 'roc_auc
 
 # Class names
 CLASS_NAMES = {
-    0: 'Ransomware',
+    0: 'Malware',   # ransomware + other malware
     1: 'Benign',
-    2: 'Other Malwares'
 }
 
 # Minimum acceptable metrics (for validation)
-MIN_RANSOMWARE_RECALL = 0.95   # Never miss ransomware
-MIN_BENIGN_RECALL = 0.90       # High recall for benign
-MIN_RANSOMWARE_PRECISION = 0.70  # Alert if too many false positives
+MIN_MALWARE_RECALL    = 0.90
+MIN_BENIGN_RECALL     = 0.90
+MIN_MALWARE_PRECISION = 0.85  # Alert if too many false positives
 
 # Confidence thresholds (post-training adjustment)
 PREDICTION_THRESHOLDS = {
-    0: 0.3,  # Ransomware: lower threshold (more sensitive)
-    1: 0.4,  # Benign
-    2: 0.5   # Other Malware
+    0: 0.35,   # Malware  — slightly sensitive
+    1: 0.65,   # Benign   — be sure before calling benign
 }
+
 
 
 # ============================================

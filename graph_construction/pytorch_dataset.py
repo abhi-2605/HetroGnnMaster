@@ -18,15 +18,16 @@ import pandas as pd
 from pathlib import Path
 from typing import List, Tuple, Optional, Dict
 import logging
+import copy
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 CLASS_NAMES = {
-    0: 'Ransomware',
+    0: 'Malware',
     1: 'Benign',
-    2: 'Other Malware'
 }
+
 
 
 class RansomwareGraphDataset(Dataset):
@@ -79,12 +80,11 @@ class RansomwareGraphDataset(Dataset):
             hash_id = row['md5']
             category_names = str(row['all_category_names']).lower()
             
-            if 'ransomware' in category_names:
-                label = 0  # Ransomware
-            elif 'benign' in category_names:
-                label = 1  # Benign
+            if 'benign' in category_names:
+                label = 1   # Benign
             else:
-                label = 2  # Other malware
+                label = 0   # Malware (ransomware + all other malware)
+
             
             labels[hash_id] = label
         
@@ -98,7 +98,7 @@ class RansomwareGraphDataset(Dataset):
                 split_labels.append(labels[hash_id])
         
         logger.info(f"  {self.split} split:")
-        logger.info(f"    - Ransomware: {sum(1 for l in split_labels if l == 0)}")
+        logger.info(f"    - Malware: {sum(1 for l in split_labels if l == 0)}")
         logger.info(f"    - Benign: {sum(1 for l in split_labels if l == 1)}")
         logger.info(f"    - Other malware: {sum(1 for l in split_labels if l == 2)}")
         
@@ -131,9 +131,37 @@ class RansomwareGraphDataset(Dataset):
         else:
             logger.warning(f"No label found for {hash_id}, defaulting to 2")
             label = 2
-        
+        if self.split == 'train' and label == 1:
+            data = self._augment_graph(data)
         # Return graph and label separately
         return data, label
+    
+    def _augment_graph(self,  data) -> HeteroData:
+        """Augment a benign graph to prevent memorisation from oversampling."""
+        
+        data = copy.deepcopy(data)   # don't mutate the cached graph
+
+        # 1. Gaussian noise on all node features
+        for node_type in data.node_types:
+            if hasattr(data[node_type], 'x') and data[node_type].x is not None:
+                data[node_type].x = data[node_type].x + \
+                    torch.randn_like(data[node_type].x) * 0.01
+
+        # 2. Random edge drop ~10% per edge type
+        for edge_type in data.edge_types:
+            ei = data[edge_type].edge_index
+            if ei is None or ei.size(1) == 0:
+                continue
+            mask = torch.rand(ei.size(1)) > 0.10   # keep 90%
+            data[edge_type].edge_index = ei[:, mask]
+            if hasattr(data[edge_type], 'edge_attr') and \
+                    data[edge_type].edge_attr is not None:
+                data[edge_type].edge_attr = data[edge_type].edge_attr[mask]
+
+        return data
+
+    
+
     
     def get_statistics(self) -> dict:
         """Get dataset statistics for HeteroData."""
@@ -341,81 +369,195 @@ def create_dataloaders(
 
 
 def validate_dataset(data_dir: str = 'data', cache_dir: str = 'cache/enriched'):
-    """Validate HeteroData graphs."""
+    """Validate HeteroData graphs — tests all recent changes."""
+    import copy
+
     logger.info("\n" + "="*70)
-    logger.info("Temporal HeteroData Graph Validation")
+    logger.info("Temporal HeteroData Graph Validation (Full Change Test)")
     logger.info("="*70)
-    
+
+    all_passed = True
+
     try:
         train_dataset = RansomwareGraphDataset(data_dir, 'train', cache_dir)
-        val_dataset = RansomwareGraphDataset(data_dir, 'val', cache_dir)
-        test_dataset = RansomwareGraphDataset(data_dir, 'test', cache_dir)
-        
+        val_dataset   = RansomwareGraphDataset(data_dir, 'val',   cache_dir)
+        test_dataset  = RansomwareGraphDataset(data_dir, 'test',  cache_dir)
+
+        # ── TEST 1: 2-Class Labels Only (no class 2 anywhere) ──────────────
+        logger.info("\n" + "="*50)
+        logger.info("TEST 1: 2-Class Label Verification")
+        logger.info("="*50)
         for dataset in [train_dataset, val_dataset, test_dataset]:
-            logger.info(f"\n{'='*50}")
-            logger.info(f"Validating {dataset.split.upper()} split")
-            logger.info('='*50)
-            
+            all_labels = [dataset.labels[dataset.graph_files[i].stem]
+                          for i in range(len(dataset))
+                          if dataset.graph_files[i].stem in dataset.labels]
+            unique = set(all_labels)
+            has_class2 = 2 in unique
+            status = "❌ FAIL — class 2 found!" if has_class2 else "✅ PASS"
+            logger.info(f"  [{dataset.split.upper()}] Labels present: {unique} → {status}")
+            if has_class2:
+                all_passed = False
+
+        # ── TEST 2: Dataset Stats per Split ────────────────────────────────
+        logger.info("\n" + "="*50)
+        logger.info("TEST 2: Dataset Split Statistics")
+        logger.info("="*50)
+        for dataset in [train_dataset, val_dataset, test_dataset]:
             stats = dataset.get_statistics()
-            logger.info(f"Graphs: {stats['num_graphs']}")
-            logger.info(f"Ransomware: {stats['num_ransomware']}")
-            logger.info(f"Benign: {stats['num_benign']}")
-            logger.info(f"Other malware: {stats['num_other_malware']}")
-            
-            # Inspect first 2 samples
-            for i in range(min(2, len(dataset))):
-                data, label = dataset[i]
-                
-                logger.info(f"\n  Sample {i+1}: {CLASS_NAMES[label]}")
-                logger.info(f"    Node types: {data.node_types}")
-                logger.info(f"    Edge types: {len(data.edge_types)} types")
-                
-                # Show node counts
-                for node_type in data.node_types:
-                    if hasattr(data[node_type], 'x'):
-                        logger.info(f"      {node_type}: {data[node_type].x.shape[0]} nodes, {data[node_type].x.shape[1]}-dim")
-                
-                # Show temporal edges
-                for edge_type in data.edge_types:
-                    if 'temporal' in edge_type[1]:
-                        num_edges = data[edge_type].edge_index.shape[1]
-                        logger.info(f"      Temporal edges: {num_edges}")
-                        if hasattr(data[edge_type], 'edge_attr'):
-                            logger.info(f"        Edge features: {data[edge_type].edge_attr.shape[1]}-dim")
-                        break
-        
-        # Test DataLoader batching
-        logger.info("\n" + "="*70)
-        logger.info("Testing HeteroData Batching")
-        logger.info("="*70)
-        
+            logger.info(f"\n  {dataset.split.upper()} split:")
+            logger.info(f"    Total graphs  : {stats['num_graphs']}")
+            logger.info(f"    Malware (0)   : {stats['num_ransomware']}")
+            logger.info(f"    Benign  (1)   : {stats['num_benign']}")
+            logger.info(f"    Other   (2)   : {stats['num_other_malware']}  ← should be 0")
+            if stats['num_other_malware'] > 0:
+                logger.warning("  ❌ FAIL — other_malware count > 0")
+                all_passed = False
+            else:
+                logger.info("  ✅ PASS — no class-2 samples")
+
+        # ── TEST 3: Augmentation ONLY fires on train+benign ────────────────
+        logger.info("\n" + "="*50)
+        logger.info("TEST 3: Augmentation Guard (train+benign only)")
+        logger.info("="*50)
+
+        # Find a benign sample in train
+        benign_train_idx = next(
+            (i for i in range(len(train_dataset))
+             if train_dataset.labels.get(train_dataset.graph_files[i].stem) == 1),
+            None
+        )
+        # Find a malware sample in train
+        malware_train_idx = next(
+            (i for i in range(len(train_dataset))
+             if train_dataset.labels.get(train_dataset.graph_files[i].stem) == 0),
+            None
+        )
+        # Find a benign sample in val
+        benign_val_idx = next(
+            (i for i in range(len(val_dataset))
+             if val_dataset.labels.get(val_dataset.graph_files[i].stem) == 1),
+            None
+        )
+
+        # 3a — train benign: data SHOULD differ from raw pkl each call
+        if benign_train_idx is not None:
+            raw_path = train_dataset.graph_files[benign_train_idx]
+            with open(raw_path, 'rb') as f:
+                raw = pickle.load(f)
+
+            aug1, _ = train_dataset[benign_train_idx]
+            aug2, _ = train_dataset[benign_train_idx]
+
+            # Check augmented vs raw differs
+            node_type = raw.node_types[0]
+            raw_x   = raw[node_type].x
+            aug1_x  = aug1[node_type].x
+            aug2_x  = aug2[node_type].x
+
+            differs_from_raw   = not torch.allclose(raw_x, aug1_x)
+            two_calls_differ   = not torch.allclose(aug1_x, aug2_x)
+
+            logger.info(f"  Train benign augmented vs raw    : {'✅ PASS (different)' if differs_from_raw else '❌ FAIL (identical)'}")
+            logger.info(f"  Two train benign calls differ    : {'✅ PASS (stochastic)' if two_calls_differ else '❌ FAIL (same every time)'}")
+            if not differs_from_raw or not two_calls_differ:
+                all_passed = False
+        else:
+            logger.warning("  ⚠️  No benign sample found in train split — skipping 3a")
+
+        # 3b — train malware: data should be IDENTICAL to raw pkl
+        if malware_train_idx is not None:
+            raw_path = train_dataset.graph_files[malware_train_idx]
+            with open(raw_path, 'rb') as f:
+                raw = pickle.load(f)
+            loaded, lbl = train_dataset[malware_train_idx]
+            node_type = raw.node_types[0]
+            malware_unchanged = torch.allclose(raw[node_type].x, loaded[node_type].x)
+            logger.info(f"  Train malware NOT augmented      : {'✅ PASS' if malware_unchanged else '❌ FAIL (was augmented!)'}")
+            if not malware_unchanged:
+                all_passed = False
+        else:
+            logger.warning("  ⚠️  No malware sample in train — skipping 3b")
+
+        # 3c — val benign: data should be IDENTICAL to raw pkl (no augmentation)
+        if benign_val_idx is not None:
+            raw_path = val_dataset.graph_files[benign_val_idx]
+            with open(raw_path, 'rb') as f:
+                raw = pickle.load(f)
+            loaded, lbl = val_dataset[benign_val_idx]
+            node_type = raw.node_types[0]
+            val_unchanged = torch.allclose(raw[node_type].x, loaded[node_type].x)
+            logger.info(f"  Val benign NOT augmented         : {'✅ PASS' if val_unchanged else '❌ FAIL (val was augmented!)'}")
+            if not val_unchanged:
+                all_passed = False
+        else:
+            logger.warning("  ⚠️  No benign sample in val — skipping 3c")
+
+        # ── TEST 4: Augmentation Sanity — shape preserved ──────────────────
+        logger.info("\n" + "="*50)
+        logger.info("TEST 4: Augmentation Shape Preservation")
+        logger.info("="*50)
+        if benign_train_idx is not None:
+            raw_path = train_dataset.graph_files[benign_train_idx]
+            with open(raw_path, 'rb') as f:
+                raw = pickle.load(f)
+            aug, _ = train_dataset[benign_train_idx]
+
+            shape_ok = True
+            for nt in raw.node_types:
+                if hasattr(raw[nt], 'x') and raw[nt].x is not None:
+                    if raw[nt].x.shape[1] != aug[nt].x.shape[1]:
+                        logger.error(f"  ❌ Node {nt} feature dim changed: {raw[nt].x.shape} → {aug[nt].x.shape}")
+                        shape_ok = False
+                    else:
+                        logger.info(f"  ✅ Node '{nt}' shape preserved: {aug[nt].x.shape}")
+            for et in raw.edge_types:
+                raw_edges = raw[et].edge_index.size(1)
+                aug_edges = aug[et].edge_index.size(1)
+                dropped   = raw_edges - aug_edges
+                pct       = dropped / raw_edges * 100 if raw_edges > 0 else 0
+                logger.info(f"  Edge '{et[1]}': {raw_edges} → {aug_edges} ({pct:.1f}% dropped)")
+                if aug_edges > raw_edges:
+                    logger.error(f"  ❌ FAIL — more edges after augmentation!")
+                    shape_ok = False
+            if not shape_ok:
+                all_passed = False
+
+        # ── TEST 5: DataLoader Batching ─────────────────────────────────────
+        logger.info("\n" + "="*50)
+        logger.info("TEST 5: DataLoader Batching")
+        logger.info("="*50)
         train_loader, val_loader, test_loader = create_dataloaders(
             data_dir=data_dir,
             cache_dir=cache_dir,
             batch_size=4,
             num_workers=0
         )
-        
-        # batch = next(iter(train_loader))
         batch, labels = next(iter(train_loader))
-        logger.info(f"\nBatch info:")
-        logger.info(f"  Batch size: {batch.num_graphs}")
-        logger.info(f"  Type: {type(batch)}")
-        logger.info(f"  Node types: {batch.node_types}")
+        logger.info(f"  Batch size        : {batch.num_graphs}")
+        logger.info(f"  Labels in batch   : {labels.tolist()}")
+        logger.info(f"  Classes in batch  : {[CLASS_NAMES[l] for l in labels.tolist()]}")
+        label_set = set(labels.tolist())
+        if label_set - {0, 1}:
+            logger.error(f"  ❌ FAIL — unexpected labels in batch: {label_set - {0,1}}")
+            all_passed = False
+        else:
+            logger.info(f"  ✅ PASS — only labels 0/1 in batch")
 
-        logger.info(f"  Labels: {labels.tolist()}")
-        logger.info(f"  Class distribution: {[CLASS_NAMES[l] for l in labels.tolist()]}")
-        
-        # Show batched node counts
         for node_type in batch.node_types:
             if hasattr(batch[node_type], 'x'):
-                logger.info(f"  {node_type} nodes in batch: {batch[node_type].x.shape[0]}")
-        
-        logger.info("\n✅ HeteroData validation complete!")
-        return True
-        
+                logger.info(f"  {node_type} nodes in batch: {batch[node_type].x.shape}")
+
+        # ── FINAL RESULT ────────────────────────────────────────────────────
+        logger.info("\n" + "="*70)
+        if all_passed:
+            logger.info("✅ ALL TESTS PASSED — pytorch_dataset.py changes verified")
+        else:
+            logger.error("❌ SOME TESTS FAILED — check output above")
+        logger.info("="*70)
+        return all_passed
+
     except Exception as e:
-        logger.error(f"\n❌ Validation failed: {str(e)}")
+        logger.error(f"\n❌ Validation crashed: {str(e)}")
         import traceback
         traceback.print_exc()
         return False
@@ -423,3 +565,4 @@ def validate_dataset(data_dir: str = 'data', cache_dir: str = 'cache/enriched'):
 
 if __name__ == '__main__':
     validate_dataset()
+

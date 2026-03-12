@@ -276,7 +276,7 @@ class HeteroTemporalGNN(nn.Module):
             )
 
         # ══════════════════════════════════════════════════════════════════════
-        #  6.  Classifier — shared trunk + 3 per-class heads       [CHANGE 1]
+        #  6.  Classifier — shared trunk + 2 per-class heads       [CHANGE 1]
         #      (replaces single self.classifier MLP, but keeps total_embedding_dim)
         # ══════════════════════════════════════════════════════════════════════
         num_resource_types       = len(resource_node_types)  # 4
@@ -297,17 +297,17 @@ class HeteroTemporalGNN(nn.Module):
             nn.GELU(),
             nn.Dropout(dropout),
         )
-        self.head_ransomware = nn.Linear(128, 1)
-        self.head_benign     = nn.Linear(128, 1)
+        # self.head_ransomware = nn.Linear(128, 1)
         self.head_malware    = nn.Linear(128, 1)
+        self.head_benign     = nn.Linear(128, 1)
+        
 
         print(f"[Model] Total embedding dim : {self.total_embedding_dim}")
-        print(f"[Model] Classifier          : shared_trunk({trunk_in}→256→128) + 3 heads")
+        print(f"[Model] Classifier          : shared_trunk({trunk_in}→256→128) + 2 heads")
 
     # ══════════════════════════════════════════════════════════════════════════
     #  forward
-    # ══════════════════════════════════════════════════════════════════════════
-
+    # ══════════════════════
     def forward(
         self,
         x_dict:          Dict[str, torch.Tensor],
@@ -368,10 +368,10 @@ class HeteroTemporalGNN(nn.Module):
 
             # ── 3. Temporal LSTM on API nodes ─────────────────────────────────────
             api_batch = batch_dict["api"]
-            api_ts    = (
-                timestamps_dict.get("api", None)
-                if timestamps_dict is not None else None
-            )
+            # api_ts    = (
+            #     timestamps_dict.get("api", None)
+            #     if timestamps_dict is not None else None
+            # )
             api_temporal = self.temporal_lstm(
                 x = h_dict["api"],
                 batch      = api_batch,
@@ -462,14 +462,15 @@ class HeteroTemporalGNN(nn.Module):
 
             behav_feats = torch.stack(behav_parts, dim=-1)  # [B, 15]
 
-            # ── Shared trunk + 3 per-class heads             [CHANGE 1 + CHANGE 2]
+            # ── Shared trunk + 2 per-class heads             [CHANGE 1 + CHANGE 2]
             x      = torch.cat([combined_embedding, behav_feats], dim=-1)  # [B, 527]
             z      = self.shared_trunk(x)
             logits = torch.cat([
-                self.head_ransomware(z),
-                self.head_benign(z),
+                # self.head_ransomware(z),
                 self.head_malware(z),
-            ], dim=-1)  # [B, 3]
+                self.head_benign(z),
+                
+            ], dim=-1)  # [B, 2]
             return logits
 
 
