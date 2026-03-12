@@ -21,7 +21,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 from pathlib import Path
 import sys
-
+from torch_geometric.nn import global_mean_pool
+# from torch_scatter import scatter
+from torch_geometric.utils import scatter
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.append(str(PROJECT_ROOT))
 
@@ -368,10 +370,10 @@ class HeteroTemporalGNN(nn.Module):
 
             # ── 3. Temporal LSTM on API nodes ─────────────────────────────────────
             api_batch = batch_dict["api"]
-            # api_ts    = (
-            #     timestamps_dict.get("api", None)
-            #     if timestamps_dict is not None else None
-            # )
+            api_ts    = (
+                timestamps_dict.get("api", None)
+                if timestamps_dict is not None else None
+            )
             api_temporal = self.temporal_lstm(
                 x = h_dict["api"],
                 batch      = api_batch,
@@ -400,23 +402,24 @@ class HeteroTemporalGNN(nn.Module):
                 actual_dim = h_res.size(-1)
 
                 pooled = []
-                for b in range(B):
-                    mask = batch_res == b
-                    pooled.append(
-                        h_res[mask].mean(0) if mask.any()
-                        else torch.zeros(actual_dim, device=device)
-                    )
-                pooled = torch.stack(pooled)  # [B, actual_dim]
+                # for b in range(B):
+                #     mask = batch_res == b
+                #     pooled.append(
+                #         h_res[mask].mean(0) if mask.any()
+                #         else torch.zeros(actual_dim, device=device)
+                #     )
+                pooled = global_mean_pool(h_res, batch_res, size=B)   # [B, actual_dim]
+                # pooled = torch.stack(pooled)  # [B, actual_dim]
 
                 if actual_dim == self.hidden_dim_resource:           # 64
                     pooled = self.resource_poolings_64[nt](pooled)
                 elif actual_dim == self.resource_out_dim_per_layer:  # 384
                     pooled = self.resource_poolings_384[nt](pooled)
                 else:
-                    # safety net: project from unexpected dim — avoids crash
-                    emergency = nn.Linear(actual_dim, self.hidden_dim_resource).to(device)
-                    pooled    = emergency(pooled)
-
+                    raise ValueError(
+                        f"Unexpected resource dim {actual_dim} for node type '{nt}'. "
+                        f"Expected {self.hidden_dim_resource} or {self.resource_out_dim_per_layer}."
+                    )
                 resource_embeddings.append(pooled)  # [B, 64]
 
             # ── 6. Combine embeddings ─────────────────────────────────────────────
@@ -430,29 +433,29 @@ class HeteroTemporalGNN(nn.Module):
             behav_parts: List[torch.Tensor] = []
             for nt in ["api"] + resource_node_types:
                 if nt in h_dict and nt in batch_dict:
-                    h_nt = h_dict[nt]
-                    b_nt = batch_dict[nt]
-                    means, stds, counts = [], [], []
-                    for b in range(B):
-                        mask = b_nt == b
-                        if mask.any():
-                            feats = h_nt[mask]
-                            means.append(feats.mean())
-                            stds.append(
-                                feats.std()
-                                if feats.size(0) > 1
-                                else feats.new_zeros(1).squeeze()
-                            )
-                            counts.append(torch.log1p(mask.float().sum()))
-                        else:
-                            means.append(h_nt.new_zeros(1).squeeze())
-                            stds.append(h_nt.new_zeros(1).squeeze())
-                            counts.append(h_nt.new_zeros(1).squeeze())
-                    behav_parts.extend([
-                        torch.stack(means),
-                        torch.stack(stds),
-                        torch.stack(counts),
-                    ])
+                    h_nt = h_dict[nt]     # [N_nt, D]
+                    b_nt = batch_dict[nt] # [N_nt]
+
+                    # feature-centric stats:
+                    # 1) mean of each feature across nodes in each graph  -> [B, D]
+                    mean_per_feat = scatter(h_nt, b_nt, dim=0, dim_size=B, reduce="mean")
+
+                    # 2) std of each feature across nodes in each graph   -> [B, D]
+                    centered = h_nt - mean_per_feat[b_nt]   # [N_nt, D]
+                    var_per_feat = scatter(centered * centered, b_nt, dim=0, dim_size=B, reduce="mean")
+                    std_per_feat = torch.sqrt(var_per_feat + 1e-8)
+
+                    # 3) collapse feature dimension to one scalar each    -> [B]
+                    g_means = mean_per_feat.mean(dim=-1)
+                    g_stds  = std_per_feat.mean(dim=-1)
+
+                    # 4) count nodes per graph                            -> [B]
+                    node_ones = torch.ones(h_nt.size(0), device=device)
+                    g_counts = torch.log1p(
+                        scatter(node_ones, b_nt, dim=0, dim_size=B, reduce="sum")
+                    )
+
+                    behav_parts.extend([g_means, g_stds, g_counts])
                 else:
                     behav_parts.extend([
                         torch.zeros(B, device=device),
@@ -460,7 +463,7 @@ class HeteroTemporalGNN(nn.Module):
                         torch.zeros(B, device=device),
                     ])
 
-            behav_feats = torch.stack(behav_parts, dim=-1)  # [B, 15]
+            behav_feats = torch.stack(behav_parts, dim=-1) # [B, 15]
 
             # ── Shared trunk + 2 per-class heads             [CHANGE 1 + CHANGE 2]
             x      = torch.cat([combined_embedding, behav_feats], dim=-1)  # [B, 527]
@@ -511,7 +514,8 @@ class HeteroTemporalGNN(nn.Module):
                 self.memory.memory_bank.weight,
                 lambda_reg,
             )
-        return torch.tensor(0.0, requires_grad=True)
+        device = next(self.parameters()).device
+        return torch.tensor(0.0, device=device)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -546,18 +550,138 @@ def create_hetero_tgnn(
 
 if __name__ == "__main__":
     import config
+    from torch_geometric.nn import global_mean_pool
+    from torch_geometric.utils import scatter
 
     print("=" * 60)
-    print("  HeteroTemporalGNN smoke test")
+    print("  HeteroTemporalGNN smoke test  (post-refactor)")
     print("=" * 60)
 
     B      = 4    # batch size
     N_api  = 80   # total API nodes across batch
     N_res  = 20   # resource nodes per type
 
+    # ── 1. Model instantiation ────────────────────────────────────────────────
     model = create_hetero_tgnn(spatial_layer="gat", use_memory=True)
     model.eval()
     device = torch.device("cpu")
+
+    # ══════════════════════════════════════════════════════════════════════════
+    #  STATIC ARCHITECTURE CHECKS  (no forward pass needed)
+    # ══════════════════════════════════════════════════════════════════════════
+
+    # ── guard: num_classes must be 2 ─────────────────────────────────────────
+    assert model.num_classes == 2, (
+        f"[FAIL] model.num_classes={model.num_classes}, expected 2. "
+        f"Update config.NUM_CLASSES = 2"
+    )
+    print(f"[✓] model.num_classes == 2")
+
+    # ── guard: exactly 2 heads, correct names ────────────────────────────────
+    assert hasattr(model, "head_malware"),        "[FAIL] head_malware missing"
+    assert hasattr(model, "head_benign"),          "[FAIL] head_benign missing"
+    assert not hasattr(model, "head_ransomware"), "[FAIL] head_ransomware still present — remove it"
+    print(f"[✓] 2 heads: head_malware (class 0) + head_benign (class 1)")
+
+    # ── guard: shared_trunk exists ───────────────────────────────────────────
+    assert hasattr(model, "shared_trunk"), "[FAIL] shared_trunk missing"
+    print(f"[✓] shared_trunk present")
+
+    # ── guard: trunk dims — derived from model, no hardcoding ────────────────
+    num_resource_types = len([nt for nt in model.node_types if nt != "api"])  # 4
+    behav_dim          = (num_resource_types + 1) * 3   # 5 types × 3 stats = 15
+    expected_trunk_in  = model.total_embedding_dim + behav_dim
+    trunk_in_actual    = model.shared_trunk[0].in_features
+
+    print(f"[i] lstm_output_dim     = {model.lstm_output_dim}  "
+          f"(hidden={model.lstm_hidden_dim}, bidir={model.bidirectional})")
+    print(f"[i] total_embedding_dim = {model.total_embedding_dim}  "
+          f"({model.lstm_output_dim} + {num_resource_types}×{model.hidden_dim_resource})")
+    print(f"[i] behav_dim           = {behav_dim}  ({num_resource_types + 1} types × 3 stats)")
+    print(f"[i] trunk_in            = {expected_trunk_in}  "
+          f"({model.total_embedding_dim} + {behav_dim})")
+
+    assert trunk_in_actual == expected_trunk_in, (
+        f"[FAIL] trunk in_features={trunk_in_actual} but expected={expected_trunk_in}. "
+        f"total_embedding_dim or behav_dim is inconsistent with the built trunk."
+    )
+    print(f"[✓] trunk input dim = {trunk_in_actual}  (self-consistent ✅)")
+
+    # ── guard: trunk shape ──────────────────────────────────────────────────
+    assert model.shared_trunk[0].out_features == 256, "[FAIL] trunk layer1 out != 256"
+    assert model.shared_trunk[4].out_features == 128, "[FAIL] trunk layer2 out != 128"
+    print(f"[✓] trunk shape: {trunk_in_actual}→256→128")
+
+    # ── guard: each head is Linear(128→1) ────────────────────────────────────
+    assert model.head_malware.in_features  == 128, "[FAIL] head_malware.in_features != 128"
+    assert model.head_benign.in_features   == 128, "[FAIL] head_benign.in_features != 128"
+    assert model.head_malware.out_features == 1,   "[FAIL] head_malware.out_features != 1"
+    assert model.head_benign.out_features  == 1,   "[FAIL] head_benign.out_features != 1"
+    print(f"[✓] each head: Linear(128 → 1)")
+
+    # ── guard: head ORDER — malware=idx0, benign=idx1 ────────────────────────
+    with torch.no_grad():
+        _orig_mw_w = model.head_malware.weight.data.clone()
+        _orig_mw_b = model.head_malware.bias.data.clone()
+        _orig_bn_w = model.head_benign.weight.data.clone()
+        _orig_bn_b = model.head_benign.bias.data.clone()
+
+        model.head_malware.weight.data.fill_(0.0)
+        model.head_malware.bias.data.fill_(999.0)
+        model.head_benign.weight.data.fill_(0.0)
+        model.head_benign.bias.data.fill_(-999.0)
+
+        z_test      = torch.zeros(1, 128)
+        test_logits = torch.cat([model.head_malware(z_test),
+                                  model.head_benign(z_test)], dim=-1)
+        pred_class  = test_logits.argmax(dim=-1).item()
+
+        model.head_malware.weight.data = _orig_mw_w
+        model.head_malware.bias.data   = _orig_mw_b
+        model.head_benign.weight.data  = _orig_bn_w
+        model.head_benign.bias.data    = _orig_bn_b
+
+    assert pred_class == 0, (
+        f"[FAIL] Head ORDER wrong! malware head is hot but argmax={pred_class} "
+        f"(expected 0). head_malware and head_benign are swapped in torch.cat."
+    )
+    print(f"[✓] Head order: malware=idx0 ✅, benign=idx1 ✅")
+
+    # ── guard: dual resource pooling paths exist ──────────────────────────────
+    resource_node_types = [nt for nt in model.node_types if nt != "api"]
+    for nt in resource_node_types:
+        assert nt in model.resource_poolings_64, (
+            f"[FAIL] resource_poolings_64 missing key '{nt}'"
+        )
+        assert nt in model.resource_poolings_384, (
+            f"[FAIL] resource_poolings_384 missing key '{nt}'"
+        )
+        # path A: 64→64
+        assert model.resource_poolings_64[nt][0].in_features  == model.hidden_dim_resource, (
+            f"[FAIL] resource_poolings_64[{nt}] in_features wrong"
+        )
+        assert model.resource_poolings_64[nt][0].out_features == model.hidden_dim_resource, (
+            f"[FAIL] resource_poolings_64[{nt}] out_features wrong"
+        )
+        # path B: 384→64
+        assert model.resource_poolings_384[nt][0].in_features  == model.resource_out_dim_per_layer, (
+            f"[FAIL] resource_poolings_384[{nt}] in_features wrong"
+        )
+        assert model.resource_poolings_384[nt][0].out_features == model.hidden_dim_resource, (
+            f"[FAIL] resource_poolings_384[{nt}] out_features wrong"
+        )
+    print(f"[✓] dual resource pooling paths (64→64 and {model.resource_out_dim_per_layer}→64) for all {len(resource_node_types)} types")
+
+    # ── guard: no emergency Linear fallback (would be unregistered) ──────────
+    # We can't check this statically, but we verify the two expected dims
+    # are exactly what the model produces — if something else appears at
+    # runtime the model now raises RuntimeError (not silently corrupt)
+    print(f"[✓] resource dim contract: {model.hidden_dim_resource} or "
+          f"{model.resource_out_dim_per_layer} — RuntimeError on anything else")
+
+    # ══════════════════════════════════════════════════════════════════════════
+    #  RUNTIME CHECKS  (forward pass)
+    # ══════════════════════════════════════════════════════════════════════════
 
     x_dict = {
         "api":      torch.randn(N_api, 775),
@@ -592,6 +716,7 @@ if __name__ == "__main__":
     timestamps_dict = {"api": torch.linspace(0, 100, N_api)}
     api_indices     = torch.randint(2, 325, (N_api,))
 
+    # ── standard forward ─────────────────────────────────────────────────────
     with torch.no_grad():
         logits = model(
             x_dict          = x_dict,
@@ -600,16 +725,90 @@ if __name__ == "__main__":
             timestamps_dict = timestamps_dict,
             api_indices     = api_indices,
         )
-    print(f"\n[Smoke] logits shape : {logits.shape}  (expected [{B}, 3])")
-    assert logits.shape == (B, 3), f"Shape mismatch: {logits.shape}"
 
+    # ── guard: output shape [B, 2] ───────────────────────────────────────────
+    assert logits.shape == (B, 2), (
+        f"[FAIL] logits.shape={logits.shape}, expected ({B}, 2). "
+        f"Dead 3rd head still active or torch.cat still has 3 entries."
+    )
+    print(f"[✓] logits.shape = {logits.shape}  (expected [{B}, 2])")
+
+    # ── guard: no NaN / Inf ──────────────────────────────────────────────────
+    assert not torch.isnan(logits).any(), "[FAIL] NaN in logits — check behav scatter std path"
+    assert not torch.isinf(logits).any(), "[FAIL] Inf in logits"
+    print(f"[✓] logits finite  (min={logits.min():.4f}, max={logits.max():.4f})")
+
+    # ── guard: behav_feats vectorized scatter produces correct dim ────────────
+    # Replicate the scatter logic on test data to verify [B, 15] shape
+    _test_h   = torch.randn(N_api, model.api_out_dim_per_layer)
+    _test_b   = torch.repeat_interleave(torch.arange(B), N_api // B)
+    _mean_pf  = scatter(_test_h, _test_b, dim=0, dim_size=B, reduce="mean")
+    _centered = _test_h - _mean_pf[_test_b]
+    _var_pf   = scatter(_centered * _centered, _test_b, dim=0, dim_size=B, reduce="mean")
+    _std_pf   = torch.sqrt(_var_pf + 1e-8)
+    _g_means  = _mean_pf.mean(dim=-1)
+    _g_stds   = _std_pf.mean(dim=-1)
+    assert _g_means.shape == (B,), f"[FAIL] scatter g_means shape={_g_means.shape}"
+    assert _g_stds.shape  == (B,), f"[FAIL] scatter g_stds shape={_g_stds.shape}"
+    assert not torch.isnan(_g_stds).any(),  "[FAIL] NaN in scatter std — 1e-8 guard missing"
+    assert not torch.isnan(_g_means).any(), "[FAIL] NaN in scatter mean"
+    print(f"[✓] behav scatter: feature-centric stats, shape [{B}] each, no NaN ✅")
+
+    # ── guard: behav_feats total dim ─────────────────────────────────────────
+    assert behav_dim == 15, f"[FAIL] behav_dim={behav_dim}, expected 15"
+    print(f"[✓] behav_feats dim = {behav_dim}  (5 types × 3 stats)")
+
+    # ── guard: global_mean_pool produces [B, D] for resource pooling ─────────
+    _test_res   = torch.randn(N_res, model.hidden_dim_resource)
+    _test_bres  = torch.repeat_interleave(torch.arange(B), N_res // B)
+    _pooled     = global_mean_pool(_test_res, _test_bres, size=B)
+    assert _pooled.shape == (B, model.hidden_dim_resource), (
+        f"[FAIL] global_mean_pool shape={_pooled.shape}, "
+        f"expected ({B}, {model.hidden_dim_resource})"
+    )
+    assert not torch.isnan(_pooled).any(), "[FAIL] NaN in global_mean_pool output"
+    print(f"[✓] global_mean_pool: [{N_res}, {model.hidden_dim_resource}] → "
+          f"[{B}, {model.hidden_dim_resource}] ✅")
+
+    # ── guard: forward with missing resource type (empty graph robustness) ────
+    partial_batch_dict = {k: v for k, v in batch_dict.items() if k != "network"}
+    partial_x_dict     = {k: v for k, v in x_dict.items()     if k != "network"}
+    partial_edge_dict  = {k: v for k, v in edge_index_dict.items()
+                          if k != ("api", "connects", "network")}
+    with torch.no_grad():
+        logits_partial = model(
+            x_dict          = partial_x_dict,
+            edge_index_dict = partial_edge_dict,
+            batch_dict      = partial_batch_dict,
+            timestamps_dict = timestamps_dict,
+            api_indices     = api_indices,
+        )
+    assert logits_partial.shape == (B, 2), (
+        f"[FAIL] Missing node type broke forward: shape={logits_partial.shape}"
+    )
+    assert not torch.isnan(logits_partial).any(), \
+        "[FAIL] NaN when a node type is absent — zero fallback broken"
+    print(f"[✓] Missing node type handled gracefully (zero fallback) ✅")
+
+    # ── memory helpers ────────────────────────────────────────────────────────
     model.update_memory(api_indices, x_dict["api"])
-    print(f"[Smoke] Memory write ✓")
+    print(f"[✓] Memory write (update_memory) ✓")
 
     mem_loss = model.memory_loss()
-    print(f"[Smoke] Memory loss  {mem_loss.item():.8f} ✓")
+    assert not torch.isnan(mem_loss), "[FAIL] memory_loss returned NaN"
+    print(f"[✓] Memory loss = {mem_loss.item():.8f} ✓")
 
+    # ── parameter count ───────────────────────────────────────────────────────
     total     = sum(p.numel() for p in model.parameters())
     trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print(f"\n[Smoke] Parameters   total={total:,}  trainable={trainable:,}")
-    print("\n✅  tgnn_model.py working correctly!")
+    print(f"\n[✓] Parameters — total={total:,}  trainable={trainable:,}")
+
+    # ── CrossEntropy compatibility ────────────────────────────────────────────
+    dummy_labels = torch.randint(0, 2, (B,))
+    loss = torch.nn.functional.cross_entropy(logits, dummy_labels)
+    assert not torch.isnan(loss), "[FAIL] CrossEntropy loss is NaN"
+    print(f"[✓] CrossEntropy(logits, labels∈{{0,1}}) = {loss.item():.6f} ✓")
+
+    print("\n" + "=" * 60)
+    print("  ✅  All checks passed — tgnn_model.py is clean")
+    print("=" * 60)

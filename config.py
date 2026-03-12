@@ -109,16 +109,16 @@ HIDDEN_DIM = 128            # Hidden dimension for GNN layers
 RESOURCE_HIDDEN_DIM = 64    # Resource node hidden dimension
 NUM_GNN_LAYERS = 2          # Number of spatial aggregation layers
 NUM_ATTENTION_HEADS = 6     # Multi-head attention (spatial)
-DROPOUT = 0.4               # Dropout rate
+DROPOUT = 0.3               # Dropout rate
 
 # Temporal modeling
-LSTM_HIDDEN_DIM = 126       # LSTM hidden dimension
+LSTM_HIDDEN_DIM = 128      # LSTM hidden dimension
 LSTM_NUM_LAYERS = 2         # Number of LSTM layers
 BIDIRECTIONAL = True        # Use bidirectional LSTM
-LSTM_DROPOUT = 0.2          # LSTM dropout
+LSTM_DROPOUT = 0.3          # LSTM dropout
 
 # Temporal attention pooling
-TEMPORAL_HEADS = 6          # Multi-head attention (temporal)
+TEMPORAL_HEADS = 8          # Multi-head attention (temporal)
 
 # Output
 NUM_CLASSES = 2             # Ransomware, Benign, Other Malware
@@ -185,7 +185,7 @@ OVERSAMPLE_WEIGHTS = {
     1: 66.0,   # Benign (4529 / 68 ≈ 66)
 }
 # Class weights for loss function (alternative to Focal Loss)
-Malware = 4529, Benign = 68
+# Malware = 4529, Benign = 68
 CLASS_WEIGHTS = {
     0: 1.0 / (4529 ** 0.5),
     1: 1.0 / (68   ** 0.5),
