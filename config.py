@@ -108,7 +108,7 @@ SPATIAL_LAYER = 'gat'       # Options: 'gat', 'transformer'
 HIDDEN_DIM = 128            # Hidden dimension for GNN layers
 RESOURCE_HIDDEN_DIM = 64    # Resource node hidden dimension
 NUM_GNN_LAYERS = 2          # Number of spatial aggregation layers
-NUM_ATTENTION_HEADS = 6     # Multi-head attention (spatial)
+NUM_ATTENTION_HEADS = 8     # Multi-head attention (spatial)
 DROPOUT = 0.3               # Dropout rate
 
 # Temporal modeling
