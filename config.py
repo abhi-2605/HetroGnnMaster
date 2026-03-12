@@ -171,7 +171,7 @@ RESUME_FROM_CHECKPOINT = True
 USE_FOCAL_LOSS = True
 FOCAL_GAMMA = 2.2
 # FOCAL_ALPHA = [0.45, 0.35, 0.20]  # [Ransomware, Benign, Other Malware]
-FOCAL_ALPHA = [0.40, 0.60]
+FOCAL_ALPHA = [0.05, 0.95]
 
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True

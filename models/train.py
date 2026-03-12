@@ -61,7 +61,10 @@ class FocalLoss(nn.Module):
         self.gamma     = gamma
         self.reduction = reduction
         if alpha is not None:
-            self.alpha = torch.tensor(alpha) if isinstance(alpha, list) else alpha
+            self.register_buffer(           # ← replaces plain self.alpha =
+                "alpha",
+                torch.tensor(alpha, dtype=torch.float32)
+            )
         else:
             self.alpha = None
     

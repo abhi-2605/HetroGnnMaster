@@ -320,7 +320,10 @@ class HeteroTemporalGNN(nn.Module):
         api_indices:     Optional[torch.Tensor] = None,
     ) -> torch.Tensor:
             device = next(self.parameters()).device
-            B = int(max(v.max().item() for v in batch_dict.values())) + 1
+            
+            if "api" not in batch_dict or batch_dict["api"].numel() == 0:
+                raise ValueError("Batch has no API nodes; cannot run HeteroTemporalGNN forward.")
+            B = int(batch_dict["api"].max().item()) + 1
 
             # ── memory enrichment ────────────────────────────────────────────────
             if self.use_memory and self.memory is not None and api_indices is not None:

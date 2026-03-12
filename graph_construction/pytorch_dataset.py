@@ -136,29 +136,31 @@ class RansomwareGraphDataset(Dataset):
         # Return graph and label separately
         return data, label
     
-    def _augment_graph(self,  data) -> HeteroData:
-        """Augment a benign graph to prevent memorisation from oversampling."""
-        
-        data = copy.deepcopy(data)   # don't mutate the cached graph
+    def _augment_graph(self, data, epoch: int = 1) -> HeteroData:
+        data = copy.deepcopy(data)
 
-        # 1. Gaussian noise on all node features
+        # 0.05 → 0.15 over 10 epochs, plateau after
+        noise_std = min(0.05 + epoch * 0.01, 0.15)   # epoch 1=0.06, epoch 5=0.10, epoch 10+=0.15
+
         for node_type in data.node_types:
             if hasattr(data[node_type], 'x') and data[node_type].x is not None:
                 data[node_type].x = data[node_type].x + \
-                    torch.randn_like(data[node_type].x) * 0.01
+                    torch.randn_like(data[node_type].x) * noise_std
 
-        # 2. Random edge drop ~10% per edge type
+        # edge drop: 10% → 20% over 10 epochs
+        drop_rate = min(0.10 + epoch * 0.01, 0.20)   # epoch 1=0.11, epoch 5=0.15, epoch 10+=0.20
         for edge_type in data.edge_types:
             ei = data[edge_type].edge_index
             if ei is None or ei.size(1) == 0:
                 continue
-            mask = torch.rand(ei.size(1)) > 0.10   # keep 90%
+            mask = torch.rand(ei.size(1)) > drop_rate
             data[edge_type].edge_index = ei[:, mask]
             if hasattr(data[edge_type], 'edge_attr') and \
                     data[edge_type].edge_attr is not None:
                 data[edge_type].edge_attr = data[edge_type].edge_attr[mask]
 
         return data
+
 
     
 
