@@ -299,11 +299,11 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
                 optimizer.zero_grad(set_to_none=True)
                 torch.cuda.empty_cache()
                 gc.collect()
-                # oom_skip_count += 1
+                oom_skip_count += 1
 
-                # if oom_skip_count > config.OOM_ABORT_THRESHOLD:
-                #     print(f"⛔ Epoch {epoch} aborted — {oom_skip_count} OOM skips")
-                #     return None
+                if oom_skip_count > config.OOM_ABORT_THRESHOLD:
+                    print(f"⛔ Epoch {epoch} aborted — {oom_skip_count} OOM skips")
+                    return None
 
                 if attempt == 0:
                     print(f"⚠️  OOM batch {batch_idx} — cleared cache, retrying...")
