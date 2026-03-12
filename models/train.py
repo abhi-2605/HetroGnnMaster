@@ -61,10 +61,7 @@ class FocalLoss(nn.Module):
         self.gamma     = gamma
         self.reduction = reduction
         if alpha is not None:
-            self.register_buffer(           # ← replaces plain self.alpha =
-                "alpha",
-                torch.tensor(alpha, dtype=torch.float32)
-            )
+            self.alpha = torch.tensor(alpha) if isinstance(alpha, list) else alpha
         else:
             self.alpha = None
     
@@ -302,11 +299,11 @@ def train_epoch(model, loader, criterion, optimizer, vocab, device, epoch, warmu
                 optimizer.zero_grad(set_to_none=True)
                 torch.cuda.empty_cache()
                 gc.collect()
-                oom_skip_count += 1
+                # oom_skip_count += 1
 
-                if oom_skip_count > config.OOM_ABORT_THRESHOLD:
-                    print(f"⛔ Epoch {epoch} aborted — {oom_skip_count} OOM skips")
-                    return None
+                # if oom_skip_count > config.OOM_ABORT_THRESHOLD:
+                #     print(f"⛔ Epoch {epoch} aborted — {oom_skip_count} OOM skips")
+                #     return None
 
                 if attempt == 0:
                     print(f"⚠️  OOM batch {batch_idx} — cleared cache, retrying...")
@@ -517,10 +514,10 @@ def train():
 
         # checkpoint
         current = val_metrics[config.CHECKPOINT_METRIC]
-        malware_recall = val_metrics['per_class_recall'][0]
+        ransomware_recall = val_metrics['per_class_recall'][0]
         benign_recall     = val_metrics['per_class_recall'][1]
         recall_floors = (
-            malware_recall >= config.MIN_MALWARE_RECALL *.80 and
+            ransomware_recall >= config.MIN_RANSOMWARE_RECALL *.80 and
             benign_recall     >= config.MIN_BENIGN_RECALL     *.58
         )
         if current > best_metric and recall_floors:   # ← MEMORY: only save if recall floors are met
@@ -535,13 +532,13 @@ def train():
                 'val_metrics':          val_metrics,
             }, checkpoint_path)
             log(f"New best {config.CHECKPOINT_METRIC}: {current:.4f} "
-        f"| Malware recall: {malware_recall:.3f} "
+        f"| Ransom recall: {ransomware_recall:.3f} "
         f"| Benign recall: {benign_recall:.3f} — saved")
             
         elif current > best_metric and not recall_floors:
-            # patience_counter += 1
+            patience_counter += 1
             log(f"⚠️  macro_f1={current:.4f} but recall floors NOT met "
-            f"(malware={malware_recall:.3f}, benign={benign_recall:.3f}) — skipped")
+            f"(ransom={ransomware_recall:.3f}, benign={benign_recall:.3f}) — skipped")
         else:
             patience_counter += 1
             log(f"\n⏳ No improvement ({patience_counter}/{config.EARLY_STOPPING_PATIENCE})")
