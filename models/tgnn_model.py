@@ -12,7 +12,7 @@ Dimension flow:
     Combined:   [B, 256 + 4×64] = [B, 512] → [MLP] → [B, 3]
 
 Author: Abhishek Menon
-Date:   2026-03-04
+Date:   2026-03-
 """
 from typing import Dict, Tuple, List, Optional
 
@@ -21,7 +21,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from pathlib import Path
 import sys
-
+from torch_geometric.utils import scatter
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.append(str(PROJECT_ROOT))
 
@@ -428,31 +428,32 @@ class HeteroTemporalGNN(nn.Module):
             # 5 node types × 3 stats (mean-activation, std-activation, log1p-count)
             # = 15 features, making trunk_in = 512 + 15 = 527
             behav_parts: List[torch.Tensor] = []
+
             for nt in ["api"] + resource_node_types:
-                if nt in h_dict and nt in batch_dict:
-                    h_nt = h_dict[nt]
-                    b_nt = batch_dict[nt]
-                    means, stds, counts = [], [], []
-                    for b in range(B):
-                        mask = b_nt == b
-                        if mask.any():
-                            feats = h_nt[mask]
-                            means.append(feats.mean())
-                            stds.append(
-                                feats.std()
-                                if feats.size(0) > 1
-                                else feats.new_zeros(1).squeeze()
-                            )
-                            counts.append(torch.log1p(mask.float().sum()))
-                        else:
-                            means.append(h_nt.new_zeros(1).squeeze())
-                            stds.append(h_nt.new_zeros(1).squeeze())
-                            counts.append(h_nt.new_zeros(1).squeeze())
-                    behav_parts.extend([
-                        torch.stack(means),
-                        torch.stack(stds),
-                        torch.stack(counts),
-                    ])
+                if nt in h_dict and nt in batch_dict and batch_dict[nt].numel() > 0:
+                    h_nt = h_dict[nt]     # [N_nt, D]
+                    b_nt = batch_dict[nt] # [N_nt]
+
+                    # 1) mean of each feature across nodes in each graph -> [B, D]
+                    mean_per_feat = scatter(h_nt, b_nt, dim=0, dim_size=B, reduce="mean")
+
+                    # 2) std of each feature across nodes in each graph -> [B, D]
+                    centered = h_nt - mean_per_feat[b_nt]   # [N_nt, D]
+                    var_per_feat = scatter(centered * centered, b_nt, dim=0, dim_size=B, reduce="mean")
+                    std_per_feat = torch.sqrt(var_per_feat + 1e-8)
+
+                    # 3) collapse feature dimension to one scalar each -> [B]
+                    g_means = mean_per_feat.mean(dim=-1)
+                    g_stds  = std_per_feat.mean(dim=-1)
+
+                    # 4) count nodes per graph -> [B]
+                    node_ones = torch.ones(h_nt.size(0), device=device)
+                    g_counts = torch.log1p(
+                        scatter(node_ones, b_nt, dim=0, dim_size=B, reduce="sum")
+                    )
+
+                    behav_parts.extend([g_means, g_stds, g_counts])
+
                 else:
                     behav_parts.extend([
                         torch.zeros(B, device=device),
@@ -460,7 +461,7 @@ class HeteroTemporalGNN(nn.Module):
                         torch.zeros(B, device=device),
                     ])
 
-            behav_feats = torch.stack(behav_parts, dim=-1)  # [B, 15]
+            behav_feats = torch.stack(behav_parts, dim=-1)   # [B, 15]
 
             # ── Shared trunk + 3 per-class heads             [CHANGE 1 + CHANGE 2]
             x      = torch.cat([combined_embedding, behav_feats], dim=-1)  # [B, 527]
