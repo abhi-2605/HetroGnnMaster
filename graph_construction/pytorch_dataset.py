@@ -18,6 +18,8 @@ import pandas as pd
 from pathlib import Path
 from typing import List, Tuple, Optional, Dict
 import logging
+import random
+import copy
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -53,6 +55,7 @@ class RansomwareGraphDataset(Dataset):
         self.split = split
         self.cache_dir = Path(cache_dir)
         self.split_dir = self.cache_dir / split
+        self.enable_augmentation = (split == 'train')
         
         # Load graph file paths
         self.graph_files = sorted(list(self.split_dir.glob('*.pkl')))
@@ -110,30 +113,80 @@ class RansomwareGraphDataset(Dataset):
     def __getitem__(self, idx: int) -> Tuple[HeteroData, int]:
         """
         Load HeteroData graph with temporal structure preserved.
-        
+
         Returns:
             Tuple of (HeteroData graph, label)
         """
         graph_path = self.graph_files[idx]
-        
+
         with open(graph_path, 'rb') as f:
             data = pickle.load(f)
-        
-        # Verify it's HeteroData
+
         if not isinstance(data, HeteroData):
             raise TypeError(f"Expected HeteroData, got {type(data)}")
-        
-        # Extract hash ID and get label
+
         hash_id = graph_path.stem
-        
+
         if hash_id in self.labels:
             label = self.labels[hash_id]
         else:
             logger.warning(f"No label found for {hash_id}, defaulting to 2")
             label = 2
-        
-        # Return graph and label separately
+
+        if self.enable_augmentation and label == 1:
+            if random.random() < 0.7:
+                data = self.augment_benign_graph(data)
+
         return data, label
+
+    def augment_benign_graph(self, data: HeteroData) -> HeteroData:
+        """
+        Light augmentation for benign training graphs.
+        Designed to reduce memorization without destroying semantics.
+        """
+        data = copy.deepcopy(data)
+
+        resource_node_types = ['file', 'registry', 'process', 'network']
+
+        # 1) Small Gaussian noise + light feature masking on resource nodes
+        for nt in resource_node_types:
+            if nt in data.node_types and hasattr(data[nt], 'x'):
+                x = data[nt].x
+                if isinstance(x, torch.Tensor) and x.numel() > 0:
+                    noise = 0.01 * torch.randn_like(x)
+                    x = x + noise
+
+                    mask = (torch.rand_like(x) > 0.05).float()
+                    x = x * mask
+
+                    data[nt].x = x
+
+        # 2) Light dropout on non-temporal edges only
+        edge_types_to_drop = [
+            ('api', 'operates_on', 'file'),
+            ('api', 'modifies', 'registry'),
+            ('process', 'executes', 'api'),
+            ('api', 'connects_to', 'network'),
+        ]
+
+        for et in edge_types_to_drop:
+            if et in data.edge_types:
+                store = data[et]
+                if hasattr(store, 'edge_index') and isinstance(store.edge_index, torch.Tensor):
+                    E = store.edge_index.size(1)
+                    if E > 0:
+                        keep_mask = torch.rand(E, device=store.edge_index.device) > 0.08
+                        if keep_mask.sum() == 0:
+                            keep_mask[torch.randint(0, E, (1,), device=keep_mask.device)] = True
+
+                        store.edge_index = store.edge_index[:, keep_mask]
+
+                        if hasattr(store, 'edge_attr') and isinstance(store.edge_attr, torch.Tensor):
+                            if store.edge_attr.size(0) == E:
+                                store.edge_attr = store.edge_attr[keep_mask]
+
+        return data
+    
     
     def get_statistics(self) -> dict:
         """Get dataset statistics for HeteroData."""
@@ -152,17 +205,20 @@ class RansomwareGraphDataset(Dataset):
             'graph_type': 'HeteroData (Temporal)'
         }
         
-        # Sample first graph structure
-        if len(self) > 0:
-            sample, sample_label = self[0]
-            stats['node_types'] = sample.node_types
-            stats['edge_types'] = sample.edge_types
-            
-            # Count nodes per type
-            for node_type in sample.node_types:
-                if hasattr(sample[node_type], 'x'):
-                    stats[f'{node_type}_nodes'] = sample[node_type].x.shape[0]
-                    stats[f'{node_type}_features'] = sample[node_type].x.shape[1]
+        # Sample first graph structure without triggering augmentation
+        if len(self.graph_files) > 0:
+            with open(self.graph_files[0], 'rb') as f:
+                sample = pickle.load(f)
+
+            if isinstance(sample, HeteroData):
+                stats['node_types'] = sample.node_types
+                stats['edge_types'] = sample.edge_types
+                
+                # Count nodes per type
+                for node_type in sample.node_types:
+                    if hasattr(sample[node_type], 'x'):
+                        stats[f'{node_type}_nodes'] = sample[node_type].x.shape[0]
+                        stats[f'{node_type}_features'] = sample[node_type].x.shape[1]
         
         return stats
 
@@ -193,7 +249,7 @@ def hetero_collate(batch):
             if node_type in graph.node_types:
                 x = graph[node_type].x
                 if x.shape[1] < 6:
-                    padding = torch.zeros(x.shape[0], 6 - x.shape[1], dtype=x.dtype)
+                    padding = torch.zeros(x.shape[0], 6 - x.shape[1], dtype=x.dtype, device=x.device)
                     graph[node_type].x = torch.cat([x, padding], dim=1)
                 elif x.shape[1] > 6:
                     graph[node_type].x = x[:, :6]

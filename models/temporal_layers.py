@@ -264,15 +264,17 @@ class TemporalLSTM(nn.Module):
         self.output_dim = hidden_dim * 2 if bidirectional else hidden_dim
 
     def forward(
-        self,
-        x: torch.Tensor,
-        batch: torch.Tensor,
-        timestamps: Optional[torch.Tensor] = None,
-    ) -> torch.Tensor:
+    self,
+    x: torch.Tensor,
+    batch: torch.Tensor,
+    timestamps: Optional[torch.Tensor] = None,
+) -> torch.Tensor:
         device = x.device
         batch_size = int(batch.max().item()) + 1
 
-        outputs = []
+        # Sort each graph's nodes by timestamp, collect sequences
+        sequences = []
+        inverse_orders = []
 
         for b in range(batch_size):
             mask = batch == b
@@ -282,18 +284,45 @@ class TemporalLSTM(nn.Module):
                 t_b = timestamps[mask]
                 order = torch.argsort(t_b)
                 x_b = x_b[order]
+                inverse_orders.append(torch.argsort(order))
+            else:
+                inverse_orders.append(None)
 
-            x_b = x_b.unsqueeze(0)
-            out_b, _ = self.lstm(x_b)
-            out_b = out_b.squeeze(0)
+            sequences.append(x_b)
 
-            if timestamps is not None:
-                inv_order = torch.argsort(order)
-                out_b = out_b[inv_order]
+        # Pad all sequences to the same length → [B, max_seq_len, input_dim]
+        lengths = torch.tensor([s.size(0) for s in sequences], dtype=torch.long)
+        padded = torch.nn.utils.rnn.pad_sequence(
+            sequences, batch_first=True
+        )  # [B, max_seq_len, input_dim]
+
+        # Pack → single LSTM call over the whole batch
+        packed = torch.nn.utils.rnn.pack_padded_sequence(
+            padded,
+            lengths.cpu(),
+            batch_first=True,
+            enforce_sorted=False,  # handles variable-length without manual sorting
+        )
+
+        packed_out, _ = self.lstm(packed)
+
+        # Unpack → [B, max_seq_len, lstm_output_dim]
+        out_padded, _ = torch.nn.utils.rnn.pad_packed_sequence(
+            packed_out, batch_first=True
+        )
+
+        # Flatten back to [N_total, lstm_output_dim] and restore original node order
+        outputs = []
+        for b in range(batch_size):
+            out_b = out_padded[b, : lengths[b]]  # trim padding → [seq_len, output_dim]
+
+            if inverse_orders[b] is not None:
+                out_b = out_b[inverse_orders[b]]  # restore original node order
 
             outputs.append(out_b)
 
-        return torch.cat(outputs, dim=0)
+        return torch.cat(outputs, dim=0)  # [N_total, lstm_output_dim]
+
 
 
 # ============================================================
