@@ -484,17 +484,36 @@ def train():
             ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
             model.load_state_dict(ckpt['model_state_dict'])
             continue  # skip to next epoch without validating or checkpointing
-
+        ransom_r = train_metrics['per_class_recall'][0]
+        benign_r = train_metrics['per_class_recall'][1]
+        malware_r  = train_metrics['per_class_recall'][2]
+        ransom_p   = train_metrics['per_class_precision'][0]
+        benign_p   = train_metrics['per_class_precision'][1]
+        malware_p  = train_metrics['per_class_precision'][2]
         log(f"\nTrain  loss={train_metrics['loss']:.4f}  "
             f"macro_f1={train_metrics['macro_f1']:.4f}  "
-            f"mem_reg={train_metrics['mem_reg']:.6f}")  # ← MEMORY: log reg term
+            f"mem_reg={train_metrics['mem_reg']:.6f}"
+            f"Ransom P={ransom_p:.3f} R={ransom_r:.3f}  "
+            f"Benign P={benign_p:.3f} R={benign_r:.3f}  "
+            f"Malware P={malware_p:.3f} R={malware_r:.3f}"
+            )  # ← MEMORY: log reg term
         
 
         # validate (no memory write)
 
         val_metrics = validate(model, val_loader, criterion, vocab, device)
+        ransom_v_r = val_metrics['per_class_recall'][0]
+        benign_v_r = val_metrics['per_class_recall'][1]
+        malware_v_r  = val_metrics['per_class_recall'][2]
+        ransom_v_p   = val_metrics['per_class_precision'][0]
+        benign_v_p   = val_metrics['per_class_precision'][1]
+        malware_v_p  = val_metrics['per_class_precision'][2]
         log(f"Val    loss={val_metrics['loss']:.4f}  "
-            f"macro_f1={val_metrics['macro_f1']:.4f}")
+            f"macro_f1={val_metrics['macro_f1']:.4f}"
+             f"Ransom P={ransom_v_p:.3f} R={ransom_v_r:.3f}  "
+                f"Benign P={benign_v_p:.3f} R={benign_v_r:.3f}  "
+                f"Malware P={malware_v_p:.3f} R={malware_v_r:.3f}"
+            )
 
         # log history
         for k, v in train_metrics.items():
