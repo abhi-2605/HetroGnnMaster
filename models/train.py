@@ -536,7 +536,7 @@ def train():
         ransomware_recall = val_metrics['per_class_recall'][0]
         benign_recall     = val_metrics['per_class_recall'][1]
         recall_floors = (
-            ransomware_recall >= config.MIN_RANSOMWARE_RECALL *.80 and
+            ransomware_recall >= config.MIN_RANSOMWARE_RECALL *.79 and
             benign_recall     >= config.MIN_BENIGN_RECALL     *.58
         )
         if current > best_metric and recall_floors:   # ← MEMORY: only save if recall floors are met

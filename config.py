@@ -170,10 +170,10 @@ RESUME_FROM_CHECKPOINT = True
 # Focal Loss
 USE_FOCAL_LOSS = True
 # FOCAL_GAMMA = 2.0
-FOCAL_GAMMA = 1.6
+FOCAL_GAMMA = 2
 # FOCAL_ALPHA = [0.40, 0.50, 0.10]  # [Ransomware, Benign, Other Malware]
 # FOCAL_ALPHA = [0.38, 0.50, 0.12]
-FOCAL_ALPHA = [0.32, 0.38, 0.30]
+FOCAL_ALPHA = [0.35, 0.35, 0.30]
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True
 # OVERSAMPLE_WEIGHTS = {
@@ -182,8 +182,8 @@ USE_WEIGHTED_SAMPLING = True
 #     2: 0.8    # Other Malware: 1.2x oversampling
 # }
 OVERSAMPLE_WEIGHTS = {
-    0: 4.0,
-    1: 7.0,
+    0: 4.5,
+    1: 5.0,
     2: 0.7
 }
 # Class weights for loss function (alternative to Focal Loss)
