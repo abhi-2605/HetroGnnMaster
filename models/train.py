@@ -487,8 +487,9 @@ def train():
     model = create_hetero_tgnn(use_memory=config.USE_MEMORY).to(device)
 
     print("\n🚀 Model architecture:")
-    print(f"  API output per layer   : {model.api_out_dim_per_layer}")
-    print(f"  Resource output / layer: {model.resource_out_dim_per_layer}")
+    print(f"  Primary temporal type  : {model.primary_temporal_type}")
+    print(f"  Primary output / layer : {model.primary_out_dim_per_layer}")
+    print(f"  Other output / layer   : {model.other_out_dim_per_layer}")
     print(f"  LSTM output            : {model.lstm_output_dim}")
     print(f"  Total embedding        : {model.total_embedding_dim}")
 

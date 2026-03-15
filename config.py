@@ -302,7 +302,13 @@ set_seed()
 
 
 
+# ─────────────────────────────────────────────
+# Temporal backbone configuration
+# ─────────────────────────────────────────────
 
+# Node type that acts as the temporal sequence backbone
+# CAPE graphs use API calls as the temporal spine.
+PRIMARY_TEMPORAL_NODE_TYPE = "api"
 PROJECT_ROOT = Path(__file__).parent
 DATA_DIR = PROJECT_ROOT / "data"
 CACHE_DIR = PROJECT_ROOT / "cache"
