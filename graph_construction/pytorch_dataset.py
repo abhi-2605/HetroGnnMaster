@@ -22,7 +22,7 @@ import pandas as pd
 import torch
 from torch.utils.data import DataLoader, Dataset
 from torch_geometric.data import Batch, HeteroData
-
+from config import METADATA_PATH
 import config
 from utils.schema_manager import ensure_active_schema
 from utils.schema_utils import (
@@ -95,7 +95,7 @@ class RansomwareGraphDataset(Dataset):
 
     def _load_labels(self) -> Dict[str, int]:
         """Load 3-class labels from metadata CSV."""
-        metadata_path = self.data_dir / "extracted_metadata.csv"
+        metadata_path = Path(METADATA_PATH)
 
         if not metadata_path.exists():
             raise FileNotFoundError(f"Metadata file not found: {metadata_path}")
