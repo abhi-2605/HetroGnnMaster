@@ -298,6 +298,11 @@ set_seed()
 # ============================================
 # PATHS
 # ============================================
+# Metadata CSV
+
+
+
+
 PROJECT_ROOT = Path(__file__).parent
 DATA_DIR = PROJECT_ROOT / "data"
 CACHE_DIR = PROJECT_ROOT / "cache"
@@ -306,9 +311,12 @@ RESULTS_DIR = PROJECT_ROOT / "results"
 # Data subdirectories
 SAMPLE_DIR = DATA_DIR / "sample"
 SPLITS_DIR = DATA_DIR / "splits"
-METADATA_PATH = DATA_DIR / "extracted_metadata.csv"
+# METADATA_PATH = DATA_DIR / "extracted_metadata.csv"
 LOOKUP_PATH = DATA_DIR / "lookup.json"
+ROOT_METADATA_PATH = PROJECT_ROOT / "extracted_metadata.csv"
+DATA_METADATA_PATH = DATA_DIR / "extracted_metadata.csv"
 
+METADATA_PATH = ROOT_METADATA_PATH if ROOT_METADATA_PATH.exists() else DATA_METADATA_PATH
 # Cache subdirectories
 GRAPHS_DIR = CACHE_DIR / "graphs"
 ENRICHED_DIR = CACHE_DIR / "enriched"  # legacy/default enriched path
