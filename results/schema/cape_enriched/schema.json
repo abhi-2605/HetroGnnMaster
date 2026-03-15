@@ -1,0 +1,202 @@
+{
+  "source": {
+    "name": "cape_enriched",
+    "graph_root": "/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched"
+  },
+  "paths": {
+    "project_root": "/Volumes/SSD/TGNN/ransomware_tgnn",
+    "cache_dir": "/Volumes/SSD/TGNN/ransomware_tgnn/cache",
+    "results_dir": "/Volumes/SSD/TGNN/ransomware_tgnn/results",
+    "schema_json": "/Volumes/SSD/TGNN/ransomware_tgnn/results/schema/cape_enriched/schema.json",
+    "schema_summary": "/Volumes/SSD/TGNN/ransomware_tgnn/results/schema/cape_enriched/schema_summary.txt"
+  },
+  "global": {
+    "total_graphs": 6572,
+    "graphs_with_label_tuple": 0,
+    "graphs_without_label_tuple": 6572,
+    "failed_files": [],
+    "graph_object_types": {
+      "graph_only": 6572,
+      "HeteroData": 6572
+    },
+    "label_distribution_detected": {}
+  },
+  "splits": {
+    "train": {
+      "num_files": 4597,
+      "missing": false,
+      "failed_files": []
+    },
+    "val": {
+      "num_files": 973,
+      "missing": false,
+      "failed_files": []
+    },
+    "test": {
+      "num_files": 1002,
+      "missing": false,
+      "failed_files": []
+    }
+  },
+  "schema_summary": {
+    "node_types_found": [
+      "api",
+      "file",
+      "network",
+      "process",
+      "registry"
+    ],
+    "edge_types_found": [
+      "api::modifies::registry",
+      "api::operates_on::file",
+      "api::temporal::api",
+      "process::executes::api"
+    ],
+    "num_node_types_found": 5,
+    "num_edge_types_found": 4
+  },
+  "node_types": {
+    "api": {
+      "graphs_present": 6572,
+      "zero_node_graphs": 0,
+      "total_nodes": 23087258,
+      "min_nodes": 12,
+      "max_nodes": 10000,
+      "feature_dims": [
+        775
+      ]
+    },
+    "file": {
+      "graphs_present": 6572,
+      "zero_node_graphs": 146,
+      "total_nodes": 423059,
+      "min_nodes": 0,
+      "max_nodes": 5298,
+      "feature_dims": [
+        6,
+        7
+      ]
+    },
+    "network": {
+      "graphs_present": 6572,
+      "zero_node_graphs": 4904,
+      "total_nodes": 5333,
+      "min_nodes": 0,
+      "max_nodes": 68,
+      "feature_dims": [
+        4,
+        6
+      ]
+    },
+    "process": {
+      "graphs_present": 6572,
+      "zero_node_graphs": 0,
+      "total_nodes": 12806,
+      "min_nodes": 1,
+      "max_nodes": 93,
+      "feature_dims": [
+        3,
+        6
+      ]
+    },
+    "registry": {
+      "graphs_present": 6572,
+      "zero_node_graphs": 142,
+      "total_nodes": 1585451,
+      "min_nodes": 0,
+      "max_nodes": 4076,
+      "feature_dims": [
+        6
+      ]
+    }
+  },
+  "edge_types": {
+    "api::modifies::registry": {
+      "graphs_present": 6572,
+      "zero_edge_graphs": 6572,
+      "total_edges": 0,
+      "min_edges": 0,
+      "max_edges": 0,
+      "has_edge_attr": false,
+      "edge_attr_dims": null
+    },
+    "api::operates_on::file": {
+      "graphs_present": 6572,
+      "zero_edge_graphs": 5928,
+      "total_edges": 2644,
+      "min_edges": 0,
+      "max_edges": 753,
+      "has_edge_attr": false,
+      "edge_attr_dims": null
+    },
+    "api::temporal::api": {
+      "graphs_present": 6572,
+      "zero_edge_graphs": 0,
+      "total_edges": 23080686,
+      "min_edges": 11,
+      "max_edges": 9999,
+      "has_edge_attr": true,
+      "edge_attr_dims": [
+        14
+      ]
+    },
+    "process::executes::api": {
+      "graphs_present": 6572,
+      "zero_edge_graphs": 5,
+      "total_edges": 23073461,
+      "min_edges": 0,
+      "max_edges": 10000,
+      "has_edge_attr": false,
+      "edge_attr_dims": null
+    }
+  },
+  "expected_from_config": {
+    "node_types": [
+      "api",
+      "file",
+      "registry",
+      "process",
+      "network"
+    ],
+    "edge_types": [
+      "api::temporal::api",
+      "api::operates_on::file",
+      "api::modifies::registry",
+      "process::executes::api",
+      "api::connects_to::network"
+    ],
+    "default_node_type_order": [
+      "api",
+      "file",
+      "registry",
+      "process",
+      "network"
+    ],
+    "default_edge_type_order": [
+      "api::temporal::api",
+      "api::operates_on::file",
+      "api::modifies::registry",
+      "process::executes::api",
+      "api::connects_to::network"
+    ],
+    "api_node_dim": 775,
+    "resource_node_dim": 6,
+    "temporal_edge_dim": 14
+  },
+  "compatibility_checks": {
+    "api_feature_dim_ok": true,
+    "resource_feature_dims_ok": {
+      "file": false,
+      "registry": true,
+      "process": false,
+      "network": false
+    },
+    "temporal_edge_dim_ok": true,
+    "missing_expected_node_types": [],
+    "missing_expected_edge_types": [
+      "api::connects_to::network"
+    ],
+    "unexpected_node_types": [],
+    "unexpected_edge_types": []
+  }
+}

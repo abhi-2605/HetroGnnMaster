@@ -1,0 +1,35 @@
+================================================================================
+ENRICHED GRAPH SCHEMA SUMMARY
+================================================================================
+Source name : cape_enriched
+Graph root  : /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched
+Total graphs: 6572
+
+NODE TYPES FOUND:
+  - api: dims=[775] graphs_present=6572 zero_node_graphs=0 min_nodes=12 max_nodes=10000
+  - file: dims=[6, 7] graphs_present=6572 zero_node_graphs=146 min_nodes=0 max_nodes=5298
+  - network: dims=[4, 6] graphs_present=6572 zero_node_graphs=4904 min_nodes=0 max_nodes=68
+  - process: dims=[3, 6] graphs_present=6572 zero_node_graphs=0 min_nodes=1 max_nodes=93
+  - registry: dims=[6] graphs_present=6572 zero_node_graphs=142 min_nodes=0 max_nodes=4076
+
+EDGE TYPES FOUND:
+  - api::modifies::registry: edge_attr=False edge_attr_dims=None graphs_present=6572 zero_edge_graphs=6572 min_edges=0 max_edges=0
+  - api::operates_on::file: edge_attr=False edge_attr_dims=None graphs_present=6572 zero_edge_graphs=5928 min_edges=0 max_edges=753
+  - api::temporal::api: edge_attr=True edge_attr_dims=[14] graphs_present=6572 zero_edge_graphs=0 min_edges=11 max_edges=9999
+  - process::executes::api: edge_attr=False edge_attr_dims=None graphs_present=6572 zero_edge_graphs=5 min_edges=0 max_edges=10000
+
+COMPATIBILITY CHECKS:
+  - api_feature_dim_ok: True
+  - resource_feature_dims_ok: {'file': False, 'registry': True, 'process': False, 'network': False}
+  - temporal_edge_dim_ok: True
+  - missing_expected_node_types: []
+  - missing_expected_edge_types: ['api::connects_to::network']
+  - unexpected_node_types: []
+  - unexpected_edge_types: []
+
+SPLITS:
+  - train: num_files=4597 missing=False failed_files=0
+  - val: num_files=973 missing=False failed_files=0
+  - test: num_files=1002 missing=False failed_files=0
+
+================================================================================

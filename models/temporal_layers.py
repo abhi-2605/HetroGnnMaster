@@ -1,52 +1,51 @@
 """
-Temporal layers for (heterogeneous) Graph Neural Networks.
+Temporal layers for heterogeneous temporal GNNs.
 
-Components (homogeneous, existing):
-1. TemporalGATConv: GAT with temporal edge features (edge_attr) + BIPARTITE SUPPORT
-2. TemporalTransformerConv: Transformer-style spatial aggregation + BIPARTITE SUPPORT
-3. TemporalLSTM: Bi-directional LSTM for sequential modeling
-4. TemporalAttentionPooling: Multi-head temporal pooling
+Components:
+1. TemporalGATConv: GAT-style relation conv with optional edge features
+2. TemporalTransformerConv: Transformer-style relation conv with optional edge features
+3. TemporalLSTM: explicit ordered sequence model for API temporal spine
+4. TemporalAttentionPooling: graph-level temporal pooling
+5. HeteroTemporalConv: schema-friendly heterogeneous relation message passing
 
-New heterogeneous wrappers:
-5. HeteroTemporalConv: Edge-type-specific temporal GNN via HeteroConv
-
-Author: AbhisheK Menon
-Date: 2026-02-12
+Important design note:
+- TemporalLSTM remains the explicit order-sensitive temporal branch.
+- HeteroTemporalConv processes graph relations, including api->temporal->api,
+  but does NOT replace sequence modeling.
 """
+
+from __future__ import annotations
+
+import math
+from typing import Dict, List, Optional, Tuple, Union
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from torch_geometric.nn import (
-    GATConv,
-    TransformerConv,
-    MessagePassing,
-    HeteroConv
-)
+from torch_geometric.nn import MessagePassing, TransformerConv
 from torch_geometric.utils import softmax
-from typing import Optional, Tuple, Dict, List, Union
-import math
+
+
+EdgeType = Tuple[str, str, str]
+
+
+def edge_type_to_key(edge_type: EdgeType) -> str:
+    """Stable string key for ModuleDict storage."""
+    src, rel, dst = edge_type
+    return f"{src}__{rel}__{dst}"
 
 
 # ============================================================
-# 1. TemporalGATConv with BIPARTITE SUPPORT
+# 1. TemporalGATConv with bipartite support
 # ============================================================
 
 class TemporalGATConv(MessagePassing):
     """
-    Graph Attention Network with optional temporal edge features.
-    
-    SUPPORTS BIPARTITE GRAPHS:
-    - Homogeneous: x is tensor, src=dst (e.g., API->API)
-    - Bipartite: x is tuple (x_src, x_dst) (e.g., API->File)
-    
-    Args:
-        in_channels: int or tuple (in_src, in_dst)
-        out_channels: int (output per head)
-        edge_dim: edge feature dimension
-        heads: number of attention heads
-        dropout: dropout rate
-        concat: concatenate heads (True) or average (False)
+    GAT-style message passing with optional edge features.
+
+    Supports:
+    - homogeneous relations: x is Tensor
+    - bipartite relations: x is (x_src, x_dst)
     """
 
     def __init__(
@@ -57,11 +56,10 @@ class TemporalGATConv(MessagePassing):
         heads: int = 6,
         dropout: float = 0.3,
         concat: bool = True,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(aggr="add", node_dim=0, **kwargs)
 
-        # Handle bipartite: (in_src, in_dst) or homogeneous: in_channels
         if isinstance(in_channels, int):
             self.in_channels_src = in_channels
             self.in_channels_dst = in_channels
@@ -74,15 +72,12 @@ class TemporalGATConv(MessagePassing):
         self.dropout = dropout
         self.concat = concat
 
-        # Linear transformation for source and destination
         self.lin_src = nn.Linear(self.in_channels_src, heads * out_channels)
         self.lin_dst = nn.Linear(self.in_channels_dst, heads * out_channels)
 
-        # Attention parameters
         self.att_src = nn.Parameter(torch.Tensor(1, heads, out_channels))
         self.att_dst = nn.Parameter(torch.Tensor(1, heads, out_channels))
 
-        # Edge feature handling
         if edge_dim > 0:
             self.lin_edge = nn.Linear(edge_dim, heads * out_channels)
             self.att_edge = nn.Parameter(torch.Tensor(1, heads, out_channels))
@@ -90,7 +85,6 @@ class TemporalGATConv(MessagePassing):
             self.lin_edge = None
             self.att_edge = None
 
-        # Bias
         if concat:
             self.bias = nn.Parameter(torch.Tensor(heads * out_channels))
         else:
@@ -101,9 +95,17 @@ class TemporalGATConv(MessagePassing):
     def reset_parameters(self):
         nn.init.xavier_uniform_(self.lin_src.weight)
         nn.init.xavier_uniform_(self.lin_dst.weight)
+        if self.lin_src.bias is not None:
+            nn.init.zeros_(self.lin_src.bias)
+        if self.lin_dst.bias is not None:
+            nn.init.zeros_(self.lin_dst.bias)
+
         if self.lin_edge is not None:
             nn.init.xavier_uniform_(self.lin_edge.weight)
+            if self.lin_edge.bias is not None:
+                nn.init.zeros_(self.lin_edge.bias)
             nn.init.xavier_uniform_(self.att_edge)
+
         nn.init.xavier_uniform_(self.att_src)
         nn.init.xavier_uniform_(self.att_dst)
         nn.init.zeros_(self.bias)
@@ -114,44 +116,31 @@ class TemporalGATConv(MessagePassing):
         edge_index: torch.Tensor,
         edge_attr: Optional[torch.Tensor] = None,
     ) -> torch.Tensor:
-        """
-        Forward pass.
-        
-        Args:
-            x: Node features
-                - Homogeneous: [N, in_channels]
-                - Bipartite: ([N_src, in_src], [N_dst, in_dst])
-            edge_index: [2, E] where edges go from src to dst
-            edge_attr: [E, edge_dim] or None
-        
-        Returns:
-            [N_dst, heads * out_channels] if concat else [N_dst, out_channels]
-        """
-        # Handle bipartite vs homogeneous
+        if edge_index.dim() != 2 or edge_index.size(0) != 2:
+            raise ValueError(f"edge_index must have shape [2, E], got {tuple(edge_index.shape)}")
+
         if isinstance(x, torch.Tensor):
             x_src = x_dst = x
         else:
             x_src, x_dst = x
 
-        # Transform source and destination
         x_src = self.lin_src(x_src).view(-1, self.heads, self.out_channels)
         x_dst = self.lin_dst(x_dst).view(-1, self.heads, self.out_channels)
 
-        # Process edge attributes
         if self.edge_dim > 0 and edge_attr is not None and self.lin_edge is not None:
+            if edge_attr.dim() == 1:
+                edge_attr = edge_attr.unsqueeze(-1)
             edge_attr_emb = self.lin_edge(edge_attr).view(-1, self.heads, self.out_channels)
         else:
             E = edge_index.size(1)
             edge_attr_emb = x_src.new_zeros(E, self.heads, self.out_channels)
 
-        # Propagate messages
         out = self.propagate(
-            edge_index,
+            edge_index=edge_index,
             x=(x_src, x_dst),
             edge_attr=edge_attr_emb,
         )
 
-        # Concatenate or average heads
         if self.concat:
             out = out.view(-1, self.heads * self.out_channels)
         else:
@@ -169,12 +158,8 @@ class TemporalGATConv(MessagePassing):
         ptr: Optional[torch.Tensor],
         size_i: Optional[int],
     ) -> torch.Tensor:
-        # x_i: destination features [E, heads, out_channels]
-        # x_j: source features [E, heads, out_channels]
-        # edge_attr: [E, heads, out_channels]
-
-        alpha_src = (x_j * self.att_src).sum(dim=-1)  # [E, heads]
-        alpha_dst = (x_i * self.att_dst).sum(dim=-1)  # [E, heads]
+        alpha_src = (x_j * self.att_src).sum(dim=-1)
+        alpha_dst = (x_i * self.att_dst).sum(dim=-1)
 
         if self.att_edge is not None:
             alpha_edge = (edge_attr * self.att_edge).sum(dim=-1)
@@ -190,12 +175,12 @@ class TemporalGATConv(MessagePassing):
 
 
 # ============================================================
-# 2. TemporalTransformerConv with BIPARTITE SUPPORT
+# 2. TemporalTransformerConv with bipartite support
 # ============================================================
 
 class TemporalTransformerConv(MessagePassing):
     """
-    Transformer-style graph convolution with bipartite support.
+    Transformer-style relation convolution with optional edge features.
     """
 
     def __init__(
@@ -206,10 +191,9 @@ class TemporalTransformerConv(MessagePassing):
         heads: int = 6,
         dropout: float = 0.3,
         concat: bool = True,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(aggr="add", node_dim=0, **kwargs)
-
         self.conv = TransformerConv(
             in_channels=in_channels,
             out_channels=out_channels,
@@ -229,12 +213,15 @@ class TemporalTransformerConv(MessagePassing):
 
 
 # ============================================================
-# 3. TemporalLSTM (unchanged)
+# 3. TemporalLSTM (explicit temporal spine)
 # ============================================================
 
 class TemporalLSTM(nn.Module):
     """
-    Bi-directional LSTM for sequential node modeling.
+    Bi-directional LSTM for ordered sequential modeling.
+
+    This is the explicit order-sensitive temporal branch and should not be
+    replaced by generic relation message passing.
     """
 
     def __init__(
@@ -264,21 +251,31 @@ class TemporalLSTM(nn.Module):
         self.output_dim = hidden_dim * 2 if bidirectional else hidden_dim
 
     def forward(
-    self,
-    x: torch.Tensor,
-    batch: torch.Tensor,
-    timestamps: Optional[torch.Tensor] = None,
-) -> torch.Tensor:
+        self,
+        x: torch.Tensor,
+        batch: torch.Tensor,
+        timestamps: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
         device = x.device
+        _ = device  # kept for future use / symmetry
+
+        if x.size(0) == 0:
+            return x.new_zeros((0, self.output_dim))
+
         batch_size = int(batch.max().item()) + 1
 
-        # Sort each graph's nodes by timestamp, collect sequences
         sequences = []
         inverse_orders = []
+        valid_positions = []
 
         for b in range(batch_size):
             mask = batch == b
             x_b = x[mask]
+
+            if x_b.size(0) == 0:
+                sequences.append(None)
+                inverse_orders.append(None)
+                continue
 
             if timestamps is not None:
                 t_b = timestamps[mask]
@@ -289,49 +286,56 @@ class TemporalLSTM(nn.Module):
                 inverse_orders.append(None)
 
             sequences.append(x_b)
+            valid_positions.append(b)
 
-        # Pad all sequences to the same length → [B, max_seq_len, input_dim]
-        lengths = torch.tensor([s.size(0) for s in sequences], dtype=torch.long)
-        padded = torch.nn.utils.rnn.pad_sequence(
-            sequences, batch_first=True
-        )  # [B, max_seq_len, input_dim]
+        valid_sequences = [seq for seq in sequences if seq is not None]
+        if len(valid_sequences) == 0:
+            return x.new_zeros((0, self.output_dim))
 
-        # Pack → single LSTM call over the whole batch
+        lengths = torch.tensor(
+            [s.size(0) for s in valid_sequences],
+            dtype=torch.long,
+            device=x.device,
+        )
+        padded = torch.nn.utils.rnn.pad_sequence(valid_sequences, batch_first=True)
+
         packed = torch.nn.utils.rnn.pack_padded_sequence(
             padded,
             lengths.cpu(),
             batch_first=True,
-            enforce_sorted=False,  # handles variable-length without manual sorting
+            enforce_sorted=False,
         )
 
         packed_out, _ = self.lstm(packed)
 
-        # Unpack → [B, max_seq_len, lstm_output_dim]
         out_padded, _ = torch.nn.utils.rnn.pad_packed_sequence(
-            packed_out, batch_first=True
+            packed_out,
+            batch_first=True,
         )
 
-        # Flatten back to [N_total, lstm_output_dim] and restore original node order
         outputs = []
-        for b in range(batch_size):
-            out_b = out_padded[b, : lengths[b]]  # trim padding → [seq_len, output_dim]
+        valid_idx = 0
+        for i in range(len(sequences)):
+            if sequences[i] is None:
+                continue
 
-            if inverse_orders[b] is not None:
-                out_b = out_b[inverse_orders[b]]  # restore original node order
+            out_b = out_padded[valid_idx, : lengths[valid_idx]]
+            if inverse_orders[i] is not None:
+                out_b = out_b[inverse_orders[i]]
 
             outputs.append(out_b)
+            valid_idx += 1
 
-        return torch.cat(outputs, dim=0)  # [N_total, lstm_output_dim]
-
+        return torch.cat(outputs, dim=0)
 
 
 # ============================================================
-# 4. TemporalAttentionPooling (unchanged)
+# 4. TemporalAttentionPooling
 # ============================================================
 
 class TemporalAttentionPooling(nn.Module):
     """
-    Multi-head temporal attention pooling.
+    Multi-head temporal attention pooling over node sequences per graph.
     """
 
     def __init__(self, input_dim: int, num_heads: int = 8):
@@ -340,30 +344,36 @@ class TemporalAttentionPooling(nn.Module):
         self.num_heads = num_heads
         self.head_dim = input_dim // num_heads
 
-        assert input_dim % num_heads == 0, "input_dim must be divisible by num_heads"
+        if input_dim % num_heads != 0:
+            raise ValueError("input_dim must be divisible by num_heads")
 
         self.query = nn.Linear(input_dim, input_dim)
         self.key = nn.Linear(input_dim, input_dim)
         self.value = nn.Linear(input_dim, input_dim)
         self.norm = nn.LayerNorm(input_dim)
 
-    def forward(
-        self,
-        x: torch.Tensor,
-        batch: torch.Tensor,
-    ) -> List[torch.Tensor]:
+    def forward(self, x: torch.Tensor, batch: torch.Tensor) -> torch.Tensor:
+        if x.size(0) == 0:
+            batch_size = int(batch.max().item()) + 1 if batch.numel() > 0 else 0
+            return x.new_zeros((batch_size, self.input_dim))
+
         batch_size = int(batch.max().item()) + 1
         graph_embeddings = []
 
         for b in range(batch_size):
             mask = batch == b
-            x_b = x[mask].unsqueeze(0)  # [1, seq_len, input_dim]
+            x_b = x[mask]
 
-            q = self.query(x_b.mean(dim=1, keepdim=True))  # [1, 1, input_dim]
+            if x_b.size(0) == 0:
+                graph_embeddings.append(x.new_zeros(self.input_dim))
+                continue
+
+            x_b = x_b.unsqueeze(0)  # [1, seq_len, input_dim]
+
+            q = self.query(x_b.mean(dim=1, keepdim=True))
             k = self.key(x_b)
             v = self.value(x_b)
 
-            # Multi-head attention
             q = q.view(1, 1, self.num_heads, self.head_dim).transpose(1, 2)
             k = k.view(1, -1, self.num_heads, self.head_dim).transpose(1, 2)
             v = v.view(1, -1, self.num_heads, self.head_dim).transpose(1, 2)
@@ -377,58 +387,69 @@ class TemporalAttentionPooling(nn.Module):
             emb_b = self.norm(emb_b)
             graph_embeddings.append(emb_b)
 
-        return torch.stack(graph_embeddings)
+        return torch.stack(graph_embeddings, dim=0)
 
 
 # ============================================================
-# 5. HeteroTemporalConv (FIXED)
+# 5. HeteroTemporalConv
 # ============================================================
 
 class HeteroTemporalConv(nn.Module):
     """
-    Heterogeneous temporal graph convolution.
+    Heterogeneous relation-aware graph convolution.
+
+    Notes:
+    - Processes all provided edge types relation-by-relation.
+    - Supports optional edge features per relation.
+    - Safely skips missing node/edge types in a batch.
+    - Does NOT replace the explicit TemporalLSTM sequence path.
     """
 
     def __init__(
         self,
         in_channels_dict: Dict[str, int],
         out_channels_dict: Dict[str, int],
-        edge_types: List[Tuple[str, str, str]],
-        layer_type: str = 'gat',
+        edge_types: List[EdgeType],
+        layer_type: str = "gat",
         num_heads: int = 6,
-        edge_dim_dict: Optional[Dict[Tuple[str, str, str], int]] = None,
+        edge_dim_dict: Optional[Dict[EdgeType, int]] = None,
         dropout: float = 0.3,
-        aggr: str = 'sum',
+        aggr: str = "sum",
     ):
         super().__init__()
 
-        self.in_channels_dict = in_channels_dict
-        self.out_channels_dict = out_channels_dict
-        self.edge_types = edge_types
+        self.in_channels_dict = dict(in_channels_dict)
+        self.out_channels_dict = dict(out_channels_dict)
+        self.edge_types = list(edge_types)
         self.layer_type = layer_type.lower()
         self.num_heads = num_heads
-        self.edge_dim_dict = edge_dim_dict if edge_dim_dict is not None else {}
+        self.edge_dim_dict = dict(edge_dim_dict) if edge_dim_dict is not None else {}
         self.dropout = dropout
-        self.aggr = aggr
+        self.aggr = aggr.lower()
 
-        # Create per-edge-type convolutions
+        if self.aggr not in {"sum", "mean", "max"}:
+            raise ValueError(f"Unsupported aggregation mode: {aggr}")
+
         convs = {}
-        for edge_type in edge_types:
-            src, rel, dst = edge_type
+        for edge_type in self.edge_types:
+            src, _, dst = edge_type
 
-            # Determine if bipartite
+            if src not in self.in_channels_dict:
+                raise KeyError(f"Missing in_channels for source node type '{src}'")
+            if dst not in self.in_channels_dict:
+                raise KeyError(f"Missing in_channels for destination node type '{dst}'")
+            if dst not in self.out_channels_dict:
+                raise KeyError(f"Missing out_channels for destination node type '{dst}'")
+
             if src == dst:
-                # Homogeneous
-                in_ch = in_channels_dict[src]
+                in_ch = self.in_channels_dict[src]
             else:
-                # Bipartite
-                in_ch = (in_channels_dict[src], in_channels_dict[dst])
+                in_ch = (self.in_channels_dict[src], self.in_channels_dict[dst])
 
-            out_ch = out_channels_dict[dst]
-            edge_dim = self.edge_dim_dict.get(edge_type, 0)
+            out_ch = self.out_channels_dict[dst]
+            edge_dim = int(self.edge_dim_dict.get(edge_type, 0) or 0)
 
-            # Create layer
-            if self.layer_type == 'gat':
+            if self.layer_type == "gat":
                 conv = TemporalGATConv(
                     in_channels=in_ch,
                     out_channels=out_ch,
@@ -437,7 +458,7 @@ class HeteroTemporalConv(nn.Module):
                     dropout=dropout,
                     concat=True,
                 )
-            elif self.layer_type == 'transformer':
+            elif self.layer_type == "transformer":
                 conv = TemporalTransformerConv(
                     in_channels=in_ch,
                     out_channels=out_ch,
@@ -449,135 +470,132 @@ class HeteroTemporalConv(nn.Module):
             else:
                 raise ValueError(f"Unknown layer_type: {layer_type}")
 
-            # Store with string key for ModuleDict
-            key = f"{src}__{rel}__{dst}"
-            convs[key] = conv
+            convs[edge_type_to_key(edge_type)] = conv
 
         self.convs = nn.ModuleDict(convs)
+
+    def get_registered_edge_types(self) -> List[EdgeType]:
+        return list(self.edge_types)
+
+    def get_active_edge_types(
+        self,
+        x_dict: Dict[str, torch.Tensor],
+        edge_index_dict: Dict[EdgeType, torch.Tensor],
+    ) -> List[EdgeType]:
+        """
+        Return relation types that are actually usable in this forward pass.
+        """
+        active = []
+        for edge_type in self.edge_types:
+            src, _, dst = edge_type
+            if edge_type not in edge_index_dict:
+                continue
+            if src not in x_dict or dst not in x_dict:
+                continue
+            edge_index = edge_index_dict[edge_type]
+            if edge_index is None or edge_index.numel() == 0:
+                continue
+            active.append(edge_type)
+        return active
+
+    def _prepare_edge_attr(
+        self,
+        edge_type: EdgeType,
+        edge_index: torch.Tensor,
+        edge_attr_dict: Optional[Dict[EdgeType, torch.Tensor]],
+        device: torch.device,
+        dtype: torch.dtype,
+    ) -> Optional[torch.Tensor]:
+        """
+        Return relation edge_attr if present, else zero-fill only when the relation
+        is configured to expect edge features.
+        """
+        expected_dim = int(self.edge_dim_dict.get(edge_type, 0) or 0)
+
+        if edge_attr_dict is not None and edge_type in edge_attr_dict:
+            edge_attr = edge_attr_dict[edge_type]
+            if edge_attr.dim() == 1:
+                edge_attr = edge_attr.unsqueeze(-1)
+            return edge_attr
+
+        if expected_dim > 0:
+            E = edge_index.size(1)
+            return torch.zeros(E, expected_dim, device=device, dtype=dtype)
+
+        return None
 
     def forward(
         self,
         x_dict: Dict[str, torch.Tensor],
-        edge_index_dict: Dict[Tuple[str, str, str], torch.Tensor],
-        edge_attr_dict: Optional[Dict[Tuple[str, str, str], torch.Tensor]] = None,
+        edge_index_dict: Dict[EdgeType, torch.Tensor],
+        edge_attr_dict: Optional[Dict[EdgeType, torch.Tensor]] = None,
     ) -> Dict[str, torch.Tensor]:
         """
-        Forward pass (FIXED to handle missing node types).
+        Apply per-relation convolution and aggregate to destination node types.
+
+        Returns:
+            Dict[node_type, updated_node_features]
         """
-        out_dict = {}
+        out_dict: Dict[str, torch.Tensor] = {}
+        contrib_count: Dict[str, int] = {}
 
         for edge_type in self.edge_types:
             if edge_type not in edge_index_dict:
                 continue
 
-            src, rel, dst = edge_type
+            src, _, dst = edge_type
 
-            # FIXED: Check if src and dst exist in x_dict before accessing
             if src not in x_dict or dst not in x_dict:
                 continue
 
+            x_src = x_dict[src]
+            x_dst = x_dict[dst]
             edge_index = edge_index_dict[edge_type]
 
-            # Get edge attributes
-            if edge_attr_dict is not None and edge_type in edge_attr_dict:
-                edge_attr = edge_attr_dict[edge_type]
-            else:
-                edge_dim = self.edge_dim_dict.get(edge_type, 0)
-                if edge_dim > 0:
-                    E = edge_index.size(1)
-                    device = x_dict[src].device
-                    edge_attr = torch.zeros(E, edge_dim, device=device)
-                else:
-                    edge_attr = None
+            if not isinstance(edge_index, torch.Tensor):
+                raise TypeError(f"edge_index for {edge_type} is not a tensor")
 
-            # Get convolution
-            key = f"{src}__{rel}__{dst}"
-            conv = self.convs[key]
+            if edge_index.dim() != 2 or edge_index.size(0) != 2:
+                raise ValueError(
+                    f"edge_index for {edge_type} must have shape [2, E], "
+                    f"got {tuple(edge_index.shape)}"
+                )
 
-            # Prepare input (bipartite or homogeneous)
+            if edge_index.size(1) == 0:
+                continue
+
+            edge_attr = self._prepare_edge_attr(
+                edge_type=edge_type,
+                edge_index=edge_index,
+                edge_attr_dict=edge_attr_dict,
+                device=x_src.device,
+                dtype=x_src.dtype,
+            )
+
+            conv = self.convs[edge_type_to_key(edge_type)]
+
             if src == dst:
-                x_input = x_dict[src]
+                x_input = x_src
             else:
-                x_input = (x_dict[src], x_dict[dst])
+                x_input = (x_src, x_dst)
 
-            # Apply convolution
             out = conv(x_input, edge_index, edge_attr)
 
-            # Aggregate to destination
             if dst not in out_dict:
                 out_dict[dst] = out
+                contrib_count[dst] = 1
             else:
-                if self.aggr == 'sum':
+                if self.aggr == "sum":
                     out_dict[dst] = out_dict[dst] + out
-                elif self.aggr == 'mean':
-                    out_dict[dst] = (out_dict[dst] + out) / 2
-                elif self.aggr == 'max':
+                elif self.aggr == "mean":
+                    out_dict[dst] = out_dict[dst] + out
+                    contrib_count[dst] += 1
+                elif self.aggr == "max":
                     out_dict[dst] = torch.max(out_dict[dst], out)
 
+        if self.aggr == "mean":
+            for dst, count in contrib_count.items():
+                if count > 1:
+                    out_dict[dst] = out_dict[dst] / float(count)
+
         return out_dict
-
-
-# ============================================================
-# Test
-# ============================================================
-
-if __name__ == '__main__':
-    # Test heterogeneous temporal convolution
-    print("Testing HeteroTemporalConv...")
-
-    in_dims = {'api': 32, 'file': 16, 'process': 24, 'registry': 20}
-    out_dims = {'api': 64, 'file': 64, 'process': 64, 'registry': 64}
-    edge_types = [
-        ('api', 'temporal', 'api'),
-        ('api', 'operates_on', 'file'),
-    ]
-    edge_dim_dict = {
-        ('api', 'temporal', 'api'): 14,
-        ('api', 'operates_on', 'file'): 0,
-    }
-
-    num_apis = 20
-    num_files = 15
-
-    # Create dummy data
-    x_dict = {
-        'api': torch.randn(num_apis, in_dims['api']),
-        'file': torch.randn(num_files, in_dims['file']),
-    }
-
-    edge_index_dict = {
-        ('api', 'temporal', 'api'): torch.randint(0, num_apis, (2, 40)),
-        ('api', 'operates_on', 'file'): torch.stack([
-            torch.randint(0, num_apis, (15,)),
-            torch.randint(0, num_files, (15,)),
-        ]),
-    }
-
-    edge_attr_dict = {
-        ('api', 'temporal', 'api'): torch.randn(40, 14),
-    }
-
-    # Create layer
-    layer = HeteroTemporalConv(
-        in_channels_dict=in_dims,
-        out_channels_dict=out_dims,
-        edge_types=edge_types,
-        layer_type='gat',
-        num_heads=6,
-        edge_dim_dict=edge_dim_dict,
-        dropout=0.3,
-        aggr='sum',
-    )
-
-    # Forward
-    out = layer(x_dict, edge_index_dict, edge_attr_dict)
-
-    print("Output node types:", list(out.keys()))
-    for k, v in out.items():
-        print(f"  {k}: {v.shape}")
-
-    # Verify shapes
-    assert out['api'].shape == (num_apis, 6 * 128), f"API shape wrong: {out['api'].shape}"
-    assert out['file'].shape == (num_files, 6 * 128), f"File shape wrong: {out['file'].shape}"
-
-    print("✅ All tests passed!")

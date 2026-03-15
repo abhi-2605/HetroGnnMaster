@@ -1,39 +1,109 @@
 """
 models/tgnn_model.py
 
-Memory-Augmented Heterogeneous Temporal GNN for Ransomware Detection.
+Schema-aware Memory-Augmented Heterogeneous Temporal GNN for ransomware detection.
 
-Dimension flow:
-    API nodes:  [N, 775] → [Memory] → [N, 903] → [InputProj] → [N, 128]
-                → [HeteroConv × L] → [N, 768] → [LSTM] → [N, 256]
-                → [AttnPool] → [B, 256]
-    Resources:  [N, 6]   → [InputProj] → [N, 64]
-                → [HeteroConv × L] → [N, 384] → [MeanPool] → [B, 64]
-    Combined:   [B, 256 + 4×64] = [B, 512] → [MLP] → [B, 3]
-
-Author: Abhishek Menon
-Date:   2026-03-
+Phase 1 upgrades:
+- active-schema driven node/edge setup
+- fixed type-slot combiner (stable across batches)
+- explicit TemporalLSTM branch preserved
+- relation-complete message passing through HeteroTemporalConv
+- safer memory handling
+- defensive pooling-dim checks
+- LSTM path diagnostic
 """
-from typing import Dict, Tuple, List, Optional
+
+from __future__ import annotations
+
+from pathlib import Path
+import sys
+from typing import Dict, List, Optional, Tuple
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from pathlib import Path
-import sys
 from torch_geometric.utils import scatter
+
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.append(str(PROJECT_ROOT))
 
 import config
 from models.temporal_layers import (
     HeteroTemporalConv,
-    TemporalLSTM,
     TemporalAttentionPooling,
+    TemporalLSTM,
 )
-from models.semantic_memory import SemanticMemory, build_semantic_memory
+from models.semantic_memory import build_semantic_memory
 from models.memory_utils import memory_regularization_loss
-from graph_construction.vocabulary import load_vocab
+from utils.schema_manager import ensure_active_schema
+from utils.schema_utils import (
+    get_active_schema,
+    get_canonical_edge_dims,
+    get_canonical_node_dims,
+    get_edge_types,
+    get_node_types,
+    get_nonempty_edge_types,
+)
+
+
+EdgeType = Tuple[str, str, str]
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+#  Type-slot combiner
+# ══════════════════════════════════════════════════════════════════════════════
+
+class TypeSlotAttentionCombiner(nn.Module):
+    """
+    Combine per-type pooled embeddings with stable slot semantics.
+
+    Input:
+        type_embeddings: [B, T, D]
+        type_mask      : [B, T]  True for present, False for absent
+
+    Output:
+        graph_embedding: [B, D]
+    """
+
+    def __init__(self, input_dim: int, num_heads: int = 4, dropout: float = 0.1):
+        super().__init__()
+        self.input_dim = input_dim
+        self.num_heads = num_heads
+
+        self.attn = nn.MultiheadAttention(
+            embed_dim=input_dim,
+            num_heads=num_heads,
+            dropout=dropout,
+            batch_first=True,
+        )
+        self.query = nn.Parameter(torch.randn(1, 1, input_dim))
+        self.norm = nn.LayerNorm(input_dim)
+        self.dropout = nn.Dropout(dropout)
+
+    def forward(self, type_embeddings: torch.Tensor, type_mask: torch.Tensor) -> torch.Tensor:
+        """
+        type_embeddings: [B, T, D]
+        type_mask:       [B, T] (True = present, False = absent)
+        """
+        B, _, _ = type_embeddings.shape
+
+        query = self.query.expand(B, -1, -1)  # [B, 1, D]
+
+        # True means "ignore" for MultiheadAttention
+        key_padding_mask = ~type_mask  # [B, T]
+
+        out, _ = self.attn(
+            query=query,
+            key=type_embeddings,
+            value=type_embeddings,
+            key_padding_mask=key_padding_mask,
+            need_weights=False,
+        )  # [B, 1, D]
+
+        out = out.squeeze(1)  # [B, D]
+        out = self.norm(out)
+        out = self.dropout(out)
+        return out
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -42,250 +112,232 @@ from graph_construction.vocabulary import load_vocab
 
 class HeteroTemporalGNN(nn.Module):
     """
-    Memory-augmented Heterogeneous Temporal GNN for ransomware detection.
+    Schema-aware memory-augmented heterogeneous temporal GNN.
 
-    New vs previous version:
-        - SemanticMemory module (Phase 2) enriches API nodes before GNN
-        - API input dim: 775 → 903  (775 static + 128 memory)
-        - Two new training-loop helpers: update_memory() and memory_loss()
-        - Everything else (GNN, LSTM, pooling, classifier) unchanged
+    Important:
+    - TemporalLSTM remains the explicit order-sensitive temporal branch.
+    - HeteroTemporalConv handles graph relations, including api->temporal->api,
+      but does not replace sequence modeling.
     """
 
     def __init__(
         self,
-        node_types:          Optional[List[str]]                    = None,
-        edge_types:          Optional[List[Tuple[str, str, str]]]   = None,
-        node_dims:           Optional[Dict[str, int]]               = None,
-        hidden_dim_api:      int   = 128,
-        hidden_dim_resource: int   = 64,
-        num_gnn_layers:      int   = None,
-        lstm_hidden_dim:     int   = None,
-        lstm_num_layers:     int   = None,
-        num_classes:         int   = None,
-        spatial_layer:       Optional[str]  = None,
-        num_attention_heads: int   = None,
-        temporal_heads:      int   = None,
-        dropout:             float = None,
-        lstm_dropout:        float = None,
-        bidirectional:       Optional[bool] = None,
-        # ── memory ──────────────────────────────────────────────────────────
-        use_memory:  bool = True,
-        memory_dim:  int  = 128,
-        vocab_path:  str  = "results/api_vocabulary.json",
+        schema: Optional[Dict] = None,
+        hidden_dim_api: int = 128,
+        hidden_dim_resource: int = 64,
+        pooled_type_dim: int = 128,
+        num_gnn_layers: Optional[int] = None,
+        lstm_hidden_dim: Optional[int] = None,
+        lstm_num_layers: Optional[int] = None,
+        num_classes: Optional[int] = None,
+        spatial_layer: Optional[str] = None,
+        num_attention_heads: Optional[int] = None,
+        temporal_heads: Optional[int] = None,
+        type_combiner_heads: int = 4,
+        dropout: Optional[float] = None,
+        lstm_dropout: Optional[float] = None,
+        bidirectional: Optional[bool] = None,
+        use_memory: bool = True,
+        memory_dim: int = 128,
+        vocab_path: str = "results/api_vocabulary.json",
     ):
         super().__init__()
 
-        # ── resolve config defaults ───────────────────────────────────────────
-        node_types          = node_types          or config.NODE_TYPES
-        edge_types          = edge_types          or config.EDGE_TYPES
-        num_gnn_layers      = num_gnn_layers      or config.NUM_GNN_LAYERS
-        lstm_hidden_dim     = lstm_hidden_dim     or config.LSTM_HIDDEN_DIM
-        lstm_num_layers     = lstm_num_layers     or config.LSTM_NUM_LAYERS
-        num_classes         = num_classes         or config.NUM_CLASSES
-        spatial_layer       = spatial_layer       or config.SPATIAL_LAYER
+        self.schema = schema if schema is not None else ensure_active_schema()
+
+        # ── config defaults ───────────────────────────────────────────────────
+        num_gnn_layers = num_gnn_layers or config.NUM_GNN_LAYERS
+        lstm_hidden_dim = lstm_hidden_dim or config.LSTM_HIDDEN_DIM
+        lstm_num_layers = lstm_num_layers or config.LSTM_NUM_LAYERS
+        num_classes = num_classes or config.NUM_CLASSES
+        spatial_layer = spatial_layer or config.SPATIAL_LAYER
         num_attention_heads = num_attention_heads or config.NUM_ATTENTION_HEADS
-        temporal_heads      = temporal_heads      or config.TEMPORAL_HEADS
-        dropout             = dropout             if dropout      is not None else config.DROPOUT
-        lstm_dropout        = lstm_dropout        if lstm_dropout is not None else config.LSTM_DROPOUT
-        bidirectional       = bidirectional       if bidirectional is not None else config.BIDIRECTIONAL
+        temporal_heads = temporal_heads or config.TEMPORAL_HEADS
+        dropout = config.DROPOUT if dropout is None else dropout
+        lstm_dropout = config.LSTM_DROPOUT if lstm_dropout is None else lstm_dropout
+        bidirectional = config.BIDIRECTIONAL if bidirectional is None else bidirectional
 
-        # base node dims (copy so we don't mutate caller)
-        if node_dims is None:
-            node_dims = {
-                "api":      config.API_NODE_DIM,       # 775
-                "file":     config.RESOURCE_NODE_DIM,  # 6
-                "registry": config.RESOURCE_NODE_DIM,
-                "process":  config.RESOURCE_NODE_DIM,
-                "network":  config.RESOURCE_NODE_DIM,
-            }
-        else:
-            node_dims = dict(node_dims)
+        # ── schema-derived structure ──────────────────────────────────────────
+        self.node_types: List[str] = get_node_types(self.schema)
+        self.edge_types: List[EdgeType] = get_edge_types(self.schema)
+        self.nonempty_edge_types: List[EdgeType] = get_nonempty_edge_types(self.schema)
+        self.node_dims: Dict[str, int] = get_canonical_node_dims(self.schema)
+        self.edge_dims: Dict[EdgeType, Optional[int]] = get_canonical_edge_dims(self.schema)
 
-        # ── store hyper-params ────────────────────────────────────────────────
-        self.node_types          = node_types
-        self.edge_types          = edge_types
-        self.hidden_dim_api      = hidden_dim_api
+        self.hidden_dim_api = hidden_dim_api
         self.hidden_dim_resource = hidden_dim_resource
-        self.num_gnn_layers      = num_gnn_layers
-        self.lstm_hidden_dim     = lstm_hidden_dim
-        self.num_classes         = num_classes
+        self.pooled_type_dim = pooled_type_dim
+        self.num_gnn_layers = num_gnn_layers
+        self.lstm_hidden_dim = lstm_hidden_dim
+        self.num_classes = num_classes
         self.num_attention_heads = num_attention_heads
-        self.temporal_heads      = temporal_heads
-        self.dropout             = dropout
-        self.bidirectional       = bidirectional
-        self.use_memory          = use_memory
-        self.memory_dim          = memory_dim
+        self.temporal_heads = temporal_heads
+        self.type_combiner_heads = type_combiner_heads
+        self.dropout = dropout
+        self.bidirectional = bidirectional
+        self.use_memory = use_memory
+        self.memory_dim = memory_dim
 
-        # ── derived dims ──────────────────────────────────────────────────────
-        # output of one GNN layer per node type (heads are concatenated)
-        self.api_out_dim_per_layer      = hidden_dim_api      * num_attention_heads  # 128×6=768
-        self.resource_out_dim_per_layer = hidden_dim_resource * num_attention_heads  # 64×6=384
-        self.lstm_output_dim = lstm_hidden_dim * 2 if bidirectional else lstm_hidden_dim  # 256
+        if "api" not in self.node_types:
+            raise ValueError("Active schema must contain 'api' node type.")
 
-        # ── sanity checks ─────────────────────────────────────────────────────
-        if self.lstm_output_dim % temporal_heads != 0:
-            raise ValueError(
-                f"lstm_output_dim ({self.lstm_output_dim}) must be divisible "
-                f"by temporal_heads ({temporal_heads}). "
-                f"Got {self.lstm_output_dim} % {temporal_heads} = "
-                f"{self.lstm_output_dim % temporal_heads}."
-            )
+        # ── explicit stable type slot order ───────────────────────────────────
+        self.type_slot_order = list(self.node_types)
+        self.resource_node_types = [nt for nt in self.node_types if nt != "api"]
 
-        # ── which node types receive messages ─────────────────────────────────
-        self.receiving_types = {dst for _, _, dst in edge_types}
+        # ── memory enrichment ─────────────────────────────────────────────────
+        base_api_dim = self.node_dims["api"]
 
-        # ══════════════════════════════════════════════════════════════════════
-        #  Phase 2 — Semantic Memory
-        # ══════════════════════════════════════════════════════════════════════
         if use_memory:
             self.memory = build_semantic_memory(
-                vocab_path    = vocab_path,
-                memory_dim    = memory_dim,
-                node_feat_dim = node_dims["api"],   # 775
+                vocab_path=vocab_path,
+                memory_dim=memory_dim,
+                node_feat_dim=base_api_dim,
             )
-            # API input dimension is now enriched
-            node_dims["api"] = node_dims["api"] + memory_dim   # 775 + 128 = 903
-            print(f"[Model] SemanticMemory ON  │ API input: "
-                  f"{node_dims['api'] - memory_dim} + {memory_dim} = {node_dims['api']}")
+            self.node_dims["api"] = base_api_dim + memory_dim
+            print(
+                f"[Model] SemanticMemory ON  │ API input: "
+                f"{base_api_dim} + {memory_dim} = {self.node_dims['api']}"
+            )
         else:
             self.memory = None
-            print(f"[Model] SemanticMemory OFF │ API input: {node_dims['api']}")
+            print(f"[Model] SemanticMemory OFF │ API input: {base_api_dim}")
 
-        self.node_dims = node_dims   # final dims used by input projections
+        # ── derived dims ──────────────────────────────────────────────────────
+        self.api_out_dim_per_layer = hidden_dim_api * num_attention_heads
+        self.resource_out_dim_per_layer = hidden_dim_resource * num_attention_heads
+        self.lstm_output_dim = lstm_hidden_dim * 2 if bidirectional else lstm_hidden_dim
+
+        if self.lstm_output_dim % temporal_heads != 0:
+            raise ValueError(
+                f"lstm_output_dim ({self.lstm_output_dim}) must be divisible by "
+                f"temporal_heads ({temporal_heads})."
+            )
 
         # ══════════════════════════════════════════════════════════════════════
-        #  1.  Input projections (one per node type)
+        # 1. Input adapters (schema-driven)
         # ══════════════════════════════════════════════════════════════════════
         self.input_projections = nn.ModuleDict()
-        for nt in node_types:
-            in_dim  = node_dims[nt]
+        for nt in self.node_types:
+            in_dim = self.node_dims[nt]
             out_dim = hidden_dim_api if nt == "api" else hidden_dim_resource
             self.input_projections[nt] = nn.Sequential(
-                nn.Linear(in_dim, out_dim),   # e.g. 903→128 or 6→64
+                nn.Linear(in_dim, out_dim),
                 nn.LayerNorm(out_dim),
                 nn.ReLU(),
                 nn.Dropout(dropout),
             )
 
         # ══════════════════════════════════════════════════════════════════════
-        #  2.  Heterogeneous GNN layers
+        # 2. Heterogeneous GNN layers
         # ══════════════════════════════════════════════════════════════════════
-        self.gnn_layers  = nn.ModuleList()
+        self.gnn_layers = nn.ModuleList()
         self.norm_layers = nn.ModuleList()
 
-        # track actual dims fed into each layer
-        current_dims: Dict[str, int] = {
-            "api":      hidden_dim_api,
-            "file":     hidden_dim_resource,
-            "registry": hidden_dim_resource,
-            "process":  hidden_dim_resource,
-            "network":  hidden_dim_resource,
+        current_dims: Dict[str, int] = {}
+        for nt in self.node_types:
+            current_dims[nt] = hidden_dim_api if nt == "api" else hidden_dim_resource
+
+        out_channels_dict: Dict[str, int] = {}
+        for nt in self.node_types:
+            out_channels_dict[nt] = hidden_dim_api if nt == "api" else hidden_dim_resource
+
+        edge_dim_dict = {
+            et: int(self.edge_dims.get(et, 0) or 0)
+            for et in self.edge_types
         }
 
+        receiving_types = {dst for _, _, dst in self.nonempty_edge_types}
+
         for _ in range(num_gnn_layers):
-            out_channels_dict = {
-                "api":      hidden_dim_api,
-                "file":     hidden_dim_resource,
-                "registry": hidden_dim_resource,
-                "process":  hidden_dim_resource,
-                "network":  hidden_dim_resource,
-            }
-
-            # edge dims: only temporal api→api edges carry features
-            edge_dim_dict: Dict[Tuple, int] = {}
-            for et in edge_types:
-                src, rel, dst = et
-                edge_dim_dict[et] = (
-                    config.TEMPORAL_EDGE_DIM
-                    if rel == "temporal" and src == "api" and dst == "api"
-                    else 0
-                )
-
-            self.gnn_layers.append(
-                HeteroTemporalConv(
-                    in_channels_dict  = dict(current_dims),
-                    out_channels_dict = out_channels_dict,
-                    edge_types        = edge_types,
-                    layer_type        = spatial_layer,
-                    num_heads         = num_attention_heads,
-                    edge_dim_dict     = edge_dim_dict,
-                    dropout           = dropout,
-                    aggr              = "sum",
-                )
+            layer = HeteroTemporalConv(
+                in_channels_dict=dict(current_dims),
+                out_channels_dict=dict(out_channels_dict),
+                edge_types=self.edge_types,
+                layer_type=spatial_layer,
+                num_heads=num_attention_heads,
+                edge_dim_dict=edge_dim_dict,
+                dropout=dropout,
+                aggr="sum",
             )
+            self.gnn_layers.append(layer)
 
-            # LayerNorm only for node types that receive messages
             norm_dict = nn.ModuleDict()
-            for nt in node_types:
-                if nt in self.receiving_types:
+            for nt in self.node_types:
+                if nt in receiving_types:
                     norm_dim = (
-                        self.api_out_dim_per_layer
-                        if nt == "api"
+                        self.api_out_dim_per_layer if nt == "api"
                         else self.resource_out_dim_per_layer
                     )
                     norm_dict[nt] = nn.LayerNorm(norm_dim)
             self.norm_layers.append(norm_dict)
 
-            # update dims for next layer
-            for nt in node_types:
-                if nt in self.receiving_types:
+            for nt in self.node_types:
+                if nt in receiving_types:
                     current_dims[nt] = (
-                        self.api_out_dim_per_layer
-                        if nt == "api"
+                        self.api_out_dim_per_layer if nt == "api"
                         else self.resource_out_dim_per_layer
                     )
 
+        # Actual final hidden dims per node type after GNN stack.
+        # Some types may remain at 64 if they never receive messages.
+        self.final_hidden_dims = dict(current_dims)
+
         # ══════════════════════════════════════════════════════════════════════
-        #  3.  Temporal LSTM on API node sequence
+        # 3. Explicit temporal branch on API sequence
         # ══════════════════════════════════════════════════════════════════════
         self.temporal_lstm = TemporalLSTM(
-            input_dim     = self.api_out_dim_per_layer,  # 768
-            hidden_dim    = lstm_hidden_dim,             # 128
-            num_layers    = lstm_num_layers,
-            dropout       = lstm_dropout,
-            bidirectional = bidirectional,
+            input_dim=self.api_out_dim_per_layer,
+            hidden_dim=lstm_hidden_dim,
+            num_layers=lstm_num_layers,
+            dropout=lstm_dropout,
+            bidirectional=bidirectional,
         )
 
-        # ══════════════════════════════════════════════════════════════════════
-        #  4.  Temporal attention pooling (graph-level embedding)
-        # ══════════════════════════════════════════════════════════════════════
         self.api_pooling = TemporalAttentionPooling(
-            input_dim = self.lstm_output_dim,  # 256
-            num_heads = temporal_heads,        # 8
+            input_dim=self.lstm_output_dim,
+            num_heads=temporal_heads,
         )
 
         # ══════════════════════════════════════════════════════════════════════
-        #  5.  Resource pooling (dual-path: 64-dim or 384-dim input)
+        # 4. Per-type pooling projections to common pooled dim
         # ══════════════════════════════════════════════════════════════════════
-        self.resource_poolings_64  = nn.ModuleDict()
-        self.resource_poolings_384 = nn.ModuleDict()
+        self.type_pool_projections = nn.ModuleDict()
 
-        resource_node_types = [nt for nt in node_types if nt != "api"]
-        for nt in resource_node_types:
-            # Path A: node type never received GNN messages → still 64-dim
-            self.resource_poolings_64[nt] = nn.Sequential(
-                nn.Linear(hidden_dim_resource, hidden_dim_resource),   # 64→64
+        # API pooled vector comes from LSTM branch
+        self.type_pool_projections["api"] = nn.Sequential(
+            nn.Linear(self.lstm_output_dim, pooled_type_dim),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+        )
+
+        # Other types pooled after GNN branch using ACTUAL final dim
+        for nt in self.resource_node_types:
+            in_dim = self.final_hidden_dims[nt]
+            self.type_pool_projections[nt] = nn.Sequential(
+                nn.Linear(in_dim, pooled_type_dim),
                 nn.ReLU(),
                 nn.Dropout(dropout),
             )
-            # Path B: node type received GNN messages → 384-dim
-            self.resource_poolings_384[nt] = nn.Sequential(
-                nn.Linear(self.resource_out_dim_per_layer, hidden_dim_resource),  # 384→64
-                nn.ReLU(),
-                nn.Dropout(dropout),
-            )
 
         # ══════════════════════════════════════════════════════════════════════
-        #  6.  Classifier — shared trunk + 3 per-class heads       [CHANGE 1]
-        #      (replaces single self.classifier MLP, but keeps total_embedding_dim)
+        # 5. Stable-slot type combiner
         # ══════════════════════════════════════════════════════════════════════
-        num_resource_types       = len(resource_node_types)  # 4
-        self.total_embedding_dim = (
-            self.lstm_output_dim + num_resource_types * hidden_dim_resource
-        )   # 256 + 4×64 = 512
+        self.type_combiner = TypeSlotAttentionCombiner(
+            input_dim=pooled_type_dim,
+            num_heads=type_combiner_heads,
+            dropout=dropout,
+        )
 
-        behav_dim = (num_resource_types + 1) * 3   # 5 node types × 3 stats = 15
-        trunk_in  = self.total_embedding_dim + behav_dim  # 512 + 15 = 527
+        # ══════════════════════════════════════════════════════════════════════
+        # 6. Behavioral summary features
+        # ══════════════════════════════════════════════════════════════════════
+        self.behav_dim = len(self.type_slot_order) * 3
+
+        # ══════════════════════════════════════════════════════════════════════
+        # 7. Classifier
+        # ══════════════════════════════════════════════════════════════════════
+        trunk_in = pooled_type_dim + self.behav_dim
 
         self.shared_trunk = nn.Sequential(
             nn.Linear(trunk_in, 256),
@@ -298,222 +350,311 @@ class HeteroTemporalGNN(nn.Module):
             nn.Dropout(dropout),
         )
         self.head_ransomware = nn.Linear(128, 1)
-        self.head_benign     = nn.Linear(128, 1)
-        self.head_malware    = nn.Linear(128, 1)
+        self.head_benign = nn.Linear(128, 1)
+        self.head_malware = nn.Linear(128, 1)
 
-        print(f"[Model] Total embedding dim : {self.total_embedding_dim}")
-        print(f"[Model] Classifier          : shared_trunk({trunk_in}→256→128) + 3 heads")
+        self.total_embedding_dim = pooled_type_dim
 
-    # ══════════════════════════════════════════════════════════════════════════
-    #  forward
-    # ══════════════════════════════════════════════════════════════════════════
+        print(f"[Model] Active node types     : {self.node_types}")
+        print(f"[Model] Active edge types     : {self.edge_types}")
+        print(f"[Model] Non-empty edge types  : {self.nonempty_edge_types}")
+        print(f"[Model] Type slot order       : {self.type_slot_order}")
+        print(f"[Model] Canonical node dims   : {self.node_dims}")
+        print(f"[Model] Final hidden dims     : {self.final_hidden_dims}")
+        print(f"[Model] Graph embedding dim   : {self.total_embedding_dim}")
+        print(f"[Model] Behavioral feat dim   : {self.behav_dim}")
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # helpers
+    # ──────────────────────────────────────────────────────────────────────────
+
+    def _pool_resource_type(
+        self,
+        h_nt: torch.Tensor,
+        batch_nt: torch.Tensor,
+        batch_size: int,
+        node_type: str,
+        device: torch.device,
+    ) -> torch.Tensor:
+        """
+        Mean-pool node embeddings of one non-api type per graph, then project.
+        """
+        pooled = []
+        feat_dim = h_nt.size(-1)
+
+        for b in range(batch_size):
+            mask = batch_nt == b
+            if mask.any():
+                pooled.append(h_nt[mask].mean(dim=0))
+            else:
+                pooled.append(torch.zeros(feat_dim, device=device, dtype=h_nt.dtype))
+
+        pooled = torch.stack(pooled, dim=0)
+
+        expected_in = self.type_pool_projections[node_type][0].in_features
+        if pooled.size(1) != expected_in:
+            raise ValueError(
+                f"Type pooling dim mismatch for '{node_type}': "
+                f"pooled has dim {pooled.size(1)}, projection expects {expected_in}."
+            )
+
+        return self.type_pool_projections[node_type](pooled)
+
+    def _build_type_slots(
+        self,
+        h_dict: Dict[str, torch.Tensor],
+        batch_dict: Dict[str, torch.Tensor],
+        api_graph_emb: torch.Tensor,
+        batch_size: int,
+        device: torch.device,
+    ) -> Tuple[torch.Tensor, torch.Tensor]:
+        """
+        Build fixed-order type slot embeddings and presence mask.
+
+        Returns:
+            type_slots: [B, T, D]
+            type_mask : [B, T]
+        """
+        slot_embeddings = []
+        slot_masks = []
+
+        for nt in self.type_slot_order:
+            if nt == "api":
+                emb = self.type_pool_projections["api"](api_graph_emb)
+                mask = torch.ones(batch_size, dtype=torch.bool, device=device)
+                slot_embeddings.append(emb)
+                slot_masks.append(mask)
+                continue
+
+            if nt in h_dict and nt in batch_dict and batch_dict[nt].numel() > 0:
+                emb = self._pool_resource_type(
+                    h_nt=h_dict[nt],
+                    batch_nt=batch_dict[nt],
+                    batch_size=batch_size,
+                    node_type=nt,
+                    device=device,
+                )
+
+                present = torch.zeros(batch_size, dtype=torch.bool, device=device)
+                present[batch_dict[nt].unique()] = True
+            else:
+                emb = torch.zeros(
+                    batch_size,
+                    self.pooled_type_dim,
+                    device=device,
+                )
+                present = torch.zeros(batch_size, dtype=torch.bool, device=device)
+
+            slot_embeddings.append(emb)
+            slot_masks.append(present)
+
+        type_slots = torch.stack(slot_embeddings, dim=1)  # [B, T, D]
+        type_mask = torch.stack(slot_masks, dim=1)        # [B, T]
+        return type_slots, type_mask
+
+    def _compute_behavioral_features(
+        self,
+        h_dict: Dict[str, torch.Tensor],
+        batch_dict: Dict[str, torch.Tensor],
+        batch_size: int,
+        device: torch.device,
+    ) -> torch.Tensor:
+        """
+        For each node type slot:
+            [mean activation, std activation, log1p(node count)]
+        """
+        behav_parts: List[torch.Tensor] = []
+
+        for nt in self.type_slot_order:
+            if nt in h_dict and nt in batch_dict and batch_dict[nt].numel() > 0:
+                h_nt = h_dict[nt]
+                b_nt = batch_dict[nt]
+
+                mean_per_feat = scatter(h_nt, b_nt, dim=0, dim_size=batch_size, reduce="mean")
+                centered = h_nt - mean_per_feat[b_nt]
+                var_per_feat = scatter(
+                    centered * centered,
+                    b_nt,
+                    dim=0,
+                    dim_size=batch_size,
+                    reduce="mean",
+                )
+                std_per_feat = torch.sqrt(var_per_feat + 1e-8)
+
+                g_means = mean_per_feat.mean(dim=-1)
+                g_stds = std_per_feat.mean(dim=-1)
+
+                node_ones = torch.ones(h_nt.size(0), device=device)
+                g_counts = torch.log1p(
+                    scatter(node_ones, b_nt, dim=0, dim_size=batch_size, reduce="sum")
+                )
+
+                behav_parts.extend([g_means, g_stds, g_counts])
+            else:
+                behav_parts.extend([
+                    torch.zeros(batch_size, device=device),
+                    torch.zeros(batch_size, device=device),
+                    torch.zeros(batch_size, device=device),
+                ])
+
+        return torch.stack(behav_parts, dim=-1)  # [B, T*3]
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # forward
+    # ──────────────────────────────────────────────────────────────────────────
 
     def forward(
         self,
-        x_dict:          Dict[str, torch.Tensor],
-        edge_index_dict: Dict[Tuple[str, str, str], torch.Tensor],
-        batch_dict:      Dict[str, torch.Tensor],
-        edge_attr_dict:  Optional[Dict[Tuple[str, str, str], torch.Tensor]] = None,
+        x_dict: Dict[str, torch.Tensor],
+        edge_index_dict: Dict[EdgeType, torch.Tensor],
+        batch_dict: Dict[str, torch.Tensor],
+        edge_attr_dict: Optional[Dict[EdgeType, torch.Tensor]] = None,
         timestamps_dict: Optional[Dict[str, torch.Tensor]] = None,
-        api_indices:     Optional[torch.Tensor] = None,
+        api_indices: Optional[torch.Tensor] = None,
     ) -> torch.Tensor:
-            device = next(self.parameters()).device
-            # B = int(max(v.max().item() for v in batch_dict.values())) + 1
-            if "api" not in batch_dict or batch_dict["api"].numel() == 0:
-                raise ValueError("Batch has no API nodes; cannot run HeteroTemporalGNN forward.")
-            B = int(batch_dict["api"].max().item()) + 1
-            # ── memory enrichment ────────────────────────────────────────────────
-            if self.use_memory and self.memory is not None and api_indices is not None:
-                api_ts = (
-                    timestamps_dict.get("api", None)
-                    if timestamps_dict is not None else None
-                )
-                x_dict = dict(x_dict)          # shallow copy — don't mutate caller
-                x_dict["api"] = self.memory(
-                    api_indices.to(device),
-                    x_dict["api"],
-                    api_ts,
-                )
+        device = next(self.parameters()).device
 
-            # ── 1. Input projections ──────────────────────────────────────────────
-            # api: 903→128, resources: 6→64
-            h_dict: Dict[str, torch.Tensor] = {}
-            for nt, x in x_dict.items():
-                h_dict[nt] = (self.input_projections[nt](x)
-                            if nt in self.input_projections else x)
+        # ── LSTM path diagnostic ──────────────────────────────────────────────
+        if not hasattr(self, "_lstm_diag"):
+            self._lstm_diag = {"with_api": 0, "zero_api": 0}
 
-            # ── 2. Stacked HeteroGNN layers ───────────────────────────────────────
-            for gnn_layer, norm_dict in zip(self.gnn_layers, self.norm_layers):
-                h_out = gnn_layer(
-                    x_dict          = h_dict,
-                    edge_index_dict = edge_index_dict,
-                    edge_attr_dict  = edge_attr_dict,
-                )
+        api_x = x_dict.get("api", None)
+        if api_x is not None and api_x.size(0) > 0:
+            self._lstm_diag["with_api"] += 1
+        else:
+            self._lstm_diag["zero_api"] += 1
 
-                for nt in h_dict:
-                    if nt in h_out:
-                        # LayerNorm
-                        if nt in norm_dict:
-                            h_out[nt] = norm_dict[nt](h_out[nt])
-                        # Residual (only when dims match)
-                        if h_dict[nt].size(-1) == h_out[nt].size(-1):
-                            h_out[nt] = h_out[nt] + h_dict[nt]
-                    else:
-                        # Node type received no messages — keep previous embedding
-                        h_out[nt] = h_dict[nt]
-
-                for nt in h_out:
-                    h_out[nt] = F.relu(h_out[nt])
-                    h_out[nt] = F.dropout(h_out[nt], p=self.dropout, training=self.training)
-
-                h_dict = h_out
-
-            # ── 3. Temporal LSTM on API nodes ─────────────────────────────────────
-            api_batch = batch_dict["api"]
-            api_ts    = (
-                timestamps_dict.get("api", None)
-                if timestamps_dict is not None else None
+        total_seen = self._lstm_diag["with_api"] + self._lstm_diag["zero_api"]
+        if total_seen % 200 == 0:
+            print(
+                f"[LSTM-CHECK] graphs_seen={total_seen} | "
+                f"with_api={self._lstm_diag['with_api']} | "
+                f"zero_api={self._lstm_diag['zero_api']}"
             )
-            api_temporal = self.temporal_lstm(
-                x = h_dict["api"],
-                batch      = api_batch,
-                timestamps = api_ts,
-            )  # [N_api, lstm_output_dim]
 
-            # ── 4. Attention pooling → graph-level API embedding ──────────────────
-            api_graph_emb = self.api_pooling(
-                x     = api_temporal,
-                batch = api_batch,
-            )  # [B, 256]
+        if "api" not in batch_dict or batch_dict["api"].numel() == 0:
+            raise ValueError("Batch has no API nodes; cannot run HeteroTemporalGNN forward.")
 
-            # ── 5. Resource pooling per resource node type ────────────────────────
-            resource_node_types = [nt for nt in self.node_types if nt != "api"]
-            resource_embeddings: List[torch.Tensor] = []
+        if self.use_memory and self.memory is not None and api_indices is None:
+            raise ValueError("Memory is enabled but api_indices is missing.")
 
-            for nt in resource_node_types:
-                if nt not in h_dict or nt not in batch_dict:
-                    resource_embeddings.append(
-                        torch.zeros(B, self.hidden_dim_resource, device=device)
-                    )
-                    continue
+        batch_size = int(batch_dict["api"].max().item()) + 1
 
-                h_res      = h_dict[nt]
-                batch_res  = batch_dict[nt]
-                actual_dim = h_res.size(-1)
+        # ── memory enrichment ────────────────────────────────────────────────
+        if self.use_memory and self.memory is not None:
+            api_ts = timestamps_dict.get("api", None) if timestamps_dict is not None else None
+            x_dict = dict(x_dict)
+            x_dict["api"] = self.memory(
+                api_indices.to(device),
+                x_dict["api"],
+                api_ts,
+            )
 
-                pooled = []
-                for b in range(B):
-                    mask = batch_res == b
-                    pooled.append(
-                        h_res[mask].mean(0) if mask.any()
-                        else torch.zeros(actual_dim, device=device)
-                    )
-                pooled = torch.stack(pooled)  # [B, actual_dim]
+        # ── 1. input projections ─────────────────────────────────────────────
+        h_dict: Dict[str, torch.Tensor] = {}
+        for nt, x in x_dict.items():
+            if nt in self.input_projections:
+                h_dict[nt] = self.input_projections[nt](x)
+            else:
+                h_dict[nt] = x
 
-                if actual_dim == self.hidden_dim_resource:           # 64
-                    pooled = self.resource_poolings_64[nt](pooled)
-                elif actual_dim == self.resource_out_dim_per_layer:  # 384
-                    pooled = self.resource_poolings_384[nt](pooled)
+        # ── 2. stacked hetero GNN layers ────────────────────────────────────
+        for gnn_layer, norm_dict in zip(self.gnn_layers, self.norm_layers):
+            h_out = gnn_layer(
+                x_dict=h_dict,
+                edge_index_dict=edge_index_dict,
+                edge_attr_dict=edge_attr_dict,
+            )
+
+            for nt in h_dict:
+                if nt in h_out:
+                    if nt in norm_dict:
+                        h_out[nt] = norm_dict[nt](h_out[nt])
+
+                    if h_dict[nt].size(-1) == h_out[nt].size(-1):
+                        h_out[nt] = h_out[nt] + h_dict[nt]
                 else:
-                    # safety net: project from unexpected dim — avoids crash
-                    emergency = nn.Linear(actual_dim, self.hidden_dim_resource).to(device)
-                    pooled    = emergency(pooled)
+                    h_out[nt] = h_dict[nt]
 
-                resource_embeddings.append(pooled)  # [B, 64]
+            for nt in h_out:
+                h_out[nt] = F.relu(h_out[nt])
+                h_out[nt] = F.dropout(h_out[nt], p=self.dropout, training=self.training)
 
-            # ── 6. Combine embeddings ─────────────────────────────────────────────
-            combined_embedding = torch.cat(
-                [api_graph_emb, *resource_embeddings], dim=1
-            )  # [B, 512]
+            h_dict = h_out
 
-            # ── Behavioural statistics                                  [CHANGE 2]
-            # 5 node types × 3 stats (mean-activation, std-activation, log1p-count)
-            # = 15 features, making trunk_in = 512 + 15 = 527
-            behav_parts: List[torch.Tensor] = []
+        # ── 3. explicit temporal branch on API nodes ────────────────────────
+        api_batch = batch_dict["api"]
+        api_ts = timestamps_dict.get("api", None) if timestamps_dict is not None else None
 
-            for nt in ["api"] + resource_node_types:
-                if nt in h_dict and nt in batch_dict and batch_dict[nt].numel() > 0:
-                    h_nt = h_dict[nt]     # [N_nt, D]
-                    b_nt = batch_dict[nt] # [N_nt]
+        api_temporal = self.temporal_lstm(
+            x=h_dict["api"],
+            batch=api_batch,
+            timestamps=api_ts,
+        )
 
-                    # 1) mean of each feature across nodes in each graph -> [B, D]
-                    mean_per_feat = scatter(h_nt, b_nt, dim=0, dim_size=B, reduce="mean")
+        api_graph_emb = self.api_pooling(
+            x=api_temporal,
+            batch=api_batch,
+        )  # [B, lstm_output_dim]
 
-                    # 2) std of each feature across nodes in each graph -> [B, D]
-                    centered = h_nt - mean_per_feat[b_nt]   # [N_nt, D]
-                    var_per_feat = scatter(centered * centered, b_nt, dim=0, dim_size=B, reduce="mean")
-                    std_per_feat = torch.sqrt(var_per_feat + 1e-8)
+        # ── 4. fixed type slots + type combiner ─────────────────────────────
+        type_slots, type_mask = self._build_type_slots(
+            h_dict=h_dict,
+            batch_dict=batch_dict,
+            api_graph_emb=api_graph_emb,
+            batch_size=batch_size,
+            device=device,
+        )
 
-                    # 3) collapse feature dimension to one scalar each -> [B]
-                    g_means = mean_per_feat.mean(dim=-1)
-                    g_stds  = std_per_feat.mean(dim=-1)
+        graph_embedding = self.type_combiner(type_slots, type_mask)  # [B, pooled_type_dim]
 
-                    # 4) count nodes per graph -> [B]
-                    node_ones = torch.ones(h_nt.size(0), device=device)
-                    g_counts = torch.log1p(
-                        scatter(node_ones, b_nt, dim=0, dim_size=B, reduce="sum")
-                    )
+        # ── 5. behavioral features in same stable type order ────────────────
+        behav_feats = self._compute_behavioral_features(
+            h_dict=h_dict,
+            batch_dict=batch_dict,
+            batch_size=batch_size,
+            device=device,
+        )  # [B, behav_dim]
 
-                    behav_parts.extend([g_means, g_stds, g_counts])
+        # ── 6. classifier ────────────────────────────────────────────────────
+        x = torch.cat([graph_embedding, behav_feats], dim=-1)
+        z = self.shared_trunk(x)
 
-                else:
-                    behav_parts.extend([
-                        torch.zeros(B, device=device),
-                        torch.zeros(B, device=device),
-                        torch.zeros(B, device=device),
-                    ])
-
-            behav_feats = torch.stack(behav_parts, dim=-1)   # [B, 15]
-
-            # ── Shared trunk + 3 per-class heads             [CHANGE 1 + CHANGE 2]
-            x      = torch.cat([combined_embedding, behav_feats], dim=-1)  # [B, 527]
-            z      = self.shared_trunk(x)
-            logits = torch.cat([
+        logits = torch.cat(
+            [
                 self.head_ransomware(z),
                 self.head_benign(z),
                 self.head_malware(z),
-            ], dim=-1)  # [B, 3]
-            return logits
-
+            ],
+            dim=-1,
+        )
+        return logits
 
     # ──────────────────────────────────────────────────────────────────────────
-    #  Training-loop helpers
+    # training-loop helpers
     # ──────────────────────────────────────────────────────────────────────────
 
     @torch.no_grad()
     def update_memory(
         self,
-        api_indices:   torch.LongTensor,
+        api_indices: torch.LongTensor,
         node_features: torch.Tensor,
-        momentum:      float = 0.9,
+        momentum: float = 0.9,
     ) -> None:
-        """
-        Write new behavioral knowledge into memory bank.
-
-        Call pattern:
-            # after loss.backward() and optimizer.step()
-            model.update_memory(api_indices, raw_api_features)
-        """
         if self.use_memory and self.memory is not None:
             self.memory.write(
-                api_indices   = api_indices.to(node_features.device),
-                node_features = node_features.detach(),
-                momentum      = momentum,
+                api_indices=api_indices.to(node_features.device),
+                node_features=node_features.detach(),
+                momentum=momentum,
             )
 
     def memory_loss(self, lambda_reg: float = 1e-4) -> torch.Tensor:
-        """
-        L2 regularisation on memory bank vectors.
-
-        Call pattern:
-            total_loss = task_loss + model.memory_loss()
-        """
         if self.use_memory and self.memory is not None:
             return memory_regularization_loss(
                 self.memory.memory_bank.weight,
                 lambda_reg,
             )
-        return torch.tensor(0.0, requires_grad=True)
+        return torch.tensor(0.0, device=next(self.parameters()).device, requires_grad=True)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -521,97 +662,29 @@ class HeteroTemporalGNN(nn.Module):
 # ══════════════════════════════════════════════════════════════════════════════
 
 def create_hetero_tgnn(
-    spatial_layer: str           = "gat",
-    use_memory:    bool          = True,
-    device:        Optional[str] = None,
+    schema: Optional[Dict] = None,
+    use_memory: Optional[bool] = None,
+    memory_dim: Optional[int] = None,
     **kwargs,
 ) -> HeteroTemporalGNN:
     """
-    Factory function.
-
-    Example:
-        model = create_hetero_tgnn(spatial_layer='gat', device='mps')
+    Factory for schema-aware TGNN.
     """
+    schema = schema if schema is not None else get_active_schema()
+    use_memory = config.USE_MEMORY if use_memory is None else use_memory
+    memory_dim = config.MEMORY_DIM if memory_dim is None else memory_dim
+
     model = HeteroTemporalGNN(
-        spatial_layer = spatial_layer,
-        use_memory    = use_memory,
+        schema=schema,
+        use_memory=use_memory,
+        memory_dim=memory_dim,
+        vocab_path=str(config.VOCAB_SAVE_PATH),
         **kwargs,
     )
-    if device is not None:
-        model = model.to(device)
     return model
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  Smoke test
-# ══════════════════════════════════════════════════════════════════════════════
-
 if __name__ == "__main__":
-    import config
-
-    print("=" * 60)
-    print("  HeteroTemporalGNN smoke test")
-    print("=" * 60)
-
-    B      = 4    # batch size
-    N_api  = 80   # total API nodes across batch
-    N_res  = 20   # resource nodes per type
-
-    model = create_hetero_tgnn(spatial_layer="gat", use_memory=True)
-    model.eval()
-    device = torch.device("cpu")
-
-    x_dict = {
-        "api":      torch.randn(N_api, 775),
-        "file":     torch.randn(N_res, 6),
-        "registry": torch.randn(N_res, 6),
-        "process":  torch.randn(N_res, 6),
-        "network":  torch.randn(N_res, 6),
-    }
-    edge_index_dict = {
-        ("api", "temporal",  "api"):
-            torch.randint(0, N_api, (2, 200)),
-        ("api", "accesses",  "file"):
-            torch.stack([torch.randint(0, N_api, (100,)),
-                         torch.randint(0, N_res,  (100,))]),
-        ("api", "modifies",  "registry"):
-            torch.stack([torch.randint(0, N_api, (100,)),
-                         torch.randint(0, N_res,  (100,))]),
-        ("api", "spawns",    "process"):
-            torch.stack([torch.randint(0, N_api, (100,)),
-                         torch.randint(0, N_res,  (100,))]),
-        ("api", "connects",  "network"):
-            torch.stack([torch.randint(0, N_api, (100,)),
-                         torch.randint(0, N_res,  (100,))]),
-    }
-    batch_dict = {
-        "api":      torch.repeat_interleave(torch.arange(B), N_api // B),
-        "file":     torch.repeat_interleave(torch.arange(B), N_res // B),
-        "registry": torch.repeat_interleave(torch.arange(B), N_res // B),
-        "process":  torch.repeat_interleave(torch.arange(B), N_res // B),
-        "network":  torch.repeat_interleave(torch.arange(B), N_res // B),
-    }
-    timestamps_dict = {"api": torch.linspace(0, 100, N_api)}
-    api_indices     = torch.randint(2, 325, (N_api,))
-
-    with torch.no_grad():
-        logits = model(
-            x_dict          = x_dict,
-            edge_index_dict = edge_index_dict,
-            batch_dict      = batch_dict,
-            timestamps_dict = timestamps_dict,
-            api_indices     = api_indices,
-        )
-    print(f"\n[Smoke] logits shape : {logits.shape}  (expected [{B}, 3])")
-    assert logits.shape == (B, 3), f"Shape mismatch: {logits.shape}"
-
-    model.update_memory(api_indices, x_dict["api"])
-    print(f"[Smoke] Memory write ✓")
-
-    mem_loss = model.memory_loss()
-    print(f"[Smoke] Memory loss  {mem_loss.item():.8f} ✓")
-
-    total     = sum(p.numel() for p in model.parameters())
-    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print(f"\n[Smoke] Parameters   total={total:,}  trainable={trainable:,}")
-    print("\n✅  tgnn_model.py working correctly!")
+    schema = ensure_active_schema()
+    model = create_hetero_tgnn(schema=schema, use_memory=config.USE_MEMORY)
+    print(model)
