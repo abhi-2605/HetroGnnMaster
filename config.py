@@ -441,7 +441,7 @@ HIDDEN_DIM = 128            # Hidden dimension for GNN layers
 RESOURCE_HIDDEN_DIM = 64    # Resource node hidden dimension
 NUM_GNN_LAYERS = 2          # Number of spatial aggregation layers
 NUM_ATTENTION_HEADS = 6     # Multi-head attention (spatial)
-DROPOUT = 0.4               # Dropout rate
+DROPOUT = 0.3               # Dropout rate
 
 # Temporal modeling
 LSTM_HIDDEN_DIM = 126       # LSTM hidden dimension
@@ -503,13 +503,13 @@ RESUME_FROM_CHECKPOINT = True
 # Focal Loss
 USE_FOCAL_LOSS = True
 FOCAL_GAMMA = 2
-FOCAL_ALPHA = [0.30, 0.40, 0.30]
-
+# FOCAL_ALPHA = [0.30, 0.40, 0.30]
+FOCAL_ALPHA = [0.40, 0.45, 0.35] 
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True
 OVERSAMPLE_WEIGHTS = {
     0: 8.0,
-    1: 7.0,
+    1: 9.0,
     2: 0.7,
 }
 
@@ -579,7 +579,7 @@ SAVE_BEST_ONLY = True       # Only save best validation model
 MAX_VOCAB_SIZE = 5000
 VOCAB_SAVE_PATH = PROJECT_ROOT / "results" / "api_vocabulary.json"
 
-USE_MEMORY = True
+USE_MEMORY = False
 MEMORY_DIM = 128
 MEMORY_MOMENTUM = 0.9
 MEMORY_LAMBDA = 1e-4
