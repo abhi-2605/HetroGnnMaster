@@ -503,14 +503,14 @@ RESUME_FROM_CHECKPOINT = True
 # Focal Loss
 USE_FOCAL_LOSS = True
 FOCAL_GAMMA = 2
-FOCAL_ALPHA = [0.25, 0.35, 0.40]
+FOCAL_ALPHA = [0.30, 0.40, 0.30]
 
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True
 OVERSAMPLE_WEIGHTS = {
-    0: 6.0,
-    1: 6.0,
-    2: 0.6,
+    0: 8.0,
+    1: 7.0,
+    2: 0.7,
 }
 
 # Class weights for loss function (alternative to Focal Loss)
