@@ -10,3 +10,4 @@ enriched_graphs.zip
 # *.pt
 *.pth
 EOF
+./vscode
