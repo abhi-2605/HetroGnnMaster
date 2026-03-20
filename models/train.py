@@ -1,7 +1,7 @@
 """
 scripts/train.py
 
-Training script for Memory-Augmented Heterogeneous Temporal GNN.
+Training script for schema-aware TGNN with redesigned Memory v2 support.
 
 Phase 1 schema-aware upgrades:
     1. ensure_active_schema() before dataset/model setup
@@ -9,10 +9,10 @@ Phase 1 schema-aware upgrades:
     3. validate_batch_or_raise() before model forward
     4. schema summary logged at startup
 
-Memory integration:
-    1. get_api_indices()      → convert API names → LongTensor before forward
-    2. model.memory_loss()    → add L2 reg term to task loss
-    3. model.update_memory()  → EMA write after optimizer.step()
+Memory v2 integration:
+    1. delayed activation via current_epoch
+    2. context-aware memory is handled inside tgnn_model.py
+    3. confidence/frequency/novelty-aware selective write after optimizer.step()
 """
 
 from __future__ import annotations
@@ -44,7 +44,16 @@ sys.path.append(str(PROJECT_ROOT))
 import config
 from graph_construction.pytorch_dataset import RansomwareGraphDataset, hetero_collate
 from graph_construction.vocabulary import load_vocab
-from models.memory_utils import get_api_indices
+from models.memory_utils import (
+    compose_write_strength,
+    compute_confidence_write_factor,
+    compute_memory_epoch_factor,
+    compute_novelty_write_factor,
+    compute_prediction_confidence,
+    compute_frequency_write_factor,
+    expand_graph_confidence_to_nodes,
+    get_api_indices,
+)
 from models.tgnn_model import create_hetero_tgnn
 from utils.schema_manager import ensure_active_schema
 from utils.schema_utils import summarize_schema
@@ -121,6 +130,44 @@ def compute_metrics(predictions, labels):
         "weighted_f1": w_f1,
         "confusion_matrix": confusion_matrix(labels, predictions),
     }
+
+
+def compute_threat_vs_benign(confusion_mat: np.ndarray) -> dict:
+    """
+    Collapse 3-class confusion matrix into Threat (Ransom+Malware) vs Benign.
+    Assumes class order: 0=Ransomware, 1=Benign, 2=Malware
+    """
+    # TP_threat = all threats predicted as threat (ransom or malware)
+    TP = confusion_mat[0, 0] + confusion_mat[0, 2] + confusion_mat[2, 0] + confusion_mat[2, 2]
+    # FN = threats predicted as benign
+    FN = confusion_mat[0, 1] + confusion_mat[2, 1]
+    # TN = benign predicted as benign
+    TN = confusion_mat[1, 1]
+    # FP = benign predicted as threat
+    FP = confusion_mat[1, 0] + confusion_mat[1, 2]
+
+    threat_recall    = TP / (TP + FN) if (TP + FN) > 0 else 0.0
+    threat_precision = TP / (TP + FP) if (TP + FP) > 0 else 0.0
+    threat_f1        = (
+        2 * threat_precision * threat_recall / (threat_precision + threat_recall)
+        if (threat_precision + threat_recall) > 0 else 0.0
+    )
+    benign_recall    = TN / (TN + FP) if (TN + FP) > 0 else 0.0
+    benign_precision = TN / (TN + FN) if (TN + FN) > 0 else 0.0
+    benign_f1        = (
+        2 * benign_precision * benign_recall / (benign_precision + benign_recall)
+        if (benign_precision + benign_recall) > 0 else 0.0
+    )
+    accuracy = (TP + TN) / (TP + TN + FP + FN) if (TP + TN + FP + FN) > 0 else 0.0
+
+    return {
+        "TP": int(TP), "FN": int(FN), "TN": int(TN), "FP": int(FP),
+        "threat_recall": threat_recall, "threat_precision": threat_precision, "threat_f1": threat_f1,
+        "benign_recall": benign_recall, "benign_precision": benign_precision, "benign_f1": benign_f1,
+        "accuracy_2class": accuracy,
+        "threats_missed": int(FN),   # most important number
+    }
+
 
 
 def print_metrics(metrics, split="Train", class_names=None):
@@ -292,9 +339,112 @@ def _validate_batch_before_forward(batch_data, schema, api_indices=None):
         batch_dict=batch_dict,
         schema=schema,
         require_api=True,
-        require_api_indices_if_memory=config.USE_MEMORY,
-        api_indices=api_indices,
+        require_api_indices=(api_indices is not None),
     )
+
+
+def _build_memory_write_strength(model, logits, batch_data, api_indices, epoch):
+    """
+    Compose selective memory write strength using:
+    - delayed activation factor
+    - confidence-aware scaling
+    - frequency-aware scaling
+    - novelty-aware scaling
+
+    Returns:
+        write_strength: [N_api] or None
+    """
+    if not getattr(config, "USE_MEMORY", False):
+        return None
+
+    if not getattr(model, "memory_enabled_for_temporal_type", False):
+        return None
+
+    if getattr(model, "memory", None) is None:
+        return None
+
+    cache = getattr(model, "_memory_cache", None)
+    if not cache or not cache.get("memory_enabled", False):
+        return None
+
+    if api_indices is None or api_indices.numel() == 0:
+        return None
+
+    device = api_indices.device
+    num_nodes = api_indices.size(0)
+
+    epoch_factor_scalar = compute_memory_epoch_factor(
+        epoch=epoch,
+        warmup_epochs=getattr(config, "MEMORY_WARMUP_EPOCHS", 5),
+    )
+    if epoch_factor_scalar <= 0.0:
+        return None
+
+    epoch_factor = torch.full(
+        (num_nodes,),
+        fill_value=float(epoch_factor_scalar),
+        dtype=torch.float32,
+        device=device,
+    )
+
+    confidence_factor = None
+    if getattr(config, "USE_CONFIDENCE_AWARE_WRITE", True):
+        graph_conf = compute_prediction_confidence(logits.detach())  # [B]
+        primary_type = model.primary_temporal_type
+        node_batch = batch_data.batch_dict[primary_type]
+        node_conf = expand_graph_confidence_to_nodes(graph_conf, node_batch)
+        confidence_factor = compute_confidence_write_factor(
+            confidence=node_conf,
+            min_confidence=getattr(config, "MEMORY_WRITE_MIN_CONFIDENCE", 0.60),
+        )
+
+    frequency_factor = None
+    if getattr(config, "USE_FREQUENCY_AWARE_WRITE", True):
+        freq_table = getattr(model.memory.vocab, "get_frequency_table", lambda: {})()
+        frequency_factor = compute_frequency_write_factor(
+            api_indices=api_indices,
+            freq_table=freq_table,
+            alpha=getattr(config, "MEMORY_FREQ_ALPHA", 0.5),
+            eps=getattr(config, "MEMORY_FREQ_EPS", 1e-6),
+            common_token_cap=getattr(config, "MEMORY_COMMON_TOKEN_WRITE_CAP", 0.25),
+        )
+
+    novelty_factor = None
+    if getattr(config, "USE_NOVELTY_AWARE_WRITE", True):
+        write_node_features = cache.get("write_node_features", None)
+        write_context = cache.get("write_context", None)
+        memory_read = cache.get("memory_read", None)
+
+        if (
+            write_node_features is not None
+            and memory_read is not None
+            and hasattr(model.memory, "_build_write_candidate")
+        ):
+            write_candidate = model.memory._build_write_candidate(
+                api_indices=api_indices,
+                node_features=write_node_features,
+                write_context=write_context,
+            ).detach()
+
+            novelty_factor = compute_novelty_write_factor(
+                write_candidate=write_candidate,
+                memory_reference=memory_read,
+                temperature=getattr(config, "MEMORY_NOVELTY_TEMPERATURE", 1.0),
+                eps=getattr(config, "MEMORY_NOVELTY_EPS", 1e-6),
+            )
+
+    write_strength = compose_write_strength(
+        num_items=num_nodes,
+        device=device,
+        base_strength=getattr(config, "MEMORY_WRITE_BASE_STRENGTH", 1.0),
+        confidence_factor=confidence_factor,
+        frequency_factor=frequency_factor,
+        novelty_factor=novelty_factor,
+        epoch_factor=epoch_factor,
+        min_strength=getattr(config, "MEMORY_WRITE_MIN_STRENGTH", 0.05),
+        max_strength=getattr(config, "MEMORY_WRITE_MAX_STRENGTH", 1.0),
+    )
+    return write_strength
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -335,6 +485,7 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                     batch_dict=batch_data.batch_dict,
                     timestamps_dict=timestamps_dict,
                     api_indices=api_indices,
+                    current_epoch=epoch,
                 )
 
                 task_loss = criterion(logits, labels)
@@ -344,34 +495,48 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                 loss.backward()
                 if config.GRAD_CLIP > 0:
                     torch.nn.utils.clip_grad_norm_(model.parameters(), config.GRAD_CLIP)
+
                 optimizer.step()
+
+                write_strength = None
+                if getattr(config, "USE_MEMORY", False):
+                    write_strength = _build_memory_write_strength(
+                        model=model,
+                        logits=logits,
+                        batch_data=batch_data,
+                        api_indices=api_indices,
+                        epoch=epoch,
+                    )
+
+                    model.update_memory(
+                        api_indices=api_indices,
+                        node_features=batch_data[model.primary_temporal_type].x.detach(),
+                        momentum=config.MEMORY_MOMENTUM,
+                        write_strength=write_strength,
+                        current_epoch=epoch,
+                    )
 
                 task_loss_val = task_loss.item()
                 mem_reg_val = mem_reg.item()
                 total_loss += task_loss_val
                 total_mem_reg += mem_reg_val
 
-                preds = logits.argmax(dim=1).cpu().numpy()
+                preds = logits.argmax(dim=1).detach().cpu().numpy()
                 all_preds.extend(preds)
-                all_labels.extend(labels.cpu().numpy())
+                all_labels.extend(labels.detach().cpu().numpy())
 
-                with torch.no_grad():
-                    model.update_memory(
-                        api_indices=api_indices,
-                        node_features=batch_data["api"].x.detach(),
-                        momentum=config.MEMORY_MOMENTUM,
-                    )
                 break
 
             except torch.cuda.OutOfMemoryError:
                 optimizer.zero_grad(set_to_none=True)
-                torch.cuda.empty_cache()
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
                 gc.collect()
 
                 if attempt == 0:
                     print(f"⚠️  OOM batch {batch_idx} — cleared cache, retrying...")
                 else:
-                    print(f"❌ OOM batch {batch_idx} — retry failed, skipping.")
+                    print(f"❌  OOM batch {batch_idx} — retry failed, skipping.")
                     batch_skipped = True
                     break
 
@@ -390,7 +555,6 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
     metrics = compute_metrics(all_preds, all_labels)
     metrics["loss"] = avg_loss
     metrics["mem_reg"] = avg_mem_reg
-
     return metrics
 
 
@@ -398,7 +562,7 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
 #  validate
 # ══════════════════════════════════════════════════════════════════════════════
 
-def validate(model, loader, criterion, vocab, schema, device):
+def validate(model, loader, criterion, vocab, schema, device, epoch=None):
     """Validate — memory is NOT written during eval."""
     model.eval()
 
@@ -423,6 +587,7 @@ def validate(model, loader, criterion, vocab, schema, device):
                 batch_dict=batch_data.batch_dict,
                 timestamps_dict=timestamps_dict,
                 api_indices=api_indices,
+                current_epoch=epoch,
             )
 
             loss = criterion(logits, labels)
@@ -521,7 +686,7 @@ def train():
         model.load_state_dict(ckpt["model_state_dict"])
         if "optimizer_state_dict" in ckpt:
             optimizer.load_state_dict(ckpt["optimizer_state_dict"])
-        if scheduler is not None and "scheduler_state_dict" in ckpt:
+        if scheduler is not None and ckpt.get("scheduler_state_dict") is not None:
             scheduler.load_state_dict(ckpt["scheduler_state_dict"])
 
         best_metric = float(ckpt.get("best_metric", 0.0))
@@ -544,10 +709,13 @@ def train():
     patience_counter = 0
     history = defaultdict(list)
 
+    active_schema_path = getattr(config, "SCHEMA_PATH", None)
+
     log(f"{'=' * 70}\nTRAINING START\n{'=' * 70}")
     log(f"Graph source: {config.ACTIVE_GRAPH_SOURCE}")
     log(f"Graph dir   : {config.ACTIVE_GRAPH_DIR}")
-    log(f"Schema path : {config.ACTIVE_SCHEMA_PATH}")
+    if active_schema_path is not None:
+        log(f"Schema path : {active_schema_path}")
 
     # ── epoch loop ────────────────────────────────────────────────────────────
     for epoch in range(start_epoch, config.EPOCHS + 1):
@@ -590,6 +758,7 @@ def train():
             vocab=vocab,
             schema=schema,
             device=device,
+            epoch=epoch,
         )
 
         ransom_v_r = val_metrics["per_class_recall"][0]
@@ -605,6 +774,15 @@ def train():
             f"Ransom P={ransom_v_p:.3f} R={ransom_v_r:.3f}  "
             f"Benign P={benign_v_p:.3f} R={benign_v_r:.3f}  "
             f"Malware P={malware_v_p:.3f} R={malware_v_r:.3f}"
+        )
+
+        # ── Threat vs Benign 2-class report ──────────────────────────────────
+        tvb = compute_threat_vs_benign(val_metrics["confusion_matrix"])
+        log(
+            f"  [Threat vs Benign]  "
+            f"Threat P={tvb['threat_precision']:.3f} R={tvb['threat_recall']:.3f} F1={tvb['threat_f1']:.3f}  |  "
+            f"Benign P={tvb['benign_precision']:.3f} R={tvb['benign_recall']:.3f} F1={tvb['benign_f1']:.3f}  |  "
+            f"Acc={tvb['accuracy_2class']:.4f}  Threats missed={tvb['threats_missed']}"
         )
 
         for k, v in train_metrics.items():
@@ -638,7 +816,7 @@ def train():
                     "best_metric": best_metric,
                     "val_metrics": val_metrics,
                     "graph_source": config.ACTIVE_GRAPH_SOURCE,
-                    "schema_path": str(config.ACTIVE_SCHEMA_PATH),
+                    "schema_path": str(active_schema_path) if active_schema_path is not None else None,
                 },
                 checkpoint_path,
             )
@@ -678,6 +856,7 @@ def train():
         vocab=vocab,
         schema=schema,
         device=device,
+        epoch=config.EPOCHS,
     )
     print_metrics(test_metrics, split="Test")
 

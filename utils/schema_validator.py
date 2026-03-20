@@ -245,6 +245,7 @@ def validate_batch_dicts(
     require_api: bool = True,
     require_api_indices_if_memory: bool = False,
     api_indices: Optional[torch.Tensor] = None,
+    require_api_indices: Optional[bool] = None,   # backward-compatible alias
 ) -> ValidationResult:
     """
     Validate model-ready batch dictionaries before forward pass.
@@ -253,6 +254,11 @@ def validate_batch_dicts(
     """
     schema = schema or get_active_schema()
     result = ValidationResult(is_valid=True)
+
+    # Backward-compatible normalization:
+    # If the old alias is provided, use it to drive the new flag.
+    if require_api_indices is not None:
+        require_api_indices_if_memory = require_api_indices
 
     canonical_node_dims = get_canonical_node_dims(schema)
     canonical_edge_dims = get_canonical_edge_dims(schema)
@@ -374,6 +380,7 @@ def validate_batch_or_raise(
     require_api: bool = True,
     require_api_indices_if_memory: bool = False,
     api_indices: Optional[torch.Tensor] = None,
+    require_api_indices: Optional[bool] = None,   # backward-compatible alias
 ) -> None:
     """
     Validate model-ready batch dicts and raise ValueError if invalid.
@@ -387,6 +394,7 @@ def validate_batch_or_raise(
         require_api=require_api,
         require_api_indices_if_memory=require_api_indices_if_memory,
         api_indices=api_indices,
+        require_api_indices=require_api_indices,
     )
 
     if not result.is_valid:

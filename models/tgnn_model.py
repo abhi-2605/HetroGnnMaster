@@ -3,13 +3,17 @@ models/tgnn_model.py
 
 Schema-aware Memory-Augmented Heterogeneous Temporal GNN for ransomware detection.
 
-Key fixes in this version:
-- Removes hardcoded "api" as the only special temporal key
-- Uses a configurable / inferred primary temporal node type
-- Keeps explicit LSTM temporal branch, but attaches it to the primary temporal type
-- Makes non-primary node pooling runtime-adaptive (64 or 384 or primary-width fallback)
-- Preserves stable type-slot combiner
-- Keeps memory optional and only enables it when the temporal type supports vocabulary indexing
+This version keeps the current redesigned TGNN as the base and only adds
+the memory changes needed for Memory v2:
+
+- primary temporal node type support (already present)
+- delayed memory activation
+- context-aware memory query construction
+- gated/contextual memory read via SemanticMemory
+- memory fusion back into the primary temporal stream
+- cache support for selective weighted writes later from train.py
+
+It does NOT change the overall classifier design or graph-processing flow.
 """
 
 from __future__ import annotations
@@ -107,8 +111,8 @@ class HeteroTemporalGNN(nn.Module):
 
     Important:
     - The explicit LSTM temporal branch is attached to self.primary_temporal_type
-    - This version is no longer hardcoded to "api" as the only temporal type
-    - Memory is optional and only applied if the temporal type supports vocab indexing
+    - Memory is optional and only applied to the primary temporal type
+    - Memory v2 uses delayed activation, context-aware query, and gated read
     """
 
     def __init__(
@@ -181,31 +185,11 @@ class HeteroTemporalGNN(nn.Module):
         self.non_primary_node_types = [nt for nt in self.node_types if nt != self.primary_temporal_type]
 
         # ── memory support only if temporal type is vocabulary-backed ────────
-        # For now, we only treat "api" as vocab-backed unless extended later.
         self.memory_enabled_for_temporal_type = (
             use_memory and self.primary_temporal_type == "api"
         )
 
         base_temporal_dim = self.node_dims[self.primary_temporal_type]
-
-        if self.memory_enabled_for_temporal_type:
-            self.memory = build_semantic_memory(
-                vocab_path=vocab_path,
-                memory_dim=memory_dim,
-                node_feat_dim=base_temporal_dim,
-            )
-            self.node_dims[self.primary_temporal_type] = base_temporal_dim + memory_dim
-            print(
-                f"[Model] SemanticMemory ON  │ "
-                f"{self.primary_temporal_type} input: "
-                f"{base_temporal_dim} + {memory_dim} = {self.node_dims[self.primary_temporal_type]}"
-            )
-        else:
-            self.memory = None
-            print(
-                f"[Model] SemanticMemory OFF │ "
-                f"{self.primary_temporal_type} input: {base_temporal_dim}"
-            )
 
         # Primary temporal type gets "api-like" hidden width.
         self.primary_hidden_dim = hidden_dim_api
@@ -335,9 +319,7 @@ class HeteroTemporalGNN(nn.Module):
             nn.Dropout(dropout),
         )
 
-        # If a future primary temporal type is not "api", some non-primary node could still
-        # be widened to primary_out_dim_per_layer if it is the destination of a relation and
-        # was designated primary. This gives a safe fallback path.
+        # Fallback if a non-primary node is somehow in primary-width state
         self.primary_state_pool_projection = nn.Sequential(
             nn.Linear(self.primary_out_dim_per_layer, pooled_type_dim),
             nn.ReLU(),
@@ -354,12 +336,66 @@ class HeteroTemporalGNN(nn.Module):
         )
 
         # ══════════════════════════════════════════════════════════════════════
-        # 6. Behavioral summary features
+        # 6. Memory v2
+        # ══════════════════════════════════════════════════════════════════════
+                # ══════════════════════════════════════════════════════════════════════
+        # 6. Memory v2
+        # ══════════════════════════════════════════════════════════════════════
+        if self.memory_enabled_for_temporal_type:
+            self.memory = build_semantic_memory(
+                vocab_path=vocab_path,
+                memory_dim=memory_dim,
+                node_feat_dim=self.primary_out_dim_per_layer,  # memory operates on post-GNN primary state
+            )
+
+            # Context projections for neighbor summaries into primary-width space
+            self.memory_neighbor_proj_base = nn.Linear(
+                self.other_hidden_dim,
+                self.primary_out_dim_per_layer,
+            )
+            self.memory_neighbor_proj_wide = nn.Linear(
+                self.other_out_dim_per_layer,
+                self.primary_out_dim_per_layer,
+            )
+            self.memory_neighbor_proj_primary = nn.Identity()
+
+            # Fusion of contextual memory back into the primary temporal stream
+            self.memory_fusion = nn.Sequential(
+                nn.Linear(self.primary_out_dim_per_layer + memory_dim, self.primary_out_dim_per_layer),
+                nn.LayerNorm(self.primary_out_dim_per_layer),
+                nn.GELU(),
+                nn.Dropout(dropout),
+            )
+
+            print(
+                f"[Model] SemanticMemory ON  │ "
+                f"{self.primary_temporal_type} memory over post-GNN dim "
+                f"{self.primary_out_dim_per_layer} + {memory_dim}"
+            )
+        else:
+            self.memory = None
+            self.memory_fusion = None
+            print(
+                f"[Model] SemanticMemory OFF │ "
+                f"{self.primary_temporal_type} memory disabled"
+            )
+
+        # cache from latest forward for later write
+        self._memory_cache: Dict[str, Optional[torch.Tensor]] = {
+            "api_indices": None,
+            "write_node_features": None,
+            "write_context": None,
+            "memory_read": None,
+            "memory_enabled": None,
+        }
+
+        # ══════════════════════════════════════════════════════════════════════
+        # 7. Behavioral summary features
         # ══════════════════════════════════════════════════════════════════════
         self.behav_dim = len(self.type_slot_order) * 3
 
         # ══════════════════════════════════════════════════════════════════════
-        # 7. Classifier
+        # 8. Classifier
         # ══════════════════════════════════════════════════════════════════════
         trunk_in = pooled_type_dim + self.behav_dim
 
@@ -415,6 +451,142 @@ class HeteroTemporalGNN(nn.Module):
             "Could not resolve a primary temporal node type. "
             "Set config.PRIMARY_TEMPORAL_NODE_TYPE explicitly."
         )
+
+    # ──────────────────────────────────────────────────────────────────────────
+    # memory helpers
+    # ──────────────────────────────────────────────────────────────────────────
+
+    def _memory_is_enabled(self, current_epoch: Optional[int] = None) -> bool:
+        """
+        Delayed memory activation.
+
+        If current_epoch is not supplied, preserve backward compatibility by
+        enabling memory immediately when USE_MEMORY is on.
+        """
+        if not self.memory_enabled_for_temporal_type or self.memory is None:
+            return False
+
+        if current_epoch is None:
+            return True
+
+        warmup_epochs = getattr(config, "MEMORY_WARMUP_EPOCHS", 5)
+        return current_epoch >= warmup_epochs
+
+    def _project_neighbor_for_memory(self, x: torch.Tensor) -> torch.Tensor:
+        feat_dim = x.size(-1)
+
+        if feat_dim == self.primary_out_dim_per_layer:
+            return self.memory_neighbor_proj_primary(x)
+
+        if feat_dim == self.other_hidden_dim:
+            return self.memory_neighbor_proj_base(x)
+
+        if feat_dim == self.other_out_dim_per_layer:
+            return self.memory_neighbor_proj_wide(x)
+
+        raise ValueError(
+            f"Unsupported neighbor feature dim for memory context: {feat_dim}. "
+            f"Expected one of "
+            f"{self.primary_out_dim_per_layer}, {self.other_hidden_dim}, {self.other_out_dim_per_layer}."
+        )
+
+    def _build_primary_neighbor_context(
+        self,
+        h_dict: Dict[str, torch.Tensor],
+        edge_index_dict: Dict[EdgeType, torch.Tensor],
+    ) -> torch.Tensor:
+        """
+        Build a local neighborhood summary for each primary temporal node.
+
+        Output:
+            [N_primary, primary_out_dim_per_layer]
+        """
+        primary = self.primary_temporal_type
+        if primary not in h_dict:
+            raise ValueError(f"Missing primary temporal type '{primary}' in h_dict")
+
+        primary_x = h_dict[primary]
+        num_primary = primary_x.size(0)
+        device = primary_x.device
+        dtype = primary_x.dtype
+
+        contexts = []
+
+        for edge_type, edge_index in edge_index_dict.items():
+            if edge_index is None or edge_index.numel() == 0:
+                continue
+
+            src, _, dst = edge_type
+
+            if src == primary and dst == primary:
+                # temporal / self relation
+                src_x = self._project_neighbor_for_memory(h_dict[src])
+                row, col = edge_index[0], edge_index[1]
+                msg = src_x[row]
+                agg = scatter(msg, col, dim=0, dim_size=num_primary, reduce="mean")
+                contexts.append(agg)
+
+            elif dst == primary and src in h_dict:
+                src_x = self._project_neighbor_for_memory(h_dict[src])
+                row, col = edge_index[0], edge_index[1]
+                msg = src_x[row]
+                agg = scatter(msg, col, dim=0, dim_size=num_primary, reduce="mean")
+                contexts.append(agg)
+
+            elif src == primary and dst in h_dict:
+                dst_x = self._project_neighbor_for_memory(h_dict[dst])
+                row, col = edge_index[0], edge_index[1]
+                msg = dst_x[col]
+                agg = scatter(msg, row, dim=0, dim_size=num_primary, reduce="mean")
+                contexts.append(agg)
+
+        if not contexts:
+            return torch.zeros(
+                num_primary,
+                self.primary_out_dim_per_layer,
+                device=device,
+                dtype=dtype,
+            )
+
+        return torch.stack(contexts, dim=0).mean(dim=0)
+
+    def _build_memory_query_context(
+        self,
+        primary_hidden: torch.Tensor,
+        temporal_context: torch.Tensor,
+        neighbor_context: torch.Tensor,
+        batch_index: torch.Tensor,
+    ) -> torch.Tensor:
+        """
+        Build the extra context vector passed into SemanticMemory.
+
+        Uses:
+        - current primary node state
+        - temporal hidden state
+        - local neighborhood summary
+        - optional light graph context (very controlled)
+        """
+        parts = [primary_hidden]
+
+        if getattr(config, "USE_TEMPORAL_CONTEXT_IN_MEMORY", True):
+            parts.append(temporal_context)
+
+        if getattr(config, "USE_NEIGHBOR_CONTEXT_IN_MEMORY", True):
+            parts.append(neighbor_context)
+
+        if getattr(config, "USE_LIGHT_GRAPH_CONTEXT_IN_MEMORY", False):
+            # light graph context only: mean-pooled current primary hidden
+            batch_size = int(batch_index.max().item()) + 1 if batch_index.numel() > 0 else 0
+            graph_ctx = scatter(
+                primary_hidden,
+                batch_index,
+                dim=0,
+                dim_size=batch_size,
+                reduce="mean",
+            )
+            parts.append(graph_ctx[batch_index])
+
+        return torch.cat(parts, dim=-1)
 
     # ──────────────────────────────────────────────────────────────────────────
     # helpers
@@ -550,8 +722,10 @@ class HeteroTemporalGNN(nn.Module):
         edge_attr_dict: Optional[Dict[EdgeType, torch.Tensor]] = None,
         timestamps_dict: Optional[Dict[str, torch.Tensor]] = None,
         api_indices: Optional[torch.Tensor] = None,
+        current_epoch: Optional[int] = None,
     ) -> torch.Tensor:
         device = next(self.parameters()).device
+        memory_active = self._memory_is_enabled(current_epoch=current_epoch)
 
         # Diagnostic for temporal-path coverage
         if not hasattr(self, "_temporal_diag"):
@@ -577,25 +751,12 @@ class HeteroTemporalGNN(nn.Module):
                 f"cannot run temporal branch."
             )
 
-        if self.memory_enabled_for_temporal_type and self.memory is not None and api_indices is None:
+        if memory_active and self.memory_enabled_for_temporal_type and api_indices is None:
             raise ValueError(
-                "Memory is enabled for the temporal type but api_indices is missing."
+                "Memory is active for the temporal type but api_indices is missing."
             )
 
         batch_size = int(batch_dict[self.primary_temporal_type].max().item()) + 1
-
-        # Optional memory enrichment only when temporal type is vocab-backed
-        if self.memory_enabled_for_temporal_type and self.memory is not None:
-            temporal_ts = (
-                timestamps_dict.get(self.primary_temporal_type, None)
-                if timestamps_dict is not None else None
-            )
-            x_dict = dict(x_dict)
-            x_dict[self.primary_temporal_type] = self.memory(
-                api_indices.to(device),
-                x_dict[self.primary_temporal_type],
-                temporal_ts,
-            )
 
         # 1. input projections
         h_dict: Dict[str, torch.Tensor] = {}
@@ -629,25 +790,83 @@ class HeteroTemporalGNN(nn.Module):
 
             h_dict = h_out
 
-        # 3. explicit temporal branch on primary temporal nodes
-        temporal_batch = batch_dict[self.primary_temporal_type]
-        temporal_ts = (
+        # 3. Memory v2 on primary temporal stream (after GNN, before final LSTM pooling)
+        primary_batch = batch_dict[self.primary_temporal_type]
+        primary_hidden = h_dict[self.primary_temporal_type]  # [N_primary, primary_out_dim]
+
+        if memory_active and self.memory is not None:
+            # preliminary temporal context from current primary hidden
+            primary_ts = (
+                timestamps_dict.get(self.primary_temporal_type, None)
+                if timestamps_dict is not None else None
+            )
+
+            prelim_temporal = self.temporal_lstm(
+                x=primary_hidden,
+                batch=primary_batch,
+                timestamps=primary_ts,
+            )  # [N_primary, lstm_output_dim]
+
+            neighbor_context = self._build_primary_neighbor_context(
+                h_dict=h_dict,
+                edge_index_dict=edge_index_dict,
+            )  # [N_primary, primary_out_dim]
+
+            memory_query_context = self._build_memory_query_context(
+                primary_hidden=primary_hidden,
+                temporal_context=prelim_temporal,
+                neighbor_context=neighbor_context,
+                batch_index=primary_batch,
+            )  # [N_primary, D_ctx]
+
+            memory_vec = self.memory.read(
+                api_indices=api_indices.to(device),
+                node_features=primary_hidden,
+                query_context=memory_query_context,
+                enable_memory=True,
+            )  # [N_primary, memory_dim]
+
+            fused_primary = self.memory_fusion(
+                torch.cat([primary_hidden, memory_vec], dim=-1)
+            )  # [N_primary, primary_out_dim]
+
+            h_dict[self.primary_temporal_type] = fused_primary
+
+            # cache for weighted writes after optimizer step
+            self._memory_cache = {
+                "api_indices": api_indices.detach(),
+                "write_node_features": primary_hidden.detach(),
+                "write_context": memory_query_context.detach(),
+                "memory_read": memory_vec.detach(),
+                "memory_enabled": True,
+            }
+        else:
+            self._memory_cache = {
+                "api_indices": None,
+                "write_node_features": None,
+                "write_context": None,
+                "memory_read": None,
+                "memory_enabled": False,
+            }
+
+        # 4. explicit temporal branch on final primary temporal nodes
+        primary_ts = (
             timestamps_dict.get(self.primary_temporal_type, None)
             if timestamps_dict is not None else None
         )
 
         temporal_hidden = self.temporal_lstm(
             x=h_dict[self.primary_temporal_type],
-            batch=temporal_batch,
-            timestamps=temporal_ts,
+            batch=primary_batch,
+            timestamps=primary_ts,
         )
 
         temporal_graph_emb = self.temporal_pooling(
             x=temporal_hidden,
-            batch=temporal_batch,
+            batch=primary_batch,
         )
 
-        # 4. fixed type slots + type combiner
+        # 5. fixed type slots + type combiner
         type_slots, type_mask = self._build_type_slots(
             h_dict=h_dict,
             batch_dict=batch_dict,
@@ -658,7 +877,7 @@ class HeteroTemporalGNN(nn.Module):
 
         graph_embedding = self.type_combiner(type_slots, type_mask)
 
-        # 5. behavioral features
+        # 6. behavioral features
         behav_feats = self._compute_behavioral_features(
             h_dict=h_dict,
             batch_dict=batch_dict,
@@ -666,7 +885,7 @@ class HeteroTemporalGNN(nn.Module):
             device=device,
         )
 
-        # 6. classifier
+        # 7. classifier
         x = torch.cat([graph_embedding, behav_feats], dim=-1)
         z = self.shared_trunk(x)
 
@@ -687,24 +906,62 @@ class HeteroTemporalGNN(nn.Module):
     @torch.no_grad()
     def update_memory(
         self,
-        api_indices: torch.LongTensor,
-        node_features: torch.Tensor,
+        api_indices: Optional[torch.LongTensor] = None,
+        node_features: Optional[torch.Tensor] = None,
         momentum: float = 0.9,
+        write_strength: Optional[torch.Tensor] = None,
+        write_context: Optional[torch.Tensor] = None,
+        current_epoch: Optional[int] = None,
     ) -> None:
-        if self.memory_enabled_for_temporal_type and self.memory is not None:
+        """
+        Memory write after optimizer step.
+
+        Prefers cached forward-pass contextual state if available.
+        """
+        if not self._memory_is_enabled(current_epoch=current_epoch):
+            return
+
+        if self.memory is None:
+            return
+
+        if self._memory_cache.get("memory_enabled", False):
+            cached_indices = self._memory_cache.get("api_indices", None)
+            cached_features = self._memory_cache.get("write_node_features", None)
+            cached_context = self._memory_cache.get("write_context", None)
+
+            if cached_indices is not None and cached_features is not None:
+                self.memory.write(
+                    api_indices=cached_indices.to(cached_features.device),
+                    node_features=cached_features,
+                    momentum=momentum,
+                    write_strength=write_strength,
+                    write_context=cached_context if write_context is None else write_context,
+                    enable_memory=True,
+                )
+                return
+
+        # fallback path if cache is unavailable
+        if api_indices is not None and node_features is not None:
             self.memory.write(
                 api_indices=api_indices.to(node_features.device),
                 node_features=node_features.detach(),
                 momentum=momentum,
+                write_strength=write_strength,
+                write_context=write_context,
+                enable_memory=True,
             )
 
     def memory_loss(self, lambda_reg: float = 1e-4) -> torch.Tensor:
-        if self.memory_enabled_for_temporal_type and self.memory is not None:
-            return memory_regularization_loss(
-                self.memory.memory_bank.weight,
-                lambda_reg,
-            )
-        return torch.tensor(0.0, device=next(self.parameters()).device, requires_grad=True)
+        if self.memory is not None and self.memory_enabled_for_temporal_type:
+            loss_keys = memory_regularization_loss(self.memory.memory_keys.weight, lambda_reg)
+            loss_vals = memory_regularization_loss(self.memory.memory_values.weight, lambda_reg)
+            return 0.5 * (loss_keys + loss_vals)
+
+        return torch.tensor(
+            0.0,
+            device=next(self.parameters()).device,
+            requires_grad=True,
+        )
 
 
 # ══════════════════════════════════════════════════════════════════════════════

@@ -1,308 +1,417 @@
 """
 models/semantic_memory.py
 
-Semantic Memory Module for Ransomware TGNN.
+Context-aware semantic memory for TGNN.
 
-Provides a persistent, learnable memory bank indexed by API vocabulary.
-Each API gets a 128-dim memory vector that accumulates cross-graph
-behavioral context during training.
+Memory v2 goals:
+- do not rely only on token identity
+- read memory using node + context
+- fuse memory through a learned gate
+- support delayed activation from training loop
+- support selective weighted EMA writes
+- keep output shape compatible with current TGNN:
+    augmented_features = [node_features ; memory_vector]
 
-Architecture:
-    Memory Bank:  nn.Embedding(325, 128)  → one slot per API
-    Read:         Attention-based retrieval (time-aware)
-    Write:        EMA update after each batch
-    Output:       node_features [775] + memory [128] = [903-dim]
+This file is the memory-core redesign only.
+Training schedule, confidence/frequency/novelty weighting, and model-side
+context construction are handled in later files.
 """
+
+from __future__ import annotations
+
+from pathlib import Path
+import sys
+from typing import Dict, Optional, Tuple
 
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from pathlib import Path
-import sys
 
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.append(str(PROJECT_ROOT))
 
+import config
 from graph_construction.vocabulary import load_vocab
 
 
-# ══════════════════════════════════════════════════════════════════════════════
-#  SemanticMemory
-# ══════════════════════════════════════════════════════════════════════════════
-
 class SemanticMemory(nn.Module):
     """
-    Persistent API behaviour memory bank.
+    Context-aware semantic memory for temporal/API-like nodes.
 
-    Memory flow:
-        READ  → api_idx → attention blend over memory bank → 128-dim vector
-        WRITE → after optimizer.step(), EMA-update memory slots for seen APIs
+    Read path:
+        token embedding + context query -> sparse attention over memory bank
+        -> gated fusion with current node features
+        -> return augmented features [node_features ; fused_memory]
 
-    Usage:
-        memory  = SemanticMemory(vocab_size=325)
-        enriched = memory(api_indices, node_features, timestamps)
-        # → [N, 903]  (775 static + 128 dynamic)
-
-        # after loss.backward() + optimizer.step():
-        memory.write(api_indices, node_features.detach())
+    Write path:
+        weighted EMA updates to token-associated memory slots
+        using contextual write candidates.
     """
 
     def __init__(
         self,
-        vocab_size: int,
-        memory_dim: int = 128,
-        node_feat_dim: int = 775,
-        num_attention_heads: int = 4,
-        dropout: float = 0.1,
+        vocab_path: str,
+        memory_dim: int,
+        node_feat_dim: int,
+        query_hidden_dim: Optional[int] = None,
+        gate_hidden_dim: Optional[int] = None,
+        read_temperature: Optional[float] = None,
+        top_k: Optional[int] = None,
     ):
         super().__init__()
 
-        self.vocab_size    = vocab_size
-        self.memory_dim    = memory_dim
+        self.vocab = load_vocab(vocab_path)
+        self.vocab_size = self.vocab.size()
+        self.memory_dim = memory_dim
         self.node_feat_dim = node_feat_dim
-        self.output_dim    = node_feat_dim + memory_dim   # 903
 
-        # ── Memory Bank ──────────────────────────────────────────────────────
-        # padding_idx=1 → <PAD> slot is always zero, never updated
-        self.memory_bank = nn.Embedding(
-            vocab_size, memory_dim, padding_idx=1
+        self.query_hidden_dim = (
+            query_hidden_dim
+            if query_hidden_dim is not None
+            else getattr(config, "MEMORY_QUERY_HIDDEN_DIM", 256)
+        )
+        self.gate_hidden_dim = (
+            gate_hidden_dim
+            if gate_hidden_dim is not None
+            else getattr(config, "MEMORY_GATE_HIDDEN_DIM", 128)
+        )
+        self.read_temperature = (
+            read_temperature
+            if read_temperature is not None
+            else getattr(config, "MEMORY_READ_TEMPERATURE", 1.0)
+        )
+        self.top_k = (
+            top_k
+            if top_k is not None
+            else getattr(config, "MEMORY_TOP_K", 64)
         )
 
-        # ── Read: query projection (node features → query space) ─────────────
-        self.query_proj = nn.Linear(node_feat_dim, memory_dim, bias=False)
+        # 1. Token embedding (identity prior)
+        self.token_embedding = nn.Embedding(self.vocab_size, memory_dim)
 
-        # ── Read: multi-head soft attention over full memory bank ─────────────
-        self.attention = nn.MultiheadAttention(
-            embed_dim=memory_dim,
-            num_heads=num_attention_heads,
-            dropout=dropout,
-            batch_first=True,
+        # 2. Memory bank
+        self.memory_keys = nn.Embedding(self.vocab_size, memory_dim)
+        self.memory_values = nn.Embedding(self.vocab_size, memory_dim)
+
+        # 3. Base context-aware query projection
+        base_query_in_dim = memory_dim + node_feat_dim
+        self.base_query_proj = nn.Sequential(
+            nn.Linear(base_query_in_dim, self.query_hidden_dim),
+            nn.LayerNorm(self.query_hidden_dim),
+            nn.GELU(),
+            nn.Linear(self.query_hidden_dim, memory_dim),
         )
 
-        # ── Read: time-aware gate ─────────────────────────────────────────────
-        # timestamp (scalar) → gate vector to scale memory by temporal position
-        self.time_gate = nn.Sequential(
-            nn.Linear(1, memory_dim),
-            nn.Sigmoid(),
+        # Registered containers for optional extra context projections
+        self.extra_context_projs = nn.ModuleDict()
+        self.extra_write_context_projs = nn.ModuleDict()
+
+        # 4. Gated read
+        gate_in_dim = node_feat_dim + memory_dim
+        self.gate_mlp = nn.Sequential(
+            nn.Linear(gate_in_dim, self.gate_hidden_dim),
+            nn.LayerNorm(self.gate_hidden_dim),
+            nn.GELU(),
+            nn.Linear(self.gate_hidden_dim, memory_dim),
         )
 
-        # ── Output normalisation ──────────────────────────────────────────────
-        self.layer_norm = nn.LayerNorm(memory_dim)
-        self.dropout    = nn.Dropout(dropout)
+        # 5. Write candidate projection
+        self.write_candidate_proj = nn.Sequential(
+            nn.Linear(base_query_in_dim, self.query_hidden_dim),
+            nn.LayerNorm(self.query_hidden_dim),
+            nn.GELU(),
+            nn.Linear(self.query_hidden_dim, memory_dim),
+        )
 
-        self._init_weights()
+        # Cache from latest read for optional inspection/debugging
+        self._last_read: Dict[str, torch.Tensor] = {}
 
-    # ── initialisation ────────────────────────────────────────────────────────
+        self.reset_parameters()
 
-    def _init_weights(self) -> None:
-        nn.init.xavier_uniform_(self.query_proj.weight)
-        nn.init.normal_(self.memory_bank.weight, mean=0.0, std=0.02)
-        with torch.no_grad():
-            self.memory_bank.weight[0].zero_()   # <UNK>
-            self.memory_bank.weight[1].zero_()   # <PAD>
+    def reset_parameters(self):
+        nn.init.xavier_uniform_(self.token_embedding.weight)
+        nn.init.xavier_uniform_(self.memory_keys.weight)
+        nn.init.xavier_uniform_(self.memory_values.weight)
 
-    # ── READ ──────────────────────────────────────────────────────────────────
+        for module in [self.base_query_proj, self.gate_mlp, self.write_candidate_proj]:
+            for m in module.modules():
+                if isinstance(m, nn.Linear):
+                    nn.init.xavier_uniform_(m.weight)
+                    if m.bias is not None:
+                        nn.init.zeros_(m.bias)
+
+    def _get_extra_context_proj(self, extra_dim: int, device: torch.device) -> nn.Module:
+        key = str(extra_dim)
+        if key not in self.extra_context_projs:
+            self.extra_context_projs[key] = nn.Sequential(
+                nn.Linear(extra_dim, self.query_hidden_dim),
+                nn.LayerNorm(self.query_hidden_dim),
+                nn.GELU(),
+                nn.Linear(self.query_hidden_dim, self.memory_dim),
+            ).to(device)
+        return self.extra_context_projs[key]
+
+    def _get_extra_write_context_proj(self, extra_dim: int, device: torch.device) -> nn.Module:
+        key = str(extra_dim)
+        if key not in self.extra_write_context_projs:
+            self.extra_write_context_projs[key] = nn.Sequential(
+                nn.Linear(extra_dim, self.query_hidden_dim),
+                nn.LayerNorm(self.query_hidden_dim),
+                nn.GELU(),
+                nn.Linear(self.query_hidden_dim, self.memory_dim),
+            ).to(device)
+        return self.extra_write_context_projs[key]
+
+    def _clamp_gate(self, gate: torch.Tensor) -> torch.Tensor:
+        min_gate = getattr(config, "MEMORY_MIN_GATE", 0.05)
+        max_gate = getattr(config, "MEMORY_MAX_GATE", 0.95)
+        return gate * (max_gate - min_gate) + min_gate
+
+    def _build_query(
+        self,
+        api_indices: torch.LongTensor,
+        node_features: torch.Tensor,
+        query_context: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
+        token_emb = self.token_embedding(api_indices)
+        base_input = torch.cat([token_emb, node_features], dim=-1)
+        query = self.base_query_proj(base_input)
+
+        if query_context is not None:
+            if query_context.dim() != 2:
+                raise ValueError(
+                    f"query_context must be 2D [N, D], got shape={tuple(query_context.shape)}"
+                )
+
+            extra_dim = query_context.size(-1)
+            proj = self._get_extra_context_proj(extra_dim, query_context.device)
+            query = query + proj(query_context)
+
+        query = F.normalize(query, dim=-1)
+        return query
+
+    def _build_write_candidate(
+        self,
+        api_indices: torch.LongTensor,
+        node_features: torch.Tensor,
+        write_context: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
+        token_emb = self.token_embedding(api_indices)
+        base_input = torch.cat([token_emb, node_features], dim=-1)
+        candidate = self.write_candidate_proj(base_input)
+
+        if write_context is not None:
+            if write_context.dim() != 2:
+                raise ValueError(
+                    f"write_context must be 2D [N, D], got shape={tuple(write_context.shape)}"
+                )
+
+            extra_dim = write_context.size(-1)
+            proj = self._get_extra_write_context_proj(extra_dim, write_context.device)
+            candidate = candidate + proj(write_context)
+
+        candidate = F.normalize(candidate, dim=-1)
+        return candidate
 
     def read(
         self,
-        api_indices:   torch.LongTensor,          # [N]
-        node_features: torch.Tensor,              # [N, 775]
-        timestamps:    torch.Tensor = None,       # [N]  optional
-    ) -> torch.Tensor:
+        api_indices: torch.LongTensor,
+        node_features: torch.Tensor,
+        query_context: Optional[torch.Tensor] = None,
+        enable_memory: bool = True,
+        return_debug: bool = False,
+    ) -> torch.Tensor | Tuple[torch.Tensor, Dict[str, torch.Tensor]]:
         """
-        Retrieve memory for each node.
-
-        Three-step process:
-          1. Direct lookup  → hard memory for this API
-          2. Soft attention → blend from behaviorally similar APIs
-          3. Time gate      → scale by position in execution sequence
-
         Returns:
-            memory_vectors: [N, 128]
+            fused_memory: [N, memory_dim]
         """
-        # 1. Direct lookup  [N, 128]
-        direct = self.memory_bank(api_indices)
+        N = node_features.size(0)
 
-        # 2. Soft attention over entire memory bank
-        queries = self.query_proj(node_features).unsqueeze(0)   # [1, N, 128]
-        keys    = self.memory_bank.weight.unsqueeze(0)           # [1, V, 128]
+        if N == 0:
+            out = node_features.new_zeros((0, self.memory_dim))
+            return (out, {}) if return_debug else out
 
-        attended, _ = self.attention(
-            query=queries,
-            key=keys,
-            value=keys,
-        )                                                         # [1, N, 128]
-        attended = attended.squeeze(0)                           # [N, 128]
+        if not enable_memory:
+            out = node_features.new_zeros((N, self.memory_dim))
+            return (out, {}) if return_debug else out
 
-        # 3. Blend: direct carries more weight (it is the API's own memory)
-        blended = 0.7 * direct + 0.3 * attended                 # [N, 128]
+        query = self._build_query(
+            api_indices=api_indices,
+            node_features=node_features,
+            query_context=query_context,
+        )  # [N, memory_dim]
 
-        # 4. Time-aware gating
-        if timestamps is not None:
-            t = timestamps.float().unsqueeze(-1)                 # [N, 1]
-            # Normalise to [0, 1] within this graph
-            t_min, t_max = t.min(), t.max()
-            t = (t - t_min) / (t_max - t_min + 1e-8)
-            gate   = self.time_gate(t)                           # [N, 128]
-            blended = blended * gate
+        local_vals = self.memory_values(api_indices)  # [N, memory_dim]
 
-        out = self.layer_norm(blended)
-        out = self.dropout(out)
-        return out                                               # [N, 128]
+        # Sparse global contextual retrieval over the memory bank
+        global_keys = F.normalize(self.memory_keys.weight, dim=-1)  # [V, D]
+        scores = torch.matmul(query, global_keys.T) / max(self.read_temperature, 1e-6)
 
-    # ── WRITE ─────────────────────────────────────────────────────────────────
+        top_k = min(self.top_k, self.vocab_size)
+        topk_scores, topk_idx = scores.topk(top_k, dim=-1)  # [N, K]
+        topk_attn = F.softmax(topk_scores, dim=-1)          # [N, K]
+        topk_vals = self.memory_values.weight[topk_idx]     # [N, K, D]
+        global_read = (topk_attn.unsqueeze(-1) * topk_vals).sum(dim=1)  # [N, D]
+
+        # Blend token-local prior with context retrieval
+        raw_memory = 0.5 * local_vals + 0.5 * global_read
+
+        # Learned gate
+        gate_input = torch.cat([node_features, raw_memory], dim=-1)
+        gate = torch.sigmoid(self.gate_mlp(gate_input))
+        gate = self._clamp_gate(gate)
+
+        fused_memory = gate * raw_memory
+
+        if return_debug:
+            debug = {
+                "query": query.detach(),
+                "topk_idx": topk_idx.detach(),
+                "topk_attn": topk_attn.detach(),
+                "local_vals": local_vals.detach(),
+                "global_read": global_read.detach(),
+                "gate": gate.detach(),
+                "fused_memory": fused_memory.detach(),
+            }
+            self._last_read = debug
+            return fused_memory, debug
+
+        return fused_memory
+
+    def forward(
+        self,
+        api_indices: torch.LongTensor,
+        node_features: torch.Tensor,
+        timestamps: Optional[torch.Tensor] = None,
+        query_context: Optional[torch.Tensor] = None,
+        enable_memory: bool = True,
+        return_debug: bool = False,
+    ) -> torch.Tensor | Tuple[torch.Tensor, Dict[str, torch.Tensor]]:
+        """
+        Forward returns augmented node features:
+            [node_features ; fused_memory]
+        """
+        if return_debug:
+            fused_memory, debug = self.read(
+                api_indices=api_indices,
+                node_features=node_features,
+                query_context=query_context,
+                enable_memory=enable_memory,
+                return_debug=True,
+            )
+        else:
+            fused_memory = self.read(
+                api_indices=api_indices,
+                node_features=node_features,
+                query_context=query_context,
+                enable_memory=enable_memory,
+                return_debug=False,
+            )
+            debug = {}
+
+        augmented = torch.cat([node_features, fused_memory], dim=-1)
+
+        if return_debug:
+            debug["augmented"] = augmented.detach()
+            if timestamps is not None:
+                debug["timestamps"] = timestamps.detach()
+            return augmented, debug
+
+        return augmented
 
     @torch.no_grad()
     def write(
         self,
-        api_indices:    torch.LongTensor,         # [N]
-        node_features:  torch.Tensor,             # [N, 775]  detached
-        momentum:       float = 0.9,
+        api_indices: torch.LongTensor,
+        node_features: torch.Tensor,
+        momentum: float = 0.9,
+        write_strength: Optional[torch.Tensor] = None,
+        write_context: Optional[torch.Tensor] = None,
+        enable_memory: bool = True,
     ) -> None:
         """
-        Update memory bank after each optimiser step (EMA).
-
-        For every unique API seen in this batch:
-          new_mem = momentum * old_mem + (1 - momentum) * mean_signal
-
-        momentum=0.9 → memory changes slowly → prevents catastrophic
-        forgetting while still accumulating cross-graph context.
-
-        Call pattern in training loop:
-            loss.backward()
-            optimizer.step()
-            memory.write(api_indices, node_features.detach())  ← here
+        Selective weighted EMA write.
         """
-        # Re-use the already-trained query_proj to project 775 → 128
-        projected = self.query_proj(node_features)              # [N, 128]
+        if not enable_memory:
+            return
 
-        for api_idx in api_indices.unique():
-            idx = api_idx.item()
-            if idx <= 1:          # skip <UNK>=0 and <PAD>=1
+        if api_indices.numel() == 0:
+            return
+
+        candidate = self._build_write_candidate(
+            api_indices=api_indices,
+            node_features=node_features,
+            write_context=write_context,
+        )  # [N, memory_dim]
+
+        if write_strength is None:
+            write_strength = torch.ones(
+                api_indices.size(0),
+                device=api_indices.device,
+                dtype=node_features.dtype,
+            )
+        else:
+            if write_strength.dim() == 2 and write_strength.size(1) == 1:
+                write_strength = write_strength.squeeze(1)
+            if write_strength.dim() != 1:
+                raise ValueError(
+                    f"write_strength must be [N] or [N,1], got shape={tuple(write_strength.shape)}"
+                )
+            write_strength = write_strength.to(node_features.device, dtype=node_features.dtype)
+
+        min_s = getattr(config, "MEMORY_WRITE_MIN_STRENGTH", 0.05)
+        max_s = getattr(config, "MEMORY_WRITE_MAX_STRENGTH", 1.0)
+        write_strength = write_strength.clamp(min=min_s, max=max_s)
+
+        unique_ids = torch.unique(api_indices)
+
+        for idx in unique_ids:
+            mask = api_indices == idx
+            if not mask.any():
                 continue
 
-            mask   = (api_indices == api_idx)
-            signal = projected[mask].mean(dim=0)                # [128]
+            cand_i = candidate[mask]          # [k, D]
+            strength_i = write_strength[mask] # [k]
 
-            old    = self.memory_bank.weight[idx]               # [128]
-            updated = momentum * old + (1.0 - momentum) * signal
-            self.memory_bank.weight[idx].copy_(updated)
+            strength_sum = strength_i.sum().clamp_min(1e-6)
+            weighted_cand = (cand_i * strength_i.unsqueeze(-1)).sum(dim=0) / strength_sum
 
-    # ── FORWARD ───────────────────────────────────────────────────────────────
+            avg_strength = strength_i.mean().item()
 
-    def forward(
-        self,
-        api_indices:   torch.LongTensor,          # [N]
-        node_features: torch.Tensor,              # [N, 775]
-        timestamps:    torch.Tensor = None,       # [N]  optional
-    ) -> torch.Tensor:
-        """
-        Read memory and concatenate with node features.
+            # Correct weighted EMA:
+            # avg_strength=1.0 -> standard momentum
+            # avg_strength=0.0 -> no update
+            effective_momentum = 1.0 - (1.0 - momentum) * avg_strength
 
-        Returns:
-            enriched: [N, 903]   (775 static + 128 dynamic)
-        """
-        mem      = self.read(api_indices, node_features, timestamps)
-        enriched = torch.cat([node_features, mem], dim=-1)
-        return enriched                                          # [N, 903]
+            old_key = self.memory_keys.weight[idx]
+            old_val = self.memory_values.weight[idx]
 
-    # ── UTILITIES ─────────────────────────────────────────────────────────────
+            new_key = effective_momentum * old_key + (1.0 - effective_momentum) * weighted_cand
+            new_val = effective_momentum * old_val + (1.0 - effective_momentum) * weighted_cand
 
-    def reset_memory(self) -> None:
-        """Reset all memory slots to initial state."""
-        self._init_weights()
+            self.memory_keys.weight[idx].copy_(F.normalize(new_key, dim=-1))
+            self.memory_values.weight[idx].copy_(new_val)
 
-    def get_api_memory(self, api_idx: int) -> torch.Tensor:
-        """Return memory vector for a single API. [128]"""
-        return self.memory_bank.weight[api_idx].detach().clone()
+    @torch.no_grad()
+    def get_memory_vectors(self, api_indices: torch.LongTensor) -> torch.Tensor:
+        return self.memory_values(api_indices)
 
-    def memory_stats(self) -> dict:
-        """Diagnostic stats about the current memory state."""
-        w     = self.memory_bank.weight.detach()
-        norms = w.norm(dim=-1)
-        return {
-            "mean_norm" : norms.mean().item(),
-            "max_norm"  : norms.max().item(),
-            "min_norm"  : norms.min().item(),
-            "mean_value": w.mean().item(),
-            "std_value" : w.std().item(),
-        }
+    @torch.no_grad()
+    def get_token_embeddings(self, api_indices: torch.LongTensor) -> torch.Tensor:
+        return self.token_embedding(api_indices)
 
-    def __repr__(self) -> str:
-        return (
-            f"SemanticMemory("
-            f"vocab={self.vocab_size}, "
-            f"memory_dim={self.memory_dim}, "
-            f"input_dim={self.node_feat_dim}, "
-            f"output_dim={self.output_dim})"
-        )
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  Factory
-# ══════════════════════════════════════════════════════════════════════════════
 
 def build_semantic_memory(
-    vocab_path:    str = "results/api_vocabulary.json",
-    memory_dim:    int = 128,
-    node_feat_dim: int = 775,
-    **kwargs,
+    vocab_path: str,
+    memory_dim: int,
+    node_feat_dim: int,
 ) -> SemanticMemory:
-    """
-    Build SemanticMemory from the saved vocabulary.
-
-    Example:
-        memory = build_semantic_memory()
-        # SemanticMemory(vocab=325, memory_dim=128, output_dim=903)
-    """
-    vocab = load_vocab(vocab_path)
-    if vocab is None:
-        raise FileNotFoundError(
-            f"Vocabulary not found at '{vocab_path}'.\n"
-            "Run:  python scripts/extract_vocab.py"
-        )
     return SemanticMemory(
-        vocab_size=vocab.size(),
+        vocab_path=vocab_path,
         memory_dim=memory_dim,
         node_feat_dim=node_feat_dim,
-        **kwargs,
+        query_hidden_dim=getattr(config, "MEMORY_QUERY_HIDDEN_DIM", 256),
+        gate_hidden_dim=getattr(config, "MEMORY_GATE_HIDDEN_DIM", 128),
+        read_temperature=getattr(config, "MEMORY_READ_TEMPERATURE", 1.0),
+        top_k=getattr(config, "MEMORY_TOP_K", 64),
     )
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  Smoke test
-# ══════════════════════════════════════════════════════════════════════════════
-
-if __name__ == "__main__":
-    print("=== SemanticMemory Smoke Test ===\n")
-
-    memory = build_semantic_memory()
-    print(f"Module  : {memory}")
-    print(f"Out dim : {memory.output_dim}")
-
-    N = 32
-    api_idx   = torch.randint(2, 325, (N,))
-    node_feat = torch.randn(N, 775)
-    timestamps = torch.linspace(0, 100, N)
-
-    # ── forward (read + concat) ───────────────────────────────────
-    enriched = memory(api_idx, node_feat, timestamps)
-    assert enriched.shape == (N, 903), f"Shape mismatch: {enriched.shape}"
-    print(f"\nForward : {list(node_feat.shape)} → {list(enriched.shape)}  ✅")
-
-    # ── write (post-optimizer step) ───────────────────────────────
-    memory.write(api_idx, node_feat.detach())
-    print(f"Write   : memory updated ✅")
-
-    # ── stats ─────────────────────────────────────────────────────
-    stats = memory.memory_stats()
-    print(f"\nMemory stats after write:")
-    for k, v in stats.items():
-        print(f"  {k:<14}: {v:.6f}")
-
-    # ── reset ─────────────────────────────────────────────────────
-    memory.reset_memory()
-    print(f"\nReset   : memory cleared ✅")
-
-    print("\n✅ semantic_memory.py is working correctly!")
-

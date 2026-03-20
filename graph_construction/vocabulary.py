@@ -32,13 +32,13 @@ from typing import Dict, List, Optional
 # ── project root on path ──────────────────────────────────────────────────────
 sys.path.append(str(Path(__file__).parent.parent))
 
-from config import MAX_VOCAB_SIZE, CACHE_DIR, PROJECT_ROOT   # adjust names to match your config.py
+from config import MAX_VOCAB_SIZE, CACHE_DIR, PROJECT_ROOT
 
 logger = logging.getLogger(__name__)
 
 # ── paths ─────────────────────────────────────────────────────────────────────
 VOCAB_SAVE_PATH: Path = PROJECT_ROOT / "results" / "api_vocabulary.json"
-ENRICHED_DIR:    Path = Path(CACHE_DIR) / "enriched"
+ENRICHED_DIR: Path = Path(CACHE_DIR) / "enriched"
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -85,6 +85,35 @@ class APIVocabulary:
         """Return API name for *idx*; returns '<UNK>' if not found."""
         return self.idx_to_api.get(idx, "<UNK>")
 
+    # ── compatibility aliases (needed for Memory v2 helpers) ─────────────────
+
+    def token_to_idx(self, token: str) -> int:
+        """Alias for get_idx(...)."""
+        return self.get_idx(token)
+
+    def token_to_id(self, token: str) -> int:
+        """Alias for get_idx(...)."""
+        return self.get_idx(token)
+
+    def idx_to_token(self, idx: int) -> str:
+        """Alias for get_api(...)."""
+        return self.get_api(idx)
+
+    def get_count(self, api_name: str) -> int:
+        """Return observed count for API/token name."""
+        return int(self.api_counts.get(api_name, 0))
+
+    def get_frequency_table(self) -> Dict[int, int]:
+        """
+        Return frequency table indexed by token id:
+            {token_idx: count}
+        """
+        freq_table: Dict[int, int] = {}
+        for api_name, count in self.api_counts.items():
+            idx = self.get_idx(api_name)
+            freq_table[idx] = int(count)
+        return freq_table
+
     # ── properties ───────────────────────────────────────────────────────────
 
     def size(self) -> int:
@@ -108,21 +137,20 @@ class APIVocabulary:
 
     def to_dict(self) -> dict:
         return {
-            "api_to_idx":     self.api_to_idx,
-            "api_counts":     dict(self.api_counts),
+            "api_to_idx": self.api_to_idx,
+            "api_counts": dict(self.api_counts),
             "max_vocab_size": self.max_vocab_size,
-            "vocab_size":     self.size(),
+            "vocab_size": self.size(),
         }
 
     @classmethod
     def from_dict(cls, data) -> "APIVocabulary":
         vocab = cls(max_vocab_size=data.get("max_vocab_size", MAX_VOCAB_SIZE))
-        vocab.api_to_idx  = {k: int(v) for k, v in data["api_to_idx"].items()}
-        vocab.idx_to_api  = {int(v): k for k, v in vocab.api_to_idx.items()}
-        vocab.api_counts  = Counter(data.get("api_counts", {}))
-        vocab._next_idx   = max(vocab.idx_to_api.keys(), default=1) + 1
+        vocab.api_to_idx = {k: int(v) for k, v in data["api_to_idx"].items()}
+        vocab.idx_to_api = {int(v): k for k, v in vocab.api_to_idx.items()}
+        vocab.api_counts = Counter(data.get("api_counts", {}))
+        vocab._next_idx = max(vocab.idx_to_api.keys(), default=1) + 1
         return vocab
-
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -226,181 +254,45 @@ def build_vocab_from_enriched_graphs(
             all_pkl_files.extend(sorted(split_dir.glob("*.pkl")))
 
     if not all_pkl_files:
-        raise FileNotFoundError(f"No *.pkl files found under {enriched_dir}")
+        raise FileNotFoundError(f"No .pkl files found under {enriched_dir}")
 
-    logger.info(f"Scanning {len(all_pkl_files)} graphs in {enriched_dir} …")
+    logger.info(f"Scanning {len(all_pkl_files):,} graph files for API vocabulary...")
 
-    counter: Counter = Counter()
-    errors = 0
+    counter = Counter()
 
     for pkl_path in all_pkl_files:
         try:
             with open(pkl_path, "rb") as f:
-                graph = pickle.load(f)
+                obj = pickle.load(f)
+
+            if isinstance(obj, tuple):
+                graph = obj[0]
+            else:
+                graph = obj
+
             names = _extract_api_names_from_graph(graph)
-            counter.update(names)
+            counter.update([n for n in names if isinstance(n, str) and n])
+
         except Exception as e:
-            logger.debug(f"  skip {pkl_path.name}: {e}")
-            errors += 1
+            logger.warning(f"Skipping {pkl_path.name}: {e}")
+            continue
 
-    if errors:
-        logger.warning(f"  {errors} files could not be read (see DEBUG log).")
-
-    # ── build ordered vocabulary (most-frequent first) ────────────────────────
     vocab = APIVocabulary(max_vocab_size=max_vocab_size)
-    for api_name, _ in counter.most_common(max_vocab_size - len(APIVocabulary.SPECIAL_TOKENS)):
-        vocab.add_api(api_name)
-    # restore full counts
-    vocab.api_counts = counter
 
-    logger.info(
-        f"Vocabulary built: {vocab.size()} entries "
-        f"({vocab.size() - len(APIVocabulary.SPECIAL_TOKENS)} unique APIs) "
-        f"from {len(all_pkl_files) - errors} graphs."
-    )
+    # Keep special tokens, then add most common APIs
+    most_common = counter.most_common(max(0, max_vocab_size - len(APIVocabulary.SPECIAL_TOKENS)))
+    for api_name, count in most_common:
+        vocab.api_counts[api_name] = count
+        if api_name not in vocab.api_to_idx:
+            vocab.api_to_idx[api_name] = vocab._next_idx
+            vocab.idx_to_api[vocab._next_idx] = api_name
+            vocab._next_idx += 1
 
     save_vocab(vocab, save_path)
     return vocab
-
-
-def build_vocab_from_cape_jsons(
-    raw_data_dir: Path,
-    save_path: Path = VOCAB_SAVE_PATH,
-    max_vocab_size: int = MAX_VOCAB_SIZE,
-) -> APIVocabulary:
-    """
-    Alternative builder: scan raw CAPE JSON report files directly.
-
-    Looks for the ``"behavior" → "processes" → "calls" → "api"`` path
-    inside each JSON report.
-
-    Args:
-        raw_data_dir: Root folder that contains *.json CAPE report files
-                      (searched recursively).
-    """
-    import glob
-
-    raw_data_dir = Path(raw_data_dir)
-    json_files = list(raw_data_dir.rglob("*.json"))
-
-    if not json_files:
-        raise FileNotFoundError(f"No JSON files found under {raw_data_dir}")
-
-    logger.info(f"Scanning {len(json_files)} CAPE JSON reports …")
-
-    counter: Counter = Counter()
-    errors = 0
-
-    for jpath in json_files:
-        try:
-            with open(jpath, "r", encoding="utf-8", errors="replace") as f:
-                report = json.load(f)
-            processes = (
-                report.get("behavior", {})
-                      .get("processes", [])
-            )
-            for proc in processes:
-                for call in proc.get("calls", []):
-                    api_name = call.get("api", "")
-                    if api_name:
-                        counter[api_name] += 1
-        except Exception as e:
-            logger.debug(f"  skip {jpath.name}: {e}")
-            errors += 1
-
-    if errors:
-        logger.warning(f"  {errors} files could not be read.")
-
-    vocab = APIVocabulary(max_vocab_size=max_vocab_size)
-    for api_name, _ in counter.most_common(max_vocab_size - len(APIVocabulary.SPECIAL_TOKENS)):
-        vocab.add_api(api_name)
-    vocab.api_counts = counter
-
-    logger.info(f"Vocabulary built: {vocab.size()} entries from JSON reports.")
-    save_vocab(vocab, save_path)
-    return vocab
-
-
-# ══════════════════════════════════════════════════════════════════════════════
-#  CLI  (python -m graphconstruction.vocabulary)
-# ══════════════════════════════════════════════════════════════════════════════
-
-def _cli() -> None:
-    import argparse
-
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s  %(levelname)-8s  %(name)s — %(message)s",
-        datefmt="%H:%M:%S",
-    )
-
-    parser = argparse.ArgumentParser(
-        description="Build or inspect the API vocabulary for the GNN pipeline."
-    )
-    parser.add_argument(
-        "--source", choices=["graphs", "jsons"], default="graphs",
-        help="'graphs' = scan enriched PKL files (default); "
-             "'jsons'  = scan raw CAPE JSON reports.",
-    )
-    parser.add_argument(
-        "--data-dir", type=Path, default=None,
-        help="Path to raw CAPE JSON directory (only needed for --source jsons).",
-    )
-    parser.add_argument(
-        "--enriched-dir", type=Path, default=ENRICHED_DIR,
-        help=f"Enriched graph directory  [default: {ENRICHED_DIR}]",
-    )
-    parser.add_argument(
-        "--save-path", type=Path, default=VOCAB_SAVE_PATH,
-        help=f"Output JSON path  [default: {VOCAB_SAVE_PATH}]",
-    )
-    parser.add_argument(
-        "--max-vocab", type=int, default=MAX_VOCAB_SIZE,
-        help=f"Maximum vocabulary size  [default: {MAX_VOCAB_SIZE}]",
-    )
-    parser.add_argument(
-        "--inspect", action="store_true",
-        help="Print summary of an already-saved vocabulary and exit.",
-    )
-    args = parser.parse_args()
-
-    # ── inspect mode ──────────────────────────────────────────────────────────
-    if args.inspect:
-        vocab = load_vocab(args.save_path)
-        if vocab is None:
-            print(f"No vocabulary found at {args.save_path}")
-            sys.exit(1)
-        print(f"\n{'='*60}")
-        print(f"  Vocabulary: {args.save_path}")
-        print(f"  Total entries  : {vocab.size()}")
-        print(f"  Unique APIs    : {vocab.size() - len(APIVocabulary.SPECIAL_TOKENS)}")
-        print(f"  Max vocab size : {vocab.max_vocab_size}")
-        print(f"\n  Top-20 most frequent APIs:")
-        for rank, (api, cnt) in enumerate(vocab.api_counts.most_common(20), 1):
-            idx = vocab.get_idx(api)
-            print(f"    {rank:>3}. [{idx:>5}]  {api:<45} ({cnt:,} calls)")
-        print(f"{'='*60}\n")
-        return
-
-    # ── build mode ────────────────────────────────────────────────────────────
-    if args.source == "graphs":
-        vocab = build_vocab_from_enriched_graphs(
-            enriched_dir=args.enriched_dir,
-            save_path=args.save_path,
-            max_vocab_size=args.max_vocab,
-        )
-    else:
-        if args.data_dir is None:
-            parser.error("--data-dir is required when --source jsons")
-        vocab = build_vocab_from_cape_jsons(
-            raw_data_dir=args.data_dir,
-            save_path=args.save_path,
-            max_vocab_size=args.max_vocab,
-        )
-
-    print(f"\n✅  {vocab}")
-    print(f"    Saved to: {args.save_path}\n")
 
 
 if __name__ == "__main__":
-    _cli()
+    logging.basicConfig(level=logging.INFO)
+    vocab = build_vocab_from_enriched_graphs()
+    print(vocab)
