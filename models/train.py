@@ -339,7 +339,8 @@ def _validate_batch_before_forward(batch_data, schema, api_indices=None):
         batch_dict=batch_dict,
         schema=schema,
         require_api=True,
-        require_api_indices=(api_indices is not None),
+        require_api_indices_if_memory=(api_indices is not None),
+        api_indices=api_indices,
     )
 
 
