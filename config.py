@@ -579,7 +579,7 @@ SAVE_BEST_ONLY = True       # Only save best validation model
 MAX_VOCAB_SIZE = 5000
 VOCAB_SAVE_PATH = PROJECT_ROOT / "results" / "api_vocabulary.json"
 
-USE_MEMORY = False
+USE_MEMORY = True
 MEMORY_DIM = 128
 MEMORY_MOMENTUM = 0.9
 MEMORY_LAMBDA = 1e-4
