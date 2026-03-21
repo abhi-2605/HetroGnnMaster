@@ -346,6 +346,16 @@ class HeteroTemporalGNN(nn.Module):
                 vocab_path=vocab_path,
                 memory_dim=memory_dim,
                 node_feat_dim=self.primary_out_dim_per_layer,  # memory operates on post-GNN primary state
+                query_context_dim=(
+                    self.primary_out_dim_per_layer
+                    + self.lstm_output_dim
+                    + self.primary_out_dim_per_layer
+                ),
+                write_context_dim=(
+                    self.primary_out_dim_per_layer
+                    + self.lstm_output_dim
+                    + self.primary_out_dim_per_layer
+                ),
             )
 
             # Context projections for neighbor summaries into primary-width space

@@ -53,6 +53,8 @@ class SemanticMemory(nn.Module):
         vocab_path: str,
         memory_dim: int,
         node_feat_dim: int,
+        query_context_dim: Optional[int] = None,
+        write_context_dim: Optional[int] = None,
         query_hidden_dim: Optional[int] = None,
         gate_hidden_dim: Optional[int] = None,
         read_temperature: Optional[float] = None,
@@ -61,9 +63,14 @@ class SemanticMemory(nn.Module):
         super().__init__()
 
         self.vocab = load_vocab(vocab_path)
+        if self.vocab is None:
+            raise FileNotFoundError(f"Vocabulary file not found or failed to load: {vocab_path}")
+
         self.vocab_size = self.vocab.size()
         self.memory_dim = memory_dim
         self.node_feat_dim = node_feat_dim
+        self.query_context_dim = query_context_dim
+        self.write_context_dim = write_context_dim
 
         self.query_hidden_dim = (
             query_hidden_dim
@@ -102,9 +109,24 @@ class SemanticMemory(nn.Module):
             nn.Linear(self.query_hidden_dim, memory_dim),
         )
 
-        # Registered containers for optional extra context projections
-        self.extra_context_projs = nn.ModuleDict()
-        self.extra_write_context_projs = nn.ModuleDict()
+        # 3b. Explicitly registered extra context projections
+        self.extra_context_proj = None
+        if self.query_context_dim is not None:
+            self.extra_context_proj = nn.Sequential(
+                nn.Linear(self.query_context_dim, self.query_hidden_dim),
+                nn.LayerNorm(self.query_hidden_dim),
+                nn.GELU(),
+                nn.Linear(self.query_hidden_dim, self.memory_dim),
+            )
+
+        self.extra_write_context_proj = None
+        if self.write_context_dim is not None:
+            self.extra_write_context_proj = nn.Sequential(
+                nn.Linear(self.write_context_dim, self.query_hidden_dim),
+                nn.LayerNorm(self.query_hidden_dim),
+                nn.GELU(),
+                nn.Linear(self.query_hidden_dim, self.memory_dim),
+            )
 
         # 4. Gated read
         gate_in_dim = node_feat_dim + memory_dim
@@ -133,34 +155,23 @@ class SemanticMemory(nn.Module):
         nn.init.xavier_uniform_(self.memory_keys.weight)
         nn.init.xavier_uniform_(self.memory_values.weight)
 
-        for module in [self.base_query_proj, self.gate_mlp, self.write_candidate_proj]:
+        modules_to_init = [
+            self.base_query_proj,
+            self.gate_mlp,
+            self.write_candidate_proj,
+        ]
+
+        if self.extra_context_proj is not None:
+            modules_to_init.append(self.extra_context_proj)
+        if self.extra_write_context_proj is not None:
+            modules_to_init.append(self.extra_write_context_proj)
+
+        for module in modules_to_init:
             for m in module.modules():
                 if isinstance(m, nn.Linear):
                     nn.init.xavier_uniform_(m.weight)
                     if m.bias is not None:
                         nn.init.zeros_(m.bias)
-
-    def _get_extra_context_proj(self, extra_dim: int, device: torch.device) -> nn.Module:
-        key = str(extra_dim)
-        if key not in self.extra_context_projs:
-            self.extra_context_projs[key] = nn.Sequential(
-                nn.Linear(extra_dim, self.query_hidden_dim),
-                nn.LayerNorm(self.query_hidden_dim),
-                nn.GELU(),
-                nn.Linear(self.query_hidden_dim, self.memory_dim),
-            ).to(device)
-        return self.extra_context_projs[key]
-
-    def _get_extra_write_context_proj(self, extra_dim: int, device: torch.device) -> nn.Module:
-        key = str(extra_dim)
-        if key not in self.extra_write_context_projs:
-            self.extra_write_context_projs[key] = nn.Sequential(
-                nn.Linear(extra_dim, self.query_hidden_dim),
-                nn.LayerNorm(self.query_hidden_dim),
-                nn.GELU(),
-                nn.Linear(self.query_hidden_dim, self.memory_dim),
-            ).to(device)
-        return self.extra_write_context_projs[key]
 
     def _clamp_gate(self, gate: torch.Tensor) -> torch.Tensor:
         min_gate = getattr(config, "MEMORY_MIN_GATE", 0.05)
@@ -182,10 +193,18 @@ class SemanticMemory(nn.Module):
                 raise ValueError(
                     f"query_context must be 2D [N, D], got shape={tuple(query_context.shape)}"
                 )
+            if self.extra_context_proj is None:
+                raise ValueError(
+                    "query_context was provided, but extra_context_proj is not initialized. "
+                    "Pass query_context_dim when building SemanticMemory."
+                )
+            if self.query_context_dim is None or query_context.size(-1) != self.query_context_dim:
+                raise ValueError(
+                    f"query_context dim mismatch: got {query_context.size(-1)}, "
+                    f"expected {self.query_context_dim}"
+                )
 
-            extra_dim = query_context.size(-1)
-            proj = self._get_extra_context_proj(extra_dim, query_context.device)
-            query = query + proj(query_context)
+            query = query + self.extra_context_proj(query_context)
 
         query = F.normalize(query, dim=-1)
         return query
@@ -205,10 +224,18 @@ class SemanticMemory(nn.Module):
                 raise ValueError(
                     f"write_context must be 2D [N, D], got shape={tuple(write_context.shape)}"
                 )
+            if self.extra_write_context_proj is None:
+                raise ValueError(
+                    "write_context was provided, but extra_write_context_proj is not initialized. "
+                    "Pass write_context_dim when building SemanticMemory."
+                )
+            if self.write_context_dim is None or write_context.size(-1) != self.write_context_dim:
+                raise ValueError(
+                    f"write_context dim mismatch: got {write_context.size(-1)}, "
+                    f"expected {self.write_context_dim}"
+                )
 
-            extra_dim = write_context.size(-1)
-            proj = self._get_extra_write_context_proj(extra_dim, write_context.device)
-            candidate = candidate + proj(write_context)
+            candidate = candidate + self.extra_write_context_proj(write_context)
 
         candidate = F.normalize(candidate, dim=-1)
         return candidate
@@ -370,15 +397,14 @@ class SemanticMemory(nn.Module):
             if not mask.any():
                 continue
 
-            cand_i = candidate[mask]          # [k, D]
-            strength_i = write_strength[mask] # [k]
+            cand_i = candidate[mask]
+            strength_i = write_strength[mask]
 
             strength_sum = strength_i.sum().clamp_min(1e-6)
             weighted_cand = (cand_i * strength_i.unsqueeze(-1)).sum(dim=0) / strength_sum
 
             avg_strength = strength_i.mean().item()
 
-            # Correct weighted EMA:
             # avg_strength=1.0 -> standard momentum
             # avg_strength=0.0 -> no update
             effective_momentum = 1.0 - (1.0 - momentum) * avg_strength
@@ -405,11 +431,15 @@ def build_semantic_memory(
     vocab_path: str,
     memory_dim: int,
     node_feat_dim: int,
+    query_context_dim: Optional[int] = None,
+    write_context_dim: Optional[int] = None,
 ) -> SemanticMemory:
     return SemanticMemory(
         vocab_path=vocab_path,
         memory_dim=memory_dim,
         node_feat_dim=node_feat_dim,
+        query_context_dim=query_context_dim,
+        write_context_dim=write_context_dim,
         query_hidden_dim=getattr(config, "MEMORY_QUERY_HIDDEN_DIM", 256),
         gate_hidden_dim=getattr(config, "MEMORY_GATE_HIDDEN_DIM", 128),
         read_temperature=getattr(config, "MEMORY_READ_TEMPERATURE", 1.0),
