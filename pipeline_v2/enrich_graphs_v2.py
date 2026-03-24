@@ -94,6 +94,25 @@ class APIEmbedder:
                 f"Original error: {e}"
             ) from e
 
+
+    def _coerce_text(self, x) -> str:
+        if x is None:
+            return ""
+        if isinstance(x, str):
+            return x
+        if isinstance(x, bytes):
+            try:
+                return x.decode("utf-8", errors="replace")
+            except Exception:
+                return str(x)
+        if isinstance(x, (list, tuple, dict)):
+            try:
+                import json
+                return json.dumps(x, ensure_ascii=False, sort_keys=True)
+            except Exception:
+                return str(x)
+        return str(x)
+    
     def encode(self, texts: List[str]) -> np.ndarray:
         texts = [self._coerce_text(t) for t in texts]
         if not texts:
@@ -295,23 +314,7 @@ class GraphEnricherV2:
 
 
 
-    def _coerce_text(self, x) -> str:
-        if x is None:
-            return ""
-        if isinstance(x, str):
-            return x
-        if isinstance(x, bytes):
-            try:
-                return x.decode("utf-8", errors="replace")
-            except Exception:
-                return str(x)
-        if isinstance(x, (list, tuple, dict)):
-            try:
-                import json
-                return json.dumps(x, ensure_ascii=False, sort_keys=True)
-            except Exception:
-                return str(x)
-        return str(x)
+    
 
     # ========================================================
     # TEMPORAL EDGE ENRICHMENT
