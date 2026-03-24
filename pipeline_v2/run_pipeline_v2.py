@@ -230,25 +230,19 @@ class PipelineRunnerV2:
             print(f"[run_pipeline_v2] Created/Re-created labels CSV: {csv_path}")
 
     def _infer_label_from_path(self, path: Path) -> str:
-        """
-        Folder-based label inference.
+        parts = {p.lower() for p in path.parts}
 
-        Rules:
-        - path under .../benign/...      -> benign
-        - path under .../ransomware/...  -> ransomware
-        - path under .../malware/...     -> malware
-        - otherwise                      -> malware
-        """
-        parts = [p.lower() for p in path.parts]
-
-        if "benign" in parts:
+        if {"benign", "ben_reports", "benignv2", "ben"} & parts:
             return "benign"
-        if "ransomware" in parts:
+
+        if {"ransomware", "ransom", "ransomware_reports"} & parts:
             return "ransomware"
-        if "malware" in parts:
+
+        if {"malware", "mal_reports", "mal"} & parts:
             return "malware"
 
-        return "malware"
+        # safer to raise than silently mislabel
+        raise ValueError(f"Could not infer label from path: {path}")
 
     def _load_label_map(self) -> Dict[str, str]:
         """
