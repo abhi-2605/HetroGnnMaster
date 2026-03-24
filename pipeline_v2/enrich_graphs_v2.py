@@ -288,7 +288,100 @@ class GraphEnricherV2:
         self.window_size = window_size
 
         self.stats = EnrichmentStats(backend=self.embedder.backend)
+    def _sanitize_for_embedding(self, s: str, max_len: int = 512) -> str:
+        """
+        Make text safe and semantically useful for sentence-transformer encoding.
 
+        - removes null bytes
+        - removes private-use / control-like binary junk
+        - collapses escaped binary payloads
+        - truncates long strings
+        """
+        import re
+        import unicodedata
+
+        if s is None:
+            return ""
+
+        s = self.embedder._coerce_text(s)
+
+        # First collapse obvious binary payload fields like value=...
+        s = self._collapse_binary_value_field(s)
+
+        # Remove null bytes
+        s = s.replace("\x00", " ")
+
+        cleaned_chars = []
+        weird_count = 0
+
+        for ch in s:
+            code = ord(ch)
+            cat = unicodedata.category(ch)
+
+            # Remove most control characters except basic whitespace
+            if cat.startswith("C") and ch not in ("\t", "\n", "\r", " "):
+                weird_count += 1
+                continue
+
+            # Remove private use characters
+            if 0xE000 <= code <= 0xF8FF:
+                weird_count += 1
+                continue
+
+            # Remove explicit noncharacters
+            if code in (0xFFFE, 0xFFFF):
+                weird_count += 1
+                continue
+
+            cleaned_chars.append(ch)
+
+        s = "".join(cleaned_chars)
+        s = re.sub(r"\s+", " ", s).strip()
+
+        # If it still looks like escaped binary, collapse it
+        if s.count("\\x") > 20:
+            return f"<escaped_binary_blob len={len(s)}>"
+
+        # If very weird overall, replace with summary
+        if weird_count > 20:
+            return f"<binary_like_text len={len(s)}>"
+
+        if len(s) > max_len:
+            s = s[:max_len] + " ...<truncated>"
+
+        return s
+    
+    def _collapse_binary_value_field(self, s: str) -> str:
+        """
+        Replace huge binary-like registry value dumps with a compact placeholder.
+        """
+        import re
+
+        if not isinstance(s, str):
+            s = str(s)
+
+        # Common bad case: value=<lots of escaped binary junk>
+        if "value=" in s and s.count("\\x") > 20:
+            s = re.sub(r"value=[^|]*", "value=<binary_blob>", s)
+
+        return s
+    
+    def _build_api_embedding_text(
+    self,
+    api_name: str,
+    category: str,
+    status: str,
+    args: str,
+) -> str:
+        """
+        Build the exact text that will be embedded for one API node.
+        """
+        api_name = self._sanitize_for_embedding(self._safe_field(api_name), max_len=128)
+        category = self._sanitize_for_embedding(self._safe_field(category), max_len=64)
+        status = self._sanitize_for_embedding(self._safe_field(status), max_len=64)
+        args = self._sanitize_for_embedding(self._safe_field(args), max_len=512)
+
+        return f"api={api_name} | category={category} | status={status} | args={args}"
     # ========================================================
     # PUBLIC API
     # ========================================================
@@ -397,12 +490,18 @@ class GraphEnricherV2:
                 placeholder_count += 1
                 text = "placeholder api node"
             else:
-                api_name = self._safe_field(api_names[i] if i < len(api_names) else "")
-                args = self._safe_field(arg_texts[i] if i < len(arg_texts) else "")
-                cat = self._safe_field(categories[i] if i < len(categories) else "")
-                stat = self._safe_field(statuses[i] if i < len(statuses) else "")
+                api_name = api_names[i] if i < len(api_names) else ""
+                args = arg_texts[i] if i < len(arg_texts) else ""
+                cat = categories[i] if i < len(categories) else ""
+                stat = statuses[i] if i < len(statuses) else ""
 
-                text = f"api={api_name} | category={cat} | status={stat} | args={args}"
+
+                text = self._build_api_embedding_text(
+                            api_name=api_name,
+                            category=cat,
+                            status=stat,
+                            args=args,
+                        )
 
             texts.append(text)
             debug_rows.append(
