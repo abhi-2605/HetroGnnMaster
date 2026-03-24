@@ -96,36 +96,127 @@ class APIEmbedder:
 
 
     def _coerce_text(self, x) -> str:
+        import json
+        import math
+        import numpy as np
+
         if x is None:
             return ""
+
         if isinstance(x, str):
             return x
+
         if isinstance(x, bytes):
             try:
                 return x.decode("utf-8", errors="replace")
             except Exception:
                 return str(x)
+
+        if isinstance(x, np.generic):
+            return str(x.item())
+
+        if isinstance(x, np.ndarray):
+            try:
+                return json.dumps(x.tolist(), ensure_ascii=False, sort_keys=True, default=str)
+            except Exception:
+                return str(x.tolist())
+
         if isinstance(x, (list, tuple, dict)):
             try:
-                import json
-                return json.dumps(x, ensure_ascii=False, sort_keys=True)
+                return json.dumps(x, ensure_ascii=False, sort_keys=True, default=str)
             except Exception:
                 return str(x)
+
+        if isinstance(x, float):
+            if math.isnan(x) or math.isinf(x):
+                return ""
+            return str(x)
+
         return str(x)
     
     def encode(self, texts: List[str]) -> np.ndarray:
-        texts = [self._coerce_text(t) for t in texts]
-        if not texts:
-            return np.empty((0, self.embedding_dim), dtype=np.float32)
-        
+        import json
+        import numpy as np
 
-        vecs = self.model.encode(
-            texts,
-            batch_size=self.batch_size,
-            show_progress_bar=False,
-            convert_to_numpy=True,
-            normalize_embeddings=False,
-        )
+        cleaned: List[str] = []
+        bad_precheck = []
+
+        for i, t in enumerate(texts):
+            try:
+                ct = self._coerce_text(t)
+            except Exception as e:
+                bad_precheck.append(
+                    {
+                        "index": i,
+                        "stage": "coerce_text",
+                        "type": str(type(t)),
+                        "repr": repr(t)[:1000],
+                        "error": str(e),
+                    }
+                )
+                ct = ""
+
+            if not isinstance(ct, str):
+                bad_precheck.append(
+                    {
+                        "index": i,
+                        "stage": "post_coerce_not_str",
+                        "type": str(type(ct)),
+                        "repr": repr(ct)[:1000],
+                    }
+                )
+                ct = str(ct)
+
+            cleaned.append(ct)
+
+        if bad_precheck:
+            raise TypeError(
+                "Bad embedding inputs detected before model.encode():\n"
+                + json.dumps(bad_precheck[:10], indent=2)
+            )
+
+        if not cleaned:
+            return np.empty((0, self.embedding_dim), dtype=np.float32)
+
+        try:
+            vecs = self.model.encode(
+                cleaned,
+                batch_size=self.batch_size,
+                show_progress_bar=False,
+                convert_to_numpy=True,
+                normalize_embeddings=False,
+            )
+        except Exception as batch_error:
+            # isolate exact offending item
+            isolated = []
+            for i, t in enumerate(cleaned):
+                try:
+                    _ = self.model.encode(
+                        [t],
+                        batch_size=1,
+                        show_progress_bar=False,
+                        convert_to_numpy=True,
+                        normalize_embeddings=False,
+                    )
+                except Exception as single_error:
+                    isolated.append(
+                        {
+                            "index": i,
+                            "type": str(type(t)),
+                            "length": len(t),
+                            "repr": repr(t)[:2000],
+                            "error": str(single_error),
+                        }
+                    )
+                    if len(isolated) >= 5:
+                        break
+
+            raise TypeError(
+                "Batch embedding failed. Isolated problematic text entries:\n"
+                + json.dumps(isolated, indent=2)
+                + f"\nOriginal batch error: {batch_error}"
+            ) from batch_error
+
         vecs = np.asarray(vecs, dtype=np.float32)
 
         if vecs.ndim != 2 or vecs.shape[1] != self.embedding_dim:
@@ -263,6 +354,19 @@ class GraphEnricherV2:
     # ========================================================
     # API NODE ENRICHMENT
     # ========================================================
+
+    def _safe_field(self, x) -> str:
+        if x is None:
+            return ""
+        if isinstance(x, str):
+            return x
+        if isinstance(x, bytes):
+            try:
+                return x.decode("utf-8", errors="replace")
+            except Exception:
+                return str(x)
+        return str(x)
+
     def _enrich_api_nodes(self, graph: HeteroData) -> None:
         if "api" not in graph.node_types:
             raise ValueError("Graph missing required node type: api")
@@ -282,24 +386,47 @@ class GraphEnricherV2:
 
         num_api = raw_x.shape[0]
         texts = []
+        debug_rows = []
         placeholder_count = 0
 
         for i in range(num_api):
             raw_feat = raw_x[i]
             is_placeholder = bool(raw_feat[6].item() > 0)
+
             if is_placeholder:
                 placeholder_count += 1
                 text = "placeholder api node"
             else:
-                api_name = api_names[i] if i < len(api_names) else ""
-                args = arg_texts[i] if i < len(arg_texts) else ""
-                cat = categories[i] if i < len(categories) else ""
-                stat = statuses[i] if i < len(statuses) else ""
+                api_name = self._safe_field(api_names[i] if i < len(api_names) else "")
+                args = self._safe_field(arg_texts[i] if i < len(arg_texts) else "")
+                cat = self._safe_field(categories[i] if i < len(categories) else "")
+                stat = self._safe_field(statuses[i] if i < len(statuses) else "")
+
                 text = f"api={api_name} | category={cat} | status={stat} | args={args}"
 
             texts.append(text)
+            debug_rows.append(
+                {
+                    "index": i,
+                    "is_placeholder": is_placeholder,
+                    "api_name_type": str(type(api_names[i])) if i < len(api_names) else "missing",
+                    "args_type": str(type(arg_texts[i])) if i < len(arg_texts) else "missing",
+                    "category_type": str(type(categories[i])) if i < len(categories) else "missing",
+                    "status_type": str(type(statuses[i])) if i < len(statuses) else "missing",
+                    "text_repr": repr(text)[:1000],
+                }
+            )
 
-        sem = self.embedder.encode(texts)
+        try:
+            sem = self.embedder.encode(texts)
+        except Exception as e:
+            import json
+            raise TypeError(
+                "Embedding failed in _enrich_api_nodes. Sample debug rows:\n"
+                + json.dumps(debug_rows[:10], indent=2)
+                + f"\nOriginal error: {e}"
+            ) from e
+
         sem_t = torch.tensor(sem, dtype=torch.float32)
 
         enriched = torch.cat([sem_t, raw_x.float()], dim=1)
