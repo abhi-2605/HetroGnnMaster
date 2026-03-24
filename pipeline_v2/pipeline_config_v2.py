@@ -299,7 +299,7 @@ MIN_API_VOCAB_COVERAGE = 0.85
 # ============================================================
 CHUNK_SIZE = 100
 SAVE_ADAPTED_REPORTS = False
-SAVE_RAW_GRAPHS = True
+SAVE_RAW_GRAPHS = False
 SAVE_ENRICHED_GRAPHS = True
 
 # ============================================================
