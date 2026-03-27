@@ -25,3 +25,4 @@ jupyterlab>=4.0.0
 
 # For reproducibility and utilities
 python-dotenv>=1.0.0
+psutil

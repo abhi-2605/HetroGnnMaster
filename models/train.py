@@ -35,11 +35,17 @@ from torch.optim import AdamW
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader, WeightedRandomSampler
 from tqdm import tqdm
+import threading
+import psutil
+import os
 
 warnings.filterwarnings("ignore")
 
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.append(str(PROJECT_ROOT))
+_ram_log: list[dict] = []          # epoch → MB used
+_ram_lock = threading.Lock()
+
 
 import config
 from graph_construction.pytorch_dataset import RansomwareGraphDataset, hetero_collate
@@ -96,6 +102,21 @@ class FocalLoss(nn.Module):
 # ══════════════════════════════════════════════════════════════════════════════
 #  Metrics
 # ══════════════════════════════════════════════════════════════════════════════
+def _get_ram_mb() -> float:
+    process = psutil.Process(os.getpid())
+    return process.memory_info().rss / 1024 / 1024
+
+def _log_ram(epoch: int) -> None:
+    with _ram_lock:
+        _ram_log.append({"epoch": epoch, "ram_mb": _get_ram_mb()})
+
+def _print_ram_bar(epoch: int, total_epochs: int) -> None:
+    ram_mb = _get_ram_mb()
+    total_mb = psutil.virtual_memory().total / 1024 / 1024
+    pct = ram_mb / total_mb * 100
+    filled = int(pct / 5)                       # 20-char bar
+    bar = "█" * filled + "░" * (20 - filled)
+    print(f"  ┌─ RAM  [{bar}] {pct:.1f}%  {ram_mb:.0f} MB / {total_mb:.0f} MB  (epoch {epoch}/{total_epochs})")
 
 def cleanup_cuda():
     """Free Python refs + unused CUDA cached memory."""
@@ -735,6 +756,9 @@ def train():
             epoch=epoch,
             warmup=warmup,
         )
+        _log_ram(epoch)
+        _print_ram_bar(epoch, config.NUM_EPOCHS)
+
 
         ransom_r = train_metrics["per_class_recall"][0]
         benign_r = train_metrics["per_class_recall"][1]
