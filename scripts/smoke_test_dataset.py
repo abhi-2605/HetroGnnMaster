@@ -74,6 +74,33 @@ def validate_single_graph_structure(graph) -> None:
             assert graph[nt].x.ndim == 2, f"{nt}.x must be 2D"
 
 
+def validate_api_timestamps(graph) -> tuple[bool, bool, int]:
+    """
+    Returns:
+        has_timestamps, good_length, used_fallback
+    """
+    if "api" not in graph.node_types:
+        return False, False, 0
+
+    if not hasattr(graph["api"], "timestamps"):
+        return False, False, 0
+
+    ts = graph["api"].timestamps
+    if ts is None:
+        return False, False, 0
+
+    good_length = hasattr(graph["api"], "x") and len(ts) == graph["api"].x.shape[0]
+
+    used_fallback = 0
+    if hasattr(graph["api"], "used_timestamp_fallback"):
+        try:
+            used_fallback = int(graph["api"].used_timestamp_fallback.item())
+        except Exception:
+            used_fallback = 0
+
+    return True, good_length, used_fallback
+
+
 def main() -> None:
     print("=" * 80)
     print("DATASET SMOKE TEST")
@@ -138,6 +165,14 @@ def main() -> None:
 
             validate_single_graph_structure(graph)
 
+            has_ts, good_ts_len, used_fb = validate_api_timestamps(graph)
+            print(f"    api.timestamps present: {has_ts}")
+            print(f"    api.timestamps good length: {good_ts_len}")
+            print(f"    used_timestamp_fallback: {used_fb}")
+
+            assert has_ts, "api.timestamps missing after dataset loading"
+            assert good_ts_len, "api.timestamps length does not match api node count"
+
             for nt in ["file", "registry", "process", "network"]:
                 if nt in graph.node_types and hasattr(graph[nt], "x"):
                     print(f"    {nt}.x shape: {tuple(graph[nt].x.shape)}")
@@ -145,14 +180,50 @@ def main() -> None:
             print(f"    api.x shape: {tuple(graph['api'].x.shape)}")
             print(f"    temporal edge count: {graph[('api', 'temporal', 'api')].edge_index.shape[1]}")
 
-            # New check: graph-level metadata cleanup
             print_suspicious_keys(graph, "    BEFORE CLEAN")
             cleaned = _clean_graph_for_batching(graph)
             print_suspicious_keys(cleaned, "    AFTER CLEAN")
             assert_clean_for_batching(cleaned)
 
     # ------------------------------------------------------------
-    # 3) Manual mini-batch collation stress test
+    # 3) Timestamp fallback audit over a sample of each split
+    # ------------------------------------------------------------
+    print("\n" + "=" * 80)
+    print("TIMESTAMP FALLBACK CHECK")
+    print("=" * 80)
+
+    for split, ds in datasets.items():
+        checked = min(200, len(ds))
+        fallback_used = 0
+        timestamps_missing_after = 0
+        bad_len_after = 0
+
+        for i in range(checked):
+            graph, _ = ds[i]
+            has_ts, good_ts_len, used_fb = validate_api_timestamps(graph)
+
+            if not has_ts:
+                timestamps_missing_after += 1
+            if has_ts and not good_ts_len:
+                bad_len_after += 1
+            fallback_used += used_fb
+
+        print(
+            f"{split}: checked={checked} | "
+            f"fallback_used={fallback_used} | "
+            f"timestamps_missing_after={timestamps_missing_after} | "
+            f"bad_len_after={bad_len_after}"
+        )
+
+        assert timestamps_missing_after == 0, (
+            f"{split}: some graphs still missing api.timestamps after dataset loading"
+        )
+        assert bad_len_after == 0, (
+            f"{split}: some graphs have bad api.timestamps length after dataset loading"
+        )
+
+    # ------------------------------------------------------------
+    # 4) Manual mini-batch collation stress test
     # ------------------------------------------------------------
     print("\n" + "=" * 80)
     print("MANUAL MINI-BATCH CLEANING CHECK")
@@ -176,7 +247,7 @@ def main() -> None:
     print(f"Manual labels: {manual_labels}")
 
     # ------------------------------------------------------------
-    # 4) DataLoader / batching smoke test on multiple batches
+    # 5) DataLoader / batching smoke test on multiple batches
     # ------------------------------------------------------------
     print("\n" + "=" * 80)
     print("BATCHING CHECKS")
