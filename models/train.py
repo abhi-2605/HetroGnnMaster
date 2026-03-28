@@ -39,6 +39,7 @@ import threading
 import psutil
 import os
 
+from torch.cuda.amp import GradScaler, autocast
 warnings.filterwarnings("ignore")
 
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -520,7 +521,7 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                     torch.nn.utils.clip_grad_norm_(model.parameters(), config.GRAD_CLIP)
 
                 # optimizer.step()
-                scaler.unscale_(optimizer)
+                scaler.step(optimizer)
                 scaler.update()
 
                 write_strength = None
