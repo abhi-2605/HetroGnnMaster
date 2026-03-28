@@ -500,7 +500,9 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                 _validate_batch_before_forward(batch_data, schema, api_indices=api_indices)
 
                 optimizer.zero_grad(set_to_none=True)
-                with torch.amp.autocast():
+                with torch.amp.autocast(
+                    'cuda'
+                ):
                     logits = model(
                         x_dict=batch_data.x_dict,
                         edge_index_dict=batch_data.edge_index_dict,
@@ -515,14 +517,20 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                     mem_reg = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)
                     loss = task_loss + mem_reg
 
-                scaler.scale(loss).backward() 
-                if config.GRAD_CLIP > 0:
-                    scaler.unscale_(optimizer)
-                    torch.nn.utils.clip_grad_norm_(model.parameters(), config.GRAD_CLIP)
+                if scaler is not None:
+                    scaler.scale(loss).backward() 
+                    if config.GRAD_CLIP > 0:
+                        scaler.unscale_(optimizer)
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), config.GRAD_CLIP)
 
-                # optimizer.step()
-                scaler.step(optimizer)
-                scaler.update()
+                    # optimizer.step()
+                    scaler.step(optimizer)
+                    scaler.update()
+                else:
+                    loss.backward()
+                    if config.GRAD_CLIP > 0:
+                        torch.nn.utils.clip_grad_norm_(model.parameters(), config.GRAD_CLIP)
+                    optimizer.step()
 
                 write_strength = None
                 if getattr(config, "USE_MEMORY", False):
