@@ -251,14 +251,11 @@ class TemporalLSTM(nn.Module):
         self.output_dim = hidden_dim * 2 if bidirectional else hidden_dim
 
     def forward(
-        self,
-        x: torch.Tensor,
-        batch: torch.Tensor,
-        timestamps: Optional[torch.Tensor] = None,
-    ) -> torch.Tensor:
-        device = x.device
-        _ = device  # kept for future use / symmetry
-
+    self,
+    x: torch.Tensor,
+    batch: torch.Tensor,
+    timestamps: Optional[torch.Tensor] = None,
+) -> torch.Tensor:
         if x.size(0) == 0:
             return x.new_zeros((0, self.output_dim))
 
@@ -266,11 +263,10 @@ class TemporalLSTM(nn.Module):
 
         sequences = []
         inverse_orders = []
-        valid_positions = []
 
         for b in range(batch_size):
             mask = batch == b
-            x_b = x[mask]
+            x_b = x[mask].contiguous()
 
             if x_b.size(0) == 0:
                 sequences.append(None)
@@ -280,13 +276,12 @@ class TemporalLSTM(nn.Module):
             if timestamps is not None:
                 t_b = timestamps[mask]
                 order = torch.argsort(t_b)
-                x_b = x_b[order]
+                x_b = x_b[order].contiguous()
                 inverse_orders.append(torch.argsort(order))
             else:
                 inverse_orders.append(None)
 
             sequences.append(x_b)
-            valid_positions.append(b)
 
         valid_sequences = [seq for seq in sequences if seq is not None]
         if len(valid_sequences) == 0:
@@ -297,11 +292,15 @@ class TemporalLSTM(nn.Module):
             dtype=torch.long,
             device=x.device,
         )
-        padded = torch.nn.utils.rnn.pad_sequence(valid_sequences, batch_first=True)
+
+        padded = torch.nn.utils.rnn.pad_sequence(
+            valid_sequences,
+            batch_first=True,
+        ).contiguous()
 
         packed = torch.nn.utils.rnn.pack_padded_sequence(
             padded,
-            lengths.cpu(),
+            lengths.detach().cpu(),
             batch_first=True,
             enforce_sorted=False,
         )
@@ -312,6 +311,7 @@ class TemporalLSTM(nn.Module):
             packed_out,
             batch_first=True,
         )
+        out_padded = out_padded.contiguous()
 
         outputs = []
         valid_idx = 0
@@ -319,14 +319,14 @@ class TemporalLSTM(nn.Module):
             if sequences[i] is None:
                 continue
 
-            out_b = out_padded[valid_idx, : lengths[valid_idx]]
+            out_b = out_padded[valid_idx, : lengths[valid_idx]].contiguous()
             if inverse_orders[i] is not None:
-                out_b = out_b[inverse_orders[i]]
+                out_b = out_b[inverse_orders[i]].contiguous()
 
             outputs.append(out_b)
             valid_idx += 1
 
-        return torch.cat(outputs, dim=0)
+        return torch.cat(outputs, dim=0).contiguous()
 
 
 # ============================================================
