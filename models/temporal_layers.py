@@ -305,6 +305,14 @@ class TemporalLSTM(nn.Module):
             enforce_sorted=False,
         )
 
+            # ── FIX: force contiguous on packed data before LSTM ──
+        packed = torch.nn.utils.rnn.PackedSequence(
+            packed.data.contiguous(),
+            packed.batch_sizes,
+            packed.sorted_indices,
+            packed.unsorted_indices,
+        )
+
         # packed_out, _ = self.lstm(packed)
         self.lstm.flatten_parameters()
         with torch.backends.cudnn.flags(enabled=False):
