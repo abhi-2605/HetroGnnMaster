@@ -714,7 +714,7 @@ def train():
     checkpoint_path = config.CHECKPOINTS_DIR / "best_model.pt"
     best_metric = 0.0
     start_epoch = 1
-    scaler = torch.amp.GradScaler()
+    scaler = torch.amp.GradScaler('cuda')
     if config.RESUME_FROM_CHECKPOINT and checkpoint_path.exists():
         ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
         model.load_state_dict(ckpt["model_state_dict"])
@@ -722,6 +722,8 @@ def train():
             optimizer.load_state_dict(ckpt["optimizer_state_dict"])
         if scheduler is not None and ckpt.get("scheduler_state_dict") is not None:
             scheduler.load_state_dict(ckpt["scheduler_state_dict"])
+        if ckpt.get("scaler_state_dict") is not None:   
+            scaler.load_state_dict(ckpt["scaler_state_dict"])
 
         best_metric = float(ckpt.get("best_metric", 0.0))
         start_epoch = int(ckpt.get("epoch", 0)) + 1
@@ -854,6 +856,7 @@ def train():
                     "best_metric": best_metric,
                     "val_metrics": val_metrics,
                     "graph_source": config.ACTIVE_GRAPH_SOURCE,
+                    "scaler_state_dict": scaler.state_dict(),
                     "schema_path": str(active_schema_path) if active_schema_path is not None else None,
                 },
                 checkpoint_path,
