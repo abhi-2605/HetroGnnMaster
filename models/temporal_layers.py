@@ -305,8 +305,10 @@ class TemporalLSTM(nn.Module):
             enforce_sorted=False,
         )
 
-        packed_out, _ = self.lstm(packed)
-
+        # packed_out, _ = self.lstm(packed)
+        self.lstm.flatten_parameters()
+        with torch.backends.cudnn.flags(enabled=False):
+            packed_out, _ = self.lstm(packed)
         out_padded, _ = torch.nn.utils.rnn.pad_packed_sequence(
             packed_out,
             batch_first=True,
