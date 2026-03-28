@@ -473,7 +473,7 @@ def _build_memory_write_strength(model, logits, batch_data, api_indices, epoch):
 #  train_epoch
 # ══════════════════════════════════════════════════════════════════════════════
 
-def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoch, warmup=False):
+def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoch, warmup=False,scaler=None):
     model.train()
     total_loss = 0.0
     total_mem_reg = 0.0
@@ -499,26 +499,29 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                 _validate_batch_before_forward(batch_data, schema, api_indices=api_indices)
 
                 optimizer.zero_grad(set_to_none=True)
+                with torch.amp.autocast():
+                    logits = model(
+                        x_dict=batch_data.x_dict,
+                        edge_index_dict=batch_data.edge_index_dict,
+                        edge_attr_dict=batch_data.edge_attr_dict,
+                        batch_dict=batch_data.batch_dict,
+                        timestamps_dict=timestamps_dict,
+                        api_indices=api_indices,
+                        current_epoch=epoch,
+                    )
 
-                logits = model(
-                    x_dict=batch_data.x_dict,
-                    edge_index_dict=batch_data.edge_index_dict,
-                    edge_attr_dict=batch_data.edge_attr_dict,
-                    batch_dict=batch_data.batch_dict,
-                    timestamps_dict=timestamps_dict,
-                    api_indices=api_indices,
-                    current_epoch=epoch,
-                )
+                    task_loss = criterion(logits, labels)
+                    mem_reg = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)
+                    loss = task_loss + mem_reg
 
-                task_loss = criterion(logits, labels)
-                mem_reg = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)
-                loss = task_loss + mem_reg
-
-                loss.backward()
+                scaler.scale(loss).backward() 
                 if config.GRAD_CLIP > 0:
+                    scaler.unscale_(optimizer)
                     torch.nn.utils.clip_grad_norm_(model.parameters(), config.GRAD_CLIP)
 
-                optimizer.step()
+                # optimizer.step()
+                scaler.unscale_(optimizer)
+                scaler.update()
 
                 write_strength = None
                 if getattr(config, "USE_MEMORY", False):
@@ -702,7 +705,7 @@ def train():
     checkpoint_path = config.CHECKPOINTS_DIR / "best_model.pt"
     best_metric = 0.0
     start_epoch = 1
-
+    scaler = torch.amp.GradScaler()
     if config.RESUME_FROM_CHECKPOINT and checkpoint_path.exists():
         ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
         model.load_state_dict(ckpt["model_state_dict"])
@@ -755,6 +758,7 @@ def train():
             device=device,
             epoch=epoch,
             warmup=warmup,
+            scaler=scaler
         )
         _log_ram(epoch)
         _print_ram_bar(epoch, config.NUM_EPOCHS)
