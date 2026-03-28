@@ -133,97 +133,6 @@ class RansomwareGraphDataset(Dataset):
 
     def __len__(self) -> int:
         return len(self.graph_files)
-    
-    def _ensure_api_timestamps(self, data: HeteroData) -> HeteroData:
-        """
-        Ensure api.timestamps exists.
-
-        If missing, reconstruct relative timestamps from the temporal api->api
-        edges using edge_attr[:, 0] as time_delta. This is only a fallback and
-        is used only when explicit api.timestamps are absent.
-        """
-        if "api" not in data.node_types:
-            return data
-
-        # Already present and aligned -> keep as-is
-        if hasattr(data["api"], "timestamps"):
-            ts = data["api"].timestamps
-            if ts is not None and hasattr(data["api"], "x"):
-                if len(ts) == data["api"].x.shape[0]:
-                    return data
-
-        edge_type = ("api", "temporal", "api")
-        if edge_type not in data.edge_types:
-            return data
-
-        store = data[edge_type]
-        if not hasattr(store, "edge_index") or store.edge_index is None:
-            return data
-        if not hasattr(store, "edge_attr") or store.edge_attr is None:
-            return data
-        if store.edge_attr.ndim != 2 or store.edge_attr.shape[1] < 1:
-            return data
-
-        if not hasattr(data["api"], "x"):
-            return data
-
-        num_api = int(data["api"].x.shape[0])
-        if num_api == 0:
-            data["api"].timestamps = torch.empty(0, dtype=torch.float32)
-            return data
-
-        edge_index = store.edge_index
-        edge_attr = store.edge_attr
-
-        src = edge_index[0].detach().cpu().tolist()
-        dst = edge_index[1].detach().cpu().tolist()
-        deltas = edge_attr[:, 0].detach().cpu().float().tolist()
-
-        incoming = {}
-        outgoing = {}
-        for s, d, dt in zip(src, dst, deltas):
-            outgoing.setdefault(s, []).append((d, dt))
-            if d not in incoming:
-                incoming[d] = (s, dt)
-
-        # Nodes with no incoming temporal edge are treated as starts
-        start_nodes = [i for i in range(num_api) if i not in incoming]
-        if not start_nodes:
-            start_nodes = [0]
-
-        timestamps = [None] * num_api
-
-        # Initialize start nodes at 0.0
-        for s in start_nodes:
-            timestamps[s] = 0.0
-
-        # Propagate cumulative deltas forward
-        stack = list(start_nodes)
-        while stack:
-            u = stack.pop()
-            base_t = timestamps[u]
-            for v, dt in outgoing.get(u, []):
-                cand = float(base_t) + float(dt)
-                if timestamps[v] is None or cand < timestamps[v]:
-                    timestamps[v] = cand
-                    stack.append(v)
-
-        # Fill disconnected/unreached nodes safely
-        last_t = 0.0
-        for i in range(num_api):
-            if timestamps[i] is None:
-                timestamps[i] = last_t
-            last_t = timestamps[i]
-
-        data["api"].timestamps = torch.tensor(timestamps, dtype=torch.float32)
-
-        # Optional provenance marker
-        try:
-            data["api"].time_sources = ["temporal_edge_fallback"] * num_api
-        except Exception:
-            pass
-
-        return data
 
     def __getitem__(self, idx: int) -> Tuple[HeteroData, int]:
         """
@@ -239,9 +148,6 @@ class RansomwareGraphDataset(Dataset):
 
         if not isinstance(data, HeteroData):
             raise TypeError(f"Expected HeteroData, got {type(data)}")
-
-        # Fallback: reconstruct api.timestamps from temporal edge deltas if missing
-        data = self._ensure_api_timestamps(data)
 
         hash_id = graph_path.stem
         label = self.labels.get(hash_id, 2)
@@ -360,7 +266,7 @@ class RansomwareGraphDataset(Dataset):
 def _clean_graph_for_batching(graph: HeteroData) -> HeteroData:
     keep_graph_level = set()
     keep_store_attrs = {"timestamps", "timestamp", "time", "num_nodes"}
-    drop_store_attrs = {"placeholder_count"}   # explicitly drop known bad extras
+    drop_store_attrs = {"placeholder_count"}  # explicitly drop known bad extras
 
     # Clean graph-level attrs: remove everything not explicitly allowed
     top_keys_to_remove = []
@@ -460,11 +366,9 @@ def hetero_collate(
 
     processed_graphs = []
     for graph in graphs:
-        # Make sure dimensions match canonical schema
         if config.NORMALIZE_NODE_FEATURE_DIMS:
             graph = normalize_graph_node_features(graph, schema=schema, inplace=True)
 
-        # Validate per-graph before batching
         if validate_batch and config.FAIL_ON_SCHEMA_MISMATCH:
             validate_graph_or_raise(
                 graph,
@@ -476,16 +380,13 @@ def hetero_collate(
         graph = _clean_graph_for_batching(graph)
         processed_graphs.append(graph)
 
-    # Batch graphs
     batched_graph = Batch.from_data_list(processed_graphs)
 
-    # Restore auxiliary attributes needed later
     if all_api_names:
         batched_graph["api"].api_names = all_api_names
 
     batched_graph.graph_timestamps = timestamps_dict if timestamps_dict else None
 
-    # Build model-facing dictionaries for validation
     x_dict = {}
     edge_index_dict = {}
     edge_attr_dict = {}
@@ -511,7 +412,7 @@ def hetero_collate(
             batch_dict=batch_dict if batch_dict else None,
             schema=schema,
             require_api=True,
-            require_api_indices_if_memory=False,  # api_indices are created later in train.py
+            require_api_indices_if_memory=False,
             api_indices=None,
         )
 
@@ -534,7 +435,6 @@ def create_dataloaders(
     try:
         schema = schema if schema is not None else ensure_active_schema()
 
-        # Create datasets
         train_dataset = RansomwareGraphDataset(
             data_dir=data_dir,
             split="train",
