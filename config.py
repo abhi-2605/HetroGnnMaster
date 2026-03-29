@@ -194,7 +194,7 @@ NUM_CLASSES = 3             # Ransomware, Benign, Other Malware
 # Optimization
 LEARNING_RATE = 1e-4
 WEIGHT_DECAY = 1e-3
-BATCH_SIZE =14
+BATCH_SIZE =10
 EPOCHS = 125
 MAX_EPOCHS = 135
 
