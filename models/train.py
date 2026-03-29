@@ -472,10 +472,13 @@ def _build_memory_write_strength(model, logits, batch_data, api_indices, epoch):
 #  train_epoch
 # ══════════════════════════════════════════════════════════════════════════════
 
-def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoch, warmup=False,scaler=None):
+def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoch, warmup=False, scaler=None):
     model.train()
+
     total_loss = 0.0
     total_mem_reg = 0.0
+    processed_batches = 0
+
     all_preds = []
     all_labels = []
 
@@ -484,7 +487,22 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
 
     pbar = tqdm(loader, desc=f"{'WARMUP ' if warmup else ''}Epoch {epoch}")
 
-    for batch_idx, (batch_data, labels) in enumerate(pbar):
+    for batch_idx, batch_item in enumerate(pbar):
+        # Guard against collate returning None/empty batch
+        if batch_item is None:
+            print(f"⚠️  Empty batch object at batch {batch_idx} — skipping.")
+            continue
+
+        if not isinstance(batch_item, (tuple, list)) or len(batch_item) != 2:
+            print(f"⚠️  Malformed batch at batch {batch_idx} — skipping.")
+            continue
+
+        batch_data, labels = batch_item
+
+        if batch_data is None or labels is None:
+            print(f"⚠️  Empty batch at batch {batch_idx} — skipping.")
+            continue
+
         labels = labels.to(device)
         batch_data = batch_data.to(device)
 
@@ -498,9 +516,12 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                 _validate_batch_before_forward(batch_data, schema, api_indices=api_indices)
 
                 optimizer.zero_grad(set_to_none=True)
+
                 use_amp = (device.type == "cuda")
                 with torch.amp.autocast(
-                    device_type="cuda", dtype=torch.float16, enabled=use_amp
+                    device_type="cuda",
+                    dtype=torch.float16,
+                    enabled=use_amp,
                 ):
                     logits = model(
                         x_dict=batch_data.x_dict,
@@ -511,33 +532,52 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                         api_indices=api_indices,
                         current_epoch=epoch,
                     )
-                    logits = logits.float()
-                    task_loss = criterion(logits, labels)
-                    mem_reg = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)
-                    loss = task_loss + mem_reg
-                    if not torch.isfinite(logits).all():
-                        print(f"❌ Non-finite logits at batch {batch_idx}; skipping batch.")
-                        batch_skipped = True
-                        break
 
-                    if not torch.isfinite(loss):
-                        print(f"❌ Non-finite loss at batch {batch_idx}; skipping batch.")
-                        batch_skipped = True
-                        break
+                # Compute losses OUTSIDE autocast for numerical stability
+                logits = logits.float()
+
+                if not torch.isfinite(logits).all():
+                    print(f"❌ Non-finite logits at batch {batch_idx} — skipping batch.")
+                    batch_skipped = True
+                    break
+
+                task_loss = criterion(logits, labels)
+                mem_reg = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)
+                loss = task_loss + mem_reg
+
+                if not torch.isfinite(task_loss):
+                    print(f"❌ Non-finite task_loss at batch {batch_idx} — skipping batch.")
+                    batch_skipped = True
+                    break
+
+                if not torch.isfinite(mem_reg):
+                    print(f"❌ Non-finite mem_reg at batch {batch_idx} — skipping batch.")
+                    batch_skipped = True
+                    break
+
+                if not torch.isfinite(loss):
+                    print(f"❌ Non-finite total loss at batch {batch_idx} — skipping batch.")
+                    batch_skipped = True
+                    break
 
                 if use_amp:
-                    scaler.scale(loss).backward() 
+                    if scaler is None:
+                        raise RuntimeError("AMP is enabled but scaler is None.")
+
+                    scaler.scale(loss).backward()
+
                     if config.GRAD_CLIP > 0:
                         scaler.unscale_(optimizer)
                         torch.nn.utils.clip_grad_norm_(model.parameters(), config.GRAD_CLIP)
 
-                    # optimizer.step()
                     scaler.step(optimizer)
                     scaler.update()
                 else:
                     loss.backward()
+
                     if config.GRAD_CLIP > 0:
                         torch.nn.utils.clip_grad_norm_(model.parameters(), config.GRAD_CLIP)
+
                     optimizer.step()
 
                 write_strength = None
@@ -558,19 +598,22 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                         current_epoch=epoch,
                     )
 
-                task_loss_val = task_loss.item()
-                mem_reg_val = mem_reg.item()
+                task_loss_val = float(task_loss.item())
+                mem_reg_val = float(mem_reg.item())
+
                 total_loss += task_loss_val
                 total_mem_reg += mem_reg_val
+                processed_batches += 1
 
                 preds = logits.argmax(dim=1).detach().cpu().numpy()
-                all_preds.extend(preds)
-                all_labels.extend(labels.detach().cpu().numpy())
+                all_preds.extend(preds.tolist())
+                all_labels.extend(labels.detach().cpu().numpy().tolist())
 
                 break
 
             except torch.cuda.OutOfMemoryError:
                 optimizer.zero_grad(set_to_none=True)
+
                 if torch.cuda.is_available():
                     torch.cuda.empty_cache()
                 gc.collect()
@@ -582,6 +625,17 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                     batch_skipped = True
                     break
 
+            except Exception as e:
+                optimizer.zero_grad(set_to_none=True)
+
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                gc.collect()
+
+                print(f"❌ Exception in batch {batch_idx}: {type(e).__name__}: {e}")
+                batch_skipped = True
+                break
+
         if not batch_skipped:
             pbar.set_postfix(
                 loss=f"{task_loss_val:.4f}",
@@ -592,8 +646,28 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
         if batch_idx % 10 == 0 and torch.cuda.is_available():
             torch.cuda.empty_cache()
 
-    avg_loss = total_loss / len(loader)
-    avg_mem_reg = total_mem_reg / len(loader)
+    avg_loss = total_loss / max(processed_batches, 1)
+    avg_mem_reg = total_mem_reg / max(processed_batches, 1)
+
+    # Safe fallback if every batch was skipped
+    if len(all_preds) == 0 or len(all_labels) == 0:
+        return {
+            "accuracy": 0.0,
+            "per_class_precision": np.zeros(config.NUM_CLASSES, dtype=float),
+            "per_class_recall": np.zeros(config.NUM_CLASSES, dtype=float),
+            "per_class_f1": np.zeros(config.NUM_CLASSES, dtype=float),
+            "per_class_support": np.zeros(config.NUM_CLASSES, dtype=float),
+            "macro_precision": 0.0,
+            "macro_recall": 0.0,
+            "macro_f1": 0.0,
+            "weighted_precision": 0.0,
+            "weighted_recall": 0.0,
+            "weighted_f1": 0.0,
+            "confusion_matrix": np.zeros((config.NUM_CLASSES, config.NUM_CLASSES), dtype=int),
+            "loss": avg_loss,
+            "mem_reg": avg_mem_reg,
+        }
+
     metrics = compute_metrics(all_preds, all_labels)
     metrics["loss"] = avg_loss
     metrics["mem_reg"] = avg_mem_reg
@@ -782,7 +856,7 @@ def train():
             scaler=scaler
         )
         _log_ram(epoch)
-        _print_ram_bar(epoch, config.NUM_EPOCHS)
+        _print_ram_bar(epoch, config.EPOCHS)
 
 
         ransom_r = train_metrics["per_class_recall"][0]
