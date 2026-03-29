@@ -44,64 +44,72 @@ logger = logging.getLogger(__name__)
 
 class SizeAwareBatchSampler(Sampler):
     """
-    Builds batches that always mix small + large graphs (eliminates OOM).
-    Optionally accepts per-sample weights to preserve weighted oversampling.
+    Each batch = 1 large graph + (batch_size-1) small graphs.
+    Maximally dilutes monster graphs — eliminates OOM entirely.
+    Uses file size on disk as proxy (no graph loading at startup).
+    Optionally accepts per-sample weights for weighted oversampling.
     """
     def __init__(self, dataset, batch_size, shuffle=True, weights=None):
         self.batch_size = batch_size
         self.shuffle    = shuffle
         self.weights    = np.array(weights) if weights is not None else None
 
-        print("📏 Measuring graph sizes for size-aware batching...")
-        sizes = []
-        for i in range(len(dataset)):
-            try:
-                g, _ = dataset[i]
-                n = g['api'].x.shape[0] if (hasattr(g['api'], 'x') and g['api'].x is not None) else 0
-            except Exception:
-                n = 0
-            sizes.append(n)
+        # ── FAST: file size on disk, zero graph loading ───────────────────
+        print("📏 Measuring graph sizes (fast, disk-only)...")
+        sizes = np.array([
+            f.stat().st_size for f in dataset.graph_files
+        ], dtype=np.float32)
 
-        self.sizes   = np.array(sizes)
-        self.indices = np.argsort(sizes)          # sorted: smallest → largest
+        self.sizes   = sizes
+        self.indices = np.argsort(sizes)   # sorted: smallest → largest
 
-        print(f"   Min graph : {self.sizes[self.indices[0]]:,} API nodes")
-        print(f"   Max graph : {self.sizes[self.indices[-1]]:,} API nodes")
-        print(f"   Avg graph : {self.sizes.mean():,.0f} API nodes")
-        print(f"   Batches   : {len(self):,}")
+        # top (1/batch_size) are "large", rest are "small"
+        # e.g. batch_size=6 → top 17% large, bottom 83% small
+        n_large      = max(1, len(self.indices) // batch_size)
+        self.small_i = self.indices[:-n_large].tolist()
+        self.large_i = self.indices[-n_large:].tolist()
+
+        print(f"   Smallest     : {sizes[self.indices[0]]  / 1024:.1f} KB")
+        print(f"   Largest      : {sizes[self.indices[-1]] / 1024 / 1024:.1f} MB")
+        print(f"   Large bucket : {len(self.large_i)} graphs (top {100 // batch_size}%)")
+        print(f"   Small bucket : {len(self.small_i)} graphs (bot {100 - 100 // batch_size}%)")
+        print(f"   Batches      : {len(self):,}")
 
     def __iter__(self):
-        n         = len(self.indices)
-        small_idx = self.indices[:n // 2].tolist()   # bottom 50% by size
-        large_idx = self.indices[n // 2:].tolist()   # top    50% by size
-        half      = self.batch_size // 2
-        n_batches = min(len(small_idx), len(large_idx)) // half
+        small_i           = self.small_i.copy()
+        large_i           = self.large_i.copy()
+        n_small_per_batch = self.batch_size - 1   # 5 small + 1 large per batch
+        n_batches         = len(large_i)
 
         if self.weights is not None:
-            # ── weighted path: sample within each size bucket using weights ─
-            small_w = self.weights[small_idx]
-            large_w = self.weights[large_idx]
+            # ── weighted path ─────────────────────────────────────────────
+            small_w = self.weights[small_i]
+            large_w = self.weights[large_i]
             small_w = small_w / small_w.sum()
             large_w = large_w / large_w.sum()
 
-            small_sampled = np.random.choice(
-                small_idx, size=n_batches * half, p=small_w, replace=True
+            small_pool = np.random.choice(
+                small_i, size=n_batches * n_small_per_batch,
+                p=small_w, replace=True
             ).tolist()
-            large_sampled = np.random.choice(
-                large_idx, size=n_batches * half, p=large_w, replace=True
+            large_pool = np.random.choice(
+                large_i, size=n_batches,
+                p=large_w, replace=True
             ).tolist()
         else:
-            # ── standard path: shuffle then slice ──────────────────────────
+            # ── standard path ────────────────────────────────────────────
             if self.shuffle:
-                np.random.shuffle(small_idx)
-                np.random.shuffle(large_idx)
-            small_sampled = small_idx[:n_batches * half]
-            large_sampled = large_idx[:n_batches * half]
+                np.random.shuffle(small_i)
+                np.random.shuffle(large_i)
+            # tile small pool if needed to fill all batches
+            repeats    = (n_batches * n_small_per_batch // len(small_i)) + 1
+            small_pool = (small_i * repeats)[: n_batches * n_small_per_batch]
+            large_pool = large_i[:n_batches]
 
-        # pair them up into batches
+        # build batches: [s, s, s, s, s, L]
         batches = [
-            small_sampled[i : i + half] + large_sampled[i : i + half]
-            for i in range(0, n_batches * half, half)
+            small_pool[i * n_small_per_batch : (i + 1) * n_small_per_batch] + [large_pool[i]]
+            for i in range(n_batches)
         ]
 
         if self.shuffle:
@@ -111,9 +119,8 @@ class SizeAwareBatchSampler(Sampler):
             yield batch
 
     def __len__(self):
-        n    = len(self.indices)
-        half = self.batch_size // 2
-        return (min(n // 2, n // 2)) // half
+        return len(self.large_i)
+
 
 
 CLASS_NAMES = {
