@@ -613,14 +613,20 @@ class HeteroTemporalGNN(nn.Module):
         pooled = []
         feat_dim = h_nt.size(-1)
 
-        for b in range(batch_size):
-            mask = batch_nt == b
-            if mask.any():
-                pooled.append(h_nt[mask].mean(dim=0))
-            else:
-                pooled.append(torch.zeros(feat_dim, device=device, dtype=h_nt.dtype))
+        # for b in range(batch_size):
+        #     mask = batch_nt == b
+        #     if mask.any():
+        #         pooled.append(h_nt[mask].mean(dim=0))
+        #     else:
+        #         pooled.append(torch.zeros(feat_dim, device=device, dtype=h_nt.dtype))
 
-        pooled = torch.stack(pooled, dim=0)
+        # pooled = torch.stack(pooled, dim=0)
+        pooled = scatter(                     # ← replaces the entire loop + stack
+            h_nt, batch_nt,
+            dim=0,
+            dim_size=batch_size,
+            reduce='mean'
+        )
 
         if feat_dim == self.other_hidden_dim:
             return self.non_primary_pool_projection_base(pooled)

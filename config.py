@@ -194,7 +194,7 @@ NUM_CLASSES = 3             # Ransomware, Benign, Other Malware
 # Optimization
 LEARNING_RATE = 1e-4
 WEIGHT_DECAY = 1e-3
-BATCH_SIZE =4
+BATCH_SIZE =6
 EPOCHS = 125
 MAX_EPOCHS = 135
 
@@ -219,7 +219,7 @@ DEVICE = (
 
 # DataLoader
 NUM_WORKERS = 0  # -- was 4
-PIN_MEMORY = True if DEVICE == "cuda" else False
+PIN_MEMORY = False if DEVICE == "cuda" else False
 
 RESUME_FROM_CHECKPOINT = True
 
