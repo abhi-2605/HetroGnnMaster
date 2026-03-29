@@ -251,7 +251,10 @@ def create_dataloaders(schema, use_weighted_sampling=True):
     print(f"Val:   {len(val_dataset)} graphs")
     print(f"Test:  {len(test_dataset)} graphs")
 
-    train_labels = [train_dataset[i][1] for i in range(len(train_dataset))]
+    train_labels = train_labels = [
+    train_dataset.labels.get(graph_file.stem, 2)
+    for graph_file in train_dataset.graph_files
+    ]
     print("\nTrain class distribution:")
     for cls in range(config.NUM_CLASSES):
         count = train_labels.count(cls)
