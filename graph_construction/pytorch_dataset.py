@@ -36,9 +36,85 @@ from utils.schema_validator import (
     validate_batch_or_raise,
     validate_graph_or_raise,
 )
-
+import numpy as np
+from torch.utils.data import Sampler
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+
+class SizeAwareBatchSampler(Sampler):
+    """
+    Builds batches that always mix small + large graphs (eliminates OOM).
+    Optionally accepts per-sample weights to preserve weighted oversampling.
+    """
+    def __init__(self, dataset, batch_size, shuffle=True, weights=None):
+        self.batch_size = batch_size
+        self.shuffle    = shuffle
+        self.weights    = np.array(weights) if weights is not None else None
+
+        print("📏 Measuring graph sizes for size-aware batching...")
+        sizes = []
+        for i in range(len(dataset)):
+            try:
+                g, _ = dataset[i]
+                n = g['api'].x.shape[0] if (hasattr(g['api'], 'x') and g['api'].x is not None) else 0
+            except Exception:
+                n = 0
+            sizes.append(n)
+
+        self.sizes   = np.array(sizes)
+        self.indices = np.argsort(sizes)          # sorted: smallest → largest
+
+        print(f"   Min graph : {self.sizes[self.indices[0]]:,} API nodes")
+        print(f"   Max graph : {self.sizes[self.indices[-1]]:,} API nodes")
+        print(f"   Avg graph : {self.sizes.mean():,.0f} API nodes")
+        print(f"   Batches   : {len(self):,}")
+
+    def __iter__(self):
+        n         = len(self.indices)
+        small_idx = self.indices[:n // 2].tolist()   # bottom 50% by size
+        large_idx = self.indices[n // 2:].tolist()   # top    50% by size
+        half      = self.batch_size // 2
+        n_batches = min(len(small_idx), len(large_idx)) // half
+
+        if self.weights is not None:
+            # ── weighted path: sample within each size bucket using weights ─
+            small_w = self.weights[small_idx]
+            large_w = self.weights[large_idx]
+            small_w = small_w / small_w.sum()
+            large_w = large_w / large_w.sum()
+
+            small_sampled = np.random.choice(
+                small_idx, size=n_batches * half, p=small_w, replace=True
+            ).tolist()
+            large_sampled = np.random.choice(
+                large_idx, size=n_batches * half, p=large_w, replace=True
+            ).tolist()
+        else:
+            # ── standard path: shuffle then slice ──────────────────────────
+            if self.shuffle:
+                np.random.shuffle(small_idx)
+                np.random.shuffle(large_idx)
+            small_sampled = small_idx[:n_batches * half]
+            large_sampled = large_idx[:n_batches * half]
+
+        # pair them up into batches
+        batches = [
+            small_sampled[i : i + half] + large_sampled[i : i + half]
+            for i in range(0, n_batches * half, half)
+        ]
+
+        if self.shuffle:
+            np.random.shuffle(batches)
+
+        for batch in batches:
+            yield batch
+
+    def __len__(self):
+        n    = len(self.indices)
+        half = self.batch_size // 2
+        return (min(n // 2, n // 2)) // half
+
 
 CLASS_NAMES = {
     0: "Ransomware",

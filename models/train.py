@@ -38,7 +38,7 @@ from tqdm import tqdm
 import threading
 import psutil
 import os
-
+from graph_construction.pytorch_dataset import SizeAwareBatchSampler
 from torch.cuda.amp import GradScaler, autocast
 warnings.filterwarnings("ignore")
 
@@ -260,35 +260,32 @@ def create_dataloaders(schema, use_weighted_sampling=True):
 
     collate = lambda batch: hetero_collate(batch, schema=schema, validate_batch=True)
 
+    # ── build weights if weighted sampling is enabled ─────────────────────────
+    sample_weights = None
     if use_weighted_sampling and config.USE_WEIGHTED_SAMPLING:
-        print("\n⚡ Using weighted oversampling...")
+        print("\n⚡ Using weighted oversampling + size-aware batching...")
         sample_weights = [
             config.OVERSAMPLE_WEIGHTS.get(train_dataset[i][1], 1.0)
             for i in range(len(train_dataset))
         ]
-        sampler = WeightedRandomSampler(
-            sample_weights,
-            len(train_dataset),
-            replacement=True,
-        )
-        train_loader = DataLoader(
-            train_dataset,
-            batch_size=config.BATCH_SIZE,
-            sampler=sampler,
-            collate_fn=collate,
-            num_workers=config.NUM_WORKERS,
-            pin_memory=config.PIN_MEMORY,
-        )
     else:
-        print("\n⚡ Standard sampling...")
-        train_loader = DataLoader(
-            train_dataset,
-            batch_size=config.BATCH_SIZE,
-            shuffle=True,
-            collate_fn=collate,
-            num_workers=config.NUM_WORKERS,
-            pin_memory=config.PIN_MEMORY,
-        )
+        print("\n⚡ Standard sampling + size-aware batching...")
+
+    # ── single size-aware sampler handles both cases ──────────────────────────
+    size_sampler = SizeAwareBatchSampler(
+        train_dataset,
+        batch_size=config.BATCH_SIZE,
+        shuffle=True,
+        weights=sample_weights,   # None → uniform, list → weighted
+    )
+
+    train_loader = DataLoader(
+        train_dataset,
+        batch_sampler=size_sampler,   # replaces batch_size + sampler/shuffle
+        collate_fn=collate,
+        num_workers=config.NUM_WORKERS,
+        pin_memory=config.PIN_MEMORY,
+    )
 
     val_loader = DataLoader(
         val_dataset,
@@ -308,6 +305,7 @@ def create_dataloaders(schema, use_weighted_sampling=True):
     )
 
     return train_loader, val_loader, test_loader
+
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -675,6 +673,7 @@ def train():
     # ── vocab ─────────────────────────────────────────────────────────────────
     vocab = load_vocab(config.RESULTS_DIR / "api_vocabulary.json")
     print(f"[Train] Vocabulary loaded: {vocab.size()} APIs")
+    
 
     # ── data ──────────────────────────────────────────────────────────────────
     train_loader, val_loader, test_loader = create_dataloaders(
