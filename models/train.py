@@ -517,7 +517,7 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
 
                 optimizer.zero_grad(set_to_none=True)
 
-                use_amp = (device.type == "cuda")
+                use_amp = False
                 with torch.amp.autocast(
                     device_type="cuda",
                     dtype=torch.float16,
@@ -797,7 +797,7 @@ def train():
     checkpoint_path = config.CHECKPOINTS_DIR / "best_model.pt"
     best_metric = 0.0
     start_epoch = 1
-    use_amp = (device.type == "cuda")
+    use_amp = False
     scaler = torch.amp.GradScaler("cuda", enabled=use_amp)
     if config.RESUME_FROM_CHECKPOINT and checkpoint_path.exists():
         ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
