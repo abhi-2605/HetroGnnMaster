@@ -506,6 +506,93 @@ def _clean_graph_for_batching(graph: HeteroData) -> HeteroData:
 
     return graph
 
+def _dynamic_cap_api_nodes(
+    graphs: list,
+    safety_fraction: float = 0.75,
+) -> list:
+    """
+    Dynamically cap API node counts so the batch fits in available GPU memory.
+
+    - Measures free GPU RAM right now
+    - Estimates safe total API nodes for this batch
+    - Only truncates graphs that push over budget (proportional share)
+    - Graphs under their share are untouched — no unnecessary information loss
+    """
+    import torch
+
+    if not torch.cuda.is_available():
+        return graphs
+
+    # ── how much GPU is free right now ───────────────────────────────────
+    free_bytes  = torch.cuda.mem_get_info()[0]   # (free, total)
+    safe_bytes  = free_bytes * safety_fraction
+
+    # empirical: each API node costs ~8 KB in forward pass
+    # (features + LSTM hidden + temporal attention)
+    bytes_per_api_node = 8 * 1024
+    total_node_budget  = int(safe_bytes / bytes_per_api_node)
+
+    # ── count current API nodes per graph ─────────────────────────────────
+    node_counts = []
+    for g in graphs:
+        if hasattr(g['api'], 'x') and g['api'].x is not None:
+            node_counts.append(g['api'].x.shape[0])
+        else:
+            node_counts.append(0)
+
+    total_nodes = sum(node_counts)
+
+    # nothing to do — batch fits as-is
+    if total_nodes <= total_node_budget:
+        return graphs
+
+    # ── proportionally trim only over-budget graphs ───────────────────────
+    # each graph's fair share of the budget
+    trimmed = []
+    for g, n in zip(graphs, node_counts):
+        if n == 0:
+            trimmed.append(g)
+            continue
+
+        fair_share = max(512, int(total_node_budget * n / total_nodes))
+
+        if n <= fair_share:
+            trimmed.append(g)   # fits in share — untouched ✅
+            continue
+
+        # this graph is over-budget → subsample to its fair share
+        perm        = torch.randperm(n)[:fair_share]
+        perm, _     = perm.sort()   # preserve temporal order
+
+        g['api'].x  = g['api'].x[perm]
+
+        if hasattr(g['api'], 'timestamps') and g['api'].timestamps is not None:
+            g['api'].timestamps = g['api'].timestamps[perm]
+
+        # remap api→api edges
+        for et in g.edge_types:
+            src, _, dst = et
+            if src == 'api' and dst == 'api':
+                ei      = g[et].edge_index
+                old2new = torch.full((n,), -1, dtype=torch.long)
+                old2new[perm] = torch.arange(fair_share)
+                mask            = (old2new[ei[0]] >= 0) & (old2new[ei[1]] >= 0)
+                g[et].edge_index = old2new[ei[:, mask]]
+                if hasattr(g[et], 'edge_attr') and g[et].edge_attr is not None:
+                    g[et].edge_attr = g[et].edge_attr[mask]
+
+        trimmed.append(g)
+
+    trimmed_total = sum(
+        g['api'].x.shape[0] if hasattr(g['api'], 'x') and g['api'].x is not None else 0
+        for g in trimmed
+    )
+    if total_nodes != trimmed_total:
+        print(f"   ✂️  API nodes: {total_nodes:,} → {trimmed_total:,} "
+              f"(budget {total_node_budget:,}, free {free_bytes/1e9:.1f} GB)")
+
+    return trimmed
+
 
 def hetero_collate(
     batch,
@@ -557,7 +644,7 @@ def hetero_collate(
             )
 
         graph = _clean_graph_for_batching(graph)
-        processed_graphs.append(graph)
+        processed_graphs = _dynamic_cap_api_nodes(processed_graphs)
 
     # Batch graphs
     batched_graph = Batch.from_data_list(processed_graphs)
