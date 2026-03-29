@@ -733,7 +733,13 @@ def _clean_graph_for_batching(graph: HeteroData) -> HeteroData:
     """
     keep_graph_level = set()
     keep_store_attrs = {"timestamps", "timestamp", "time", "num_nodes"}
-    drop_store_attrs = {"placeholder_count", "num_apis", "graph_features"}
+    drop_store_attrs = {
+    "placeholder_count",
+    "num_apis",
+    "graph_features",
+    "repeat_count",
+    "run_duration",
+}
 
     # Clean graph-level attrs
     top_keys_to_remove = []
