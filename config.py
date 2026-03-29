@@ -360,3 +360,28 @@ MEMORY_NOVELTY_TEMPERATURE = 1.0
 MEMORY_NOVELTY_EPS = 1e-6
 
 MEMORY_COMMON_TOKEN_WRITE_CAP = 0.25
+
+
+
+
+# ============================================
+# API RUN COMPRESSION
+# ============================================
+# If False:
+#   keep graph structure exactly as-is
+# If True:
+#   compress only strictly redundant consecutive API runs
+ENABLE_API_RUN_COMPRESSION = True
+
+# Compression safety rules
+API_RUN_COMPRESSION_REQUIRE_API_NAMES = True
+API_RUN_COMPRESSION_METADATA_START_DIM = 768   # metadata tail starts after embedding part
+API_RUN_COMPRESSION_METADATA_ATOL = 1e-6
+
+# Only compress if consecutive repeated calls are also temporally close
+API_RUN_COMPRESSION_USE_TIME_GAP = True
+API_RUN_COMPRESSION_MAX_TIME_GAP = 1.0
+
+# Store auxiliary tensors for future model use
+# These do NOT change api.x dimensionality, so schema stays stable.
+API_RUN_COMPRESSION_STORE_AUX = True
