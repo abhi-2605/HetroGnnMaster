@@ -498,8 +498,9 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                 _validate_batch_before_forward(batch_data, schema, api_indices=api_indices)
 
                 optimizer.zero_grad(set_to_none=True)
+                use_amp = (device.type == "cuda")
                 with torch.amp.autocast(
-                    'cuda'
+                    device_type="cuda", dtype=torch.float16, enabled=use_amp
                 ):
                     logits = model(
                         x_dict=batch_data.x_dict,
@@ -510,12 +511,21 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                         api_indices=api_indices,
                         current_epoch=epoch,
                     )
-
+                    logits = logits.float()
                     task_loss = criterion(logits, labels)
                     mem_reg = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)
                     loss = task_loss + mem_reg
+                    if not torch.isfinite(logits).all():
+                        print(f"❌ Non-finite logits at batch {batch_idx}; skipping batch.")
+                        batch_skipped = True
+                        break
 
-                if scaler is not None:
+                    if not torch.isfinite(loss):
+                        print(f"❌ Non-finite loss at batch {batch_idx}; skipping batch.")
+                        batch_skipped = True
+                        break
+
+                if use_amp:
                     scaler.scale(loss).backward() 
                     if config.GRAD_CLIP > 0:
                         scaler.unscale_(optimizer)
@@ -713,7 +723,8 @@ def train():
     checkpoint_path = config.CHECKPOINTS_DIR / "best_model.pt"
     best_metric = 0.0
     start_epoch = 1
-    scaler = torch.amp.GradScaler('cuda')
+    use_amp = (device.type == "cuda")
+    scaler = torch.amp.GradScaler("cuda", enabled=use_amp)
     if config.RESUME_FROM_CHECKPOINT and checkpoint_path.exists():
         ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
         model.load_state_dict(ckpt["model_state_dict"])
