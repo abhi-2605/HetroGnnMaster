@@ -649,7 +649,8 @@ def hetero_collate(
             )
 
         graph = _clean_graph_for_batching(graph)
-        processed_graphs = _dynamic_cap_api_nodes(processed_graphs)
+        processed_graphs.append(graph)
+    processed_graphs = _dynamic_cap_api_nodes(processed_graphs)
 
     # Batch graphs
     batched_graph = Batch.from_data_list(processed_graphs)
