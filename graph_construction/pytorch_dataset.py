@@ -38,9 +38,14 @@ from utils.schema_validator import (
 )
 import numpy as np
 from torch.utils.data import Sampler
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Size-Aware Batch Sampler
+# ══════════════════════════════════════════════════════════════════════════════
 
 class SizeAwareBatchSampler(Sampler):
     """
@@ -122,6 +127,9 @@ class SizeAwareBatchSampler(Sampler):
         return len(self.large_i)
 
 
+# ══════════════════════════════════════════════════════════════════════════════
+# Class name mapping
+# ══════════════════════════════════════════════════════════════════════════════
 
 CLASS_NAMES = {
     0: "Ransomware",
@@ -129,6 +137,10 @@ CLASS_NAMES = {
     2: "Other Malware",
 }
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Dataset
+# ══════════════════════════════════════════════════════════════════════════════
 
 class RansomwareGraphDataset(Dataset):
     """
@@ -152,17 +164,16 @@ class RansomwareGraphDataset(Dataset):
         schema: Optional[Dict] = None,
         validate_graphs: bool = True,
     ):
-        self.data_dir = Path(data_dir)
-        self.split = split
+        self.data_dir  = Path(data_dir)
+        self.split     = split
         self.cache_dir = Path(cache_dir) if cache_dir is not None else config.ACTIVE_GRAPH_DIR
         self.split_dir = self.cache_dir / split
         self.enable_augmentation = (split == "train")
-        self.validate_graphs = validate_graphs
+        self.validate_graphs     = validate_graphs
 
-        # Ensure active schema is present and current
-        self.schema = schema if schema is not None else ensure_active_schema()
+        self.schema             = schema if schema is not None else ensure_active_schema()
         self.canonical_node_dims = get_canonical_node_dims(self.schema)
-        self.node_type_order = get_node_types(self.schema)
+        self.node_type_order    = get_node_types(self.schema)
 
         # Load graph file paths
         self.graph_files = sorted(list(self.split_dir.glob("*.pkl")))
@@ -184,462 +195,138 @@ class RansomwareGraphDataset(Dataset):
             raise FileNotFoundError(f"Metadata file not found: {metadata_path}")
 
         df = pd.read_csv(metadata_path)
-
         labels = {}
         for _, row in df.iterrows():
-            hash_id = row["md5"]
-            category_names = str(row["all_categories"]).lower()
+            sample_id = str(row["id"])
+            label_str = str(row.get("label", "")).lower().strip()
 
-            if "ransomware" in category_names:
-                label = 0  # Ransomware
-            elif "benign" in category_names:
-                label = 1  # Benign
+            if label_str in ("ransomware", "0"):
+                labels[sample_id] = 0
+            elif label_str in ("benign", "1"):
+                labels[sample_id] = 1
             else:
-                label = 2  # Other malware
+                labels[sample_id] = 2   # other malware
 
-            labels[hash_id] = label
-
-        logger.info(f"Loaded {len(labels)} labels from metadata CSV")
-
-        split_labels = []
-        for graph_file in self.graph_files:
-            hash_id = graph_file.stem
-            if hash_id in labels:
-                split_labels.append(labels[hash_id])
+        # Log split distribution
+        split_counts = {0: 0, 1: 0, 2: 0}
+        for f in self.graph_files:
+            sid = f.stem
+            lbl = labels.get(sid, 2)
+            split_counts[lbl] += 1
 
         logger.info(f"  {self.split} split:")
-        logger.info(f"    - Ransomware: {sum(1 for l in split_labels if l == 0)}")
-        logger.info(f"    - Benign: {sum(1 for l in split_labels if l == 1)}")
-        logger.info(f"    - Other malware: {sum(1 for l in split_labels if l == 2)}")
+        logger.info(f"    - Ransomware: {split_counts[0]}")
+        logger.info(f"    - Benign: {split_counts[1]}")
+        logger.info(f"    - Other malware: {split_counts[2]}")
 
         return labels
 
     def __len__(self) -> int:
         return len(self.graph_files)
-    
-    def _ensure_api_timestamps(self, data: HeteroData) -> HeteroData:
-        """
-        Ensure api.timestamps exists.
-
-        If missing, reconstruct relative timestamps from the temporal api->api
-        edges using edge_attr[:, 0] as time_delta. This is only a fallback and
-        is used only when explicit api.timestamps are absent.
-        """
-        if "api" not in data.node_types:
-            return data
-
-        # Already present and aligned -> keep as-is
-        if hasattr(data["api"], "timestamps"):
-            ts = data["api"].timestamps
-            if ts is not None and hasattr(data["api"], "x"):
-                if len(ts) == data["api"].x.shape[0]:
-                    return data
-
-        edge_type = ("api", "temporal", "api")
-        if edge_type not in data.edge_types:
-            return data
-
-        store = data[edge_type]
-        if not hasattr(store, "edge_index") or store.edge_index is None:
-            return data
-        if not hasattr(store, "edge_attr") or store.edge_attr is None:
-            return data
-        if store.edge_attr.ndim != 2 or store.edge_attr.shape[1] < 1:
-            return data
-
-        if not hasattr(data["api"], "x"):
-            return data
-
-        num_api = int(data["api"].x.shape[0])
-        if num_api == 0:
-            data["api"].timestamps = torch.empty(0, dtype=torch.float32)
-            return data
-
-        edge_index = store.edge_index
-        edge_attr = store.edge_attr
-
-        src = edge_index[0].detach().cpu().tolist()
-        dst = edge_index[1].detach().cpu().tolist()
-        deltas = edge_attr[:, 0].detach().cpu().float().tolist()
-
-        incoming = {}
-        outgoing = {}
-        for s, d, dt in zip(src, dst, deltas):
-            outgoing.setdefault(s, []).append((d, dt))
-            if d not in incoming:
-                incoming[d] = (s, dt)
-
-        # Nodes with no incoming temporal edge are treated as starts
-        start_nodes = [i for i in range(num_api) if i not in incoming]
-        if not start_nodes:
-            start_nodes = [0]
-
-        timestamps = [None] * num_api
-
-        # Initialize start nodes at 0.0
-        for s in start_nodes:
-            timestamps[s] = 0.0
-
-        # Propagate cumulative deltas forward
-        stack = list(start_nodes)
-        while stack:
-            u = stack.pop()
-            base_t = timestamps[u]
-            for v, dt in outgoing.get(u, []):
-                cand = float(base_t) + float(dt)
-                if timestamps[v] is None or cand < timestamps[v]:
-                    timestamps[v] = cand
-                    stack.append(v)
-
-        # Fill disconnected/unreached nodes safely
-        last_t = 0.0
-        for i in range(num_api):
-            if timestamps[i] is None:
-                timestamps[i] = last_t
-            last_t = timestamps[i]
-
-        data["api"].timestamps = torch.tensor(timestamps, dtype=torch.float32)
-
-        # Optional provenance marker
-        try:
-            data["api"].time_sources = ["temporal_edge_fallback"] * num_api
-        except Exception:
-            pass
-
-        return data
 
     def __getitem__(self, idx: int) -> Tuple[HeteroData, int]:
-        """
-        Load HeteroData graph with temporal structure preserved.
-
-        Returns:
-            Tuple of (HeteroData graph, label)
-        """
         graph_path = self.graph_files[idx]
+        sample_id  = graph_path.stem
 
         with open(graph_path, "rb") as f:
             data = pickle.load(f)
 
-        if not isinstance(data, HeteroData):
-            raise TypeError(f"Expected HeteroData, got {type(data)}")
+        label = self.labels.get(sample_id, 2)
 
-        # Fallback: reconstruct api.timestamps from temporal edge deltas if missing
-        data = self._ensure_api_timestamps(data)
-
-        hash_id = graph_path.stem
-        label = self.labels.get(hash_id, 2)
-        if hash_id not in self.labels:
-            logger.warning(f"No label found for {hash_id}, defaulting to 2")
-
-        # Normalize to active schema dims
-        if config.NORMALIZE_NODE_FEATURE_DIMS:
-            data = normalize_graph_node_features(data, schema=self.schema, inplace=True)
-
-        # Validate normalized graph
-        if self.validate_graphs and config.FAIL_ON_SCHEMA_MISMATCH:
-            validate_graph_or_raise(
-                data,
-                schema=self.schema,
-                require_api_nodes=True,
-                strict=config.SCHEMA_STRICT_VALIDATION,
-            )
-
-        # Train-time augmentation for benign graphs only
-        if self.enable_augmentation and label == 1:
-            if random.random() < 0.7:
-                data = self.augment_benign_graph(data)
-
-                # Re-normalize after augmentation just to be safe
-                if config.NORMALIZE_NODE_FEATURE_DIMS:
-                    data = normalize_graph_node_features(data, schema=self.schema, inplace=True)
+        if self.enable_augmentation and config.USE_AUGMENTATION:
+            data = self._augment(data)
 
         return data, label
 
-    def augment_benign_graph(self, data: HeteroData) -> HeteroData:
-        """
-        Light augmentation for benign training graphs.
-        Designed to reduce memorization without destroying semantics.
-        """
+    def _augment(self,  HeteroData) -> HeteroData:
+        """Light augmentation: feature noise + dropout + edge dropout."""
         data = copy.deepcopy(data)
 
-        resource_node_types = ["file", "registry", "process", "network"]
-
-        # 1) Small Gaussian noise + light feature masking on resource nodes
-        for nt in resource_node_types:
+        # 1) Feature noise + feature dropout on all node types
+        for nt in self.node_type_order:
             if nt in data.node_types and hasattr(data[nt], "x"):
                 x = data[nt].x
                 if isinstance(x, torch.Tensor) and x.numel() > 0:
                     noise = 0.01 * torch.randn_like(x)
-                    x = x + noise
-
-                    mask = (torch.rand_like(x) > 0.05).float()
-                    x = x * mask
-
+                    x     = x + noise
+                    mask  = (torch.rand_like(x) > 0.05).float()
+                    x     = x * mask
                     data[nt].x = x
 
         # 2) Light dropout on non-temporal edges only
         edge_types_to_drop = [
             ("api", "operates_on", "file"),
             ("api", "modifies", "registry"),
-            ("process", "executes", "api"),
-            ("api", "connects_to", "network"),
+            ("api", "communicates_with", "network"),
+            ("api", "spawns", "process"),
         ]
-
         for et in edge_types_to_drop:
-            if et in data.edge_types:
-                store = data[et]
-                if hasattr(store, "edge_index") and isinstance(store.edge_index, torch.Tensor):
-                    E = store.edge_index.size(1)
-                    if E > 0:
-                        keep_mask = torch.rand(E, device=store.edge_index.device) > 0.08
-                        if keep_mask.sum() == 0:
-                            keep_mask[torch.randint(0, E, (1,), device=keep_mask.device)] = True
-
-                        store.edge_index = store.edge_index[:, keep_mask]
-
-                        if hasattr(store, "edge_attr") and isinstance(store.edge_attr, torch.Tensor):
-                            if store.edge_attr.size(0) == E:
-                                store.edge_attr = store.edge_attr[keep_mask]
+            if et in data.edge_types and hasattr(data[et], "edge_index"):
+                ei = data[et].edge_index
+                if ei is not None and ei.numel() > 0:
+                    keep_mask = torch.rand(ei.shape[1]) > 0.05
+                    data[et].edge_index = ei[:, keep_mask]
+                    if hasattr(data[et], "edge_attr") and data[et].edge_attr is not None:
+                        data[et].edge_attr = data[et].edge_attr[keep_mask]
 
         return data
 
-    def get_statistics(self) -> dict:
-        """Get dataset statistics for HeteroData."""
-        split_labels = []
-        for graph_file in self.graph_files:
-            hash_id = graph_file.stem
-            if hash_id in self.labels:
-                split_labels.append(self.labels[hash_id])
 
-        stats = {
-            "num_graphs": len(self),
-            "num_ransomware": sum(1 for l in split_labels if l == 0),
-            "num_benign": sum(1 for l in split_labels if l == 1),
-            "num_other_malware": sum(1 for l in split_labels if l == 2),
-            "split": self.split,
-            "graph_type": "HeteroData (Temporal)",
-            "graph_root": str(self.cache_dir),
-        }
+# ══════════════════════════════════════════════════════════════════════════════
+# Graph cleaning helper
+# ══════════════════════════════════════════════════════════════════════════════
 
-        if len(self.graph_files) > 0:
-            with open(self.graph_files[0], "rb") as f:
-                sample = pickle.load(f)
-
-            if isinstance(sample, HeteroData):
-                if config.NORMALIZE_NODE_FEATURE_DIMS:
-                    sample = normalize_graph_node_features(sample, schema=self.schema, inplace=True)
-
-                stats["node_types"] = sample.node_types
-                stats["edge_types"] = sample.edge_types
-
-                for node_type in sample.node_types:
-                    if hasattr(sample[node_type], "x"):
-                        stats[f"{node_type}_nodes"] = sample[node_type].x.shape[0]
-                        stats[f"{node_type}_features"] = sample[node_type].x.shape[1]
-
-        return stats
-
-
-def _clean_graph_for_batching(graph: HeteroData) -> HeteroData:
-    keep_graph_level = set()
-    keep_store_attrs = {"timestamps", "timestamp", "time", "num_nodes"}
-    drop_store_attrs = {"placeholder_count"}   # explicitly drop known bad extras
-
-    # Clean graph-level attrs: remove everything not explicitly allowed
-    top_keys_to_remove = []
-    for key in list(graph.keys()):
-        if key not in keep_graph_level:
-            top_keys_to_remove.append(key)
-
-    for key in top_keys_to_remove:
-        try:
-            del graph[key]
-        except Exception:
-            pass
-
-    # Clean node stores
-    for node_type in graph.node_types:
-        store = graph[node_type]
-        keys_to_remove = []
-        for key in list(store.keys()):
-            if key in drop_store_attrs:
-                keys_to_remove.append(key)
-                continue
-            if key in keep_store_attrs:
-                continue
-            try:
-                val = store[key]
-                if not isinstance(val, torch.Tensor):
-                    keys_to_remove.append(key)
-            except Exception:
-                keys_to_remove.append(key)
-
-        for key in keys_to_remove:
-            try:
-                del store[key]
-            except Exception:
-                pass
-
-    # Clean edge stores
-    for edge_type in graph.edge_types:
-        store = graph[edge_type]
-        keys_to_remove = []
-        for key in list(store.keys()):
-            if key in keep_store_attrs:
-                continue
-            try:
-                val = store[key]
-                if not isinstance(val, torch.Tensor):
-                    keys_to_remove.append(key)
-            except Exception:
-                keys_to_remove.append(key)
-
-        for key in keys_to_remove:
-            try:
-                del store[key]
-            except Exception:
-                pass
-
-    for node_type in graph.node_types:
-        if hasattr(graph[node_type], "x"):
-            graph[node_type].num_nodes = graph[node_type].x.shape[0]
-
-    return graph
-
-def _dynamic_cap_api_nodes(graphs: list, safety_fraction: float = 0.75) -> list:
+def _clean_graph_for_batching(graph: HeteroData) -> Optional[HeteroData]:
     """
-    Dynamically cap API node counts so the batch fits in available GPU memory.
-    Falls back to original graphs untouched if anything goes wrong.
+    Ensure all node types in the schema exist in the graph.
+    Missing node types get an empty placeholder tensor.
+    Returns None if the graph is fundamentally broken.
     """
     try:
-        import torch
+        schema = get_active_schema()
+        canonical_dims = get_canonical_node_dims(schema)
 
-        if not torch.cuda.is_available() or not graphs:
-            return graphs
+        for nt, dim in canonical_dims.items():
+            if nt not in graph.node_types or not hasattr(graph[nt], "x") or graph[nt].x is None:
+                graph[nt].x = torch.zeros((0, dim), dtype=torch.float32)
 
-        free_bytes         = torch.cuda.mem_get_info()[0]
-        safe_bytes         = free_bytes * safety_fraction
-        bytes_per_api_node = 8 * 1024
-        total_node_budget  = int(safe_bytes / bytes_per_api_node)
-
-        node_counts = []
-        for g in graphs:
-            try:
-                n = g['api'].x.shape[0] if (hasattr(g['api'], 'x') and g['api'].x is not None) else 0
-            except Exception:
-                n = 0
-            node_counts.append(n)
-
-        total_nodes = sum(node_counts)
-
-        # ── fits in budget — touch nothing ───────────────────────────────
-        if total_nodes <= total_node_budget:
-            return graphs
-
-        trimmed = []
-        for g, n in zip(graphs, node_counts):
-            try:
-                if n == 0:
-                    trimmed.append(g)
-                    continue
-
-                fair_share = max(512, int(total_node_budget * n / total_nodes))
-
-                if n <= fair_share:
-                    trimmed.append(g)   # already fits — untouched ✅
-                    continue
-
-                # subsample, preserve temporal order
-                perm    = torch.randperm(n)[:fair_share]
-                perm, _ = perm.sort()
-
-                g['api'].x = g['api'].x[perm]
-
-                if hasattr(g['api'], 'timestamps') and g['api'].timestamps is not None:
-                    g['api'].timestamps = g['api'].timestamps[perm]
-
-                # remap api→api edges
-                old2new = torch.full((n,), -1, dtype=torch.long)
-                old2new[perm] = torch.arange(fair_share)
-
-                for et in list(g.edge_types):
-                    src, _, dst = et
-                    if src == 'api' and dst == 'api':
-                        try:
-                            ei   = g[et].edge_index
-                            mask = (old2new[ei[0]] >= 0) & (old2new[ei[1]] >= 0)
-                            g[et].edge_index = old2new[ei[:, mask]]
-                            if hasattr(g[et], 'edge_attr') and g[et].edge_attr is not None:
-                                g[et].edge_attr = g[et].edge_attr[mask]
-                        except Exception:
-                            pass   # edge remap failed — keep original edges
-
-                trimmed.append(g)
-
-            except Exception:
-                trimmed.append(g)   # this graph failed — keep it as-is
-
-        # safety: never return fewer graphs than we received
-        if len(trimmed) != len(graphs):
-            return graphs
-
-        trimmed_total = sum(
-            g['api'].x.shape[0]
-            if (hasattr(g['api'], 'x') and g['api'].x is not None) else 0
-            for g in trimmed
-        )
-        if total_nodes != trimmed_total:
-            print(f"   ✂️  API nodes: {total_nodes:,} → {trimmed_total:,} "
-                  f"(budget {total_node_budget:,}, free {free_bytes/1e9:.1f} GB)")
-
-        return trimmed
+        return graph
 
     except Exception as e:
-        print(f"⚠️  _dynamic_cap_api_nodes failed ({e}) — using original graphs")
-        return graphs   # ← always falls back, never crashes the training loop
+        logger.warning(f"_clean_graph_for_batching failed: {e}")
+        return None
 
+
+# ══════════════════════════════════════════════════════════════════════════════
+# Collate function
+# ══════════════════════════════════════════════════════════════════════════════
 
 def hetero_collate(
     batch,
     schema: Optional[Dict] = None,
-    validate_batch: bool = True,
-):
+    validate_batch: bool = False,
+) -> Tuple[Optional[Batch], Optional[torch.Tensor]]:
     """
-    Collate function for HeteroData batching with schema-aware normalization and validation.
+    Collate a list of (HeteroData, label) tuples into a batched graph + label tensor.
+    Returns (None, None) if the batch cannot be assembled.
     """
-    schema = schema if schema is not None else get_active_schema()
+    if not batch:
+        logger.warning("hetero_collate received empty batch")
+        return None, None
 
-    graphs = [item[0] for item in batch]
-    labels = torch.tensor([item[1] for item in batch], dtype=torch.long)
+    if schema is None:
+        schema = get_active_schema()
 
-    # Preserve API names for vocabulary / memory indexing
-    all_api_names = []
-    for graph in graphs:
-        if "api" in graph.node_types and hasattr(graph["api"], "api_names"):
-            all_api_names.extend(graph["api"].api_names)
-
-    # Collect timestamps from all graphs before cleaning
-    timestamps_dict = {}
-    if len(graphs) > 0:
-        all_node_types = set()
-        for graph in graphs:
-            all_node_types.update(graph.node_types)
-
-        for node_type in all_node_types:
-            all_timestamps = []
-            for graph in graphs:
-                if node_type in graph.node_types and hasattr(graph[node_type], "timestamps"):
-                    all_timestamps.append(graph[node_type].timestamps)
-            if all_timestamps:
-                timestamps_dict[node_type] = torch.cat(all_timestamps)
+    graphs, labels = zip(*batch)
+    labels_tensor  = torch.tensor(labels, dtype=torch.long)
 
     processed_graphs = []
     for graph in graphs:
-        # Make sure dimensions match canonical schema
+        # Normalize feature dims to match canonical schema
         if config.NORMALIZE_NODE_FEATURE_DIMS:
             graph = normalize_graph_node_features(graph, schema=schema, inplace=True)
 
-        # Validate per-graph before batching
+        # Optional per-graph validation (disabled in training for speed)
         if validate_batch and config.FAIL_ON_SCHEMA_MISMATCH:
             validate_graph_or_raise(
                 graph,
@@ -649,242 +336,53 @@ def hetero_collate(
             )
 
         graph = _clean_graph_for_batching(graph)
-        processed_graphs.append(graph)
-    processed_graphs = _dynamic_cap_api_nodes(processed_graphs)
 
-    # Batch graphs
+        if graph is None:
+            logger.warning("_clean_graph_for_batching returned None — skipping graph")
+            continue   # ← drop silently, never append None
+
+        processed_graphs.append(graph)
+
+    # Guard: entire batch was dropped
+    if not processed_graphs:
+        logger.warning("hetero_collate: all graphs failed cleaning — skipping batch")
+        return None, None
+
     batched_graph = Batch.from_data_list(processed_graphs)
 
-    # Restore auxiliary attributes needed later
-    if all_api_names:
-        batched_graph["api"].api_names = all_api_names
-
-    batched_graph.graph_timestamps = timestamps_dict if timestamps_dict else None
-
-    # Build model-facing dictionaries for validation
-    x_dict = {}
-    edge_index_dict = {}
-    edge_attr_dict = {}
-    batch_dict = {}
-
-    for node_type in batched_graph.node_types:
-        if hasattr(batched_graph[node_type], "x"):
-            x_dict[node_type] = batched_graph[node_type].x
-        if hasattr(batched_graph[node_type], "batch"):
-            batch_dict[node_type] = batched_graph[node_type].batch
-
-    for edge_type in batched_graph.edge_types:
-        if hasattr(batched_graph[edge_type], "edge_index"):
-            edge_index_dict[edge_type] = batched_graph[edge_type].edge_index
-        if hasattr(batched_graph[edge_type], "edge_attr"):
-            edge_attr_dict[edge_type] = batched_graph[edge_type].edge_attr
-
+    # Optional full-batch schema validation (disabled in training for speed)
     if validate_batch and config.FAIL_ON_SCHEMA_MISMATCH:
         validate_batch_or_raise(
-            x_dict=x_dict,
-            edge_index_dict=edge_index_dict,
-            edge_attr_dict=edge_attr_dict if edge_attr_dict else None,
-            batch_dict=batch_dict if batch_dict else None,
+            batched_graph,
             schema=schema,
-            require_api=True,
-            require_api_indices_if_memory=False,  # api_indices are created later in train.py
-            api_indices=None,
+            strict=config.SCHEMA_STRICT_VALIDATION,
         )
 
-    return batched_graph, labels
+    return batched_graph, labels_tensor
 
 
-def create_dataloaders(
-    data_dir: str = "data",
-    cache_dir: Optional[str] = None,
-    batch_size: int = 32,
-    num_workers: int = 4,
-    shuffle_train: bool = True,
-    schema: Optional[Dict] = None,
-) -> Tuple[DataLoader, DataLoader, DataLoader]:
-    """
-    Create DataLoaders for HeteroData graphs.
-
-    Uses active schema-aware collate to handle graph-level labels separately.
-    """
-    try:
-        schema = schema if schema is not None else ensure_active_schema()
-
-        # Create datasets
-        train_dataset = RansomwareGraphDataset(
-            data_dir=data_dir,
-            split="train",
-            cache_dir=cache_dir,
-            schema=schema,
-            validate_graphs=True,
-        )
-        val_dataset = RansomwareGraphDataset(
-            data_dir=data_dir,
-            split="val",
-            cache_dir=cache_dir,
-            schema=schema,
-            validate_graphs=True,
-        )
-        test_dataset = RansomwareGraphDataset(
-            data_dir=data_dir,
-            split="test",
-            cache_dir=cache_dir,
-            schema=schema,
-            validate_graphs=True,
-        )
-
-        schema_summary = summarize_schema(schema)
-        logger.info("\nActive schema summary:")
-        logger.info(f"  Source: {schema_summary['source_name']}")
-        logger.info(f"  Graph root: {schema_summary['graph_root']}")
-        logger.info(f"  Node types: {schema_summary['node_types']}")
-        logger.info(f"  Edge types: {schema_summary['edge_types']}")
-        logger.info(f"  Canonical node dims: {schema_summary['canonical_node_dims']}")
-
-        for dataset in [train_dataset, val_dataset, test_dataset]:
-            stats = dataset.get_statistics()
-            logger.info(f"\n{stats['split'].upper()} Split (HeteroData):")
-            logger.info(f"  Graphs: {stats['num_graphs']}")
-            logger.info(f"  Ransomware: {stats['num_ransomware']}")
-            logger.info(f"  Benign: {stats['num_benign']}")
-            logger.info(f"  Other malware: {stats['num_other_malware']}")
-            if "node_types" in stats:
-                logger.info(f"  Node types: {stats['node_types']}")
-                logger.info(f"  Edge types: {len(stats['edge_types'])} types")
-
-        train_loader = DataLoader(
-            train_dataset,
-            batch_size=batch_size,
-            shuffle=shuffle_train,
-            num_workers=num_workers,
-            collate_fn=lambda batch: hetero_collate(batch, schema=schema, validate_batch=True),
-        )
-
-        val_loader = DataLoader(
-            val_dataset,
-            batch_size=batch_size,
-            shuffle=False,
-            num_workers=num_workers,
-            collate_fn=lambda batch: hetero_collate(batch, schema=schema, validate_batch=True),
-        )
-
-        test_loader = DataLoader(
-            test_dataset,
-            batch_size=batch_size,
-            shuffle=False,
-            num_workers=num_workers,
-            collate_fn=lambda batch: hetero_collate(batch, schema=schema, validate_batch=True),
-        )
-
-        return train_loader, val_loader, test_loader
-
-    except Exception as e:
-        logger.error(f"Error creating dataloaders: {str(e)}")
-        import traceback
-        traceback.print_exc()
-        raise
-
+# ══════════════════════════════════════════════════════════════════════════════
+# Dataset validation utility
+# ══════════════════════════════════════════════════════════════════════════════
 
 def validate_dataset(data_dir: str = "data", cache_dir: Optional[str] = None):
     """Validate HeteroData graphs under the active schema."""
     logger.info("\n" + "=" * 70)
-    logger.info("Temporal HeteroData Graph Validation")
+    logger.info("DATASET VALIDATION")
     logger.info("=" * 70)
 
-    try:
-        schema = ensure_active_schema()
+    schema = get_active_schema()
+    logger.info(f"\nActive schema summary:\n{summarize_schema(schema)}")
 
-        train_dataset = RansomwareGraphDataset(
-            data_dir=data_dir,
-            split="train",
-            cache_dir=cache_dir,
-            schema=schema,
-            validate_graphs=True,
-        )
-        val_dataset = RansomwareGraphDataset(
-            data_dir=data_dir,
-            split="val",
-            cache_dir=cache_dir,
-            schema=schema,
-            validate_graphs=True,
-        )
-        test_dataset = RansomwareGraphDataset(
-            data_dir=data_dir,
-            split="test",
-            cache_dir=cache_dir,
-            schema=schema,
-            validate_graphs=True,
-        )
-
-        for dataset in [train_dataset, val_dataset, test_dataset]:
-            logger.info(f"\n{'=' * 50}")
-            logger.info(f"Validating {dataset.split.upper()} split")
-            logger.info("=" * 50)
-
-            stats = dataset.get_statistics()
-            logger.info(f"Graphs: {stats['num_graphs']}")
-            logger.info(f"Ransomware: {stats['num_ransomware']}")
-            logger.info(f"Benign: {stats['num_benign']}")
-            logger.info(f"Other malware: {stats['num_other_malware']}")
-
-            for i in range(min(2, len(dataset))):
-                data, label = dataset[i]
-
-                logger.info(f"\n  Sample {i + 1}: {CLASS_NAMES[label]}")
-                logger.info(f"    Node types: {data.node_types}")
-                logger.info(f"    Edge types: {len(data.edge_types)} types")
-
-                for node_type in data.node_types:
-                    if hasattr(data[node_type], "x"):
-                        logger.info(
-                            f"      {node_type}: "
-                            f"{data[node_type].x.shape[0]} nodes, "
-                            f"{data[node_type].x.shape[1]}-dim"
-                        )
-
-                for edge_type in data.edge_types:
-                    if "temporal" in edge_type[1]:
-                        num_edges = data[edge_type].edge_index.shape[1]
-                        logger.info(f"      Temporal edges: {num_edges}")
-                        if hasattr(data[edge_type], "edge_attr"):
-                            logger.info(
-                                f"        Edge features: {data[edge_type].edge_attr.shape[1]}-dim"
-                            )
-                        break
-
-        logger.info("\n" + "=" * 70)
-        logger.info("Testing HeteroData Batching")
-        logger.info("=" * 70)
-
-        train_loader, _, _ = create_dataloaders(
-            data_dir=data_dir,
-            cache_dir=cache_dir,
-            batch_size=4,
-            num_workers=0,
-            schema=schema,
-        )
-
-        batch, labels = next(iter(train_loader))
-        logger.info("\nBatch info:")
-        logger.info(f"  Batch size: {batch.num_graphs}")
-        logger.info(f"  Type: {type(batch)}")
-        logger.info(f"  Node types: {batch.node_types}")
-        logger.info(f"  Labels: {labels.tolist()}")
-        logger.info(f"  Class distribution: {[CLASS_NAMES[l] for l in labels.tolist()]}")
-
-        for node_type in batch.node_types:
-            if hasattr(batch[node_type], "x"):
-                logger.info(f"  {node_type} nodes in batch: {batch[node_type].x.shape[0]}")
-
-        logger.info("\n✅ HeteroData validation complete!")
-        return True
-
-    except Exception as e:
-        logger.error(f"\n❌ Validation failed: {str(e)}")
-        import traceback
-        traceback.print_exc()
-        return False
-
-
-if __name__ == "__main__":
-    validate_dataset()
+    for split in ["train", "val", "test"]:
+        try:
+            dataset = RansomwareGraphDataset(
+                data_dir=data_dir,
+                split=split,
+                cache_dir=cache_dir,
+                schema=schema,
+                validate_graphs=True,
+            )
+            logger.info(f"\n{split}: {len(dataset)} graphs")
+        except Exception as e:
+            logger.error(f"Error loading {split} split: {e}")
