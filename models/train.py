@@ -265,11 +265,13 @@ def create_dataloaders(schema, use_weighted_sampling=True):
     if use_weighted_sampling and config.USE_WEIGHTED_SAMPLING:
         print("\n⚡ Using weighted oversampling + size-aware batching...")
         sample_weights = [
-            config.OVERSAMPLE_WEIGHTS.get(train_dataset[i][1], 1.0)
-            for i in range(len(train_dataset))
-        ]
+                config.OVERSAMPLE_WEIGHTS.get(
+                    train_dataset.labels.get(graph_file.stem, 2), 1.0
+                )
+                for graph_file in train_dataset.graph_files
+            ]
     else:
-        print("\n⚡ Standard sampling + size-aware batching...")
+            print("\n⚡ Standard sampling + size-aware batching...")
 
     # ── single size-aware sampler handles both cases ──────────────────────────
     size_sampler = SizeAwareBatchSampler(
