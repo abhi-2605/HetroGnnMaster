@@ -219,7 +219,8 @@ DEVICE = (
 
 # DataLoader
 NUM_WORKERS = 4  # -- was 4
-PIN_MEMORY = False if DEVICE == "cuda" else False
+PREFETCH_FACTOR = 2
+PIN_MEMORY = True if DEVICE == "cuda" else False
 
 RESUME_FROM_CHECKPOINT = True
 
