@@ -38,7 +38,10 @@ from tqdm import tqdm
 import threading
 import psutil
 import os
-from graph_construction.pytorch_dataset import SizeAwareBatchSampler
+from graph_construction.pytorch_dataset import (
+    SizeAwareBatchSampler,
+    BucketedBatchSampler,
+)
 from torch.cuda.amp import GradScaler, autocast
 warnings.filterwarnings("ignore")
 
@@ -266,27 +269,47 @@ def create_dataloaders(schema, use_weighted_sampling=True):
     # ── build weights if weighted sampling is enabled ─────────────────────────
     sample_weights = None
     if use_weighted_sampling and config.USE_WEIGHTED_SAMPLING:
-        print("\n⚡ Using weighted oversampling + size-aware batching...")
         sample_weights = [
-                config.OVERSAMPLE_WEIGHTS.get(
-                    train_dataset.labels.get(graph_file.stem, 2), 1.0
-                )
-                for graph_file in train_dataset.graph_files
-            ]
+            config.OVERSAMPLE_WEIGHTS.get(
+                train_dataset.labels.get(graph_file.stem, 2), 1.0
+            )
+            for graph_file in train_dataset.graph_files
+        ]
+
+    # ── choose sampler from config ────────────────────────────────────────────
+    if getattr(config, "ENABLE_BUCKETED_BATCH_SAMPLER", False):
+        print("\n⚡ Using weighted oversampling + bucketed batching..." if sample_weights is not None
+              else "\n⚡ Using bucketed batching...")
+
+        train_batch_sampler = BucketedBatchSampler(
+            dataset=train_dataset,
+            shuffle=True,
+            weights=sample_weights,
+            bucket_boundaries=getattr(config, "BUCKETED_BATCH_BOUNDARIES", [10000, 25000, 50000, 100000]),
+            bucket_batch_sizes=getattr(config, "BUCKETED_BATCH_SIZES", [32, 16, 8, 4, 2]),
+        )
     else:
-            print("\n⚡ Standard sampling + size-aware batching...")
+        print("\n⚡ Using weighted oversampling + size-aware batching..." if sample_weights is not None
+              else "\n⚡ Using size-aware batching...")
+
+        train_batch_sampler = SizeAwareBatchSampler(
+            train_dataset,
+            batch_size=config.BATCH_SIZE,
+            shuffle=True,
+            weights=sample_weights,
+        )
 
     # ── single size-aware sampler handles both cases ──────────────────────────
-    size_sampler = SizeAwareBatchSampler(
-        train_dataset,
-        batch_size=config.BATCH_SIZE,
-        shuffle=True,
-        weights=sample_weights,   # None → uniform, list → weighted
-    )
+    # size_sampler = SizeAwareBatchSampler(
+    #     train_dataset,
+    #     batch_size=config.BATCH_SIZE,
+    #     shuffle=True,
+    #     weights=sample_weights,   # None → uniform, list → weighted
+    # )
 
     train_loader = DataLoader(
         train_dataset,
-        batch_sampler=size_sampler,   # replaces batch_size + sampler/shuffle
+        batch_sampler=train_batch_sampler,   # replaces batch_size + sampler/shuffle
         collate_fn=collate,
         num_workers=config.NUM_WORKERS,
         pin_memory=config.PIN_MEMORY,
