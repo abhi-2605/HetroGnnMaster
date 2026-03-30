@@ -194,7 +194,7 @@ NUM_CLASSES = 3             # Ransomware, Benign, Other Malware
 # Optimization
 LEARNING_RATE = 1e-4
 WEIGHT_DECAY = 1e-3
-BATCH_SIZE =32
+BATCH_SIZE =48
 EPOCHS = 125
 MAX_EPOCHS = 135
 
@@ -409,7 +409,7 @@ ENABLE_BUCKETED_BATCH_SAMPLER = True
 # Buckets are evaluated in order.
 ENABLE_BUCKETED_BATCH_SAMPLER = True
 BUCKETED_BATCH_RULES = [
-    (10_000, 32),
+    (10_000, 48),
     (25_000, 16),
     (50_000, 8),
     (100_000, 4),
