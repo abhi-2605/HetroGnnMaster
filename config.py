@@ -371,14 +371,28 @@ MEMORY_COMMON_TOKEN_WRITE_CAP = 0.25
 #   keep graph structure exactly as-is
 # If True:
 #   compress only strictly redundant consecutive API runs
-ENABLE_TARGETED_API_CAP = True
+ENABLE_API_RUN_COMPRESSION = True
+API_RUN_COMPRESSION_REQUIRE_API_NAMES = True
+API_RUN_COMPRESSION_METADATA_START_DIM = 768
+API_RUN_COMPRESSION_METADATA_ATOL = 1e-6
+API_RUN_COMPRESSION_USE_TIME_GAP = True
+API_RUN_COMPRESSION_MAX_TIME_GAP = 1.0
+API_RUN_COMPRESSION_STORE_AUX = True
 
-# Cap only these known monster train graphs first
-TARGETED_API_CAP_IDS = {
-    "d6b6cf19c0b8c9752ec92541c6b543e7",
-    "fb34939a4ed0bd56486a733570c48f66",
-    "d8afd8283e2cc8cf23b43e6114e3713f",
-}
+# ============================================
+# BEHAVIOR-AWARE API CAPPING
+# ============================================
+ENABLE_BEHAVIOR_AWARE_API_CAP = True
 
-# Initial conservative cap
+# Only cap graphs whose API sequence is larger than this
+BEHAVIOR_AWARE_API_CAP_THRESHOLD = 100000
+
+# Cap those graphs down to this many API nodes
+BEHAVIOR_AWARE_API_CAP_MAX_NODES = 30000
+
+# Protection knobs
+BEHAVIOR_AWARE_API_CAP_PROTECT_EDGE_ENDPOINTS = True
+BEHAVIOR_AWARE_API_CAP_PROTECT_TIME_SPIKES = True
+BEHAVIOR_AWARE_API_CAP_TIME_SPIKE_QUANTILE = 0.95
+BEHAVIOR_AWARE_API_CAP_REQUIRE_API_NAMES = False
 TARGETED_API_CAP_MAX_NODES = 100000

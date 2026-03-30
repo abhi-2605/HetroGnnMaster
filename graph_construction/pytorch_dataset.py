@@ -291,8 +291,8 @@ class RansomwareGraphDataset(Dataset):
 
     def _ensure_api_aux_tensors(self, data: HeteroData) -> HeteroData:
         """
-        Ensure repeat_count and run_duration exist on api store whenever
-        compression/capping features are enabled, so PyG batching stays consistent.
+        Ensure repeat_count and run_duration exist on api store so PyG batching
+        stays consistent across compressed/capped and untouched graphs.
         """
         if "api" not in data.node_types or not hasattr(data["api"], "x"):
             return data
@@ -392,11 +392,10 @@ class RansomwareGraphDataset(Dataset):
 
         return True
 
-    def _rebuild_temporal_chain(
+    def _rebuild_temporal_chain_after_compression(
         self,
         data: HeteroData,
-        old_runs: Optional[List[Tuple[int, int]]] = None,
-        old_to_new: Optional[torch.Tensor] = None,
+        runs: List[Tuple[int, int]],
     ) -> HeteroData:
         temporal_edge_type = ("api", "temporal", "api")
         if temporal_edge_type not in data.edge_types:
@@ -408,14 +407,13 @@ class RansomwareGraphDataset(Dataset):
         edge_attr_dim = 0
         edge_attr_dtype = torch.float32
         edge_attr_device = api_store.x.device
-        old_temporal_attr_map = {}
 
+        old_temporal_attr_map = {}
         if hasattr(temporal_store, "edge_index") and isinstance(temporal_store.edge_index, torch.Tensor):
             old_ei = temporal_store.edge_index.detach().cpu()
             if hasattr(temporal_store, "edge_attr") and isinstance(temporal_store.edge_attr, torch.Tensor):
                 old_ea = temporal_store.edge_attr
-                if old_ea.dim() == 2:
-                    edge_attr_dim = old_ea.size(1)
+                edge_attr_dim = old_ea.size(1) if old_ea.dim() == 2 else 0
                 edge_attr_dtype = old_ea.dtype
                 edge_attr_device = old_ea.device
 
@@ -424,8 +422,7 @@ class RansomwareGraphDataset(Dataset):
                     d = int(old_ei[1, k].item())
                     old_temporal_attr_map[(s, d)] = old_ea[k]
 
-        new_num_api = int(api_store.x.shape[0])
-
+        new_num_api = len(runs)
         if new_num_api <= 1:
             temporal_store.edge_index = torch.empty((2, 0), dtype=torch.long)
             if edge_attr_dim > 0:
@@ -440,28 +437,20 @@ class RansomwareGraphDataset(Dataset):
         new_dst = []
         new_edge_attrs = []
 
-        if old_runs is not None:
-            for new_idx in range(new_num_api - 1):
-                cur_start, cur_end = old_runs[new_idx]
-                nxt_start, _ = old_runs[new_idx + 1]
-                new_src.append(new_idx)
-                new_dst.append(new_idx + 1)
+        for new_idx in range(new_num_api - 1):
+            cur_start, cur_end = runs[new_idx]
+            nxt_start, _ = runs[new_idx + 1]
 
-                if edge_attr_dim > 0:
-                    boundary_attr = old_temporal_attr_map.get((cur_end, nxt_start), None)
-                    if boundary_attr is None:
-                        boundary_attr = torch.zeros(edge_attr_dim, dtype=edge_attr_dtype, device=edge_attr_device)
-                    new_edge_attrs.append(boundary_attr)
-        else:
-            for i in range(new_num_api - 1):
-                new_src.append(i)
-                new_dst.append(i + 1)
+            new_src.append(new_idx)
+            new_dst.append(new_idx + 1)
 
-                if edge_attr_dim > 0:
-                    boundary_attr = old_temporal_attr_map.get((i, i + 1), None)
-                    if boundary_attr is None:
-                        boundary_attr = torch.zeros(edge_attr_dim, dtype=edge_attr_dtype, device=edge_attr_device)
-                    new_edge_attrs.append(boundary_attr)
+            if edge_attr_dim > 0:
+                boundary_attr = old_temporal_attr_map.get((cur_end, nxt_start), None)
+                if boundary_attr is None:
+                    boundary_attr = torch.zeros(edge_attr_dim, dtype=edge_attr_dtype, device=edge_attr_device)
+                    if edge_attr_dim > 0 and hasattr(api_store, "timestamps") and isinstance(api_store.timestamps, torch.Tensor):
+                        pass
+                new_edge_attrs.append(boundary_attr)
 
         temporal_store.edge_index = torch.tensor([new_src, new_dst], dtype=torch.long)
         if edge_attr_dim > 0:
@@ -471,7 +460,8 @@ class RansomwareGraphDataset(Dataset):
 
     def _compress_consecutive_api_runs(self, data: HeteroData) -> HeteroData:
         if not getattr(config, "ENABLE_API_RUN_COMPRESSION", False):
-            return data
+            return self._ensure_api_aux_tensors(data)
+
         if "api" not in data.node_types:
             return data
         if not hasattr(data["api"], "x") or not isinstance(data["api"].x, torch.Tensor):
@@ -560,8 +550,8 @@ class RansomwareGraphDataset(Dataset):
                 edge_index[1] = old_to_new[edge_index[1]]
             store.edge_index = edge_index
 
-        data = self._rebuild_temporal_chain(data, old_runs=runs, old_to_new=old_to_new)
-        return data
+        data = self._rebuild_temporal_chain_after_compression(data, runs)
+        return self._ensure_api_aux_tensors(data)
 
     def _get_behavior_protected_api_indices(self, data: HeteroData, num_api: int) -> Set[int]:
         protected: Set[int] = set()
@@ -583,13 +573,18 @@ class RansomwareGraphDataset(Dataset):
             except Exception:
                 pass
 
-        if hasattr(api_store, "timestamps") and isinstance(api_store.timestamps, torch.Tensor):
+        if (
+            getattr(config, "BEHAVIOR_AWARE_API_CAP_PROTECT_TIME_SPIKES", True)
+            and hasattr(api_store, "timestamps")
+            and isinstance(api_store.timestamps, torch.Tensor)
+        ):
             ts = api_store.timestamps
             if ts.numel() == num_api and num_api > 2:
                 diffs = ts[1:] - ts[:-1]
                 try:
                     if diffs.numel() > 0:
-                        q = torch.quantile(diffs.float(), 0.95)
+                        qv = float(getattr(config, "BEHAVIOR_AWARE_API_CAP_TIME_SPIKE_QUANTILE", 0.95))
+                        q = torch.quantile(diffs.float(), qv)
                         spike_idx = (diffs >= q).nonzero(as_tuple=False).view(-1).tolist()
                         for idx in spike_idx:
                             protected.add(int(idx))
@@ -597,28 +592,64 @@ class RansomwareGraphDataset(Dataset):
                 except Exception:
                     pass
 
-        for edge_type in data.edge_types:
-            src_type, rel, dst_type = edge_type
-            if rel == "temporal":
-                continue
+        if getattr(config, "BEHAVIOR_AWARE_API_CAP_PROTECT_EDGE_ENDPOINTS", True):
+            for edge_type in data.edge_types:
+                src_type, rel, dst_type = edge_type
+                if rel == "temporal":
+                    continue
 
-            store = data[edge_type]
-            if not hasattr(store, "edge_index") or not isinstance(store.edge_index, torch.Tensor):
-                continue
-            if store.edge_index.numel() == 0:
-                continue
+                store = data[edge_type]
+                if not hasattr(store, "edge_index") or not isinstance(store.edge_index, torch.Tensor):
+                    continue
+                if store.edge_index.numel() == 0:
+                    continue
 
-            ei = store.edge_index
-            if src_type == "api":
-                protected.update(int(v) for v in ei[0].detach().cpu().tolist() if 0 <= int(v) < num_api)
-            if dst_type == "api":
-                protected.update(int(v) for v in ei[1].detach().cpu().tolist() if 0 <= int(v) < num_api)
+                ei = store.edge_index
+                if src_type == "api":
+                    protected.update(int(v) for v in ei[0].detach().cpu().tolist() if 0 <= int(v) < num_api)
+                if dst_type == "api":
+                    protected.update(int(v) for v in ei[1].detach().cpu().tolist() if 0 <= int(v) < num_api)
 
         return protected
 
-    def _apply_api_subset(self, data: HeteroData, keep_indices: List[int]) -> HeteroData:
+    def _build_segment_ranges(self, keep_indices: List[int], n: int) -> List[Tuple[int, int]]:
+        """
+        Each kept node represents a local interval around itself.
+        Used to aggregate repeat_count and run_duration after behavior-aware cap.
+        """
+        if not keep_indices:
+            return []
+
+        segments: List[Tuple[int, int]] = []
+        for i, cur in enumerate(keep_indices):
+            if i == 0:
+                start = 0
+            else:
+                prev = keep_indices[i - 1]
+                start = (prev + cur) // 2 + 1
+
+            if i == len(keep_indices) - 1:
+                end = n - 1
+            else:
+                nxt = keep_indices[i + 1]
+                end = (cur + nxt) // 2
+
+            start = max(0, min(start, n - 1))
+            end = max(start, min(end, n - 1))
+            segments.append((start, end))
+
+        return segments
+
+    def _apply_api_subset(
+        self,
+        data: HeteroData,
+        keep_indices: List[int],
+        aggregate_segments: Optional[List[Tuple[int, int]]] = None,
+    ) -> HeteroData:
         """
         Apply an ordered subset of API nodes and remap all API-linked edges.
+        If aggregate_segments is provided, aggregate repeat_count/run_duration
+        over represented regions instead of simple indexing.
         """
         if "api" not in data.node_types or not hasattr(data["api"], "x"):
             return data
@@ -634,49 +665,62 @@ class RansomwareGraphDataset(Dataset):
         old_to_new = torch.full((old_num_api,), -1, dtype=torch.long)
         old_to_new[keep_t] = torch.arange(len(keep_indices), dtype=torch.long)
 
-        api_store.x = api_store.x[keep_t]
+        old_x = api_store.x
+        old_ts = api_store.timestamps.clone() if hasattr(api_store, "timestamps") and isinstance(api_store.timestamps, torch.Tensor) else None
+        old_repeat = api_store.repeat_count.clone() if hasattr(api_store, "repeat_count") and isinstance(api_store.repeat_count, torch.Tensor) else torch.ones(old_num_api, dtype=torch.float32)
+        old_run_dur = api_store.run_duration.clone() if hasattr(api_store, "run_duration") and isinstance(api_store.run_duration, torch.Tensor) else torch.zeros(old_num_api, dtype=torch.float32)
+        old_api_names = list(api_store.api_names) if hasattr(api_store, "api_names") else None
 
-        if hasattr(api_store, "timestamps") and isinstance(api_store.timestamps, torch.Tensor):
-            api_store.timestamps = api_store.timestamps[keep_t]
+        api_store.x = old_x[keep_t]
 
-        if hasattr(api_store, "repeat_count") and isinstance(api_store.repeat_count, torch.Tensor):
-            api_store.repeat_count = api_store.repeat_count[keep_t]
-        else:
-            api_store.repeat_count = torch.ones(len(keep_indices), dtype=torch.float32)
+        if old_ts is not None:
+            api_store.timestamps = old_ts[keep_t]
 
-        if hasattr(api_store, "run_duration") and isinstance(api_store.run_duration, torch.Tensor):
-            api_store.run_duration = api_store.run_duration[keep_t]
-        else:
-            api_store.run_duration = torch.zeros(len(keep_indices), dtype=torch.float32)
-
-        if hasattr(api_store, "api_names"):
+        if old_api_names is not None:
             try:
-                api_store.api_names = [api_store.api_names[i] for i in keep_indices]
+                api_store.api_names = [old_api_names[i] for i in keep_indices]
             except Exception:
                 pass
+
+        if aggregate_segments is None:
+            api_store.repeat_count = old_repeat[keep_t].float()
+            api_store.run_duration = old_run_dur[keep_t].float()
+        else:
+            agg_repeat = []
+            agg_duration = []
+
+            for start, end in aggregate_segments:
+                agg_repeat.append(float(old_repeat[start : end + 1].sum().item()))
+                if old_ts is not None:
+                    agg_duration.append(float(old_ts[end].item() - old_ts[start].item()))
+                else:
+                    agg_duration.append(float(old_run_dur[start : end + 1].sum().item()))
+
+            api_store.repeat_count = torch.tensor(agg_repeat, dtype=torch.float32)
+            api_store.run_duration = torch.tensor(agg_duration, dtype=torch.float32)
 
         api_store.num_nodes = len(keep_indices)
 
         temporal_edge_type = ("api", "temporal", "api")
-        old_temporal_store = data[temporal_edge_type] if temporal_edge_type in data.edge_types else None
         old_temporal_attr_map = {}
         edge_attr_dim = 0
         edge_attr_dtype = torch.float32
         edge_attr_device = api_store.x.device
 
-        if old_temporal_store is not None and hasattr(old_temporal_store, "edge_index"):
-            old_ei = old_temporal_store.edge_index.detach().cpu()
-            if hasattr(old_temporal_store, "edge_attr") and isinstance(old_temporal_store.edge_attr, torch.Tensor):
-                old_ea = old_temporal_store.edge_attr
-                if old_ea.dim() == 2:
-                    edge_attr_dim = old_ea.size(1)
-                edge_attr_dtype = old_ea.dtype
-                edge_attr_device = old_ea.device
-
-                for k in range(old_ei.size(1)):
-                    s = int(old_ei[0, k].item())
-                    d = int(old_ei[1, k].item())
-                    old_temporal_attr_map[(s, d)] = old_ea[k]
+        if temporal_edge_type in data.edge_types:
+            old_temporal_store = data[temporal_edge_type]
+            if hasattr(old_temporal_store, "edge_index") and isinstance(old_temporal_store.edge_index, torch.Tensor):
+                old_ei = old_temporal_store.edge_index.detach().cpu()
+                if hasattr(old_temporal_store, "edge_attr") and isinstance(old_temporal_store.edge_attr, torch.Tensor):
+                    old_ea = old_temporal_store.edge_attr
+                    if old_ea.dim() == 2:
+                        edge_attr_dim = old_ea.size(1)
+                    edge_attr_dtype = old_ea.dtype
+                    edge_attr_device = old_ea.device
+                    for k in range(old_ei.size(1)):
+                        s = int(old_ei[0, k].item())
+                        d = int(old_ei[1, k].item())
+                        old_temporal_attr_map[(s, d)] = old_ea[k]
 
         for edge_type in list(data.edge_types):
             src_type, _, dst_type = edge_type
@@ -736,6 +780,9 @@ class RansomwareGraphDataset(Dataset):
                         boundary_attr = old_temporal_attr_map.get((old_s, old_d), None)
                         if boundary_attr is None:
                             boundary_attr = torch.zeros(edge_attr_dim, dtype=edge_attr_dtype, device=edge_attr_device)
+                            if edge_attr_dim > 0 and old_ts is not None and old_ts.numel() > max(old_s, old_d):
+                                boundary_attr = boundary_attr.clone()
+                                boundary_attr[0] = old_ts[old_d] - old_ts[old_s]
                         new_edge_attrs.append(boundary_attr)
 
                 temporal_store.edge_index = torch.tensor([new_src, new_dst], dtype=torch.long)
@@ -744,35 +791,34 @@ class RansomwareGraphDataset(Dataset):
 
         return self._ensure_api_aux_tensors(data)
 
-    def _targeted_behavior_aware_cap(self, data: HeteroData, graph_id: str) -> HeteroData:
+    def _behavior_aware_api_cap(self, data: HeteroData) -> HeteroData:
         """
-        Cap only specific configured monster graphs, preserving behavioral landmarks.
+        Cap graphs only when API count exceeds threshold, while preserving
+        behavior landmarks and temporal structure.
         """
-        if not getattr(config, "ENABLE_TARGETED_API_CAP", False):
-            return data
-
-        target_ids = set(getattr(config, "TARGETED_API_CAP_IDS", []))
-        if graph_id not in target_ids:
-            return data
+        if not getattr(config, "ENABLE_BEHAVIOR_AWARE_API_CAP", False):
+            return self._ensure_api_aux_tensors(data)
 
         if "api" not in data.node_types or not hasattr(data["api"], "x"):
             return data
 
         num_api = int(data["api"].x.shape[0])
-        max_nodes = int(getattr(config, "TARGETED_API_CAP_MAX_NODES", 100000))
+        threshold = int(getattr(config, "BEHAVIOR_AWARE_API_CAP_THRESHOLD", 100000))
+        max_nodes = int(getattr(config, "BEHAVIOR_AWARE_API_CAP_MAX_NODES", 25000))
 
-        if num_api <= max_nodes:
+        if num_api <= threshold or num_api <= max_nodes:
             return self._ensure_api_aux_tensors(data)
 
-        protected = self._get_behavior_protected_api_indices(data, num_api)
+        if getattr(config, "BEHAVIOR_AWARE_API_CAP_REQUIRE_API_NAMES", False):
+            if not hasattr(data["api"], "api_names"):
+                return self._ensure_api_aux_tensors(data)
 
+        protected = self._get_behavior_protected_api_indices(data, num_api)
         protected_sorted = sorted(i for i in protected if 0 <= i < num_api)
 
         if len(protected_sorted) >= max_nodes:
-            positions = np.linspace(0, len(protected_sorted) - 1, num=max_nodes, dtype=int).tolist()
-            keep_indices = sorted({protected_sorted[p] for p in positions})
-            keep_indices[0] = 0
-            keep_indices[-1] = num_api - 1
+            pos = np.linspace(0, len(protected_sorted) - 1, num=max_nodes, dtype=int).tolist()
+            keep_indices = sorted({protected_sorted[p] for p in pos})
         else:
             keep_set = set(protected_sorted)
             remaining_budget = max_nodes - len(keep_set)
@@ -787,24 +833,28 @@ class RansomwareGraphDataset(Dataset):
                 keep_set.update(sampled)
 
             keep_indices = sorted(keep_set)
-            if 0 not in keep_indices:
-                keep_indices = [0] + keep_indices
-            if (num_api - 1) not in keep_indices:
-                keep_indices.append(num_api - 1)
 
-            if len(keep_indices) > max_nodes:
-                pos = np.linspace(0, len(keep_indices) - 1, num=max_nodes, dtype=int).tolist()
-                keep_indices = sorted({keep_indices[p] for p in pos})
-                if 0 not in keep_indices:
-                    keep_indices[0] = 0
-                if (num_api - 1) not in keep_indices:
-                    keep_indices[-1] = num_api - 1
+        if 0 not in keep_indices:
+            keep_indices = [0] + keep_indices
+        if (num_api - 1) not in keep_indices:
+            keep_indices.append(num_api - 1)
+
+        if len(keep_indices) > max_nodes:
+            pos = np.linspace(0, len(keep_indices) - 1, num=max_nodes, dtype=int).tolist()
+            keep_indices = sorted({keep_indices[p] for p in pos})
+            if 0 not in keep_indices:
+                keep_indices[0] = 0
+            if (num_api - 1) not in keep_indices:
+                keep_indices[-1] = num_api - 1
+
+        segments = self._build_segment_ranges(keep_indices, num_api)
 
         logger.info(
-            f"🔧 Targeted API cap applied to {graph_id}: {num_api} -> {len(keep_indices)} "
-            f"(protected={len(protected_sorted)}, max={max_nodes})"
+            f"🔧 Behavior-aware API cap: {num_api} -> {len(keep_indices)} "
+            f"(protected={len(protected_sorted)}, threshold={threshold}, max={max_nodes})"
         )
-        return self._apply_api_subset(data, keep_indices)
+
+        return self._apply_api_subset(data, keep_indices, aggregate_segments=segments)
 
     def __getitem__(self, idx: int) -> Tuple[HeteroData, int]:
         graph_path = self.graph_files[idx]
@@ -826,12 +876,8 @@ class RansomwareGraphDataset(Dataset):
         if config.NORMALIZE_NODE_FEATURE_DIMS:
             data = normalize_graph_node_features(data, schema=self.schema, inplace=True)
 
-        if getattr(config, "ENABLE_API_RUN_COMPRESSION", False):
-            data = self._compress_consecutive_api_runs(data)
-
-        if getattr(config, "ENABLE_TARGETED_API_CAP", False):
-            data = self._targeted_behavior_aware_cap(data, hash_id)
-
+        data = self._compress_consecutive_api_runs(data)
+        data = self._behavior_aware_api_cap(data)
         data = self._ensure_api_aux_tensors(data)
 
         if self.validate_graphs and config.FAIL_ON_SCHEMA_MISMATCH:
@@ -1268,6 +1314,15 @@ def validate_dataset(data_dir: str = "data", cache_dir: Optional[str] = None):
                             f"{data[node_type].x.shape[1]}-dim"
                         )
 
+                if "api" in data.node_types and hasattr(data["api"], "repeat_count"):
+                    logger.info(
+                        f"      api.repeat_count shape: {tuple(data['api'].repeat_count.shape)}"
+                    )
+                if "api" in data.node_types and hasattr(data["api"], "run_duration"):
+                    logger.info(
+                        f"      api.run_duration shape: {tuple(data['api'].run_duration.shape)}"
+                    )
+
                 for edge_type in data.edge_types:
                     if "temporal" in edge_type[1]:
                         num_edges = data[edge_type].edge_index.shape[1]
@@ -1301,6 +1356,11 @@ def validate_dataset(data_dir: str = "data", cache_dir: Optional[str] = None):
         for node_type in batch.node_types:
             if hasattr(batch[node_type], "x"):
                 logger.info(f"  {node_type} nodes in batch: {batch[node_type].x.shape[0]}")
+
+        if "api" in batch.node_types and hasattr(batch["api"], "repeat_count"):
+            logger.info(f"  api.repeat_count in batch: {tuple(batch['api'].repeat_count.shape)}")
+        if "api" in batch.node_types and hasattr(batch["api"], "run_duration"):
+            logger.info(f"  api.run_duration in batch: {tuple(batch['api'].run_duration.shape)}")
 
         logger.info("\n✅ HeteroData validation complete!")
         return True
