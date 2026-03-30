@@ -371,17 +371,14 @@ MEMORY_COMMON_TOKEN_WRITE_CAP = 0.25
 #   keep graph structure exactly as-is
 # If True:
 #   compress only strictly redundant consecutive API runs
-ENABLE_API_RUN_COMPRESSION = True
+ENABLE_TARGETED_API_CAP = True
 
-# Compression safety rules
-API_RUN_COMPRESSION_REQUIRE_API_NAMES = True
-API_RUN_COMPRESSION_METADATA_START_DIM = 768   # metadata tail starts after embedding part
-API_RUN_COMPRESSION_METADATA_ATOL = 1e-6
+# Cap only these known monster train graphs first
+TARGETED_API_CAP_IDS = {
+    "d6b6cf19c0b8c9752ec92541c6b543e7",
+    "fb34939a4ed0bd56486a733570c48f66",
+    "d8afd8283e2cc8cf23b43e6114e3713f",
+}
 
-# Only compress if consecutive repeated calls are also temporally close
-API_RUN_COMPRESSION_USE_TIME_GAP = True
-API_RUN_COMPRESSION_MAX_TIME_GAP = 1.0
-
-# Store auxiliary tensors for future model use
-# These do NOT change api.x dimensionality, so schema stays stable.
-API_RUN_COMPRESSION_STORE_AUX = True
+# Initial conservative cap
+TARGETED_API_CAP_MAX_NODES = 100000

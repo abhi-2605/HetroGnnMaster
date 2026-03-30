@@ -1,0 +1,350 @@
+python -m scripts.analyze_api_node_counts
+==========================================================================================
+API NODE COUNT ANALYSIS
+==========================================================================================
+Graph root: /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched
+Scanning split: /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train
+Scanning split: /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val
+Scanning split: /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test
+
+==========================================================================================
+SPLIT: TRAIN
+==========================================================================================
+Total graphs              : 5919
+Average api node count    : 4680.33
+Median api node count     : 1755
+Std dev                   : 23816.97
+Minimum api node count    : 1
+Maximum api node count    : 1536476
+Max count occurrences     : 1
+Min count occurrences     : 100
+
+Percentiles
+  p50  : 1755.00
+  p75  : 5461.00
+  p90  : 10000.00
+  p95  : 10000.00
+  p99  : 35928.48
+  p99.5: 73465.21
+  p99.9: 165337.92
+
+Graphs with MAX api node count
+  d6b6cf19c0b8c9752ec92541c6b543e7  | api_nodes=1536476 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/d6b6cf19c0b8c9752ec92541c6b543e7.pkl
+
+Graphs with MIN api node count
+  1004  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/1004.pkl
+  1016  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/1016.pkl
+  1019  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/1019.pkl
+  102  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/102.pkl
+  152  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/152.pkl
+  171  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/171.pkl
+  187  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/187.pkl
+  193  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/193.pkl
+  210  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/210.pkl
+  227  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/227.pkl
+  230  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/230.pkl
+  232  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/232.pkl
+  262  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/262.pkl
+  2ad026fa67884af1393d0991d9629a22  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/2ad026fa67884af1393d0991d9629a22.pkl
+  2e1da394712d955cf0916d29b1b9bef9  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/2e1da394712d955cf0916d29b1b9bef9.pkl
+  354  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/354.pkl
+  358  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/358.pkl
+  359  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/359.pkl
+  362  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/362.pkl
+  364  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/364.pkl
+  ... and 80 more
+
+Top 20 largest graphs by api node count
+  #01  d6b6cf19c0b8c9752ec92541c6b543e7  | api_nodes=1536476 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/d6b6cf19c0b8c9752ec92541c6b543e7.pkl
+  #02  fb34939a4ed0bd56486a733570c48f66  | api_nodes=536107 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/fb34939a4ed0bd56486a733570c48f66.pkl
+  #03  d8afd8283e2cc8cf23b43e6114e3713f  | api_nodes=392827 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/d8afd8283e2cc8cf23b43e6114e3713f.pkl
+  #04  229  | api_nodes=207703 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/229.pkl
+  #05  570  | api_nodes=173922 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/570.pkl
+  #06  270  | api_nodes=169468 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/270.pkl
+  #07  305  | api_nodes=164969 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/305.pkl
+  #08  5f92fe27b92db089691dd30f543085fd  | api_nodes=158023 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/5f92fe27b92db089691dd30f543085fd.pkl
+  #09  773  | api_nodes=147774 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/773.pkl
+  #10  0dd1ede1018e0b309bbf7aaab0703b59  | api_nodes=147069 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/0dd1ede1018e0b309bbf7aaab0703b59.pkl
+  #11  d066da44570a5faa90525f56a83a0a91  | api_nodes=146812 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/d066da44570a5faa90525f56a83a0a91.pkl
+  #12  57  | api_nodes=138752 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/57.pkl
+  #13  353  | api_nodes=137950 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/353.pkl
+  #14  335  | api_nodes=134004 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/335.pkl
+  #15  18a77aca029f7db6a49768a91fd0ab8d  | api_nodes=125635 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/18a77aca029f7db6a49768a91fd0ab8d.pkl
+  #16  fa651a26b5328900f149bbf9f3992028  | api_nodes=114780 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/fa651a26b5328900f149bbf9f3992028.pkl
+  #17  80a83851c8bcdb9461740f3f038d0a86  | api_nodes=112244 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/80a83851c8bcdb9461740f3f038d0a86.pkl
+  #18  321b3a2e418a81a05fea2a363dacea55  | api_nodes=109054 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/321b3a2e418a81a05fea2a363dacea55.pkl
+  #19  4fe9899a3214e3fa672f75ad9656da8c  | api_nodes=108325 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/4fe9899a3214e3fa672f75ad9656da8c.pkl
+  #20  26  | api_nodes=107316 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/26.pkl
+
+Most common api node counts
+  api_nodes=10000    -> 719 graphs
+  api_nodes=1        -> 100 graphs
+  api_nodes=51       -> 25 graphs
+  api_nodes=50       -> 23 graphs
+  api_nodes=55       -> 23 graphs
+  api_nodes=788      -> 23 graphs
+  api_nodes=818      -> 22 graphs
+  api_nodes=815      -> 21 graphs
+  api_nodes=37       -> 21 graphs
+  api_nodes=806      -> 20 graphs
+  api_nodes=819      -> 20 graphs
+  api_nodes=42       -> 19 graphs
+  api_nodes=150      -> 18 graphs
+  api_nodes=816      -> 17 graphs
+  api_nodes=41       -> 16 graphs
+
+==========================================================================================
+SPLIT: VAL
+==========================================================================================
+Total graphs              : 1256
+Average api node count    : 4102.06
+Median api node count     : 1707.5
+Std dev                   : 8719.94
+Minimum api node count    : 1
+Maximum api node count    : 140402
+Max count occurrences     : 1
+Min count occurrences     : 23
+
+Percentiles
+  p50  : 1707.50
+  p75  : 5060.75
+  p90  : 10000.00
+  p95  : 10000.00
+  p99  : 29790.00
+  p99.5: 51185.20
+  p99.9: 121961.64
+
+Graphs with MAX api node count
+  937  | api_nodes=140402 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/937.pkl
+
+Graphs with MIN api node count
+  1018  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1018.pkl
+  1025  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1025.pkl
+  120  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/120.pkl
+  142  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/142.pkl
+  211  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/211.pkl
+  254  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/254.pkl
+  28365ecba0ca27c85634e8747b147730  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/28365ecba0ca27c85634e8747b147730.pkl
+  314  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/314.pkl
+  331  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/331.pkl
+  365  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/365.pkl
+  43  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/43.pkl
+  4a5efb20daee57d1ca64637c24fac8b7  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4a5efb20daee57d1ca64637c24fac8b7.pkl
+  507  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/507.pkl
+  55  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/55.pkl
+  57cac848fa14ae38f14f9441f8933282  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/57cac848fa14ae38f14f9441f8933282.pkl
+  73f084d9113acb59c4009027d5fcf946  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/73f084d9113acb59c4009027d5fcf946.pkl
+  8715b4c9984e7f34ff80bab9cf2f7a7a  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/8715b4c9984e7f34ff80bab9cf2f7a7a.pkl
+  906  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/906.pkl
+  916  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/916.pkl
+  b34dc3c74aea78e5bf4d9854ac7e95ef  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/b34dc3c74aea78e5bf4d9854ac7e95ef.pkl
+  ... and 3 more
+
+Top 20 largest graphs by api node count
+  #01  937  | api_nodes=140402 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/937.pkl
+  #02  ab0a854e7740a4e78e3e5e5e380353fa  | api_nodes=126226 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/ab0a854e7740a4e78e3e5e5e380353fa.pkl
+  #03  529  | api_nodes=109503 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/529.pkl
+  #04  111449a95c0eef0b0af1fa3b542d49f9  | api_nodes=102884 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/111449a95c0eef0b0af1fa3b542d49f9.pkl
+  #05  593  | api_nodes=79603 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/593.pkl
+  #06  355  | api_nodes=62953 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/355.pkl
+  #07  3d6ca5e5367eb7ba518598f2e8a2d43f  | api_nodes=51678 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/3d6ca5e5367eb7ba518598f2e8a2d43f.pkl
+  #08  539  | api_nodes=49886 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/539.pkl
+  #09  f3b146b2fb2333c834c269d51b57e585  | api_nodes=43310 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/f3b146b2fb2333c834c269d51b57e585.pkl
+  #10  770  | api_nodes=42797 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/770.pkl
+  #11  4dad3561973722bab2bd65db140e9ab9  | api_nodes=36881 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4dad3561973722bab2bd65db140e9ab9.pkl
+  #12  b736ed75d84246b57be9f1366dcb9e00  | api_nodes=34219 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/b736ed75d84246b57be9f1366dcb9e00.pkl
+  #13  181c13b40d217be4e16ec6eed027a34c  | api_nodes=30736 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/181c13b40d217be4e16ec6eed027a34c.pkl
+  #14  9a794e62a64548399887b97781ac58a3  | api_nodes=29016 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/9a794e62a64548399887b97781ac58a3.pkl
+  #15  c0b826afa4765bb24ca3327c3358b093  | api_nodes=28679 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/c0b826afa4765bb24ca3327c3358b093.pkl
+  #16  605  | api_nodes=25288 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/605.pkl
+  #17  887  | api_nodes=24996 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/887.pkl
+  #18  e4090fa0f2368bf1e2fd850de51b9267  | api_nodes=24808 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/e4090fa0f2368bf1e2fd850de51b9267.pkl
+  #19  945  | api_nodes=23553 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/945.pkl
+  #20  414  | api_nodes=23327 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/414.pkl
+
+Most common api node counts
+  api_nodes=10000    -> 148 graphs
+  api_nodes=1        -> 23 graphs
+  api_nodes=814      -> 6 graphs
+  api_nodes=50       -> 6 graphs
+  api_nodes=789      -> 5 graphs
+  api_nodes=38       -> 5 graphs
+  api_nodes=786      -> 5 graphs
+  api_nodes=37       -> 5 graphs
+  api_nodes=51       -> 4 graphs
+  api_nodes=267      -> 4 graphs
+  api_nodes=33       -> 4 graphs
+  api_nodes=56       -> 4 graphs
+  api_nodes=344      -> 4 graphs
+  api_nodes=23       -> 4 graphs
+  api_nodes=352      -> 4 graphs
+
+==========================================================================================
+SPLIT: TEST
+==========================================================================================
+Total graphs              : 1285
+Average api node count    : 4456.36
+Median api node count     : 1573
+Std dev                   : 12853.77
+Minimum api node count    : 1
+Maximum api node count    : 238389
+Max count occurrences     : 1
+Min count occurrences     : 19
+
+Percentiles
+  p50  : 1573.00
+  p75  : 5091.00
+  p90  : 10000.00
+  p95  : 10000.00
+  p99  : 34627.68
+  p99.5: 84838.76
+  p99.9: 171730.37
+
+Graphs with MAX api node count
+  96589565507744cb7e99d72eb8e5906a  | api_nodes=238389 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/96589565507744cb7e99d72eb8e5906a.pkl
+
+Graphs with MIN api node count
+  123  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/123.pkl
+  162  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/162.pkl
+  165  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/165.pkl
+  25  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/25.pkl
+  250  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/250.pkl
+  313  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/313.pkl
+  487  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/487.pkl
+  512  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/512.pkl
+  585  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/585.pkl
+  614  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/614.pkl
+  709  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/709.pkl
+  739  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/739.pkl
+  785  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/785.pkl
+  786  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/786.pkl
+  789  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/789.pkl
+  797  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/797.pkl
+  838  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/838.pkl
+  918  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/918.pkl
+  979  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/979.pkl
+
+Top 20 largest graphs by api node count
+  #01  96589565507744cb7e99d72eb8e5906a  | api_nodes=238389 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/96589565507744cb7e99d72eb8e5906a.pkl
+  #02  7172d6bc93e15b8d8594e2537c09a0c7  | api_nodes=178821 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7172d6bc93e15b8d8594e2537c09a0c7.pkl
+  #03  9dda048e5bff1e5f233670cfa9bff1a6  | api_nodes=153854 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/9dda048e5bff1e5f233670cfa9bff1a6.pkl
+  #04  dcaa9fd0f6da052f09bcaad87a2db219  | api_nodes=153274 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/dcaa9fd0f6da052f09bcaad87a2db219.pkl
+  #05  343  | api_nodes=131632 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/343.pkl
+  #06  527  | api_nodes=115823 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/527.pkl
+  #07  656e618ee02e71760f36d25aa3e1f34b  | api_nodes=87116 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/656e618ee02e71760f36d25aa3e1f34b.pkl
+  #08  f9552c49e355b065cfa9def59b7dd050  | api_nodes=81694 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/f9552c49e355b065cfa9def59b7dd050.pkl
+  #09  8bfc3272bd408849393cbfc58a06e670  | api_nodes=78341 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/8bfc3272bd408849393cbfc58a06e670.pkl
+  #10  5cdf106bf92c65c5b73e4c87138a85df  | api_nodes=75071 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5cdf106bf92c65c5b73e4c87138a85df.pkl
+  #11  22ee41b958515479e5c2e43635d77a9e  | api_nodes=64012 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/22ee41b958515479e5c2e43635d77a9e.pkl
+  #12  137c73503ffb5eefe9c3a0fbedb93ebc  | api_nodes=52406 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/137c73503ffb5eefe9c3a0fbedb93ebc.pkl
+  #13  7dc38c40c521f8f57b961c1fc1f808e5  | api_nodes=51321 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7dc38c40c521f8f57b961c1fc1f808e5.pkl
+  #14  749  | api_nodes=31448 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/749.pkl
+  #15  3  | api_nodes=29848 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3.pkl
+  #16  ec5c49f9fa8d871d1937148b9f55f01c  | api_nodes=29629 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/ec5c49f9fa8d871d1937148b9f55f01c.pkl
+  #17  817cb2d8d2f58648b7728b0c7c47c3d8  | api_nodes=28138 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/817cb2d8d2f58648b7728b0c7c47c3d8.pkl
+  #18  5af6b376e660805759683865437acbc0  | api_nodes=27476 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5af6b376e660805759683865437acbc0.pkl
+  #19  703  | api_nodes=26868 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/703.pkl
+  #20  259fa8fd25cb041c0d6c2412f342bd88  | api_nodes=21387 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/259fa8fd25cb041c0d6c2412f342bd88.pkl
+
+Most common api node counts
+  api_nodes=10000    -> 163 graphs
+  api_nodes=1        -> 19 graphs
+  api_nodes=50       -> 9 graphs
+  api_nodes=823      -> 8 graphs
+  api_nodes=394      -> 6 graphs
+  api_nodes=20       -> 6 graphs
+  api_nodes=824      -> 6 graphs
+  api_nodes=806      -> 5 graphs
+  api_nodes=37       -> 5 graphs
+  api_nodes=42       -> 5 graphs
+  api_nodes=786      -> 5 graphs
+  api_nodes=52       -> 5 graphs
+  api_nodes=391      -> 4 graphs
+  api_nodes=856      -> 4 graphs
+  api_nodes=150      -> 4 graphs
+
+==========================================================================================
+OVERALL SUMMARY
+==========================================================================================
+Total graphs              : 8460
+Average api node count    : 4560.46
+Median api node count     : 1734.5
+Std dev                   : 20815.85
+Minimum api node count    : 1
+Maximum api node count    : 1536476
+Max count occurrences     : 1
+Min count occurrences     : 142
+
+Percentiles
+  p50  : 1734.50
+  p75  : 5296.25
+  p90  : 10000.00
+  p95  : 10000.00
+  p99  : 34831.13
+  p99.5: 77376.35
+  p99.9: 161780.79
+
+Graphs with MAX api node count
+  d6b6cf19c0b8c9752ec92541c6b543e7  | api_nodes=1536476 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/d6b6cf19c0b8c9752ec92541c6b543e7.pkl
+
+Graphs with MIN api node count
+  1004  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/1004.pkl
+  1016  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/1016.pkl
+  1019  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/1019.pkl
+  102  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/102.pkl
+  152  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/152.pkl
+  171  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/171.pkl
+  187  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/187.pkl
+  193  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/193.pkl
+  210  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/210.pkl
+  227  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/227.pkl
+  230  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/230.pkl
+  232  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/232.pkl
+  262  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/262.pkl
+  2ad026fa67884af1393d0991d9629a22  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/2ad026fa67884af1393d0991d9629a22.pkl
+  2e1da394712d955cf0916d29b1b9bef9  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/2e1da394712d955cf0916d29b1b9bef9.pkl
+  354  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/354.pkl
+  358  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/358.pkl
+  359  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/359.pkl
+  362  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/362.pkl
+  364  | api_nodes=1 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/364.pkl
+  ... and 122 more
+
+Top 20 largest graphs by api node count
+  #01  d6b6cf19c0b8c9752ec92541c6b543e7  | api_nodes=1536476 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/d6b6cf19c0b8c9752ec92541c6b543e7.pkl
+  #02  fb34939a4ed0bd56486a733570c48f66  | api_nodes=536107 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/fb34939a4ed0bd56486a733570c48f66.pkl
+  #03  d8afd8283e2cc8cf23b43e6114e3713f  | api_nodes=392827 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/d8afd8283e2cc8cf23b43e6114e3713f.pkl
+  #04  96589565507744cb7e99d72eb8e5906a  | api_nodes=238389 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/96589565507744cb7e99d72eb8e5906a.pkl
+  #05  229  | api_nodes=207703 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/229.pkl
+  #06  7172d6bc93e15b8d8594e2537c09a0c7  | api_nodes=178821 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7172d6bc93e15b8d8594e2537c09a0c7.pkl
+  #07  570  | api_nodes=173922 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/570.pkl
+  #08  270  | api_nodes=169468 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/270.pkl
+  #09  305  | api_nodes=164969 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/305.pkl
+  #10  5f92fe27b92db089691dd30f543085fd  | api_nodes=158023 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/5f92fe27b92db089691dd30f543085fd.pkl
+  #11  9dda048e5bff1e5f233670cfa9bff1a6  | api_nodes=153854 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/9dda048e5bff1e5f233670cfa9bff1a6.pkl
+  #12  dcaa9fd0f6da052f09bcaad87a2db219  | api_nodes=153274 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/dcaa9fd0f6da052f09bcaad87a2db219.pkl
+  #13  773  | api_nodes=147774 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/773.pkl
+  #14  0dd1ede1018e0b309bbf7aaab0703b59  | api_nodes=147069 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/0dd1ede1018e0b309bbf7aaab0703b59.pkl
+  #15  d066da44570a5faa90525f56a83a0a91  | api_nodes=146812 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/d066da44570a5faa90525f56a83a0a91.pkl
+  #16  937  | api_nodes=140402 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/937.pkl
+  #17  57  | api_nodes=138752 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/57.pkl
+  #18  353  | api_nodes=137950 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/353.pkl
+  #19  335  | api_nodes=134004 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/train/335.pkl
+  #20  343  | api_nodes=131632 | /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/343.pkl
+
+Most common api node counts
+  api_nodes=10000    -> 1030 graphs
+  api_nodes=1        -> 142 graphs
+  api_nodes=50       -> 38 graphs
+  api_nodes=51       -> 32 graphs
+  api_nodes=37       -> 31 graphs
+  api_nodes=55       -> 29 graphs
+  api_nodes=42       -> 27 graphs
+  api_nodes=788      -> 27 graphs
+  api_nodes=806      -> 26 graphs
+  api_nodes=819      -> 26 graphs
+  api_nodes=815      -> 26 graphs
+  api_nodes=818      -> 26 graphs
+  api_nodes=823      -> 25 graphs
+  api_nodes=394      -> 24 graphs
+  api_nodes=814      -> 24 graphs
