@@ -410,7 +410,7 @@ ENABLE_BUCKETED_BATCH_SAMPLER = True
 # Buckets are evaluated in order.
 ENABLE_BUCKETED_BATCH_SAMPLER = True
 BUCKETED_BATCH_RULES = [
-    (10_000, 48),
+    (10_000, 64),
     (25_000, 16),
     (50_000, 8),
     (100_000, 4),
