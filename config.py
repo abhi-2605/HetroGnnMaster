@@ -243,7 +243,7 @@ FOCAL_ALPHA = [0.45, 0.30, 0.25]
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True
 OVERSAMPLE_WEIGHTS = {
-    0: 9,
+    0: 15,
     1: 5.0,
     2: 0.7,
 }
