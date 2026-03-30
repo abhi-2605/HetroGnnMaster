@@ -396,3 +396,25 @@ BEHAVIOR_AWARE_API_CAP_PROTECT_TIME_SPIKES = True
 BEHAVIOR_AWARE_API_CAP_TIME_SPIKE_QUANTILE = 0.95
 BEHAVIOR_AWARE_API_CAP_REQUIRE_API_NAMES = False
 TARGETED_API_CAP_MAX_NODES = 100000
+
+
+
+# ============================================
+# BUCKETED SIZE-AWARE BATCHING
+# ============================================
+ENABLE_BUCKETED_BATCH_SAMPLER = True
+
+# Policy is based on API node count after any compression / behavior-aware cap.
+# Format: (max_api_nodes_in_bucket, batch_size_for_that_bucket)
+# Buckets are evaluated in order.
+ENABLE_BUCKETED_BATCH_SAMPLER = True
+BUCKETED_BATCH_RULES = [
+    (10_000, 32),
+    (25_000, 16),
+    (50_000, 8),
+    (100_000, 4),
+    (10_000_000, 1),
+]
+BUCKETED_BATCH_SHUFFLE = True
+BUCKETED_BATCH_USE_WEIGHTS = True
+BUCKETED_BATCH_VERBOSE = True

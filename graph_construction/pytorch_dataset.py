@@ -44,8 +44,13 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+# ============================================================================
+# Samplers
+# ============================================================================
+
 class SizeAwareBatchSampler(Sampler):
     """
+    Legacy sampler:
     Each batch = 1 large graph + (batch_size-1) small graphs.
     Uses file size on disk as proxy.
     Optionally accepts per-sample weights for weighted oversampling.
@@ -122,12 +127,191 @@ class SizeAwareBatchSampler(Sampler):
         return len(self.large_i)
 
 
+class BucketedBatchSampler(Sampler):
+    """
+    Bucketed batch sampler based on API node counts.
+
+    Uses per-graph API node count to assign samples into buckets, each with
+    its own batch size.
+
+    Expected config:
+        ENABLE_BUCKETED_BATCH_SAMPLER = True
+        BUCKETED_BATCH_RULES = [
+            (10_000, 32),
+            (25_000, 16),
+            (50_000, 8),
+            (100_000, 4),
+            (10_000_000, 1),
+        ]
+    """
+
+    def __init__(
+        self,
+        dataset,
+        bucket_rules=None,
+        shuffle=True,
+        weights=None,
+        verbose=True,
+    ):
+        self.dataset = dataset
+        self.bucket_rules = bucket_rules or list(getattr(config, "BUCKETED_BATCH_RULES", []))
+        self.shuffle = shuffle
+        self.weights = np.array(weights, dtype=np.float64) if weights is not None else None
+        self.verbose = verbose
+
+        print("📏 Measuring API node counts for bucketed batching...")
+        self.api_counts = self._measure_api_counts()
+        self.buckets = self._build_buckets()
+
+        self._num_batches = sum(
+            int(np.ceil(len(bucket["indices"]) / bucket["batch_size"]))
+            for bucket in self.buckets
+            if len(bucket["indices"]) > 0
+        )
+
+        if self.verbose:
+            self._print_summary()
+
+    def _measure_api_counts(self) -> np.ndarray:
+        counts = []
+
+        for graph_path in self.dataset.graph_files:
+            try:
+                with open(graph_path, "rb") as f:
+                    data = pickle.load(f)
+
+                if isinstance(data, HeteroData) and "api" in data.node_types and hasattr(data["api"], "x"):
+                    x = data["api"].x
+                    n = int(x.shape[0]) if isinstance(x, torch.Tensor) else 0
+                else:
+                    n = 0
+            except Exception:
+                n = 0
+
+            counts.append(n)
+
+        return np.array(counts, dtype=np.int64)
+
+    def _build_buckets(self):
+        buckets = []
+        remaining_indices = np.arange(len(self.api_counts))
+        lower_bound = -1
+
+        for max_nodes, batch_size in self.bucket_rules:
+            mask = (
+                (self.api_counts[remaining_indices] > lower_bound) &
+                (self.api_counts[remaining_indices] <= max_nodes)
+            )
+            bucket_indices = remaining_indices[mask].tolist()
+
+            buckets.append(
+                {
+                    "max_nodes": max_nodes,
+                    "batch_size": int(batch_size),
+                    "indices": bucket_indices,
+                }
+            )
+
+            remaining_indices = remaining_indices[~mask]
+            lower_bound = max_nodes
+
+        if len(remaining_indices) > 0:
+            fallback_bs = int(self.bucket_rules[-1][1]) if len(self.bucket_rules) > 0 else 1
+            buckets.append(
+                {
+                    "max_nodes": float("inf"),
+                    "batch_size": fallback_bs,
+                    "indices": remaining_indices.tolist(),
+                }
+            )
+
+        return buckets
+
+    def _make_batches_for_bucket(self, bucket):
+        indices = bucket["indices"].copy()
+        batch_size = bucket["batch_size"]
+
+        if len(indices) == 0:
+            return []
+
+        if self.weights is not None and getattr(config, "BUCKETED_BATCH_USE_WEIGHTS", True):
+            bucket_weights = self.weights[indices]
+            bucket_weights = bucket_weights / bucket_weights.sum()
+
+            sampled = np.random.choice(
+                indices,
+                size=len(indices),
+                replace=True,
+                p=bucket_weights,
+            ).tolist()
+
+            if self.shuffle:
+                np.random.shuffle(sampled)
+
+            indices = sampled
+        else:
+            if self.shuffle:
+                np.random.shuffle(indices)
+
+        return [indices[i:i + batch_size] for i in range(0, len(indices), batch_size)]
+
+    def _print_summary(self):
+        print("📦 Bucketed batch sampler summary:")
+        total_graphs = len(self.api_counts)
+        lower = 0
+
+        for i, bucket in enumerate(self.buckets):
+            idxs = bucket["indices"]
+            bs = bucket["batch_size"]
+            max_nodes = bucket["max_nodes"]
+
+            count = len(idxs)
+            avg_nodes = float(self.api_counts[idxs].mean()) if count > 0 else 0.0
+
+            upper_txt = "inf" if max_nodes == float("inf") else f"{max_nodes:,}"
+            if i == 0:
+                label = f"<= {upper_txt}"
+            else:
+                label = f"{lower + 1:,} .. {upper_txt}"
+
+            pct = 100.0 * count / max(1, total_graphs)
+            print(
+                f"   Bucket {i + 1}: api_nodes {label:<18} | "
+                f"graphs={count:<5} ({pct:5.1f}%) | "
+                f"batch_size={bs:<2} | avg_nodes={avg_nodes:,.1f}"
+            )
+
+            if max_nodes != float("inf"):
+                lower = max_nodes
+
+        print(f"   Total batches per epoch: {self._num_batches:,}")
+
+    def __iter__(self):
+        all_batches = []
+
+        for bucket in self.buckets:
+            all_batches.extend(self._make_batches_for_bucket(bucket))
+
+        if self.shuffle:
+            np.random.shuffle(all_batches)
+
+        for batch in all_batches:
+            yield batch
+
+    def __len__(self):
+        return self._num_batches
+
+
 CLASS_NAMES = {
     0: "Ransomware",
     1: "Benign",
     2: "Other Malware",
 }
 
+
+# ============================================================================
+# Dataset
+# ============================================================================
 
 class RansomwareGraphDataset(Dataset):
     """
@@ -205,6 +389,10 @@ class RansomwareGraphDataset(Dataset):
 
     def __len__(self) -> int:
         return len(self.graph_files)
+
+    # ----------------------------------------------------------------------
+    # Timestamp recovery
+    # ----------------------------------------------------------------------
 
     def _ensure_api_timestamps(self, data: HeteroData) -> HeteroData:
         """
@@ -289,6 +477,10 @@ class RansomwareGraphDataset(Dataset):
 
         return data
 
+    # ----------------------------------------------------------------------
+    # Auxiliary tensors
+    # ----------------------------------------------------------------------
+
     def _ensure_api_aux_tensors(self, data: HeteroData) -> HeteroData:
         """
         Ensure repeat_count and run_duration exist on api store so PyG batching
@@ -312,6 +504,10 @@ class RansomwareGraphDataset(Dataset):
             data["api"].run_duration = torch.zeros(n, dtype=torch.float32)
 
         return data
+
+    # ----------------------------------------------------------------------
+    # Conservative run compression
+    # ----------------------------------------------------------------------
 
     def _build_api_local_signatures(self, data: HeteroData, num_api: int) -> List[tuple]:
         signatures = [defaultdict(int) for _ in range(num_api)]
@@ -448,8 +644,6 @@ class RansomwareGraphDataset(Dataset):
                 boundary_attr = old_temporal_attr_map.get((cur_end, nxt_start), None)
                 if boundary_attr is None:
                     boundary_attr = torch.zeros(edge_attr_dim, dtype=edge_attr_dtype, device=edge_attr_device)
-                    if edge_attr_dim > 0 and hasattr(api_store, "timestamps") and isinstance(api_store.timestamps, torch.Tensor):
-                        pass
                 new_edge_attrs.append(boundary_attr)
 
         temporal_store.edge_index = torch.tensor([new_src, new_dst], dtype=torch.long)
@@ -550,8 +744,16 @@ class RansomwareGraphDataset(Dataset):
                 edge_index[1] = old_to_new[edge_index[1]]
             store.edge_index = edge_index
 
+            if hasattr(store, "edge_attr") and isinstance(store.edge_attr, torch.Tensor):
+                if store.edge_attr.size(0) == store.edge_index.size(1):
+                    pass
+
         data = self._rebuild_temporal_chain_after_compression(data, runs)
         return self._ensure_api_aux_tensors(data)
+
+    # ----------------------------------------------------------------------
+    # Behavior-aware cap
+    # ----------------------------------------------------------------------
 
     def _get_behavior_protected_api_indices(self, data: HeteroData, num_api: int) -> Set[int]:
         protected: Set[int] = set()
@@ -666,9 +868,21 @@ class RansomwareGraphDataset(Dataset):
         old_to_new[keep_t] = torch.arange(len(keep_indices), dtype=torch.long)
 
         old_x = api_store.x
-        old_ts = api_store.timestamps.clone() if hasattr(api_store, "timestamps") and isinstance(api_store.timestamps, torch.Tensor) else None
-        old_repeat = api_store.repeat_count.clone() if hasattr(api_store, "repeat_count") and isinstance(api_store.repeat_count, torch.Tensor) else torch.ones(old_num_api, dtype=torch.float32)
-        old_run_dur = api_store.run_duration.clone() if hasattr(api_store, "run_duration") and isinstance(api_store.run_duration, torch.Tensor) else torch.zeros(old_num_api, dtype=torch.float32)
+        old_ts = (
+            api_store.timestamps.clone()
+            if hasattr(api_store, "timestamps") and isinstance(api_store.timestamps, torch.Tensor)
+            else None
+        )
+        old_repeat = (
+            api_store.repeat_count.clone()
+            if hasattr(api_store, "repeat_count") and isinstance(api_store.repeat_count, torch.Tensor)
+            else torch.ones(old_num_api, dtype=torch.float32)
+        )
+        old_run_dur = (
+            api_store.run_duration.clone()
+            if hasattr(api_store, "run_duration") and isinstance(api_store.run_duration, torch.Tensor)
+            else torch.zeros(old_num_api, dtype=torch.float32)
+        )
         old_api_names = list(api_store.api_names) if hasattr(api_store, "api_names") else None
 
         api_store.x = old_x[keep_t]
@@ -690,11 +904,11 @@ class RansomwareGraphDataset(Dataset):
             agg_duration = []
 
             for start, end in aggregate_segments:
-                agg_repeat.append(float(old_repeat[start : end + 1].sum().item()))
+                agg_repeat.append(float(old_repeat[start:end + 1].sum().item()))
                 if old_ts is not None:
                     agg_duration.append(float(old_ts[end].item() - old_ts[start].item()))
                 else:
-                    agg_duration.append(float(old_run_dur[start : end + 1].sum().item()))
+                    agg_duration.append(float(old_run_dur[start:end + 1].sum().item()))
 
             api_store.repeat_count = torch.tensor(agg_repeat, dtype=torch.float32)
             api_store.run_duration = torch.tensor(agg_duration, dtype=torch.float32)
@@ -780,7 +994,7 @@ class RansomwareGraphDataset(Dataset):
                         boundary_attr = old_temporal_attr_map.get((old_s, old_d), None)
                         if boundary_attr is None:
                             boundary_attr = torch.zeros(edge_attr_dim, dtype=edge_attr_dtype, device=edge_attr_device)
-                            if edge_attr_dim > 0 and old_ts is not None and old_ts.numel() > max(old_s, old_d):
+                            if old_ts is not None and old_ts.numel() > max(old_s, old_d):
                                 boundary_attr = boundary_attr.clone()
                                 boundary_attr[0] = old_ts[old_d] - old_ts[old_s]
                         new_edge_attrs.append(boundary_attr)
@@ -855,6 +1069,10 @@ class RansomwareGraphDataset(Dataset):
         )
 
         return self._apply_api_subset(data, keep_indices, aggregate_segments=segments)
+
+    # ----------------------------------------------------------------------
+    # Public dataset path
+    # ----------------------------------------------------------------------
 
     def __getitem__(self, idx: int) -> Tuple[HeteroData, int]:
         graph_path = self.graph_files[idx]
@@ -975,6 +1193,10 @@ class RansomwareGraphDataset(Dataset):
         return stats
 
 
+# ============================================================================
+# Collate helpers
+# ============================================================================
+
 def _clean_graph_for_batching(graph: HeteroData) -> HeteroData:
     """
     Remove non-tensor attrs that break PyG batching, while preserving
@@ -1073,6 +1295,9 @@ def hetero_collate(
     validate_batch: bool = True,
 ):
     schema = schema if schema is not None else get_active_schema()
+
+    if not batch:
+        return None, None
 
     graphs = [item[0] for item in batch]
     labels = torch.tensor([item[1] for item in batch], dtype=torch.long)
@@ -1173,6 +1398,10 @@ def hetero_collate(
     return batched_graph, labels
 
 
+# ============================================================================
+# Dataloaders
+# ============================================================================
+
 def create_dataloaders(
     data_dir: str = "data",
     cache_dir: Optional[str] = None,
@@ -1225,20 +1454,54 @@ def create_dataloaders(
                 logger.info(f"  Node types: {stats['node_types']}")
                 logger.info(f"  Edge types: {len(stats['edge_types'])} types")
 
-        train_loader = DataLoader(
-            train_dataset,
-            batch_size=batch_size,
-            shuffle=shuffle_train,
-            num_workers=num_workers,
-            collate_fn=lambda batch: hetero_collate(batch, schema=schema, validate_batch=True),
-        )
+        collate = lambda batch: hetero_collate(batch, schema=schema, validate_batch=True)
+
+        sample_weights = None
+        if getattr(config, "USE_WEIGHTED_SAMPLING", False):
+            sample_weights = [
+                config.OVERSAMPLE_WEIGHTS.get(train_dataset.labels.get(graph_file.stem, 2), 1.0)
+                for graph_file in train_dataset.graph_files
+            ]
+
+        if getattr(config, "ENABLE_BUCKETED_BATCH_SAMPLER", False):
+            train_batch_sampler = BucketedBatchSampler(
+                train_dataset,
+                bucket_rules=getattr(config, "BUCKETED_BATCH_RULES", None),
+                shuffle=getattr(config, "BUCKETED_BATCH_SHUFFLE", True),
+                weights=sample_weights,
+                verbose=getattr(config, "BUCKETED_BATCH_VERBOSE", True),
+            )
+
+            train_loader = DataLoader(
+                train_dataset,
+                batch_sampler=train_batch_sampler,
+                num_workers=num_workers,
+                collate_fn=collate,
+                pin_memory=getattr(config, "PIN_MEMORY", False),
+                prefetch_factor=getattr(config, "PREFETCH_FACTOR", 2) if num_workers > 0 else None,
+                persistent_workers=getattr(config, "PERSISTENT_WORKERS", False) if num_workers > 0 else False,
+            )
+        else:
+            train_loader = DataLoader(
+                train_dataset,
+                batch_size=batch_size,
+                shuffle=shuffle_train,
+                num_workers=num_workers,
+                collate_fn=collate,
+                pin_memory=getattr(config, "PIN_MEMORY", False),
+                prefetch_factor=getattr(config, "PREFETCH_FACTOR", 2) if num_workers > 0 else None,
+                persistent_workers=getattr(config, "PERSISTENT_WORKERS", False) if num_workers > 0 else False,
+            )
 
         val_loader = DataLoader(
             val_dataset,
             batch_size=batch_size,
             shuffle=False,
             num_workers=num_workers,
-            collate_fn=lambda batch: hetero_collate(batch, schema=schema, validate_batch=True),
+            collate_fn=collate,
+            pin_memory=getattr(config, "PIN_MEMORY", False),
+            prefetch_factor=getattr(config, "PREFETCH_FACTOR", 2) if num_workers > 0 else None,
+            persistent_workers=getattr(config, "PERSISTENT_WORKERS", False) if num_workers > 0 else False,
         )
 
         test_loader = DataLoader(
@@ -1246,7 +1509,10 @@ def create_dataloaders(
             batch_size=batch_size,
             shuffle=False,
             num_workers=num_workers,
-            collate_fn=lambda batch: hetero_collate(batch, schema=schema, validate_batch=True),
+            collate_fn=collate,
+            pin_memory=getattr(config, "PIN_MEMORY", False),
+            prefetch_factor=getattr(config, "PREFETCH_FACTOR", 2) if num_workers > 0 else None,
+            persistent_workers=getattr(config, "PERSISTENT_WORKERS", False) if num_workers > 0 else False,
         )
 
         return train_loader, val_loader, test_loader
@@ -1257,6 +1523,10 @@ def create_dataloaders(
         traceback.print_exc()
         raise
 
+
+# ============================================================================
+# Validation utility
+# ============================================================================
 
 def validate_dataset(data_dir: str = "data", cache_dir: Optional[str] = None):
     logger.info("\n" + "=" * 70)
@@ -1315,22 +1585,16 @@ def validate_dataset(data_dir: str = "data", cache_dir: Optional[str] = None):
                         )
 
                 if "api" in data.node_types and hasattr(data["api"], "repeat_count"):
-                    logger.info(
-                        f"      api.repeat_count shape: {tuple(data['api'].repeat_count.shape)}"
-                    )
+                    logger.info(f"      api.repeat_count shape: {tuple(data['api'].repeat_count.shape)}")
                 if "api" in data.node_types and hasattr(data["api"], "run_duration"):
-                    logger.info(
-                        f"      api.run_duration shape: {tuple(data['api'].run_duration.shape)}"
-                    )
+                    logger.info(f"      api.run_duration shape: {tuple(data['api'].run_duration.shape)}")
 
                 for edge_type in data.edge_types:
                     if "temporal" in edge_type[1]:
                         num_edges = data[edge_type].edge_index.shape[1]
                         logger.info(f"      Temporal edges: {num_edges}")
                         if hasattr(data[edge_type], "edge_attr"):
-                            logger.info(
-                                f"        Edge features: {data[edge_type].edge_attr.shape[1]}-dim"
-                            )
+                            logger.info(f"        Edge features: {data[edge_type].edge_attr.shape[1]}-dim")
                         break
 
         logger.info("\n" + "=" * 70)
@@ -1346,6 +1610,9 @@ def validate_dataset(data_dir: str = "data", cache_dir: Optional[str] = None):
         )
 
         batch, labels = next(iter(train_loader))
+        if batch is None or labels is None:
+            raise RuntimeError("First batch is None after collate")
+
         logger.info("\nBatch info:")
         logger.info(f"  Batch size: {batch.num_graphs}")
         logger.info(f"  Type: {type(batch)}")
