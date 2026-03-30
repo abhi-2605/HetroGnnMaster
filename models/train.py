@@ -254,7 +254,7 @@ def create_dataloaders(schema, use_weighted_sampling=True):
     print(f"Val:   {len(val_dataset)} graphs")
     print(f"Test:  {len(test_dataset)} graphs")
 
-    train_labels = train_labels = [
+    train_labels =  [
     train_dataset.labels.get(graph_file.stem, 2)
     for graph_file in train_dataset.graph_files
     ]
@@ -282,21 +282,22 @@ def create_dataloaders(schema, use_weighted_sampling=True):
               else "\n⚡ Using bucketed batching...")
 
         train_batch_sampler = BucketedBatchSampler(
-            dataset=train_dataset,
-            shuffle=True,
-            weights=sample_weights,
-            bucket_boundaries=getattr(config, "BUCKETED_BATCH_BOUNDARIES", [10000, 25000, 50000, 100000]),
-            bucket_batch_sizes=getattr(config, "BUCKETED_BATCH_SIZES", [32, 16, 8, 4, 2]),
-        )
+        dataset=train_dataset,
+        bucket_rules=getattr(config, "BUCKETED_BATCH_RULES", None),
+        shuffle=getattr(config, "BUCKETED_BATCH_SHUFFLE", True),
+        weights=sample_weights,
+        verbose=getattr(config, "BUCKETED_BATCH_VERBOSE", True),
+    )
     else:
         print("\n⚡ Using weighted oversampling + size-aware batching..." if sample_weights is not None
               else "\n⚡ Using size-aware batching...")
 
-        train_batch_sampler = SizeAwareBatchSampler(
-            train_dataset,
-            batch_size=config.BATCH_SIZE,
-            shuffle=True,
+        train_batch_sampler = BucketedBatchSampler(
+            dataset=train_dataset,
+            bucket_rules=getattr(config, "BUCKETED_BATCH_RULES", None),
+            shuffle=getattr(config, "BUCKETED_BATCH_SHUFFLE", True),
             weights=sample_weights,
+            verbose=getattr(config, "BUCKETED_BATCH_VERBOSE", True),
         )
 
     # ── single size-aware sampler handles both cases ──────────────────────────
