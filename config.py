@@ -244,8 +244,8 @@ FOCAL_ALPHA = [0.40, 0.30, 0.30]
 USE_WEIGHTED_SAMPLING = True
 OVERSAMPLE_WEIGHTS = {
     0: 15,
-    1: 5.0,
-    2: 0.7,
+    1: 3.0,
+    2: 1,
 }
 
 # Class weights for loss function (alternative to Focal Loss)
