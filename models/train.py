@@ -868,7 +868,7 @@ def train():
 
     # ── epoch loop ────────────────────────────────────────────────────────────
     for epoch in range(start_epoch, config.EPOCHS + 1):
-        importlib.reload(config)  # hot-reload utils for dynamic config changes
+        # importlib.reload(config)  # hot-reload utils for dynamic config changes
         log(f"\n{'=' * 70}\nEpoch {epoch}/{config.EPOCHS}\n{'=' * 70}")
 
         warmup = epoch <= config.WARMUP_EPOCHS
