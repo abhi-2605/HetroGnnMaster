@@ -869,6 +869,12 @@ def train():
     # ── epoch loop ────────────────────────────────────────────────────────────
     for epoch in range(start_epoch, config.EPOCHS + 1):
         # importlib.reload(config)  # hot-reload utils for dynamic config changes
+        importlib.reload(config)
+
+        criterion = FocalLoss(
+            alpha=config.FOCAL_ALPHA,
+            gamma=config.FOCAL_GAMMA,
+        )
         log(f"\n{'=' * 70}\nEpoch {epoch}/{config.EPOCHS}\n{'=' * 70}")
 
         warmup = epoch <= config.WARMUP_EPOCHS
