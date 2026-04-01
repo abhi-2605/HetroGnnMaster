@@ -1,0 +1,309 @@
+======================================================================
+TRAINING START
+======================================================================
+Graph source: cape_enriched
+Graph dir   : /workspace/project/TGNN/cache/enriched
+
+======================================================================
+Epoch 2/125
+======================================================================
+
+Train  loss=0.0388  macro_f1=0.6995  mem_reg=0.000000  Ransom P=0.505 R=0.626  Benign P=0.998 R=0.948  Malware P=0.595 R=0.541
+Val    loss=0.0479  macro_f1=0.7484  Ransom P=0.271 R=0.361  Benign P=1.000 R=0.950  Malware P=0.960 R=0.963
+  [Threat vs Benign]  Threat P=0.985 R=1.000 F1=0.992  |  Benign P=1.000 R=0.950 F1=0.974  |  Acc=0.9881  Threats missed=0
+⚠️  macro_f1=0.7484 but recall floors NOT met (ransom=0.361, benign=0.950) — skipped
+
+======================================================================
+Epoch 3/125
+======================================================================
+
+Train  loss=0.0389  macro_f1=0.6918  mem_reg=0.000000  Ransom P=0.500 R=0.624  Benign P=1.000 R=0.950  Malware P=0.579 R=0.516
+Val    loss=0.0508  macro_f1=0.7344  Ransom P=0.196 R=0.556  Benign P=1.000 R=0.950  Malware P=0.967 R=0.913
+  [Threat vs Benign]  Threat P=0.985 R=1.000 F1=0.992  |  Benign P=1.000 R=0.950 F1=0.974  |  Acc=0.9881  Threats missed=0
+⚠️  macro_f1=0.7344 but recall floors NOT met (ransom=0.556, benign=0.950) — skipped
+
+======================================================================
+Epoch 4/125
+======================================================================
+
+Train  loss=0.0393  macro_f1=0.6952  mem_reg=0.000000  Ransom P=0.505 R=0.662  Benign P=0.995 R=0.943  Malware P=0.595 R=0.502
+Val    loss=0.0469  macro_f1=0.7202  Ransom P=0.172 R=0.417  Benign P=1.000 R=0.950  Malware P=0.962 R=0.924
+  [Threat vs Benign]  Threat P=0.985 R=1.000 F1=0.992  |  Benign P=1.000 R=0.950 F1=0.974  |  Acc=0.9881  Threats missed=0
+⚠️  macro_f1=0.7202 but recall floors NOT met (ransom=0.417, benign=0.950) — skipped
+
+======================================================================
+Epoch 5/125
+======================================================================
+
+Train  loss=0.0368  macro_f1=0.7091  mem_reg=0.000000  Ransom P=0.518 R=0.628  Benign P=0.996 R=0.951  Malware P=0.613 R=0.562
+Val    loss=0.0441  macro_f1=0.7406  Ransom P=0.221 R=0.417  Benign P=1.000 R=0.960  Malware P=0.965 R=0.944
+  [Threat vs Benign]  Threat P=0.988 R=1.000 F1=0.994  |  Benign P=1.000 R=0.960 F1=0.979  |  Acc=0.9904  Threats missed=0
+⚠️  macro_f1=0.7406 but recall floors NOT met (ransom=0.417, benign=0.960) — skipped
+
+======================================================================
+Epoch 6/125
+======================================================================
+
+Train  loss=0.0321  macro_f1=0.7260  mem_reg=0.000000  Ransom P=0.545 R=0.673  Benign P=0.993 R=0.966  Malware P=0.643 R=0.556
+Val    loss=0.0420  macro_f1=0.7456  Ransom P=0.250 R=0.389  Benign P=1.000 R=0.950  Malware P=0.961 R=0.956
+  [Threat vs Benign]  Threat P=0.985 R=1.000 F1=0.992  |  Benign P=1.000 R=0.950 F1=0.974  |  Acc=0.9881  Threats missed=0
+⚠️  macro_f1=0.7456 but recall floors NOT met (ransom=0.389, benign=0.950) — skipped
+
+======================================================================
+Epoch 7/125
+======================================================================
+
+Train  loss=0.0323  macro_f1=0.7213  mem_reg=0.000000  Ransom P=0.545 R=0.651  Benign P=0.985 R=0.967  Malware P=0.635 R=0.558
+Val    loss=0.0486  macro_f1=0.6595  Ransom P=0.093 R=0.694  Benign P=0.990 R=0.970  Malware P=0.973 R=0.732
+  [Threat vs Benign]  Threat P=0.991 R=0.997 F1=0.994  |  Benign P=0.990 R=0.970 F1=0.980  |  Acc=0.9904  Threats missed=3
+New best macro_f1: 0.6595 | Ransom recall: 0.694 | Benign recall: 0.970 — saved
+
+======================================================================
+Epoch 8/125
+======================================================================
+
+Train  loss=0.0299  macro_f1=0.7371  mem_reg=0.000000  Ransom P=0.574 R=0.684  Benign P=0.990 R=0.969  Malware P=0.647 R=0.572
+Val    loss=0.0461  macro_f1=0.6720  Ransom P=0.098 R=0.583  Benign P=0.990 R=0.970  Malware P=0.969 R=0.787
+  [Threat vs Benign]  Threat P=0.991 R=0.997 F1=0.994  |  Benign P=0.990 R=0.970 F1=0.980  |  Acc=0.9904  Threats missed=3
+⚠️  macro_f1=0.6720 but recall floors NOT met (ransom=0.583, benign=0.970) — skipped
+
+======================================================================
+Epoch 9/125
+======================================================================
+
+Train  loss=0.0275  macro_f1=0.7573  mem_reg=0.000000  Ransom P=0.601 R=0.693  Benign P=0.990 R=0.978  Malware P=0.680 R=0.612
+Val    loss=0.0449  macro_f1=0.6779  Ransom P=0.104 R=0.556  Benign P=0.983 R=0.970  Malware P=0.969 R=0.809
+  [Threat vs Benign]  Threat P=0.991 R=0.995 F1=0.993  |  Benign P=0.983 R=0.970 F1=0.976  |  Acc=0.9889  Threats missed=5
+⚠️  macro_f1=0.6779 but recall floors NOT met (ransom=0.556, benign=0.970) — skipped
+
+======================================================================
+Epoch 10/125
+======================================================================
+
+Train  loss=0.0265  macro_f1=0.7601  mem_reg=0.000000  Ransom P=0.600 R=0.698  Benign P=0.994 R=0.979  Malware P=0.687 R=0.614
+Val    loss=0.0401  macro_f1=0.7182  Ransom P=0.170 R=0.500  Benign P=0.970 R=0.970  Malware P=0.969 R=0.896
+  [Threat vs Benign]  Threat P=0.991 R=0.991 F1=0.991  |  Benign P=0.970 R=0.970 F1=0.970  |  Acc=0.9857  Threats missed=9
+⚠️  macro_f1=0.7182 but recall floors NOT met (ransom=0.500, benign=0.970) — skipped
+
+======================================================================
+Epoch 11/125
+======================================================================
+
+Train  loss=0.0261  macro_f1=0.7662  mem_reg=0.000000  Ransom P=0.614 R=0.667  Benign P=0.992 R=0.979  Malware P=0.689 R=0.659
+Val    loss=0.0450  macro_f1=0.6629  Ransom P=0.091 R=0.611  Benign P=0.997 R=0.960  Malware P=0.966 R=0.762
+  [Threat vs Benign]  Threat P=0.988 R=0.999 F1=0.993  |  Benign P=0.997 R=0.960 F1=0.978  |  Acc=0.9896  Threats missed=1
+New best macro_f1: 0.6629 | Ransom recall: 0.611 | Benign recall: 0.960 — saved
+
+======================================================================
+Epoch 12/125
+======================================================================
+
+Train  loss=0.0255  macro_f1=0.7715  mem_reg=0.000000  Ransom P=0.622 R=0.700  Benign P=0.992 R=0.983  Malware P=0.699 R=0.640
+Val    loss=0.0420  macro_f1=0.6763  Ransom P=0.105 R=0.611  Benign P=0.983 R=0.970  Malware P=0.971 R=0.793
+  [Threat vs Benign]  Threat P=0.991 R=0.995 F1=0.993  |  Benign P=0.983 R=0.970 F1=0.976  |  Acc=0.9889  Threats missed=5
+New best macro_f1: 0.6763 | Ransom recall: 0.611 | Benign recall: 0.970 — saved
+
+======================================================================
+Epoch 13/125
+======================================================================
+
+Train  loss=0.0224  macro_f1=0.8011  mem_reg=0.000000  Ransom P=0.665 R=0.739  Benign P=0.992 R=0.985  Malware P=0.744 R=0.687
+Val    loss=0.0395  macro_f1=0.6888  Ransom P=0.134 R=0.694  Benign P=0.939 R=0.980  Malware P=0.979 R=0.805
+  [Threat vs Benign]  Threat P=0.994 R=0.980 F1=0.987  |  Benign P=0.939 R=0.980 F1=0.959  |  Acc=0.9801  Threats missed=19
+New best macro_f1: 0.6888 | Ransom recall: 0.694 | Benign recall: 0.980 — saved
+
+======================================================================
+Epoch 14/125
+======================================================================
+
+Train  loss=0.0227  macro_f1=0.8142  mem_reg=0.000000  Ransom P=0.693 R=0.752  Benign P=0.992 R=0.984  Malware P=0.754 R=0.714
+Val    loss=0.0390  macro_f1=0.6701  Ransom P=0.103 R=0.667  Benign P=0.976 R=0.970  Malware P=0.973 R=0.768
+  [Threat vs Benign]  Threat P=0.991 R=0.993 F1=0.992  |  Benign P=0.976 R=0.970 F1=0.973  |  Acc=0.9873  Threats missed=7
+
+⏳ No improvement (1/20)
+
+======================================================================
+Epoch 15/125
+======================================================================
+
+Train  loss=0.0207  macro_f1=0.8536  mem_reg=0.000000  Ransom P=0.768 R=0.787  Benign P=0.993 R=0.985  Malware P=0.796 R=0.793
+Val    loss=0.0645  macro_f1=0.5499  Ransom P=0.055 R=0.889  Benign P=0.990 R=0.970  Malware P=0.971 R=0.400
+  [Threat vs Benign]  Threat P=0.991 R=0.997 F1=0.994  |  Benign P=0.990 R=0.970 F1=0.980  |  Acc=0.9904  Threats missed=3
+
+⏳ No improvement (2/20)
+
+======================================================================
+Epoch 16/125
+======================================================================
+
+Train  loss=0.0186  macro_f1=0.8654  mem_reg=0.000000  Ransom P=0.786 R=0.805  Benign P=0.993 R=0.986  Malware P=0.813 R=0.810
+Val    loss=0.0435  macro_f1=0.6294  Ransom P=0.068 R=0.611  Benign P=0.980 R=0.970  Malware P=0.967 R=0.669
+  [Threat vs Benign]  Threat P=0.991 R=0.994 F1=0.992  |  Benign P=0.980 R=0.970 F1=0.975  |  Acc=0.9881  Threats missed=6
+
+⏳ No improvement (3/20)
+
+======================================================================
+Epoch 17/125
+======================================================================
+
+Train  loss=0.0175  macro_f1=0.8670  mem_reg=0.000000  Ransom P=0.799 R=0.818  Benign P=0.992 R=0.986  Malware P=0.807 R=0.800
+Val    loss=0.0352  macro_f1=0.6769  Ransom P=0.112 R=0.667  Benign P=0.970 R=0.970  Malware P=0.974 R=0.785
+  [Threat vs Benign]  Threat P=0.991 R=0.991 F1=0.991  |  Benign P=0.970 R=0.970 F1=0.970  |  Acc=0.9857  Threats missed=9
+
+⏳ No improvement (4/20)
+
+======================================================================
+Epoch 18/125
+======================================================================
+
+Train  loss=0.0171  macro_f1=0.8701  mem_reg=0.000000  Ransom P=0.789 R=0.808  Benign P=0.993 R=0.989  Malware P=0.826 R=0.817
+Val    loss=0.0375  macro_f1=0.6680  Ransom P=0.103 R=0.667  Benign P=0.967 R=0.973  Malware P=0.975 R=0.764
+  [Threat vs Benign]  Threat P=0.992 R=0.990 F1=0.991  |  Benign P=0.967 R=0.973 F1=0.970  |  Acc=0.9857  Threats missed=10
+
+⏳ No improvement (5/20)
+
+======================================================================
+Epoch 19/125
+======================================================================
+
+Train  loss=0.0166  macro_f1=0.8817  mem_reg=0.000000  Ransom P=0.816 R=0.830  Benign P=0.993 R=0.988  Malware P=0.833 R=0.830
+Val    loss=0.0222  macro_f1=0.7394  Ransom P=0.225 R=0.556  Benign P=0.936 R=0.983  Malware P=0.977 R=0.905
+  [Threat vs Benign]  Threat P=0.995 R=0.979 F1=0.987  |  Benign P=0.936 R=0.983 F1=0.959  |  Acc=0.9801  Threats missed=20
+⚠️  macro_f1=0.7394 but recall floors NOT met (ransom=0.556, benign=0.983) — skipped
+
+======================================================================
+Epoch 20/125
+======================================================================
+
+Train  loss=0.0159  macro_f1=0.8920  mem_reg=0.000000  Ransom P=0.840 R=0.834  Benign P=0.994 R=0.988  Malware P=0.840 R=0.856
+Val    loss=0.0320  macro_f1=0.6961  Ransom P=0.135 R=0.667  Benign P=0.964 R=0.977  Malware P=0.978 R=0.823
+  [Threat vs Benign]  Threat P=0.993 R=0.989 F1=0.991  |  Benign P=0.964 R=0.977 F1=0.970  |  Acc=0.9857  Threats missed=11
+New best macro_f1: 0.6961 | Ransom recall: 0.667 | Benign recall: 0.977 — saved
+
+======================================================================
+Epoch 21/125
+======================================================================
+
+Train  loss=0.0156  macro_f1=0.8889  mem_reg=0.000000  Ransom P=0.825 R=0.847  Benign P=0.995 R=0.990  Malware P=0.844 R=0.834
+Val    loss=0.0266  macro_f1=0.7155  Ransom P=0.162 R=0.611  Benign P=0.967 R=0.977  Malware P=0.977 R=0.868
+  [Threat vs Benign]  Threat P=0.993 R=0.990 F1=0.991  |  Benign P=0.967 R=0.977 F1=0.972  |  Acc=0.9865  Threats missed=10
+New best macro_f1: 0.7155 | Ransom recall: 0.611 | Benign recall: 0.977 — saved
+
+======================================================================
+Epoch 22/125
+======================================================================
+
+Train  loss=0.0155  macro_f1=0.8946  mem_reg=0.000000  Ransom P=0.840 R=0.840  Benign P=0.994 R=0.989  Malware P=0.848 R=0.857
+Val    loss=0.0239  macro_f1=0.7291  Ransom P=0.190 R=0.639  Benign P=0.957 R=0.977  Malware P=0.978 R=0.882
+  [Threat vs Benign]  Threat P=0.993 R=0.986 F1=0.990  |  Benign P=0.957 R=0.977 F1=0.967  |  Acc=0.9841  Threats missed=13
+New best macro_f1: 0.7291 | Ransom recall: 0.639 | Benign recall: 0.977 — saved
+
+======================================================================
+Epoch 23/125
+======================================================================
+
+Train  loss=0.0145  macro_f1=0.9008  mem_reg=0.000000  Ransom P=0.847 R=0.854  Benign P=0.994 R=0.990  Malware P=0.860 R=0.860
+Val    loss=0.0287  macro_f1=0.7121  Ransom P=0.157 R=0.667  Benign P=0.967 R=0.977  Malware P=0.979 R=0.851
+  [Threat vs Benign]  Threat P=0.993 R=0.990 F1=0.991  |  Benign P=0.967 R=0.977 F1=0.972  |  Acc=0.9865  Threats missed=10
+
+⏳ No improvement (1/20)
+
+======================================================================
+Epoch 24/125
+======================================================================
+
+Train  loss=0.0140  macro_f1=0.9026  mem_reg=0.000000  Ransom P=0.843 R=0.868  Benign P=0.994 R=0.988  Malware P=0.866 R=0.857
+Val    loss=0.0239  macro_f1=0.7563  Ransom P=0.247 R=0.639  Benign P=0.960 R=0.977  Malware P=0.978 R=0.912
+  [Threat vs Benign]  Threat P=0.993 R=0.987 F1=0.990  |  Benign P=0.960 R=0.977 F1=0.968  |  Acc=0.9849  Threats missed=12
+New best macro_f1: 0.7563 | Ransom recall: 0.639 | Benign recall: 0.977 — saved
+
+======================================================================
+Epoch 25/125
+======================================================================
+
+Train  loss=0.0155  macro_f1=0.8961  mem_reg=0.000000  Ransom P=0.840 R=0.854  Benign P=0.992 R=0.987  Malware P=0.853 R=0.851
+Val    loss=0.0200  macro_f1=0.7634  Ransom P=0.266 R=0.583  Benign P=0.964 R=0.983  Malware P=0.978 R=0.926
+  [Threat vs Benign]  Threat P=0.995 R=0.989 F1=0.992  |  Benign P=0.964 R=0.983 F1=0.973  |  Acc=0.9873  Threats missed=11
+⚠️  macro_f1=0.7634 but recall floors NOT met (ransom=0.583, benign=0.983) — skipped
+
+======================================================================
+Epoch 26/125
+======================================================================
+
+Train  loss=0.0132  macro_f1=0.9048  mem_reg=0.000000  Ransom P=0.852 R=0.871  Benign P=0.995 R=0.990  Malware P=0.864 R=0.856
+Val    loss=0.0214  macro_f1=0.7640  Ransom P=0.264 R=0.639  Benign P=0.958 R=0.983  Malware P=0.980 R=0.918
+  [Threat vs Benign]  Threat P=0.995 R=0.986 F1=0.991  |  Benign P=0.958 R=0.983 F1=0.970  |  Acc=0.9857  Threats missed=13
+New best macro_f1: 0.7640 | Ransom recall: 0.639 | Benign recall: 0.983 — saved
+
+======================================================================
+Epoch 27/125
+======================================================================
+
+Train  loss=0.0141  macro_f1=0.9017  mem_reg=0.000000  Ransom P=0.853 R=0.860  Benign P=0.995 R=0.988  Malware P=0.854 R=0.860
+Val    loss=0.0232  macro_f1=0.7567  Ransom P=0.250 R=0.639  Benign P=0.951 R=0.983  Malware P=0.980 R=0.910
+  [Threat vs Benign]  Threat P=0.995 R=0.984 F1=0.990  |  Benign P=0.951 R=0.983 F1=0.967  |  Acc=0.9841  Threats missed=15
+
+⏳ No improvement (1/20)
+
+======================================================================
+Epoch 28/125
+======================================================================
+
+Train  loss=0.0144  macro_f1=0.8972  mem_reg=0.000000  Ransom P=0.836 R=0.866  Benign P=0.993 R=0.989  Malware P=0.860 R=0.840
+Val    loss=0.0276  macro_f1=0.7206  Ransom P=0.174 R=0.667  Benign P=0.960 R=0.977  Malware P=0.978 R=0.864
+  [Threat vs Benign]  Threat P=0.993 R=0.987 F1=0.990  |  Benign P=0.960 R=0.977 F1=0.968  |  Acc=0.9849  Threats missed=12
+
+⏳ No improvement (2/20)
+
+======================================================================
+Epoch 29/125
+======================================================================
+
+Train  loss=0.0134  macro_f1=0.9072  mem_reg=0.000000  Ransom P=0.858 R=0.877  Benign P=0.992 R=0.990  Malware P=0.869 R=0.858
+Val    loss=0.0250  macro_f1=0.7348  Ransom P=0.198 R=0.667  Benign P=0.964 R=0.977  Malware P=0.978 R=0.884
+  [Threat vs Benign]  Threat P=0.993 R=0.989 F1=0.991  |  Benign P=0.964 R=0.977 F1=0.970  |  Acc=0.9857  Threats missed=11
+
+⏳ No improvement (3/20)
+
+======================================================================
+Epoch 30/125
+======================================================================
+
+Train  loss=0.0141  macro_f1=0.9081  mem_reg=0.000000  Ransom P=0.859 R=0.883  Benign P=0.993 R=0.987  Malware P=0.868 R=0.859
+Val    loss=0.0309  macro_f1=0.7081  Ransom P=0.152 R=0.667  Benign P=0.964 R=0.977  Malware P=0.979 R=0.845
+  [Threat vs Benign]  Threat P=0.993 R=0.989 F1=0.991  |  Benign P=0.964 R=0.977 F1=0.970  |  Acc=0.9857  Threats missed=11
+
+⏳ No improvement (4/20)
+
+======================================================================
+Epoch 31/125
+======================================================================
+
+Train  loss=0.0126  macro_f1=0.9082  mem_reg=0.000000  Ransom P=0.855 R=0.874  Benign P=0.995 R=0.991  Malware P=0.872 R=0.862
+Val    loss=0.0235  macro_f1=0.7421  Ransom P=0.217 R=0.639  Benign P=0.957 R=0.977  Malware P=0.978 R=0.897
+  [Threat vs Benign]  Threat P=0.993 R=0.986 F1=0.990  |  Benign P=0.957 R=0.977 F1=0.967  |  Acc=0.9841  Threats missed=13
+
+⏳ No improvement (5/20)
+
+======================================================================
+Epoch 32/125
+======================================================================
+
+Train  loss=0.0119  macro_f1=0.9185  mem_reg=0.000000  Ransom P=0.876 R=0.897  Benign P=0.991 R=0.990  Malware P=0.887 R=0.871
+Val    loss=0.0230  macro_f1=0.7490  Ransom P=0.242 R=0.639  Benign P=0.939 R=0.977  Malware P=0.978 R=0.902
+  [Threat vs Benign]  Threat P=0.993 R=0.980 F1=0.986  |  Benign P=0.939 R=0.977 F1=0.957  |  Acc=0.9793  Threats missed=19
+
+⏳ No improvement (6/20)
+
+======================================================================
+Epoch 33/125
+======================================================================
+
+Train  loss=0.0134  macro_f1=0.9087  mem_reg=0.000000  Ransom P=0.854 R=0.884  Benign P=0.992 R=0.989  Malware P=0.877 R=0.857
+Val    loss=0.0208  macro_f1=0.7645  Ransom P=0.267 R=0.639  Benign P=0.960 R=0.977  Malware P=0.978 R=0.920
+  [Threat vs Benign]  Threat P=0.993 R=0.987 F1=0.990  |  Benign P=0.960 R=0.977 F1=0.968  |  Acc=0.9849  Threats missed=12
+New best macro_f1: 0.7645 | Ransom recall: 0.639 | Benign recall: 0.977 — saved
+
+======================================================================
+Epoch 34/125
+======================================================================
