@@ -1,0 +1,22 @@
+split,benign_op_type,description,count,percentage
+train,network_service,Network daemon / background service,425,30.58
+train,file_operation_app,Document editor / file manager / archiver,400,28.78
+train,system_tool_or_installer,"System tool, updater, or installer",303,21.8
+train,system_configuration,Registry / system config tool,132,9.5
+train,web_or_cloud_app,Browser / cloud sync / web client,114,8.2
+train,system_monitor_or_utility,System monitor / diagnostic / CLI utility,10,0.72
+train,simple_utility,Simple utility (no strong signals),6,0.43
+val,network_service,Network daemon / background service,92,30.87
+val,file_operation_app,Document editor / file manager / archiver,80,26.85
+val,system_tool_or_installer,"System tool, updater, or installer",61,20.47
+val,system_configuration,Registry / system config tool,35,11.74
+val,web_or_cloud_app,Browser / cloud sync / web client,25,8.39
+val,system_monitor_or_utility,System monitor / diagnostic / CLI utility,3,1.01
+val,simple_utility,Simple utility (no strong signals),2,0.67
+test,network_service,Network daemon / background service,99,33.11
+test,file_operation_app,Document editor / file manager / archiver,81,27.09
+test,system_tool_or_installer,"System tool, updater, or installer",65,21.74
+test,system_configuration,Registry / system config tool,29,9.7
+test,web_or_cloud_app,Browser / cloud sync / web client,21,7.02
+test,simple_utility,Simple utility (no strong signals),3,1.0
+test,system_monitor_or_utility,System monitor / diagnostic / CLI utility,1,0.33

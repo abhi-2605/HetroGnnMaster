@@ -1,0 +1,8 @@
+benign_op_type,description,count,percentage,avg_api_nodes,median_api_nodes,avg_file_nodes,avg_registry_nodes,avg_process_nodes,avg_network_nodes,avg_temporal_edges,common_bucket_1,common_bucket_2,common_api_1,common_api_2,common_api_3
+network_service,Network daemon / background service,616,31.0,68.44,33.0,0.97,5.9,3.53,8.28,67.43,process_management,file_io,ntclose,ldrgetprocedureaddress,ntdelayexecution
+file_operation_app,Document editor / file manager / archiver,561,28.23,10210.32,1693,61.32,357.86,3.99,89.32,10209.23,registry_access,file_io,getasynckeystate,ldrgetprocedureaddress,getsystemmetrics
+system_tool_or_installer,"System tool, updater, or installer",429,21.59,14966.87,5459,209.39,903.31,5.0,149.0,14965.31,registry_access,file_io,ntreadvirtualmemory,ntreadfile,getsystemmetrics
+system_configuration,Registry / system config tool,196,9.86,1889.23,431.5,5.84,943.85,3.85,16.77,1888.22,registry_access,file_io,regopenkeyexa,getsystemmetrics,getcursorpos
+web_or_cloud_app,Browser / cloud sync / web client,160,8.05,20040.69,10283.5,139.95,1114.31,6.78,168.14,20038.24,registry_access,file_io,getsystemmetrics,ldrgetprocedureaddress,ntdeviceiocontrolfile
+system_monitor_or_utility,System monitor / diagnostic / CLI utility,14,0.7,565.64,540.5,3.29,42.64,2.93,10.14,564.64,system_info,process_management,ntquerykey,ntclose,ntopenkeyex
+simple_utility,Simple utility (no strong signals),11,0.55,72.18,77,0.64,1.91,0.91,0,71.18,process_management,file_io,ntclose,ldrgetdllhandle,ntallocatevirtualmemory

@@ -1,0 +1,36 @@
+benign_op_type,description,split,md5,api_nodes,file_nodes,registry_nodes,process_nodes,network_nodes,top_bucket,top_api_1,top_api_2,top_api_3
+file_operation_app,Document editor / file manager / archiver,test,12f24fe99e5a19454233e71ce00f3133,1673,10,50,4,23,file_io,getsystemmetrics,getforegroundwindow,getkeystate
+file_operation_app,Document editor / file manager / archiver,train,372,1731,29,137,4,34,registry_access,getsystemmetrics,regopenkeyexw,regclosekey
+file_operation_app,Document editor / file manager / archiver,train,79e1e314ccd65320a45d606c6aede555,1693,9,58,4,21,registry_access,getsystemmetrics,getkeystate,findresourceexw
+file_operation_app,Document editor / file manager / archiver,train,bb9b8b3c2611d80c76e2fbcc6fdf5589,1700,11,168,4,24,registry_access,getsystemmetrics,getforegroundwindow,getkeystate
+file_operation_app,Document editor / file manager / archiver,val,390,1663,20,55,4,36,registry_access,getsystemmetrics,ldrgetprocedureaddress,getkeystate
+network_service,Network daemon / background service,train,083e03f012c641807d17b1cc0d0914d3,33,3,2,4,8,process_management,ntclose,ntunmapviewofsection,ntterminateprocess
+network_service,Network daemon / background service,train,37b87fd5222d14763f200c389dc23783,33,0,2,4,7,process_management,ntclose,ntterminateprocess,ldrgetdllhandle
+network_service,Network daemon / background service,train,610,33,0,2,4,7,process_management,ntclose,ntterminateprocess,ldrgetdllhandle
+network_service,Network daemon / background service,train,875,33,0,2,4,7,process_management,loadstringw,ntclose,ntterminateprocess
+network_service,Network daemon / background service,train,889,33,0,2,4,7,process_management,ntclose,getkeystate,ntterminateprocess
+simple_utility,Simple utility (no strong signals),train,5247539e5510a12bb64bdef04027befb,65,0,2,1,0,process_management,ntclose,ldrgetdllhandle,ntterminateprocess
+simple_utility,Simple utility (no strong signals),train,551c155f4fce82bba4cc92e56f1ecb84,77,0,3,1,0,process_management,ntclose,ntprotectvirtualmemory,ldrgetdllhandle
+simple_utility,Simple utility (no strong signals),train,6141e25885e56ab4df9ee96400892c73,69,0,2,1,0,process_management,ntclose,ntdeviceiocontrolfile,ldrgetdllhandle
+simple_utility,Simple utility (no strong signals),train,89d0572c9b53f34230c8514f6b11bd56,87,3,2,1,0,file_io,ntclose,ldrgetdllhandle,ntdeviceiocontrolfile
+simple_utility,Simple utility (no strong signals),val,820b97429e4153a743708b376807ee69,81,0,2,1,0,process_management,ntclose,ntdeviceiocontrolfile,ldrgetdllhandle
+system_configuration,Registry / system config tool,test,953b02c876998cc49f8122d53f07b33b,456,7,42,4,19,registry_access,getsystemmetrics,drawtextexw,ntclose
+system_configuration,Registry / system config tool,train,1006,424,6,56,4,17,registry_access,getsystemmetrics,ntclose,regopenkeyexw
+system_configuration,Registry / system config tool,train,24b64caf1c95c87bfbc30b062e2d538e,412,9,48,4,22,registry_access,ldrgetprocedureaddress,getsystemmetrics,regopenkeyexw
+system_configuration,Registry / system config tool,train,363,439,5,69,4,19,registry_access,getsystemmetrics,ntclose,regenumvaluew
+system_configuration,Registry / system config tool,train,929,389,5,75,4,19,registry_access,getsystemmetrics,ldrgetprocedureaddress,ntclose
+system_monitor_or_utility,System monitor / diagnostic / CLI utility,test,852,631,4,25,4,11,system_info,getsystemtimeasfiletime,ntquerykey,ntopenkeyex
+system_monitor_or_utility,System monitor / diagnostic / CLI utility,train,112,408,4,23,4,11,system_info,getsystemtimeasfiletime,ntquerykey,ntopenkeyex
+system_monitor_or_utility,System monitor / diagnostic / CLI utility,train,5338d4beddf23db817eb5c37500b5735,648,4,56,1,0,system_info,ntclose,ntquerykey,ntprotectvirtualmemory
+system_monitor_or_utility,System monitor / diagnostic / CLI utility,train,710,704,4,25,4,11,system_info,getsystemtimeasfiletime,ntquerykey,ntopenkeyex
+system_monitor_or_utility,System monitor / diagnostic / CLI utility,train,bd86784abda6c4fd8acfd3912ac192e9,450,2,31,1,0,process_management,ntclose,ntquerykey,ntprotectvirtualmemory
+system_tool_or_installer,"System tool, updater, or installer",train,284,5459,29,371,4,72,process_management,ntreadvirtualmemory,getsystemmetrics,ntclose
+system_tool_or_installer,"System tool, updater, or installer",train,5d0f9de84bd204f98798bbbde8785516,5434,37,84,6,59,registry_access,getsystemmetrics,drawtextexw,ldrgetprocedureaddress
+system_tool_or_installer,"System tool, updater, or installer",train,758,5521,212,433,12,385,registry_access,ntallocatevirtualmemory,ldrgetprocedureaddress,ntfreevirtualmemory
+system_tool_or_installer,"System tool, updater, or installer",train,858,5523,115,682,4,285,registry_access,ntclose,ntquerykey,ldrgetprocedureaddress
+system_tool_or_installer,"System tool, updater, or installer",val,47245e8bba1b1ed68913c1a6c9d9ced7,5511,97,730,4,81,file_io,ntreadfile,loadstringw,regqueryvalueexw
+web_or_cloud_app,Browser / cloud sync / web client,test,f7de88025835d46413234be911be4a4f,10491,84,2682,4,95,file_io,getsystemmetrics,ntqueryvaluekey,ntquerykey
+web_or_cloud_app,Browser / cloud sync / web client,train,309,10137,63,393,8,67,file_io,getsystemmetrics,getkeystate,ntquerykey
+web_or_cloud_app,Browser / cloud sync / web client,train,3cbc8d0f65e3db6c76c119ed7c2ffd85,10000,82,516,2,0,file_io,ntclose,ntquerykey,ntopenkeyex
+web_or_cloud_app,Browser / cloud sync / web client,train,639,10508,113,435,6,88,registry_access,getsystemmetrics,getkeystate,ntclose
+web_or_cloud_app,Browser / cloud sync / web client,train,d6e167b5569572e0afeba88e7627867c,10430,101,3285,4,76,registry_access,regqueryvalueexw,regopenkeyexw,ldrgetprocedureaddress
