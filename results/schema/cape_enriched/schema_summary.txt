@@ -3,21 +3,21 @@ ENRICHED GRAPH SCHEMA SUMMARY
 ================================================================================
 Source name : cape_enriched
 Graph root  : /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched
-Total graphs: 8460
+Total graphs: 8459
 
 NODE TYPES FOUND:
-  - api: dims=[775] graphs_present=8460 zero_node_graphs=0 min_nodes=1 max_nodes=1536476
-  - file: dims=[6, 7] graphs_present=8460 zero_node_graphs=547 min_nodes=0 max_nodes=38470
-  - network: dims=[4, 6] graphs_present=8460 zero_node_graphs=4905 min_nodes=0 max_nodes=7555
-  - process: dims=[3, 6] graphs_present=8460 zero_node_graphs=11 min_nodes=0 max_nodes=93
-  - registry: dims=[6] graphs_present=8460 zero_node_graphs=349 min_nodes=0 max_nodes=92739
+  - api: dims=[775] graphs_present=8459 zero_node_graphs=0 min_nodes=1 max_nodes=1536476
+  - file: dims=[6, 7] graphs_present=8459 zero_node_graphs=571 min_nodes=0 max_nodes=38470
+  - network: dims=[4, 6] graphs_present=8459 zero_node_graphs=4789 min_nodes=0 max_nodes=11381
+  - process: dims=[3, 6] graphs_present=8459 zero_node_graphs=13 min_nodes=0 max_nodes=204
+  - registry: dims=[6] graphs_present=8459 zero_node_graphs=381 min_nodes=0 max_nodes=92739
 
 EDGE TYPES FOUND:
-  - api::connects_to::network: edge_attr=False edge_attr_dims=None graphs_present=1888 zero_edge_graphs=176 min_edges=0 max_edges=42658
-  - api::modifies::registry: edge_attr=False edge_attr_dims=None graphs_present=8460 zero_edge_graphs=6779 min_edges=0 max_edges=93556
-  - api::operates_on::file: edge_attr=False edge_attr_dims=None graphs_present=8460 zero_edge_graphs=6331 min_edges=0 max_edges=67516
-  - api::temporal::api: edge_attr=True edge_attr_dims=[14] graphs_present=8460 zero_edge_graphs=142 min_edges=0 max_edges=1536475
-  - process::executes::api: edge_attr=False edge_attr_dims=None graphs_present=8460 zero_edge_graphs=16 min_edges=0 max_edges=1536476
+  - api::connects_to::network: edge_attr=False edge_attr_dims=None graphs_present=2032 zero_edge_graphs=191 min_edges=0 max_edges=60221
+  - api::modifies::registry: edge_attr=False edge_attr_dims=None graphs_present=8459 zero_edge_graphs=6667 min_edges=0 max_edges=93556
+  - api::operates_on::file: edge_attr=False edge_attr_dims=None graphs_present=8459 zero_edge_graphs=6226 min_edges=0 max_edges=67516
+  - api::temporal::api: edge_attr=True edge_attr_dims=[14] graphs_present=8459 zero_edge_graphs=153 min_edges=0 max_edges=1536475
+  - process::executes::api: edge_attr=False edge_attr_dims=None graphs_present=8459 zero_edge_graphs=18 min_edges=0 max_edges=1536476
 
 COMPATIBILITY CHECKS:
   - api_feature_dim_ok: True
@@ -29,7 +29,7 @@ COMPATIBILITY CHECKS:
   - unexpected_edge_types: []
 
 SPLITS:
-  - train: num_files=5919 missing=False failed_files=0
+  - train: num_files=5918 missing=False failed_files=0
   - val: num_files=1256 missing=False failed_files=0
   - test: num_files=1285 missing=False failed_files=0
 

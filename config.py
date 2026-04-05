@@ -220,7 +220,7 @@ DEVICE = (
 )
 
 # DataLoader
-NUM_WORKERS = 4  # -- was 4
+NUM_WORKERS = 4 if DEVICE == "cuda" else 0  # -- was 4
 PREFETCH_FACTOR = 2
 PIN_MEMORY = True if DEVICE == "cuda" else False
 

@@ -11,19 +11,19 @@
     "schema_summary": "/Volumes/SSD/TGNN/ransomware_tgnn/results/schema/cape_enriched/schema_summary.txt"
   },
   "global": {
-    "total_graphs": 8460,
+    "total_graphs": 8459,
     "graphs_with_label_tuple": 0,
-    "graphs_without_label_tuple": 8460,
+    "graphs_without_label_tuple": 8459,
     "failed_files": [],
     "graph_object_types": {
-      "graph_only": 8460,
-      "HeteroData": 8460
+      "graph_only": 8459,
+      "HeteroData": 8459
     },
     "label_distribution_detected": {}
   },
   "splits": {
     "train": {
-      "num_files": 5919,
+      "num_files": 5918,
       "missing": false,
       "failed_files": []
     },
@@ -58,9 +58,9 @@
   },
   "node_types": {
     "api": {
-      "graphs_present": 8460,
+      "graphs_present": 8459,
       "zero_node_graphs": 0,
-      "total_nodes": 38581477,
+      "total_nodes": 40451586,
       "min_nodes": 1,
       "max_nodes": 1536476,
       "feature_dims": [
@@ -68,9 +68,9 @@
       ]
     },
     "file": {
-      "graphs_present": 8460,
-      "zero_node_graphs": 547,
-      "total_nodes": 562744,
+      "graphs_present": 8459,
+      "zero_node_graphs": 571,
+      "total_nodes": 582161,
       "min_nodes": 0,
       "max_nodes": 38470,
       "feature_dims": [
@@ -79,31 +79,31 @@
       ]
     },
     "network": {
-      "graphs_present": 8460,
-      "zero_node_graphs": 4905,
-      "total_nodes": 154785,
+      "graphs_present": 8459,
+      "zero_node_graphs": 4789,
+      "total_nodes": 189509,
       "min_nodes": 0,
-      "max_nodes": 7555,
+      "max_nodes": 11381,
       "feature_dims": [
         4,
         6
       ]
     },
     "process": {
-      "graphs_present": 8460,
-      "zero_node_graphs": 11,
-      "total_nodes": 21120,
+      "graphs_present": 8459,
+      "zero_node_graphs": 13,
+      "total_nodes": 22431,
       "min_nodes": 0,
-      "max_nodes": 93,
+      "max_nodes": 204,
       "feature_dims": [
         3,
         6
       ]
     },
     "registry": {
-      "graphs_present": 8460,
-      "zero_node_graphs": 349,
-      "total_nodes": 2522284,
+      "graphs_present": 8459,
+      "zero_node_graphs": 381,
+      "total_nodes": 2552287,
       "min_nodes": 0,
       "max_nodes": 92739,
       "feature_dims": [
@@ -113,36 +113,36 @@
   },
   "edge_types": {
     "api::connects_to::network": {
-      "graphs_present": 1888,
-      "zero_edge_graphs": 176,
-      "total_edges": 986608,
+      "graphs_present": 2032,
+      "zero_edge_graphs": 191,
+      "total_edges": 1340515,
       "min_edges": 0,
-      "max_edges": 42658,
+      "max_edges": 60221,
       "has_edge_attr": false,
       "edge_attr_dims": null
     },
     "api::modifies::registry": {
-      "graphs_present": 8460,
-      "zero_edge_graphs": 6779,
-      "total_edges": 1901914,
+      "graphs_present": 8459,
+      "zero_edge_graphs": 6667,
+      "total_edges": 2135083,
       "min_edges": 0,
       "max_edges": 93556,
       "has_edge_attr": false,
       "edge_attr_dims": null
     },
     "api::operates_on::file": {
-      "graphs_present": 8460,
-      "zero_edge_graphs": 6331,
-      "total_edges": 667684,
+      "graphs_present": 8459,
+      "zero_edge_graphs": 6226,
+      "total_edges": 941754,
       "min_edges": 0,
       "max_edges": 67516,
       "has_edge_attr": false,
       "edge_attr_dims": null
     },
     "api::temporal::api": {
-      "graphs_present": 8460,
-      "zero_edge_graphs": 142,
-      "total_edges": 38572490,
+      "graphs_present": 8459,
+      "zero_edge_graphs": 153,
+      "total_edges": 40442085,
       "min_edges": 0,
       "max_edges": 1536475,
       "has_edge_attr": true,
@@ -151,9 +151,9 @@
       ]
     },
     "process::executes::api": {
-      "graphs_present": 8460,
-      "zero_edge_graphs": 16,
-      "total_edges": 38567669,
+      "graphs_present": 8459,
+      "zero_edge_graphs": 18,
+      "total_edges": 40437776,
       "min_edges": 0,
       "max_edges": 1536476,
       "has_edge_attr": false,
