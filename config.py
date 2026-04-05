@@ -247,7 +247,7 @@ USE_WEIGHTED_SAMPLING = True
 OVERSAMPLE_WEIGHTS = {
     0: 15,
     1: 2.0,
-    2: 1.2,
+    2: 6.0,
 }
 
 # Class weights for loss function (alternative to Focal Loss)
