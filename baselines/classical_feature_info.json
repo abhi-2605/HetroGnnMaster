@@ -1,0 +1,17 @@
+{
+  "metadata_path": "/Volumes/SSD/TGNN/ransomware_tgnn/extracted_metadata_appended.csv",
+  "active_graph_dir": "/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched",
+  "label_column_used": "all_categories",
+  "feature_family": "api_tfidf_only",
+  "tfidf_vocab_size": 3000,
+  "random_state": 42,
+  "malware_keep_frac": 0.8,
+  "apply_malware_subsample_to_train": true,
+  "apply_malware_subsample_to_val": true,
+  "apply_malware_subsample_to_test": true,
+  "train_samples": 5048,
+  "val_samples": 1072,
+  "test_samples": 1096,
+  "split_manifest_path": "",
+  "xgboost_available": true
+}

@@ -264,7 +264,7 @@ def create_dataloaders(schema, use_weighted_sampling=True):
         pct = 100 * count / len(train_labels) if train_labels else 0.0
         print(f"  {config.CLASS_NAMES[cls]}: {count} ({pct:.2f}%)")
 
-    collate = lambda batch: hetero_collate(batch, schema=schema, validate_batch=False)
+    collate = lambda batch: hetero_collate(batch, schema=schema, validate_batch=False) # currently turned off to reduce overhead
 
     # ── build weights if weighted sampling is enabled ─────────────────────────
     sample_weights = None

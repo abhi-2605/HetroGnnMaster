@@ -1,0 +1,23 @@
+{
+  "raw_reports_found": 6206,
+  "raw_reports_processed": 0,
+  "raw_reports_failed": 1,
+  "raw_reports_skipped": 0,
+  "adapted_saved": 0,
+  "raw_graphs_saved": 0,
+  "enriched_graphs_saved": 0,
+  "rich_reports": 0,
+  "low_activity_reports": 0,
+  "very_sparse_reports": 0,
+  "invalid_reports": 0,
+  "placeholder_graphs": 0,
+  "graphs_with_registry_edges": 0,
+  "graphs_with_network_edges": 0,
+  "graphs_with_zero_temporal_edges": 0,
+  "label_ransomware": 0,
+  "label_benign": 0,
+  "label_malware": 0,
+  "label_unknown": 0,
+  "labels_csv_created": 1,
+  "schema_inspection_ran": 0
+}
