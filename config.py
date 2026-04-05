@@ -451,7 +451,7 @@ CUSTOM_EVAL_PREDICTIONS_PATH = CUSTOM_EVAL_DIR / "zero_day_predictions.csv"
 CUSTOM_EVAL_CHECKPOINT_PATH = CHECKPOINTS_DIR / "best_model.pt"
 
 # Separate loader controls for custom evaluation
-CUSTOM_EVAL_BATCH_SIZE = 4
+CUSTOM_EVAL_BATCH_SIZE = 1
 CUSTOM_EVAL_NUM_WORKERS = 0
 CUSTOM_EVAL_PIN_MEMORY = True if DEVICE == "cuda" else False
 CUSTOM_EVAL_SHUFFLE = False
