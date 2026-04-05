@@ -104,7 +104,9 @@ for dir_path in [
 AUTO_REFRESH_SCHEMA = True
 FAIL_ON_SCHEMA_MISMATCH = True
 SCHEMA_STRICT_VALIDATION = True
-
+# Number of successfully processed graphs to generate.
+# Set to None to process everything.
+MAX_SUCCESSFUL_GRAPHS = 200
 # ============================================
 # SCHEMA NORMALIZATION POLICY
 # ============================================
@@ -239,7 +241,7 @@ USE_FOCAL_LOSS = True
 FOCAL_GAMMA = 2
 # FOCAL_ALPHA = [0.30, 0.40, 0.30]
 # FOCAL_ALPHA = [0.35, 0.35, 0.30] # 
-FOCAL_ALPHA = [0.36, 0.30, 0.38] # slight tweak to give more weight to ransomware and less to benign, while keeping other malware dominant
+FOCAL_ALPHA = [0.36, 0.38, 0.40] # slight tweak to give more weight to ransomware and less to benign, while keeping other malware dominant
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True
 OVERSAMPLE_WEIGHTS = {
@@ -419,3 +421,70 @@ BUCKETED_BATCH_RULES = [
 BUCKETED_BATCH_SHUFFLE = True
 BUCKETED_BATCH_USE_WEIGHTS = True
 BUCKETED_BATCH_VERBOSE = True
+
+
+
+# ============================================
+# CUSTOM ZERO-DAY / MIXED EVALUATION
+# ============================================
+USE_CUSTOM_ZERO_DAY_EVAL = True
+
+CUSTOM_EVAL_SOURCE_SPLITS = ["val", "test"]
+
+CUSTOM_EVAL_NEW_MALWARE_DIR = CACHE_DIR / "zero_day_unseen" / "all"
+
+CUSTOM_EVAL_TARGET_BENIGN = 200
+CUSTOM_EVAL_TARGET_OLD_MALWARE = 55
+CUSTOM_EVAL_INCLUDE_ALL_RANSOMWARE = True
+CUSTOM_EVAL_INCLUDE_ALL_NEW_MALWARE = True
+
+# 0 = Ransomware, 1 = Benign, 2 = Other Malwares
+CUSTOM_EVAL_NEW_MALWARE_LABEL = 2
+
+CUSTOM_EVAL_DIR = RESULTS_DIR / "custom_eval"
+CUSTOM_EVAL_DIR.mkdir(parents=True, exist_ok=True)
+
+CUSTOM_EVAL_MANIFEST_PATH = CUSTOM_EVAL_DIR / "zero_day_manifest.csv"
+CUSTOM_EVAL_RESULTS_PATH = CUSTOM_EVAL_DIR / "zero_day_results.json"
+CUSTOM_EVAL_PREDICTIONS_PATH = CUSTOM_EVAL_DIR / "zero_day_predictions.csv"
+
+CUSTOM_EVAL_CHECKPOINT_PATH = CHECKPOINTS_DIR / "best_model.pt"
+
+# Separate loader controls for custom evaluation
+CUSTOM_EVAL_BATCH_SIZE = 4
+CUSTOM_EVAL_NUM_WORKERS = 0
+CUSTOM_EVAL_PIN_MEMORY = True if DEVICE == "cuda" else False
+CUSTOM_EVAL_SHUFFLE = False
+CUSTOM_EVAL_VALIDATE_BATCH = False
+CUSTOM_EVAL_VALIDATE_GRAPHS = False
+
+CUSTOM_EVAL_REBUILD_MANIFEST = True
+CUSTOM_EVAL_SHUFFLE_BEFORE_SAMPLE = True
+
+CUSTOM_EVAL_FAIL_IF_NOT_ENOUGH_BENIGN = True
+CUSTOM_EVAL_FAIL_IF_NOT_ENOUGH_OLD_MALWARE = True
+CUSTOM_EVAL_FAIL_IF_NEW_MALWARE_DIR_MISSING = True
+
+CUSTOM_EVAL_ENFORCE_NEW_UNSEEN_DISJOINT = True
+
+
+
+
+CUSTOM_EVAL_SOURCE_SPLITS = ["val", "test"]
+CUSTOM_EVAL_NEW_MALWARE_DIR = CACHE_DIR / "zero_day_unseen" / "all"
+CUSTOM_EVAL_TARGET_BENIGN = 200
+CUSTOM_EVAL_TARGET_OLD_MALWARE = 55
+CUSTOM_EVAL_INCLUDE_ALL_RANSOMWARE = True
+CUSTOM_EVAL_INCLUDE_ALL_NEW_MALWARE = True
+CUSTOM_EVAL_NEW_MALWARE_LABEL = 2
+CUSTOM_EVAL_DIR = RESULTS_DIR / "custom_eval"
+CUSTOM_EVAL_MANIFEST_PATH = CUSTOM_EVAL_DIR / "zero_day_manifest.csv"
+CUSTOM_EVAL_FAIL_IF_NOT_ENOUGH_BENIGN = True
+CUSTOM_EVAL_FAIL_IF_NOT_ENOUGH_OLD_MALWARE = True
+CUSTOM_EVAL_FAIL_IF_NEW_MALWARE_DIR_MISSING = True
+CUSTOM_EVAL_ENFORCE_NEW_UNSEEN_DISJOINT = True
+CUSTOM_EVAL_SHUFFLE_BEFORE_SAMPLE = True
+
+
+
+OVERWRITE_ORIGINAL_METADATA = False

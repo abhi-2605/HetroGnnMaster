@@ -1,0 +1,475 @@
+sample_id,graph_path,label,class_name,origin,is_new_unseen
+80,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/80.pkl,1,Benign,old_test,False
+760,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/760.pkl,1,Benign,old_val,False
+713,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/713.pkl,1,Benign,old_test,False
+686,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/686.pkl,1,Benign,old_test,False
+786,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/786.pkl,1,Benign,old_test,False
+12f24fe99e5a19454233e71ce00f3133,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/12f24fe99e5a19454233e71ce00f3133.pkl,1,Benign,old_test,False
+820,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/820.pkl,1,Benign,old_val,False
+1de248bf6f4d2e09eddd208199d6e24b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1de248bf6f4d2e09eddd208199d6e24b.pkl,1,Benign,old_test,False
+37efdb65b9cdca9b4c553033c7c1c3d5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/37efdb65b9cdca9b4c553033c7c1c3d5.pkl,1,Benign,old_val,False
+4adaa6bf3e4658045f8c09b75956b83b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4adaa6bf3e4658045f8c09b75956b83b.pkl,1,Benign,old_val,False
+683,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/683.pkl,1,Benign,old_val,False
+9dda048e5bff1e5f233670cfa9bff1a6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/9dda048e5bff1e5f233670cfa9bff1a6.pkl,1,Benign,old_test,False
+557a681676c7a3a3a0d89544c509d633,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/557a681676c7a3a3a0d89544c509d633.pkl,1,Benign,old_val,False
+794,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/794.pkl,1,Benign,old_val,False
+869894ad6f4ce28f9ad8a97e811b3cab,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/869894ad6f4ce28f9ad8a97e811b3cab.pkl,1,Benign,old_val,False
+737,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/737.pkl,1,Benign,old_val,False
+448,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/448.pkl,1,Benign,old_val,False
+cacdd86923e9b9572fe804153de3be2a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/cacdd86923e9b9572fe804153de3be2a.pkl,1,Benign,old_test,False
+517,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/517.pkl,1,Benign,old_test,False
+886,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/886.pkl,1,Benign,old_val,False
+676,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/676.pkl,1,Benign,old_test,False
+785,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/785.pkl,1,Benign,old_test,False
+71bda7eea00c51262ae0533f4d5b9031,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/71bda7eea00c51262ae0533f4d5b9031.pkl,1,Benign,old_val,False
+395329498ce9088cf88cd69db4e3a9e3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/395329498ce9088cf88cd69db4e3a9e3.pkl,1,Benign,old_val,False
+11d6aa42756869d9556d163bba48410c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/11d6aa42756869d9556d163bba48410c.pkl,1,Benign,old_test,False
+e9b42270f9d7c5f8f11c1fccacdda2b8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/e9b42270f9d7c5f8f11c1fccacdda2b8.pkl,1,Benign,old_val,False
+957,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/957.pkl,1,Benign,old_test,False
+924,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/924.pkl,1,Benign,old_test,False
+605,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/605.pkl,1,Benign,old_val,False
+28365ecba0ca27c85634e8747b147730,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/28365ecba0ca27c85634e8747b147730.pkl,1,Benign,old_val,False
+108,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/108.pkl,1,Benign,old_test,False
+4e5c4aa1d85573783c78f3b7dbfe13d1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4e5c4aa1d85573783c78f3b7dbfe13d1.pkl,1,Benign,old_test,False
+04da78a30dbcf24f7ede52098c831316,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/04da78a30dbcf24f7ede52098c831316.pkl,1,Benign,old_test,False
+843,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/843.pkl,1,Benign,old_test,False
+1025,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1025.pkl,1,Benign,old_val,False
+61,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/61.pkl,1,Benign,old_test,False
+73f084d9113acb59c4009027d5fcf946,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/73f084d9113acb59c4009027d5fcf946.pkl,1,Benign,old_val,False
+7dc38c40c521f8f57b961c1fc1f808e5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7dc38c40c521f8f57b961c1fc1f808e5.pkl,1,Benign,old_test,False
+250,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/250.pkl,1,Benign,old_test,False
+122bf2c198bfb6f225b5f1a5d0a09733,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/122bf2c198bfb6f225b5f1a5d0a09733.pkl,1,Benign,old_val,False
+1008,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1008.pkl,1,Benign,old_test,False
+d711551959e05bf683e163378de2492e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/d711551959e05bf683e163378de2492e.pkl,1,Benign,old_val,False
+ecf4df5c442e1ff302473aa13a9f1c5c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/ecf4df5c442e1ff302473aa13a9f1c5c.pkl,1,Benign,old_val,False
+749,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/749.pkl,1,Benign,old_test,False
+3abc6454998cdf94293df652aa4b5080,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3abc6454998cdf94293df652aa4b5080.pkl,1,Benign,old_test,False
+405,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/405.pkl,1,Benign,old_val,False
+556,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/556.pkl,1,Benign,old_val,False
+553a2deead3671112db16f78328b28d5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/553a2deead3671112db16f78328b28d5.pkl,1,Benign,old_test,False
+106,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/106.pkl,1,Benign,old_test,False
+784,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/784.pkl,1,Benign,old_test,False
+a30897c37b12adf4d834791575d8e144,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a30897c37b12adf4d834791575d8e144.pkl,1,Benign,old_val,False
+7c37dc92088ae9ec102df7a4e4cf5aba,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7c37dc92088ae9ec102df7a4e4cf5aba.pkl,1,Benign,old_test,False
+504,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/504.pkl,1,Benign,old_test,False
+9d22d08179c8e9f3c68538fc38bbab24,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/9d22d08179c8e9f3c68538fc38bbab24.pkl,1,Benign,old_val,False
+753da24067a9978bd64d969ffaf6bb99,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/753da24067a9978bd64d969ffaf6bb99.pkl,1,Benign,old_val,False
+f9232ff1163607043624c77423766563,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/f9232ff1163607043624c77423766563.pkl,1,Benign,old_val,False
+446,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/446.pkl,1,Benign,old_test,False
+404,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/404.pkl,1,Benign,old_test,False
+365,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/365.pkl,1,Benign,old_val,False
+ff6ab174de694c751fe456fe93dadb36,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/ff6ab174de694c751fe456fe93dadb36.pkl,1,Benign,old_test,False
+123,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/123.pkl,1,Benign,old_test,False
+5dd5d6bc3a1b5c01b8d4503b8116477b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5dd5d6bc3a1b5c01b8d4503b8116477b.pkl,1,Benign,old_val,False
+ef760c4bf254b378c6ff60293b505130,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/ef760c4bf254b378c6ff60293b505130.pkl,1,Benign,old_val,False
+994,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/994.pkl,1,Benign,old_test,False
+770,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/770.pkl,1,Benign,old_val,False
+b2f3a33416a83666a59470539e9d3701,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/b2f3a33416a83666a59470539e9d3701.pkl,1,Benign,old_val,False
+330,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/330.pkl,1,Benign,old_val,False
+12e28cbd887cf4e6ae6c37a476a219f9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/12e28cbd887cf4e6ae6c37a476a219f9.pkl,1,Benign,old_test,False
+8980f26386a9568c36a43ad7f8eba068,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/8980f26386a9568c36a43ad7f8eba068.pkl,1,Benign,old_test,False
+223670e086632a1b7057f25b8a2c593c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/223670e086632a1b7057f25b8a2c593c.pkl,1,Benign,old_test,False
+771,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/771.pkl,1,Benign,old_val,False
+20bdd6a4e641aa3769aeb8722f92bde1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/20bdd6a4e641aa3769aeb8722f92bde1.pkl,1,Benign,old_test,False
+49,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/49.pkl,1,Benign,old_test,False
+087012822b313c7f013d3f22de33e3ac,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/087012822b313c7f013d3f22de33e3ac.pkl,1,Benign,old_test,False
+715,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/715.pkl,1,Benign,old_val,False
+246a819e549cd1bc998109e9c6b7d70d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/246a819e549cd1bc998109e9c6b7d70d.pkl,1,Benign,old_test,False
+62f170fb07fdbb79ceb7147101406eb8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/62f170fb07fdbb79ceb7147101406eb8.pkl,1,Benign,old_val,False
+58,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/58.pkl,1,Benign,old_test,False
+524,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/524.pkl,1,Benign,old_test,False
+502,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/502.pkl,1,Benign,old_test,False
+736,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/736.pkl,1,Benign,old_val,False
+110,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/110.pkl,1,Benign,old_val,False
+18,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/18.pkl,1,Benign,old_test,False
+f3b146b2fb2333c834c269d51b57e585,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/f3b146b2fb2333c834c269d51b57e585.pkl,1,Benign,old_val,False
+689,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/689.pkl,1,Benign,old_test,False
+1003,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1003.pkl,1,Benign,old_val,False
+861,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/861.pkl,1,Benign,old_test,False
+838,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/838.pkl,1,Benign,old_test,False
+550,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/550.pkl,1,Benign,old_test,False
+703,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/703.pkl,1,Benign,old_test,False
+fa7f5f109ba8a36817991e10880cb022,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/fa7f5f109ba8a36817991e10880cb022.pkl,1,Benign,old_test,False
+1030,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1030.pkl,1,Benign,old_test,False
+2f0050f870b2d49e0880334e4938d528,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2f0050f870b2d49e0880334e4938d528.pkl,1,Benign,old_val,False
+7794ed8826feda17f1044cc501463f55,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7794ed8826feda17f1044cc501463f55.pkl,1,Benign,old_val,False
+643,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/643.pkl,1,Benign,old_val,False
+b6850fbaf0652ebe3a0bb5a54932b834,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/b6850fbaf0652ebe3a0bb5a54932b834.pkl,1,Benign,old_test,False
+c07434de6dd55e765bf9d05aaf451d4e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/c07434de6dd55e765bf9d05aaf451d4e.pkl,1,Benign,old_test,False
+d1f18962d1720d342993d0f26e96ddae,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/d1f18962d1720d342993d0f26e96ddae.pkl,1,Benign,old_test,False
+831,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/831.pkl,1,Benign,old_test,False
+8bfc3272bd408849393cbfc58a06e670,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/8bfc3272bd408849393cbfc58a06e670.pkl,1,Benign,old_test,False
+b665733ffa2575cf55fe735b4dbe4daf,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/b665733ffa2575cf55fe735b4dbe4daf.pkl,1,Benign,old_val,False
+4a5efb20daee57d1ca64637c24fac8b7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4a5efb20daee57d1ca64637c24fac8b7.pkl,1,Benign,old_val,False
+819,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/819.pkl,1,Benign,old_val,False
+937,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/937.pkl,1,Benign,old_val,False
+852c065deaf53c02c37ca13a3cc61173,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/852c065deaf53c02c37ca13a3cc61173.pkl,1,Benign,old_val,False
+855,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/855.pkl,1,Benign,old_test,False
+414,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/414.pkl,1,Benign,old_val,False
+9a6089ee909d0f4d20a3e03dc1d681ac,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/9a6089ee909d0f4d20a3e03dc1d681ac.pkl,1,Benign,old_test,False
+c2938eb5ff932c2540a1514cc82c197c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/c2938eb5ff932c2540a1514cc82c197c.pkl,1,Benign,old_test,False
+954,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/954.pkl,1,Benign,old_test,False
+88f59fa501e1f34ddadaa7ad2e5c3bab,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/88f59fa501e1f34ddadaa7ad2e5c3bab.pkl,1,Benign,old_val,False
+8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/8.pkl,1,Benign,old_val,False
+063875d1549af53b587a829456b7f716,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/063875d1549af53b587a829456b7f716.pkl,1,Benign,old_val,False
+495,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/495.pkl,1,Benign,old_val,False
+322,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/322.pkl,1,Benign,old_val,False
+126a8c1643b2b3834b03ec69713dcc12,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/126a8c1643b2b3834b03ec69713dcc12.pkl,1,Benign,old_val,False
+bb03388131338158ea92b5408533a974,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/bb03388131338158ea92b5408533a974.pkl,1,Benign,old_val,False
+34,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/34.pkl,1,Benign,old_test,False
+103af5dafe7b1dda9494d94ce3337a4b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/103af5dafe7b1dda9494d94ce3337a4b.pkl,1,Benign,old_val,False
+328,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/328.pkl,1,Benign,old_test,False
+20af57bfff931229046ff52d2b2c7797,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/20af57bfff931229046ff52d2b2c7797.pkl,1,Benign,old_val,False
+5fc944b96b19ee35265e7578151160e6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5fc944b96b19ee35265e7578151160e6.pkl,1,Benign,old_val,False
+453,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/453.pkl,1,Benign,old_val,False
+371,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/371.pkl,1,Benign,old_val,False
+590,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/590.pkl,1,Benign,old_val,False
+484,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/484.pkl,1,Benign,old_test,False
+5af6b376e660805759683865437acbc0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5af6b376e660805759683865437acbc0.pkl,1,Benign,old_test,False
+57cac848fa14ae38f14f9441f8933282,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/57cac848fa14ae38f14f9441f8933282.pkl,1,Benign,old_val,False
+551,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/551.pkl,1,Benign,old_val,False
+964,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/964.pkl,1,Benign,old_val,False
+153,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/153.pkl,1,Benign,old_test,False
+0e1c3a6ee3a05b5c4cd3d43fce8311a1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0e1c3a6ee3a05b5c4cd3d43fce8311a1.pkl,1,Benign,old_test,False
+712,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/712.pkl,1,Benign,old_test,False
+22328ba82ec2642ca0fda742146a8477,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/22328ba82ec2642ca0fda742146a8477.pkl,1,Benign,old_test,False
+623,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/623.pkl,1,Benign,old_test,False
+530ebb87a01526c10197a23a3f33a5d5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/530ebb87a01526c10197a23a3f33a5d5.pkl,1,Benign,old_test,False
+7366668cc7eaa1068a38cc2761217fc4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7366668cc7eaa1068a38cc2761217fc4.pkl,1,Benign,old_test,False
+916,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/916.pkl,1,Benign,old_val,False
+244f3a79c653e7ed3c327f44d48bc8a7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/244f3a79c653e7ed3c327f44d48bc8a7.pkl,1,Benign,old_test,False
+a4414c6f58e30651d09643e7ef54ecf8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a4414c6f58e30651d09643e7ef54ecf8.pkl,1,Benign,old_val,False
+246,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/246.pkl,1,Benign,old_val,False
+817cb2d8d2f58648b7728b0c7c47c3d8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/817cb2d8d2f58648b7728b0c7c47c3d8.pkl,1,Benign,old_test,False
+70e9bf498059d6d966bccb5ff683bfef,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/70e9bf498059d6d966bccb5ff683bfef.pkl,1,Benign,old_test,False
+5cdf106bf92c65c5b73e4c87138a85df,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5cdf106bf92c65c5b73e4c87138a85df.pkl,1,Benign,old_test,False
+f2867bee7180cdc839f7636fddc1aa74,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/f2867bee7180cdc839f7636fddc1aa74.pkl,1,Benign,old_val,False
+874,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/874.pkl,1,Benign,old_val,False
+948,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/948.pkl,1,Benign,old_val,False
+304,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/304.pkl,1,Benign,old_val,False
+bfd6a7765dd0ead7bc8f89a55b5481ee,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/bfd6a7765dd0ead7bc8f89a55b5481ee.pkl,1,Benign,old_test,False
+ab0a854e7740a4e78e3e5e5e380353fa,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/ab0a854e7740a4e78e3e5e5e380353fa.pkl,1,Benign,old_val,False
+b8c801810a69845dcd8dee13703f97ac,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/b8c801810a69845dcd8dee13703f97ac.pkl,1,Benign,old_test,False
+f2e6c09bc48f5496523731d4ce3abdec,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/f2e6c09bc48f5496523731d4ce3abdec.pkl,1,Benign,old_test,False
+dda22b0cee0e7f742a5c4696e3b5a804,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/dda22b0cee0e7f742a5c4696e3b5a804.pkl,1,Benign,old_test,False
+442,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/442.pkl,1,Benign,old_val,False
+214,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/214.pkl,1,Benign,old_val,False
+768,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/768.pkl,1,Benign,old_val,False
+288,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/288.pkl,1,Benign,old_val,False
+86c18dfb8b30d7000a80b226dc57eaf4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/86c18dfb8b30d7000a80b226dc57eaf4.pkl,1,Benign,old_val,False
+368,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/368.pkl,1,Benign,old_test,False
+748,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/748.pkl,1,Benign,old_val,False
+391,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/391.pkl,1,Benign,old_val,False
+863,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/863.pkl,1,Benign,old_test,False
+298,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/298.pkl,1,Benign,old_val,False
+432f47f1e4b8d108d61526746b83af5c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/432f47f1e4b8d108d61526746b83af5c.pkl,1,Benign,old_test,False
+66,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/66.pkl,1,Benign,old_test,False
+696,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/696.pkl,1,Benign,old_val,False
+14,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/14.pkl,1,Benign,old_test,False
+606,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/606.pkl,1,Benign,old_test,False
+341,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/341.pkl,1,Benign,old_test,False
+347,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/347.pkl,1,Benign,old_test,False
+47245e8bba1b1ed68913c1a6c9d9ced7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/47245e8bba1b1ed68913c1a6c9d9ced7.pkl,1,Benign,old_val,False
+a56ea46b5530e60b1291eb41a63da229,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a56ea46b5530e60b1291eb41a63da229.pkl,1,Benign,old_val,False
+527,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/527.pkl,1,Benign,old_test,False
+615a6d10b80a821a293ef54935ef2cb5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/615a6d10b80a821a293ef54935ef2cb5.pkl,1,Benign,old_val,False
+953,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/953.pkl,1,Benign,old_val,False
+54607769283c879872c44cfef857806e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/54607769283c879872c44cfef857806e.pkl,1,Benign,old_test,False
+86fca7f150ddf96047ff35f3e39c63af,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/86fca7f150ddf96047ff35f3e39c63af.pkl,1,Benign,old_test,False
+63,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/63.pkl,1,Benign,old_test,False
+735,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/735.pkl,1,Benign,old_val,False
+120,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/120.pkl,1,Benign,old_val,False
+156,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/156.pkl,1,Benign,old_val,False
+1c1f8ed7316852f8248c62e0bd199c01,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1c1f8ed7316852f8248c62e0bd199c01.pkl,1,Benign,old_test,False
+5ab171e34ae233588334898964713652,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5ab171e34ae233588334898964713652.pkl,1,Benign,old_val,False
+10,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/10.pkl,1,Benign,old_test,False
+717,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/717.pkl,1,Benign,old_test,False
+a3f4107c68215616cebb0d787f66bcc9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/a3f4107c68215616cebb0d787f66bcc9.pkl,1,Benign,old_test,False
+4779f59e00bcb80826e3deb3fb4af52a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4779f59e00bcb80826e3deb3fb4af52a.pkl,1,Benign,old_val,False
+bc41c25862628aaac0221baa51175d8a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/bc41c25862628aaac0221baa51175d8a.pkl,1,Benign,old_val,False
+cc9d0697280c3a2bc93818be2074a2be,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/cc9d0697280c3a2bc93818be2074a2be.pkl,1,Benign,old_val,False
+dcaa9fd0f6da052f09bcaad87a2db219,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/dcaa9fd0f6da052f09bcaad87a2db219.pkl,1,Benign,old_test,False
+a1ee8b242045a6dd67d5067ac8045817,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/a1ee8b242045a6dd67d5067ac8045817.pkl,1,Benign,old_test,False
+613,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/613.pkl,1,Benign,old_test,False
+ec5c49f9fa8d871d1937148b9f55f01c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/ec5c49f9fa8d871d1937148b9f55f01c.pkl,1,Benign,old_test,False
+1023,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1023.pkl,1,Benign,old_val,False
+849,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/849.pkl,1,Benign,old_test,False
+586,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/586.pkl,1,Benign,old_test,False
+edcb816abe6bafd8db69d42692f0cbce,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/edcb816abe6bafd8db69d42692f0cbce.pkl,1,Benign,old_test,False
+136,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/136.pkl,1,Benign,old_val,False
+10287b93c2805618649e4cedf0268d4d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/10287b93c2805618649e4cedf0268d4d.pkl,1,Benign,old_val,False
+487,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/487.pkl,1,Benign,old_test,False
+0b902953257e6485aa54f7f6406d4484,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0b902953257e6485aa54f7f6406d4484.pkl,2,Other Malware,old_test,False
+4025f1381d374c10d4bf2ccf24b59910,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4025f1381d374c10d4bf2ccf24b59910.pkl,2,Other Malware,old_test,False
+7c9523eeb57aa7bb55603afc5f0a9c75,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7c9523eeb57aa7bb55603afc5f0a9c75.pkl,2,Other Malware,old_test,False
+19e4d479a7312be92f1e7321920fbba7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/19e4d479a7312be92f1e7321920fbba7.pkl,2,Other Malware,old_val,False
+791aaed7c82b1763fccd80670d7f131a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/791aaed7c82b1763fccd80670d7f131a.pkl,2,Other Malware,old_test,False
+1133c55f35498d54c7868199d769cacd,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1133c55f35498d54c7868199d769cacd.pkl,2,Other Malware,old_test,False
+93b79ef8e60221e1a725711104548d2d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/93b79ef8e60221e1a725711104548d2d.pkl,2,Other Malware,old_test,False
+2c4c7537bbac2761817c84ec761f20c1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2c4c7537bbac2761817c84ec761f20c1.pkl,2,Other Malware,old_test,False
+3d6032537231d21979220b2ae6fae23f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3d6032537231d21979220b2ae6fae23f.pkl,2,Other Malware,old_test,False
+0b778265366c9080ca3d2783d7d3f922,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/0b778265366c9080ca3d2783d7d3f922.pkl,2,Other Malware,old_val,False
+ff913bcef5cd89ccfab745f69f2724ea,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/ff913bcef5cd89ccfab745f69f2724ea.pkl,2,Other Malware,old_test,False
+45dc197559c624713936cd3465f4c0d1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/45dc197559c624713936cd3465f4c0d1.pkl,2,Other Malware,old_val,False
+65f39c00aaa1e95adfac1e7eaf96771b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/65f39c00aaa1e95adfac1e7eaf96771b.pkl,2,Other Malware,old_test,False
+be3e9113b99c5bd7e44636f43a267a55,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/be3e9113b99c5bd7e44636f43a267a55.pkl,2,Other Malware,old_test,False
+77b3b30603c5ed2d8557318cead012f3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/77b3b30603c5ed2d8557318cead012f3.pkl,2,Other Malware,old_val,False
+2098a0723dad837df3325408b04d12c4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2098a0723dad837df3325408b04d12c4.pkl,2,Other Malware,old_val,False
+40189a47f5066e1a896399443daaca94,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/40189a47f5066e1a896399443daaca94.pkl,2,Other Malware,old_test,False
+1b2656a6e8513354ca8cf39e64ba1720,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1b2656a6e8513354ca8cf39e64ba1720.pkl,2,Other Malware,old_test,False
+2a457cdf4d4a6920e6bebc54db641157,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2a457cdf4d4a6920e6bebc54db641157.pkl,2,Other Malware,old_test,False
+c7fb57a1664a6447a839b863176f9f8b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/c7fb57a1664a6447a839b863176f9f8b.pkl,2,Other Malware,old_val,False
+1a0703548d450f3d1be8afc4443f64bb,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1a0703548d450f3d1be8afc4443f64bb.pkl,2,Other Malware,old_val,False
+66096d60da718878ee6b1e789e44f944,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/66096d60da718878ee6b1e789e44f944.pkl,2,Other Malware,old_val,False
+0ee7b8c3293237f4641dc59cc26bbc36,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0ee7b8c3293237f4641dc59cc26bbc36.pkl,2,Other Malware,old_test,False
+1fd42f809e4390fe7249c0f363d825bd,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1fd42f809e4390fe7249c0f363d825bd.pkl,2,Other Malware,old_val,False
+ba4913867c60cf1d2ec88b3bb09046af,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/ba4913867c60cf1d2ec88b3bb09046af.pkl,2,Other Malware,old_val,False
+60df26f60e68c6a3cddbd1e91bbb9958,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/60df26f60e68c6a3cddbd1e91bbb9958.pkl,2,Other Malware,old_test,False
+e928a435f5af20ecae6d3c1d026ca68c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/e928a435f5af20ecae6d3c1d026ca68c.pkl,2,Other Malware,old_val,False
+a8f37741de55cf714ec85f2e4793aee4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a8f37741de55cf714ec85f2e4793aee4.pkl,2,Other Malware,old_val,False
+15f4dc3e2aa85e4b304d419797eb9bdd,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/15f4dc3e2aa85e4b304d419797eb9bdd.pkl,2,Other Malware,old_val,False
+37738ff87319df66cb24a0d269128fcb,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/37738ff87319df66cb24a0d269128fcb.pkl,2,Other Malware,old_test,False
+49196211087947ea3b36abb0570dab75,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/49196211087947ea3b36abb0570dab75.pkl,2,Other Malware,old_test,False
+21bb978b116fa781407e7e0e7892d421,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/21bb978b116fa781407e7e0e7892d421.pkl,2,Other Malware,old_val,False
+192b6c78c33e94bb55a6d9f33796d430,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/192b6c78c33e94bb55a6d9f33796d430.pkl,2,Other Malware,old_test,False
+a43a6dfe8f389669af4ee7c92a1568ac,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a43a6dfe8f389669af4ee7c92a1568ac.pkl,2,Other Malware,old_val,False
+6e99bafb555dac01a2dee1c81f482bda,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/6e99bafb555dac01a2dee1c81f482bda.pkl,2,Other Malware,old_val,False
+1d1233ae367b2929f8d795fdbd0ea877,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1d1233ae367b2929f8d795fdbd0ea877.pkl,2,Other Malware,old_val,False
+360168bae948242f58b16f0f7e16d9a4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/360168bae948242f58b16f0f7e16d9a4.pkl,2,Other Malware,old_test,False
+627f3cba7a3abb0d2a5cbee34640021d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/627f3cba7a3abb0d2a5cbee34640021d.pkl,2,Other Malware,old_val,False
+7b1c9bbdb3a7a3752fe28d481903e8da,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7b1c9bbdb3a7a3752fe28d481903e8da.pkl,2,Other Malware,old_val,False
+048174ad12125d3f815f4bf694341b9e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/048174ad12125d3f815f4bf694341b9e.pkl,2,Other Malware,old_val,False
+2c56306c26e9190dc86d4279b1c1efd6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2c56306c26e9190dc86d4279b1c1efd6.pkl,2,Other Malware,old_val,False
+6c488aefe58f91ff8da820b35e3c99df,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/6c488aefe58f91ff8da820b35e3c99df.pkl,2,Other Malware,old_test,False
+75634a7bb92d6c6195035f1c2b73196b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/75634a7bb92d6c6195035f1c2b73196b.pkl,2,Other Malware,old_val,False
+006ebdbef38a2878fa1a8c21f2ebc96b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/006ebdbef38a2878fa1a8c21f2ebc96b.pkl,2,Other Malware,old_test,False
+0b96a42e48aac41fceac6f0d69892c05,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/0b96a42e48aac41fceac6f0d69892c05.pkl,2,Other Malware,old_val,False
+be042550d2a6a28e8eef90a973822702,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/be042550d2a6a28e8eef90a973822702.pkl,2,Other Malware,old_test,False
+2a98642cefa94d1fcfbb1b18d3438d68,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2a98642cefa94d1fcfbb1b18d3438d68.pkl,2,Other Malware,old_val,False
+3dbeb83c7ca8aef76863061df7a9ef1d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/3dbeb83c7ca8aef76863061df7a9ef1d.pkl,2,Other Malware,old_val,False
+9a70f6990d7264650161dec0dcd4e281,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/9a70f6990d7264650161dec0dcd4e281.pkl,2,Other Malware,old_test,False
+aa0858e3b584d4d9fcf20fcb030a21aa,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/aa0858e3b584d4d9fcf20fcb030a21aa.pkl,2,Other Malware,old_val,False
+4129fa1628f9fd14a0db24618365d0d3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4129fa1628f9fd14a0db24618365d0d3.pkl,2,Other Malware,old_val,False
+3cf597a0a38997cebee5b64a9972b59e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/3cf597a0a38997cebee5b64a9972b59e.pkl,2,Other Malware,old_val,False
+4b594c89430b7fcf6742cf3d664f0f59,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4b594c89430b7fcf6742cf3d664f0f59.pkl,2,Other Malware,old_test,False
+170b90a483c3dc67779ed777ee9aba03,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/170b90a483c3dc67779ed777ee9aba03.pkl,2,Other Malware,old_val,False
+6bd2be69a7afe4aab06aad752e344dbc,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/6bd2be69a7afe4aab06aad752e344dbc.pkl,2,Other Malware,old_test,False
+mal_reports__000a3ea381d7d70be8b6fe1ee51dca22,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000a3ea381d7d70be8b6fe1ee51dca22.pkl,2,Other Malware,new_unseen,True
+mal_reports__000adc56f2d8cd1f7b8f6b54912000e9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000adc56f2d8cd1f7b8f6b54912000e9.pkl,2,Other Malware,new_unseen,True
+mal_reports__000b28e7a5905b5bf3b80c6c60a5f828,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000b28e7a5905b5bf3b80c6c60a5f828.pkl,2,Other Malware,new_unseen,True
+mal_reports__000c7ff25b87232407b0f3afdc1daf43,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000c7ff25b87232407b0f3afdc1daf43.pkl,2,Other Malware,new_unseen,True
+mal_reports__000cbb278e4f0194e7c693160d7975bb,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000cbb278e4f0194e7c693160d7975bb.pkl,2,Other Malware,new_unseen,True
+mal_reports__000ed458b787e6841c103a694d11962c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000ed458b787e6841c103a694d11962c.pkl,2,Other Malware,new_unseen,True
+mal_reports__000f6d35ea5397e40ffaa7931a9ae1d3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000f6d35ea5397e40ffaa7931a9ae1d3.pkl,2,Other Malware,new_unseen,True
+mal_reports__001a255c29530c33702b244b5ade0b76,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__001a255c29530c33702b244b5ade0b76.pkl,2,Other Malware,new_unseen,True
+mal_reports__001cfa63ad79aaf3e4a2b85a2e7f227f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__001cfa63ad79aaf3e4a2b85a2e7f227f.pkl,2,Other Malware,new_unseen,True
+mal_reports__001d106b8f74e8a92d8d19b39fb4afea,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__001d106b8f74e8a92d8d19b39fb4afea.pkl,2,Other Malware,new_unseen,True
+mal_reports__001eaf022daacf081db1a0cfb72af1b0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__001eaf022daacf081db1a0cfb72af1b0.pkl,2,Other Malware,new_unseen,True
+mal_reports__001ed0ac1fbb06d474213b1d37d60021,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__001ed0ac1fbb06d474213b1d37d60021.pkl,2,Other Malware,new_unseen,True
+mal_reports__00a03d37ba2cbcd9a532ff01d3d5e070,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a03d37ba2cbcd9a532ff01d3d5e070.pkl,2,Other Malware,new_unseen,True
+mal_reports__00a0f5fe1ba0102ed789b2aa85c3e316,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a0f5fe1ba0102ed789b2aa85c3e316.pkl,2,Other Malware,new_unseen,True
+mal_reports__00a38bce6818521bed3c78b14ddef25f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a38bce6818521bed3c78b14ddef25f.pkl,2,Other Malware,new_unseen,True
+mal_reports__00a473640f8d7286e315317b03cc55ef,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a473640f8d7286e315317b03cc55ef.pkl,2,Other Malware,new_unseen,True
+mal_reports__00a4a67dc6a4f175affa93d45340c119,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a4a67dc6a4f175affa93d45340c119.pkl,2,Other Malware,new_unseen,True
+mal_reports__00a4b6a503d5cfd408c97091c914fd74,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a4b6a503d5cfd408c97091c914fd74.pkl,2,Other Malware,new_unseen,True
+mal_reports__00a4dab57de640e7846fdc35b2e4675a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a4dab57de640e7846fdc35b2e4675a.pkl,2,Other Malware,new_unseen,True
+mal_reports__00a53241bf9c9425c6df8da44a5ca4f4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a53241bf9c9425c6df8da44a5ca4f4.pkl,2,Other Malware,new_unseen,True
+mal_reports__00a80192730aaf79a2c444d66b6c5ae6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a80192730aaf79a2c444d66b6c5ae6.pkl,2,Other Malware,new_unseen,True
+mal_reports__00a85c1a86a9553d6ff98195d15bff15,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a85c1a86a9553d6ff98195d15bff15.pkl,2,Other Malware,new_unseen,True
+mal_reports__00aaa82e283450b7940acf8a5a675666,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00aaa82e283450b7940acf8a5a675666.pkl,2,Other Malware,new_unseen,True
+mal_reports__00aae6c41996b3d1631f605ad783f1f8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00aae6c41996b3d1631f605ad783f1f8.pkl,2,Other Malware,new_unseen,True
+mal_reports__00b26c8964bf6c20183d13867e6dbcb0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00b26c8964bf6c20183d13867e6dbcb0.pkl,2,Other Malware,new_unseen,True
+mal_reports__00b2fa6a50ad6652627b3e9336b962c2,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00b2fa6a50ad6652627b3e9336b962c2.pkl,2,Other Malware,new_unseen,True
+mal_reports__00b35ea8173b4f5116e599d9f80e3611,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00b35ea8173b4f5116e599d9f80e3611.pkl,2,Other Malware,new_unseen,True
+mal_reports__00b3975f09b5c3fa3ff7a62db0033850,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00b3975f09b5c3fa3ff7a62db0033850.pkl,2,Other Malware,new_unseen,True
+mal_reports__00bb04604996c97b7b4f8b2c767c0f40,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00bb04604996c97b7b4f8b2c767c0f40.pkl,2,Other Malware,new_unseen,True
+mal_reports__00be655ad247b27495443d97ffc181d9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00be655ad247b27495443d97ffc181d9.pkl,2,Other Malware,new_unseen,True
+mal_reports__00be6e324bb3f8e5266ad1ce10b6a859,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00be6e324bb3f8e5266ad1ce10b6a859.pkl,2,Other Malware,new_unseen,True
+mal_reports__00c03e47023be97861f53b0a05d1c0c8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00c03e47023be97861f53b0a05d1c0c8.pkl,2,Other Malware,new_unseen,True
+mal_reports__00c1cf2ebdfe9dba60fe2b4ce609bf7a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00c1cf2ebdfe9dba60fe2b4ce609bf7a.pkl,2,Other Malware,new_unseen,True
+mal_reports__00c3a93bad6ae2d3b082aabe3098b904,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00c3a93bad6ae2d3b082aabe3098b904.pkl,2,Other Malware,new_unseen,True
+mal_reports__00c4fbab0e10b68a77bb7e9289a0d54b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00c4fbab0e10b68a77bb7e9289a0d54b.pkl,2,Other Malware,new_unseen,True
+mal_reports__00c60e1945d9584792f3691b82378bd0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00c60e1945d9584792f3691b82378bd0.pkl,2,Other Malware,new_unseen,True
+mal_reports__00cc33352ae8e526f7533119fb823cb1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00cc33352ae8e526f7533119fb823cb1.pkl,2,Other Malware,new_unseen,True
+mal_reports__00ce1f799aa5dc2f43c366dc60dc6098,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00ce1f799aa5dc2f43c366dc60dc6098.pkl,2,Other Malware,new_unseen,True
+mal_reports__00ce45f73fa3bdbb862357983ce8989d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00ce45f73fa3bdbb862357983ce8989d.pkl,2,Other Malware,new_unseen,True
+mal_reports__00d058aaf79abc4cd49524b4394818dd,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d058aaf79abc4cd49524b4394818dd.pkl,2,Other Malware,new_unseen,True
+mal_reports__00d3bedc5c6cf3614990a5a21592cebd,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d3bedc5c6cf3614990a5a21592cebd.pkl,2,Other Malware,new_unseen,True
+mal_reports__00d47e7738c972700d66c80d973ca1ba,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d47e7738c972700d66c80d973ca1ba.pkl,2,Other Malware,new_unseen,True
+mal_reports__00d5e8c917ee36e5a2544bbd4b8681d1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d5e8c917ee36e5a2544bbd4b8681d1.pkl,2,Other Malware,new_unseen,True
+mal_reports__00d6ba82eed3ca0af8cf3a4342014bb1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d6ba82eed3ca0af8cf3a4342014bb1.pkl,2,Other Malware,new_unseen,True
+mal_reports__00d7bcafe9e33ede2af6cf91cc33e176,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d7bcafe9e33ede2af6cf91cc33e176.pkl,2,Other Malware,new_unseen,True
+mal_reports__00d9d5a0319cddef48add9257d4721df,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d9d5a0319cddef48add9257d4721df.pkl,2,Other Malware,new_unseen,True
+mal_reports__00db0e7fe43d5b235d6fd37937093d7c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00db0e7fe43d5b235d6fd37937093d7c.pkl,2,Other Malware,new_unseen,True
+mal_reports__00e076e93aebd752f96f7704dd321c7f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00e076e93aebd752f96f7704dd321c7f.pkl,2,Other Malware,new_unseen,True
+mal_reports__00e236527d4294fc5a75eb1cbc2eb141,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00e236527d4294fc5a75eb1cbc2eb141.pkl,2,Other Malware,new_unseen,True
+mal_reports__00e65efbe9d442aca345431bea267fa9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00e65efbe9d442aca345431bea267fa9.pkl,2,Other Malware,new_unseen,True
+mal_reports__00e973ec1f36476287298965276d5989,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00e973ec1f36476287298965276d5989.pkl,2,Other Malware,new_unseen,True
+mal_reports__00ea535ecc3b6f358b73add6dfade641,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00ea535ecc3b6f358b73add6dfade641.pkl,2,Other Malware,new_unseen,True
+mal_reports__00ebc15103226de598bda6cd03b001d5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00ebc15103226de598bda6cd03b001d5.pkl,2,Other Malware,new_unseen,True
+mal_reports__00ed79d8ffb56a853365fb673ece1680,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00ed79d8ffb56a853365fb673ece1680.pkl,2,Other Malware,new_unseen,True
+mal_reports__00f14956960aad9a31d4147db524c65c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f14956960aad9a31d4147db524c65c.pkl,2,Other Malware,new_unseen,True
+mal_reports__00f1a2c951baaeb34418c67607b70f50,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f1a2c951baaeb34418c67607b70f50.pkl,2,Other Malware,new_unseen,True
+mal_reports__00f360494544f2243a5bdde710af3178,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f360494544f2243a5bdde710af3178.pkl,2,Other Malware,new_unseen,True
+mal_reports__00f5b7dd67cbb43dc1f03caaf1b702f0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f5b7dd67cbb43dc1f03caaf1b702f0.pkl,2,Other Malware,new_unseen,True
+mal_reports__00f5da8b1b4539508a418bda650f68b0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f5da8b1b4539508a418bda650f68b0.pkl,2,Other Malware,new_unseen,True
+mal_reports__00f6921f2a1ef6abcf691fb7e15bd997,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f6921f2a1ef6abcf691fb7e15bd997.pkl,2,Other Malware,new_unseen,True
+mal_reports__00f73b2fae33e9becc6f700194704774,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f73b2fae33e9becc6f700194704774.pkl,2,Other Malware,new_unseen,True
+mal_reports__00f8bbe855a32c75f4c0aaf65ff1b950,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f8bbe855a32c75f4c0aaf65ff1b950.pkl,2,Other Malware,new_unseen,True
+mal_reports__00f91c3f4a20d1c513aca8cdd3e16680,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f91c3f4a20d1c513aca8cdd3e16680.pkl,2,Other Malware,new_unseen,True
+mal_reports__00faac7951328980fd09a2d46ca42cc4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00faac7951328980fd09a2d46ca42cc4.pkl,2,Other Malware,new_unseen,True
+mal_reports__00fbcbd669f72cd2dc71ec3a4e971f14,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00fbcbd669f72cd2dc71ec3a4e971f14.pkl,2,Other Malware,new_unseen,True
+mal_reports__00fbeabd68a647ef625408848c39946c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00fbeabd68a647ef625408848c39946c.pkl,2,Other Malware,new_unseen,True
+mal_reports__00ffefc428396be826b239e04e5b5f1c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00ffefc428396be826b239e04e5b5f1c.pkl,2,Other Malware,new_unseen,True
+mal_reports__0158ac8036bbd59df8de79133b0ecc58,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0158ac8036bbd59df8de79133b0ecc58.pkl,2,Other Malware,new_unseen,True
+mal_reports__01a1f3c3b1b11c7538d3bfeb2e97e5c0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a1f3c3b1b11c7538d3bfeb2e97e5c0.pkl,2,Other Malware,new_unseen,True
+mal_reports__01a33dfb20a3dafb2dfc0d30b8b94e10,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a33dfb20a3dafb2dfc0d30b8b94e10.pkl,2,Other Malware,new_unseen,True
+mal_reports__01a3f144a15edbbd08fc606ecbaca7da,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a3f144a15edbbd08fc606ecbaca7da.pkl,2,Other Malware,new_unseen,True
+mal_reports__01a43fa78b7b79fceeee8dfa7dda0e18,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a43fa78b7b79fceeee8dfa7dda0e18.pkl,2,Other Malware,new_unseen,True
+mal_reports__01a53acf19d8e1341b3ea97189fbbe00,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a53acf19d8e1341b3ea97189fbbe00.pkl,2,Other Malware,new_unseen,True
+mal_reports__01a8c4b8243edead1ff6de0a9d9f01d0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a8c4b8243edead1ff6de0a9d9f01d0.pkl,2,Other Malware,new_unseen,True
+mal_reports__01a8d99cc288fdff1aca1c4f00704321,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a8d99cc288fdff1aca1c4f00704321.pkl,2,Other Malware,new_unseen,True
+mal_reports__01a8fb9e746dd2d600ac3c1c26b7e4cb,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a8fb9e746dd2d600ac3c1c26b7e4cb.pkl,2,Other Malware,new_unseen,True
+mal_reports__01a98142b184b284e6540f933de8cc31,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a98142b184b284e6540f933de8cc31.pkl,2,Other Malware,new_unseen,True
+mal_reports__01a9d166e6f35c7fb1c59c5c6477f4c7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a9d166e6f35c7fb1c59c5c6477f4c7.pkl,2,Other Malware,new_unseen,True
+mal_reports__01ab6a23f7543b96544db55873079288,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01ab6a23f7543b96544db55873079288.pkl,2,Other Malware,new_unseen,True
+mal_reports__01aba858bc7c376bb3a549d6162ed256,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01aba858bc7c376bb3a549d6162ed256.pkl,2,Other Malware,new_unseen,True
+mal_reports__01ad91ef61505499209230963d195c47,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01ad91ef61505499209230963d195c47.pkl,2,Other Malware,new_unseen,True
+mal_reports__01aede06342d40843fbf99a1f2fb4d64,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01aede06342d40843fbf99a1f2fb4d64.pkl,2,Other Malware,new_unseen,True
+mal_reports__01b1859ddf8ba3549cd31f12d60ab9fc,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b1859ddf8ba3549cd31f12d60ab9fc.pkl,2,Other Malware,new_unseen,True
+mal_reports__01b1a6079054d5d82896773e2118ae5d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b1a6079054d5d82896773e2118ae5d.pkl,2,Other Malware,new_unseen,True
+mal_reports__01b258d8142ed08a541a916386872be3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b258d8142ed08a541a916386872be3.pkl,2,Other Malware,new_unseen,True
+mal_reports__01b2a2958e367d56dfd513a110e63aef,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b2a2958e367d56dfd513a110e63aef.pkl,2,Other Malware,new_unseen,True
+mal_reports__01b7204632e00e67d3691a35db06f6e0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b7204632e00e67d3691a35db06f6e0.pkl,2,Other Malware,new_unseen,True
+mal_reports__01b83a7d3052810627ac2a76e02818b9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b83a7d3052810627ac2a76e02818b9.pkl,2,Other Malware,new_unseen,True
+mal_reports__01b85652db934fb4187921af8f7d0e90,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b85652db934fb4187921af8f7d0e90.pkl,2,Other Malware,new_unseen,True
+mal_reports__01b8f61129915211a90f950fa2053cb3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b8f61129915211a90f950fa2053cb3.pkl,2,Other Malware,new_unseen,True
+mal_reports__01b925f630d42983d5942885aa4dfd90,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b925f630d42983d5942885aa4dfd90.pkl,2,Other Malware,new_unseen,True
+mal_reports__01bbb5eee02be5c95726356c9e13d6d7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01bbb5eee02be5c95726356c9e13d6d7.pkl,2,Other Malware,new_unseen,True
+mal_reports__01bcceb0ef77a9aaa1e2f044fbe94156,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01bcceb0ef77a9aaa1e2f044fbe94156.pkl,2,Other Malware,new_unseen,True
+mal_reports__01bd02b422cdc7b9b4dc5036d3ed3550,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01bd02b422cdc7b9b4dc5036d3ed3550.pkl,2,Other Malware,new_unseen,True
+mal_reports__01be967e73679d75ba8cdc67d6dcce00,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01be967e73679d75ba8cdc67d6dcce00.pkl,2,Other Malware,new_unseen,True
+mal_reports__01c0577725a79b9a300831ead296cec9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01c0577725a79b9a300831ead296cec9.pkl,2,Other Malware,new_unseen,True
+mal_reports__01c0e709db088465f1700c41a5037e93,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01c0e709db088465f1700c41a5037e93.pkl,2,Other Malware,new_unseen,True
+mal_reports__01c75638b91bd9a36b996f5d3d80c7b8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01c75638b91bd9a36b996f5d3d80c7b8.pkl,2,Other Malware,new_unseen,True
+mal_reports__01c7bf20e1560d95c00c2458e3925560,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01c7bf20e1560d95c00c2458e3925560.pkl,2,Other Malware,new_unseen,True
+mal_reports__01c900185a4004e7ec7c4e5c765226a0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01c900185a4004e7ec7c4e5c765226a0.pkl,2,Other Malware,new_unseen,True
+mal_reports__01ca4239e92121046252f528aa46d8e0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01ca4239e92121046252f528aa46d8e0.pkl,2,Other Malware,new_unseen,True
+mal_reports__01cbdb10ab96d7de94ac1db156ad0572,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01cbdb10ab96d7de94ac1db156ad0572.pkl,2,Other Malware,new_unseen,True
+mal_reports__01cc10f794a3bf364f583a1b7ab5a9c4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01cc10f794a3bf364f583a1b7ab5a9c4.pkl,2,Other Malware,new_unseen,True
+mal_reports__01cc1baddec97a144acc941c52d3b9c8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01cc1baddec97a144acc941c52d3b9c8.pkl,2,Other Malware,new_unseen,True
+mal_reports__01cc9354adbe2fe194eba691d7a225a9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01cc9354adbe2fe194eba691d7a225a9.pkl,2,Other Malware,new_unseen,True
+mal_reports__01d2d1d522cd829ce71268764fe09b00,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01d2d1d522cd829ce71268764fe09b00.pkl,2,Other Malware,new_unseen,True
+mal_reports__01d34bb243ca15fc733964eb0e988d32,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01d34bb243ca15fc733964eb0e988d32.pkl,2,Other Malware,new_unseen,True
+mal_reports__01d51bbed8e7741e349dfc6019dab7b0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01d51bbed8e7741e349dfc6019dab7b0.pkl,2,Other Malware,new_unseen,True
+mal_reports__01d7e427369568446d28139170ee4022,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01d7e427369568446d28139170ee4022.pkl,2,Other Malware,new_unseen,True
+mal_reports__01d8ae207de44f7b1605bd255afb4744,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01d8ae207de44f7b1605bd255afb4744.pkl,2,Other Malware,new_unseen,True
+mal_reports__01dbac2cd5a08d4f2baf81f1c6da5e30,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01dbac2cd5a08d4f2baf81f1c6da5e30.pkl,2,Other Malware,new_unseen,True
+mal_reports__01dc216274bd9647a6fc12644d28bf39,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01dc216274bd9647a6fc12644d28bf39.pkl,2,Other Malware,new_unseen,True
+mal_reports__01dcc83d97fff22001b438c9c855cf2f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01dcc83d97fff22001b438c9c855cf2f.pkl,2,Other Malware,new_unseen,True
+mal_reports__01de6b549881d64c54eabc0c6ad656a9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01de6b549881d64c54eabc0c6ad656a9.pkl,2,Other Malware,new_unseen,True
+mal_reports__01e190f66e6075da60f81c07b4966e1b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01e190f66e6075da60f81c07b4966e1b.pkl,2,Other Malware,new_unseen,True
+mal_reports__01e3756d1652a2d58bd170061aab9e92,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01e3756d1652a2d58bd170061aab9e92.pkl,2,Other Malware,new_unseen,True
+mal_reports__01e43e1719695e3b6d8911dc77de8460,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01e43e1719695e3b6d8911dc77de8460.pkl,2,Other Malware,new_unseen,True
+mal_reports__01e567e3325614213e9703e7d535c33a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01e567e3325614213e9703e7d535c33a.pkl,2,Other Malware,new_unseen,True
+mal_reports__01e6bcad0754fdcd1c5903505a6b08ca,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01e6bcad0754fdcd1c5903505a6b08ca.pkl,2,Other Malware,new_unseen,True
+mal_reports__01e6ffd7879fe3df912da5f0dc217b6c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01e6ffd7879fe3df912da5f0dc217b6c.pkl,2,Other Malware,new_unseen,True
+mal_reports__01eb2ede541f93859fd7af7f3ef5ac9a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01eb2ede541f93859fd7af7f3ef5ac9a.pkl,2,Other Malware,new_unseen,True
+mal_reports__01ec8d7a957a6431ac98221b837ddc33,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01ec8d7a957a6431ac98221b837ddc33.pkl,2,Other Malware,new_unseen,True
+mal_reports__01ef8d188d5adfd338cae89b8e7afd40,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01ef8d188d5adfd338cae89b8e7afd40.pkl,2,Other Malware,new_unseen,True
+mal_reports__01f192b86d26813315a79f27be115bf3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f192b86d26813315a79f27be115bf3.pkl,2,Other Malware,new_unseen,True
+mal_reports__01f317bb260b5a2781d19d47f41acda2,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f317bb260b5a2781d19d47f41acda2.pkl,2,Other Malware,new_unseen,True
+mal_reports__01f482620e6b1fad2de394116ad9da38,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f482620e6b1fad2de394116ad9da38.pkl,2,Other Malware,new_unseen,True
+mal_reports__01f52285f73e2da5e7a4869ff7a818ed,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f52285f73e2da5e7a4869ff7a818ed.pkl,2,Other Malware,new_unseen,True
+mal_reports__01f7371635f41f66ab259253b36488ca,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f7371635f41f66ab259253b36488ca.pkl,2,Other Malware,new_unseen,True
+mal_reports__01f76d92b36d98921a4321dc2d3654f5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f76d92b36d98921a4321dc2d3654f5.pkl,2,Other Malware,new_unseen,True
+mal_reports__01f88257f06cc2858b384899e8dd809a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f88257f06cc2858b384899e8dd809a.pkl,2,Other Malware,new_unseen,True
+mal_reports__01f911629156ce4bfcde07f7354b3e27,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f911629156ce4bfcde07f7354b3e27.pkl,2,Other Malware,new_unseen,True
+mal_reports__01faa688773fab3ca20efc0bc214fbef,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01faa688773fab3ca20efc0bc214fbef.pkl,2,Other Malware,new_unseen,True
+mal_reports__01fb68b27ecb4ba9d255a2a9ce5403ef,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01fb68b27ecb4ba9d255a2a9ce5403ef.pkl,2,Other Malware,new_unseen,True
+mal_reports__01fbaf2f5afefc6632d65c5e02e99ebe,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01fbaf2f5afefc6632d65c5e02e99ebe.pkl,2,Other Malware,new_unseen,True
+mal_reports__01fc51a6e9a20f654d38eef554b59309,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01fc51a6e9a20f654d38eef554b59309.pkl,2,Other Malware,new_unseen,True
+mal_reports__01fcd050903f478a12be1ef937ff4b60,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01fcd050903f478a12be1ef937ff4b60.pkl,2,Other Malware,new_unseen,True
+mal_reports__01fda937a97602470b7b4585eb94a09a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01fda937a97602470b7b4585eb94a09a.pkl,2,Other Malware,new_unseen,True
+mal_reports__01fdbedebf7e07758be8713502ecdc1e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01fdbedebf7e07758be8713502ecdc1e.pkl,2,Other Malware,new_unseen,True
+mal_reports__0293691cc41627c4f0a118b708a1b470,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0293691cc41627c4f0a118b708a1b470.pkl,2,Other Malware,new_unseen,True
+mal_reports__0a03b1eafeb4c4a6f6b04f507562b1fb,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0a03b1eafeb4c4a6f6b04f507562b1fb.pkl,2,Other Malware,new_unseen,True
+mal_reports__0a03b918736591eada58029dd071cc80,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0a03b918736591eada58029dd071cc80.pkl,2,Other Malware,new_unseen,True
+mal_reports__0a050b8cfbe63674158e80376f1b236f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0a050b8cfbe63674158e80376f1b236f.pkl,2,Other Malware,new_unseen,True
+mal_reports__0a06fbd7930744b8a6b24c92007913ce,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0a06fbd7930744b8a6b24c92007913ce.pkl,2,Other Malware,new_unseen,True
+mal_reports__0a074c24e298f97a255cdf976a304ee7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0a074c24e298f97a255cdf976a304ee7.pkl,2,Other Malware,new_unseen,True
+0532e250400ded8515f6d042d388ff07,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/0532e250400ded8515f6d042d388ff07.pkl,0,Ransomware,old_val,False
+08eedaa70ca384e76b4eac39ff2683e1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/08eedaa70ca384e76b4eac39ff2683e1.pkl,0,Ransomware,old_val,False
+0dd4bcb59beff511516725118e7b2f80,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/0dd4bcb59beff511516725118e7b2f80.pkl,0,Ransomware,old_val,False
+0f4cb4b34c4e8d75da02bf6536ec8563,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/0f4cb4b34c4e8d75da02bf6536ec8563.pkl,0,Ransomware,old_val,False
+136b3af29063f6c2f76b6e4ef6d3a755,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/136b3af29063f6c2f76b6e4ef6d3a755.pkl,0,Ransomware,old_val,False
+15572d97a140d38192e33442fbe9400d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/15572d97a140d38192e33442fbe9400d.pkl,0,Ransomware,old_val,False
+188561cadd5e63bdf5092929a551c35d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/188561cadd5e63bdf5092929a551c35d.pkl,0,Ransomware,old_val,False
+1886d05c64e5cb9325439782fe7f6556,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1886d05c64e5cb9325439782fe7f6556.pkl,0,Ransomware,old_val,False
+19ebbd5eb5fdb062a3c356dc535ca012,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/19ebbd5eb5fdb062a3c356dc535ca012.pkl,0,Ransomware,old_val,False
+1a14e7fcdb5666ffbd0005db70eeda45,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1a14e7fcdb5666ffbd0005db70eeda45.pkl,0,Ransomware,old_val,False
+1b68729f1f03c3d82b13abe38599f6c3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1b68729f1f03c3d82b13abe38599f6c3.pkl,0,Ransomware,old_val,False
+1c74690ed0ad28f73f1aa9c4e71ccafa,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1c74690ed0ad28f73f1aa9c4e71ccafa.pkl,0,Ransomware,old_val,False
+1eb6ba04fc00da6202d505930e427fc7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1eb6ba04fc00da6202d505930e427fc7.pkl,0,Ransomware,old_val,False
+1ffe7f8af56971a0710d6390231ed209,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1ffe7f8af56971a0710d6390231ed209.pkl,0,Ransomware,old_val,False
+2903e2c448e129fb0b09c1534d204c4a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2903e2c448e129fb0b09c1534d204c4a.pkl,0,Ransomware,old_val,False
+29660cb68690bad4dcc65345ea8727e7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/29660cb68690bad4dcc65345ea8727e7.pkl,0,Ransomware,old_val,False
+2d6aee94b05bf693e6d9ebc21fbfe128,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2d6aee94b05bf693e6d9ebc21fbfe128.pkl,0,Ransomware,old_val,False
+3185e6f627a6edca6bfb88f9cefa342d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/3185e6f627a6edca6bfb88f9cefa342d.pkl,0,Ransomware,old_val,False
+32b2c4fee38c01ca95c97c9b74b8b03d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/32b2c4fee38c01ca95c97c9b74b8b03d.pkl,0,Ransomware,old_val,False
+39684bb790b573d72dbce03f3607a31c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/39684bb790b573d72dbce03f3607a31c.pkl,0,Ransomware,old_val,False
+423ae24af438c46867d159a3247eea5d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/423ae24af438c46867d159a3247eea5d.pkl,0,Ransomware,old_val,False
+4dc6d0458f28d18b48cc41912c6282de,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4dc6d0458f28d18b48cc41912c6282de.pkl,0,Ransomware,old_val,False
+4edcdef4bf23b658964691bfc3c45537,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4edcdef4bf23b658964691bfc3c45537.pkl,0,Ransomware,old_val,False
+5941b3656aa230b2ce15f90835d48f7c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5941b3656aa230b2ce15f90835d48f7c.pkl,0,Ransomware,old_val,False
+5a78fad03a10d68ed566ac750ab3ab02,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5a78fad03a10d68ed566ac750ab3ab02.pkl,0,Ransomware,old_val,False
+5aef55d7170521999324f51d62a8ee30,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5aef55d7170521999324f51d62a8ee30.pkl,0,Ransomware,old_val,False
+5c63d44c2997a6b322cb2329552b6ea8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5c63d44c2997a6b322cb2329552b6ea8.pkl,0,Ransomware,old_val,False
+5eedf40d3546eb90b5423ae3ac1d3f32,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5eedf40d3546eb90b5423ae3ac1d3f32.pkl,0,Ransomware,old_val,False
+682ef4f2b66b1e447701fecfad15094c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/682ef4f2b66b1e447701fecfad15094c.pkl,0,Ransomware,old_val,False
+68e367dfd6de0b0a3c00b966423f196a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/68e367dfd6de0b0a3c00b966423f196a.pkl,0,Ransomware,old_val,False
+76d81c7735752088692897a00e529bbb,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/76d81c7735752088692897a00e529bbb.pkl,0,Ransomware,old_val,False
+7a7b798c0772cbbe3654174737d08542,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7a7b798c0772cbbe3654174737d08542.pkl,0,Ransomware,old_val,False
+7b14479b7226662af6beffba4854c2e7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7b14479b7226662af6beffba4854c2e7.pkl,0,Ransomware,old_val,False
+7f7f16a7dfad06ec4504220e4c130015,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7f7f16a7dfad06ec4504220e4c130015.pkl,0,Ransomware,old_val,False
+a95111407437bd851ae651f847b53e90,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a95111407437bd851ae651f847b53e90.pkl,0,Ransomware,old_val,False
+aef03ddd3134451e1efe137fb22e3a0c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/aef03ddd3134451e1efe137fb22e3a0c.pkl,0,Ransomware,old_val,False
+09b06fa3f1fadb21006c1fa79c75c536,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/09b06fa3f1fadb21006c1fa79c75c536.pkl,0,Ransomware,old_test,False
+0c7e59536a7be4a446bbe8b4f22e5880,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0c7e59536a7be4a446bbe8b4f22e5880.pkl,0,Ransomware,old_test,False
+109d60fbb4b1857429fc8019c800307b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/109d60fbb4b1857429fc8019c800307b.pkl,0,Ransomware,old_test,False
+10e9683de04292c617d2fba5b64a6b2f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/10e9683de04292c617d2fba5b64a6b2f.pkl,0,Ransomware,old_test,False
+1491e513fe739d64a3965d01758d97c6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1491e513fe739d64a3965d01758d97c6.pkl,0,Ransomware,old_test,False
+1705bd6b4c7a2fa4a046c5a7b2a0a8f6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1705bd6b4c7a2fa4a046c5a7b2a0a8f6.pkl,0,Ransomware,old_test,False
+184bb34d632aa3d52f23f4315918eb29,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/184bb34d632aa3d52f23f4315918eb29.pkl,0,Ransomware,old_test,False
+202bf9be9a4e45526e482f08104717ad,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/202bf9be9a4e45526e482f08104717ad.pkl,0,Ransomware,old_test,False
+2198677d22dd71f9e6108da020da059d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2198677d22dd71f9e6108da020da059d.pkl,0,Ransomware,old_test,False
+229d05ae6fa046339d34419216dd3bae,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/229d05ae6fa046339d34419216dd3bae.pkl,0,Ransomware,old_test,False
+243852fce02f4f7d77949d75ccfddbac,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/243852fce02f4f7d77949d75ccfddbac.pkl,0,Ransomware,old_test,False
+24ad1ac3ddd67f08cbdd26803b5539a1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/24ad1ac3ddd67f08cbdd26803b5539a1.pkl,0,Ransomware,old_test,False
+28c80c4739056f200818d221ddf5a496,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/28c80c4739056f200818d221ddf5a496.pkl,0,Ransomware,old_test,False
+2b744b113946f905a9526f9fb82b22d3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2b744b113946f905a9526f9fb82b22d3.pkl,0,Ransomware,old_test,False
+2e366bdc80e31e7678bf0681b8b6370c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2e366bdc80e31e7678bf0681b8b6370c.pkl,0,Ransomware,old_test,False
+2fc3b46c7be1a14ea7382cc8e85bfa96,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2fc3b46c7be1a14ea7382cc8e85bfa96.pkl,0,Ransomware,old_test,False
+34074a625609e156de42ca6e0405edb9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/34074a625609e156de42ca6e0405edb9.pkl,0,Ransomware,old_test,False
+3521e879e8068fc25d117365e11ff4f9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3521e879e8068fc25d117365e11ff4f9.pkl,0,Ransomware,old_test,False
+364d2445adf7be2c8e4fee906483c5cf,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/364d2445adf7be2c8e4fee906483c5cf.pkl,0,Ransomware,old_test,False
+3b36e0a2392ffec8ae656a95f56826ff,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3b36e0a2392ffec8ae656a95f56826ff.pkl,0,Ransomware,old_test,False
+3fb1b0800b4dbd0e19cb1aaebb6f4236,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3fb1b0800b4dbd0e19cb1aaebb6f4236.pkl,0,Ransomware,old_test,False
+4559d59bef79c762fccffb4b046f17cf,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4559d59bef79c762fccffb4b046f17cf.pkl,0,Ransomware,old_test,False
+48a673157da3940244ce0dfb3ecb58e9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/48a673157da3940244ce0dfb3ecb58e9.pkl,0,Ransomware,old_test,False
+497e558b37fd98ae27fc693a77eab16c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/497e558b37fd98ae27fc693a77eab16c.pkl,0,Ransomware,old_test,False
+4ba68cd8615429da8cc535515fbea549,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4ba68cd8615429da8cc535515fbea549.pkl,0,Ransomware,old_test,False
+55b3af46b98029adda05ef83baa0dc73,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/55b3af46b98029adda05ef83baa0dc73.pkl,0,Ransomware,old_test,False
+5a01c407a8be2ac6a004d2c40a75264e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5a01c407a8be2ac6a004d2c40a75264e.pkl,0,Ransomware,old_test,False
+5e7f1934bdbb4b4cd6bc30f49e455dc3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5e7f1934bdbb4b4cd6bc30f49e455dc3.pkl,0,Ransomware,old_test,False
+5f411ecddf2844721b48b6dc6aa19f3c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5f411ecddf2844721b48b6dc6aa19f3c.pkl,0,Ransomware,old_test,False
+61c897f5e326b166e160d63056d402a4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/61c897f5e326b166e160d63056d402a4.pkl,0,Ransomware,old_test,False
+6aa468aad5cfed969149dcaca4034b88,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/6aa468aad5cfed969149dcaca4034b88.pkl,0,Ransomware,old_test,False
+71a977bf33620055a7c2c6a273ef709c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/71a977bf33620055a7c2c6a273ef709c.pkl,0,Ransomware,old_test,False
+7354dde28d10e406b535677f6a43a98d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7354dde28d10e406b535677f6a43a98d.pkl,0,Ransomware,old_test,False
+73e2b69d759b9969300776c75f61c295,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/73e2b69d759b9969300776c75f61c295.pkl,0,Ransomware,old_test,False
+7909f4fb49579ad2df48f10d65804e49,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7909f4fb49579ad2df48f10d65804e49.pkl,0,Ransomware,old_test,False
+7ab0b603e4f2e8925928862ed32ec8d6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7ab0b603e4f2e8925928862ed32ec8d6.pkl,0,Ransomware,old_test,False
+a6e69950b93c9769188f2ff2bead52da,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/a6e69950b93c9769188f2ff2bead52da.pkl,0,Ransomware,old_test,False
+eaef25ab1f59492ffc735a386294b69f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/eaef25ab1f59492ffc735a386294b69f.pkl,0,Ransomware,old_test,False
+ef0aafefa653a36a33a9a8469f1e8159,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/ef0aafefa653a36a33a9a8469f1e8159.pkl,0,Ransomware,old_test,False

@@ -1,0 +1,5 @@
+model,accuracy,macro_f1,threats_missed,ransom_P,ransom_R,ransom_F1,benign_P,benign_R,benign_F1,malware_P,malware_R,malware_F1
+Random Forest (train),0.9994,0.997,0,0.983,1.0,0.991,1.0,1.0,1.0,1.0,0.999,1.0
+Random Forest (custom_eval),0.6139,0.597,142,0.952,0.533,0.684,0.579,0.975,0.726,0.589,0.281,0.381
+XGBoost (train),0.9994,0.997,0,0.983,1.0,0.991,1.0,1.0,1.0,1.0,0.999,1.0
+XGBoost (custom_eval),0.6245,0.6128,141,0.956,0.573,0.717,0.582,0.98,0.73,0.62,0.286,0.392

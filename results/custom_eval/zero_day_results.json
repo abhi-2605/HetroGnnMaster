@@ -1,0 +1,78 @@
+{
+  "manifest_path": "/Volumes/SSD/TGNN/ransomware_tgnn/results/custom_eval/zero_day_manifest.csv",
+  "checkpoint_path": "/Volumes/SSD/TGNN/ransomware_tgnn/results/checkpoints/best_model.pt",
+  "checkpoint_epoch": 33,
+  "num_samples": 474,
+  "custom_eval_batch_size": 4,
+  "label_distribution": {
+    "ransomware": 75,
+    "benign": 200,
+    "other_malware": 199
+  },
+  "origin_distribution": {
+    "old_test": 169,
+    "old_val": 161,
+    "new_unseen": 144
+  },
+  "metrics_3class": {
+    "accuracy": 0.6181434599156118,
+    "per_class_precision": [
+      0.9574468085106383,
+      0.5726744186046512,
+      0.6144578313253012
+    ],
+    "per_class_recall": [
+      0.6,
+      0.985,
+      0.2562814070351759
+    ],
+    "per_class_f1": [
+      0.7377049180327869,
+      0.7242647058823529,
+      0.3617021276595745
+    ],
+    "per_class_support": [
+      75,
+      200,
+      199
+    ],
+    "macro_precision": 0.7148596861468636,
+    "macro_recall": 0.6137604690117252,
+    "macro_f1": 0.6078905838582381,
+    "weighted_precision": 0.65109810715815,
+    "weighted_recall": 0.6181434599156118,
+    "weighted_f1": 0.5741762308716982,
+    "confusion_matrix": [
+      [
+        45,
+        1,
+        29
+      ],
+      [
+        0,
+        197,
+        3
+      ],
+      [
+        2,
+        146,
+        51
+      ]
+    ],
+    "loss": 0.510572537238768
+  },
+  "metrics_threat_vs_benign": {
+    "TP": 127,
+    "FN": 147,
+    "TN": 197,
+    "FP": 3,
+    "threat_recall": 0.4635036496350365,
+    "threat_precision": 0.9769230769230769,
+    "threat_f1": 0.6287128712871287,
+    "benign_recall": 0.985,
+    "benign_precision": 0.5726744186046512,
+    "benign_f1": 0.7242647058823529,
+    "accuracy_2class": 0.6835443037974683,
+    "threats_missed": 147
+  }
+}

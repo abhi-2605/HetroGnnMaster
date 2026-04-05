@@ -1,0 +1,24 @@
+{
+  "metadata_path": "/Volumes/SSD/TGNN/ransomware_tgnn/extracted_metadata_appended.csv",
+  "active_graph_dir": "/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched",
+  "custom_eval_manifest_path": "/Volumes/SSD/TGNN/ransomware_tgnn/results/custom_eval/zero_day_manifest.csv",
+  "label_column_used": "all_categories",
+  "feature_family": "api_tfidf_only",
+  "tfidf_vocab_size": 3000,
+  "random_state": 42,
+  "malware_keep_frac_train": 0.8,
+  "apply_malware_subsample_to_train": true,
+  "train_samples": 5048,
+  "custom_eval_samples": 474,
+  "custom_eval_label_distribution": {
+    "ransomware": 75,
+    "benign": 200,
+    "other_malware": 199
+  },
+  "custom_eval_origin_distribution": {
+    "old_test": 169,
+    "old_val": 161,
+    "new_unseen": 144
+  },
+  "xgboost_available": true
+}
