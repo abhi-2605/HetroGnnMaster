@@ -292,12 +292,18 @@ def create_dataloaders(schema, use_weighted_sampling=True):
         print("\n⚡ Using weighted oversampling + size-aware batching..." if sample_weights is not None
               else "\n⚡ Using size-aware batching...")
 
-        train_batch_sampler = BucketedBatchSampler(
-            dataset=train_dataset,
-            bucket_rules=getattr(config, "BUCKETED_BATCH_RULES", None),
-            shuffle=getattr(config, "BUCKETED_BATCH_SHUFFLE", True),
-            weights=sample_weights,
-            verbose=getattr(config, "BUCKETED_BATCH_VERBOSE", True),
+        # train_batch_sampler = BucketedBatchSampler(
+        #     dataset=train_dataset,
+        #     bucket_rules=getattr(config, "BUCKETED_BATCH_RULES", None),
+        #     shuffle=getattr(config, "BUCKETED_BATCH_SHUFFLE", True),
+        #     weights=sample_weights,
+        #     verbose=getattr(config, "BUCKETED_BATCH_VERBOSE", True),
+        # )
+        train_batch_sampler = SizeAwareBatchSampler(
+            train_dataset,
+            batch_size=config.BATCH_SIZE,
+            shuffle=True,
+            weights=sample_weights,   # None → uniform, list → weighted
         )
 
     # ── single size-aware sampler handles both cases ──────────────────────────
