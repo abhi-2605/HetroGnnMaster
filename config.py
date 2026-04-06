@@ -409,7 +409,7 @@ TARGETED_API_CAP_MAX_NODES = 100000
 # Policy is based on API node count after any compression / behavior-aware cap.
 # Format: (max_api_nodes_in_bucket, batch_size_for_that_bucket)
 # Buckets are evaluated in order.
-ENABLE_BUCKETED_BATCH_SAMPLER = True
+ENABLE_BUCKETED_BATCH_SAMPLER = False
 BUCKETED_BATCH_RULES = [
     (10_000, 64),
     (25_000, 16),
