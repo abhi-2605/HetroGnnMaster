@@ -241,13 +241,13 @@ USE_FOCAL_LOSS = True
 FOCAL_GAMMA = 2
 # FOCAL_ALPHA = [0.30, 0.40, 0.30]
 # FOCAL_ALPHA = [0.35, 0.35, 0.30] # 
-FOCAL_ALPHA = [0.36, 0.38, 0.40] # slight tweak to give more weight to ransomware and less to benign, while keeping other malware dominant
+FOCAL_ALPHA = [0.37, 0.38, 0.40] # slight tweak to give more weight to ransomware and less to benign, while keeping other malware dominant
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True
 OVERSAMPLE_WEIGHTS = {
-    0: 15,
-    1: 2.0,
-    2: 6.0,
+    0: 16, # RANSOMWARE: give it much higher weight to ensure it's well-represented in training batches
+    1: 2.0, # BENIGN: moderate weight to improve representation without overwhelming the model
+    2: 5.5, # OTHER MALWARE: some oversampling to help model learn better, but not as much as ransomware
 }
 
 # Class weights for loss function (alternative to Focal Loss)
