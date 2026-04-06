@@ -196,7 +196,7 @@ NUM_CLASSES = 3             # Ransomware, Benign, Other Malware
 # Optimization
 LEARNING_RATE = 1e-4
 WEIGHT_DECAY = 1e-3
-BATCH_SIZE = 4 
+BATCH_SIZE = 16
 EPOCHS = 125
 MAX_EPOCHS = 135
 
@@ -449,7 +449,7 @@ CUSTOM_EVAL_PREDICTIONS_PATH = CUSTOM_EVAL_DIR / "zero_day_predictions.csv"
 
 CUSTOM_EVAL_CHECKPOINT_PATH = CHECKPOINTS_DIR / "best_model.pt"
 
-# Separate loader controls for custom evaluation
+# Separate loader controls for custom evaluation - baseline config
 CUSTOM_EVAL_BATCH_SIZE = 1
 CUSTOM_EVAL_NUM_WORKERS = 0
 CUSTOM_EVAL_PIN_MEMORY = True if DEVICE == "cuda" else False
@@ -468,7 +468,7 @@ CUSTOM_EVAL_ENFORCE_NEW_UNSEEN_DISJOINT = True
 
 
 
-
+# zero-day evaluation configuration
 CUSTOM_EVAL_SOURCE_SPLITS = ["val", "test"]
 CUSTOM_EVAL_NEW_MALWARE_DIR = CACHE_DIR / "zero_day_unseen" / "all"
 CUSTOM_EVAL_TARGET_BENIGN = 200
