@@ -245,9 +245,9 @@ FOCAL_ALPHA = [0.39, 0.39, 0.40] # slight tweak to give more weight to ransomwar
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True
 OVERSAMPLE_WEIGHTS = {
-    0: 16, # RANSOMWARE: give it much higher weight to ensure it's well-represented in training batches
-    1: 2.0, # BENIGN: moderate weight to improve representation without overwhelming the model
-    2: 5.5, # OTHER MALWARE: some oversampling to help model learn better, but not as much as ransomware
+    0: 15, # RANSOMWARE: give it much higher weight to ensure it's well-represented in training batches
+    1: 5.0, # BENIGN: moderate weight to improve representation without overwhelming the model
+    2: 1.3, # OTHER MALWARE: some oversampling to help model learn better, but not as much as ransomware
 }
 
 # Class weights for loss function (alternative to Focal Loss)
@@ -409,7 +409,7 @@ TARGETED_API_CAP_MAX_NODES = 100000
 # Policy is based on API node count after any compression / behavior-aware cap.
 # Format: (max_api_nodes_in_bucket, batch_size_for_that_bucket)
 # Buckets are evaluated in order.
-ENABLE_BUCKETED_BATCH_SAMPLER = False
+ENABLE_BUCKETED_BATCH_SAMPLER = True
 BUCKETED_BATCH_RULES = [
     (10_000, 64),
     (25_000, 16),
