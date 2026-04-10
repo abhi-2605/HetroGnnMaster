@@ -241,7 +241,7 @@ USE_FOCAL_LOSS = True
 FOCAL_GAMMA = 2
 # FOCAL_ALPHA = [0.30, 0.40, 0.30]
 # FOCAL_ALPHA = [0.35, 0.35, 0.30] # 
-FOCAL_ALPHA = [0.39, 0.39, 0.40] # slight tweak to give more weight to ransomware and less to benign, while keeping other malware dominant
+FOCAL_ALPHA = [0.39, 0.39, 0.41] # slight tweak to give more weight to ransomware and less to benign, while keeping other malware dominant
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True
 OVERSAMPLE_WEIGHTS = {
