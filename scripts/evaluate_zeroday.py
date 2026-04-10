@@ -359,6 +359,80 @@ class CustomManifestDataset(Dataset):
     def __len__(self):
         return len(self.df)
 
+    def _ensure_eval_temporal_path(self, graph):
+        """
+        Make eval robust for graphs where API nodes survive preprocessing
+        but no active incoming relation updates API width before the model LSTM.
+
+        The TGNN expects API features to be widened by relation message passing
+        before entering the explicit temporal LSTM. If all API-destination
+        relations are empty, API stays at base width (128) and the LSTM crashes,
+        because it expects 768.
+
+        For eval only, rebuild a simple api->temporal->api chain when needed.
+        """
+        if "api" not in graph.node_types:
+            return graph
+        if not hasattr(graph["api"], "x") or not isinstance(graph["api"].x, torch.Tensor):
+            return graph
+
+        num_api = int(graph["api"].x.size(0))
+        if num_api <= 0:
+            return graph
+
+        temporal_et = ("api", "temporal", "api")
+        proc_exec_et = ("process", "executes", "api")
+
+        def _num_edges(et):
+            if et not in graph.edge_types:
+                return 0
+            store = graph[et]
+            if not hasattr(store, "edge_index") or not isinstance(store.edge_index, torch.Tensor):
+                return 0
+            if store.edge_index.dim() != 2 or store.edge_index.size(0) != 2:
+                return 0
+            return int(store.edge_index.size(1))
+
+        has_api_receiver_edges = (_num_edges(temporal_et) > 0) or (_num_edges(proc_exec_et) > 0)
+        if has_api_receiver_edges:
+            return graph
+
+        # Rebuild a minimal temporal chain for eval robustness
+        if temporal_et not in graph.edge_types:
+            _ = graph[temporal_et]
+
+        store = graph[temporal_et]
+
+        if num_api == 1:
+            edge_index = torch.tensor([[0], [0]], dtype=torch.long)
+        else:
+            src = torch.arange(num_api - 1, dtype=torch.long)
+            dst = torch.arange(1, num_api, dtype=torch.long)
+            edge_index = torch.stack([src, dst], dim=0)
+
+        store.edge_index = edge_index
+
+        # Keep / create compatible edge_attr if temporal edge_attr exists in schema graphs
+        edge_attr_dim = 0
+        edge_attr_dtype = graph["api"].x.dtype
+        edge_attr_device = graph["api"].x.device
+
+        if hasattr(store, "edge_attr") and isinstance(store.edge_attr, torch.Tensor):
+            if store.edge_attr.dim() == 2:
+                edge_attr_dim = int(store.edge_attr.size(1))
+                edge_attr_dtype = store.edge_attr.dtype
+                edge_attr_device = store.edge_attr.device
+
+        if edge_attr_dim > 0:
+            store.edge_attr = torch.zeros(
+                edge_index.size(1),
+                edge_attr_dim,
+                dtype=edge_attr_dtype,
+                device=edge_attr_device,
+            )
+
+        return graph
+
     def __getitem__(self, idx: int):
         row = self.df.iloc[idx]
         graph_path = Path(row["graph_path"])
@@ -379,6 +453,9 @@ class CustomManifestDataset(Dataset):
         graph = self.graph_processor._compress_consecutive_api_runs(graph)
         graph = self.graph_processor._behavior_aware_api_cap(graph)
         graph = self.graph_processor._ensure_api_aux_tensors(graph)
+
+        # Critical eval-only robustness fix
+        graph = self._ensure_eval_temporal_path(graph)
 
         # make non-api stores consistent for batching
         for node_type in graph.node_types:
@@ -403,7 +480,6 @@ class CustomManifestDataset(Dataset):
         graph.graph_path = str(graph_path)
 
         return graph, label
-
 
 # ============================================================
 # Forward / validate helpers
@@ -462,62 +538,79 @@ def run_eval(model, loader, criterion, vocab, schema, device, eval_epoch=None):
     prediction_rows = []
     total_loss = 0.0
     total_graphs = 0
+    skipped_samples = []
 
     for batch_data, labels in loader:
         if batch_data is None or labels is None:
             continue
 
-        labels = labels.to(device)
-        batch_data = batch_data.to(device)
+        try:
+            labels = labels.to(device)
+            batch_data = batch_data.to(device)
 
-        api_indices = _extract_api_indices(batch_data, vocab, device)
-        _validate_batch_before_forward(batch_data, schema, api_indices=api_indices)
+            api_indices = _extract_api_indices(batch_data, vocab, device)
+            _validate_batch_before_forward(batch_data, schema, api_indices=api_indices)
 
-        logits = model(
-            x_dict=batch_data.x_dict,
-            edge_index_dict=batch_data.edge_index_dict,
-            edge_attr_dict=batch_data.edge_attr_dict if hasattr(batch_data, "edge_attr_dict") else None,
-            batch_dict=batch_data.batch_dict if hasattr(batch_data, "batch_dict") else None,
-            timestamps_dict=_extract_timestamps(batch_data),
-            api_indices=api_indices,
-            current_epoch=eval_epoch,
-        )
+            logits = model(
+                x_dict=batch_data.x_dict,
+                edge_index_dict=batch_data.edge_index_dict,
+                edge_attr_dict=batch_data.edge_attr_dict if hasattr(batch_data, "edge_attr_dict") else None,
+                batch_dict=batch_data.batch_dict if hasattr(batch_data, "batch_dict") else None,
+                timestamps_dict=_extract_timestamps(batch_data),
+                api_indices=api_indices,
+                current_epoch=eval_epoch,
+            )
 
-        loss = criterion(logits, labels)
+            loss = criterion(logits, labels)
 
-        probs = torch.softmax(logits, dim=1)
-        preds = probs.argmax(dim=1)
+            probs = torch.softmax(logits, dim=1)
+            preds = probs.argmax(dim=1)
 
-        total_loss += float(loss.item()) * labels.size(0)
-        total_graphs += labels.size(0)
+            total_loss += float(loss.item()) * labels.size(0)
+            total_graphs += labels.size(0)
 
-        all_preds.extend(preds.cpu().numpy().tolist())
-        all_labels.extend(labels.cpu().numpy().tolist())
+            all_preds.extend(preds.cpu().numpy().tolist())
+            all_labels.extend(labels.cpu().numpy().tolist())
 
-        sample_ids = getattr(batch_data, "sample_id", None)
-        graph_paths = getattr(batch_data, "graph_path", None)
+            sample_ids = getattr(batch_data, "sample_id", None)
+            graph_paths = getattr(batch_data, "graph_path", None)
 
-        if sample_ids is None:
-            sample_ids = [f"sample_{i}" for i in range(labels.size(0))]
-        if graph_paths is None:
-            graph_paths = [""] * labels.size(0)
+            if sample_ids is None:
+                sample_ids = [f"sample_{i}" for i in range(labels.size(0))]
+            if graph_paths is None:
+                graph_paths = [""] * labels.size(0)
 
-        for i in range(labels.size(0)):
-            prediction_rows.append({
-                "sample_id": sample_ids[i] if isinstance(sample_ids, list) else str(sample_ids),
-                "graph_path": graph_paths[i] if isinstance(graph_paths, list) else str(graph_paths),
-                "true_label": int(labels[i].item()),
-                "true_name": label_to_name(int(labels[i].item())),
-                "pred_label": int(preds[i].item()),
-                "pred_name": label_to_name(int(preds[i].item())),
-                "prob_ransomware": float(probs[i, 0].item()),
-                "prob_benign": float(probs[i, 1].item()),
-                "prob_other_malware": float(probs[i, 2].item()),
-                "correct": int(preds[i].item() == labels[i].item()),
+            for i in range(labels.size(0)):
+                prediction_rows.append({
+                    "sample_id": sample_ids[i] if isinstance(sample_ids, list) else str(sample_ids),
+                    "graph_path": graph_paths[i] if isinstance(graph_paths, list) else str(graph_paths),
+                    "true_label": int(labels[i].item()),
+                    "true_name": label_to_name(int(labels[i].item())),
+                    "pred_label": int(preds[i].item()),
+                    "pred_name": label_to_name(int(preds[i].item())),
+                    "prob_ransomware": float(probs[i, 0].item()),
+                    "prob_benign": float(probs[i, 1].item()),
+                    "prob_other_malware": float(probs[i, 2].item()),
+                    "correct": int(preds[i].item() == labels[i].item()),
+                })
+
+        except Exception as e:
+            sid = getattr(batch_data, "sample_id", "unknown")
+            gpath = getattr(batch_data, "graph_path", "unknown")
+            print(f"[WARN] Skipping eval sample due to forward failure: sample_id={sid} graph_path={gpath} error={e}")
+            skipped_samples.append({
+                "sample_id": sid,
+                "graph_path": gpath,
+                "error": str(e),
             })
+            continue
+
+    if total_graphs == 0:
+        raise RuntimeError("All evaluation samples were skipped or failed during forward pass.")
 
     metrics = compute_metrics(all_preds, all_labels)
     metrics["loss"] = total_loss / max(total_graphs, 1)
+    metrics["skipped_samples"] = len(skipped_samples)
     return metrics, prediction_rows
 
 

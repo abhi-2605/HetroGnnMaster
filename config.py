@@ -106,7 +106,7 @@ FAIL_ON_SCHEMA_MISMATCH = True
 SCHEMA_STRICT_VALIDATION = True
 # Number of successfully processed graphs to generate.
 # Set to None to process everything.
-MAX_SUCCESSFUL_GRAPHS = 200
+
 # ============================================
 # SCHEMA NORMALIZATION POLICY
 # ============================================
@@ -448,7 +448,6 @@ CUSTOM_EVAL_RESULTS_PATH = CUSTOM_EVAL_DIR / "zero_day_results.json"
 CUSTOM_EVAL_PREDICTIONS_PATH = CUSTOM_EVAL_DIR / "zero_day_predictions.csv"
 
 CUSTOM_EVAL_CHECKPOINT_PATH = CHECKPOINTS_DIR / "best_model.pt"
-
 # Separate loader controls for custom evaluation - baseline config
 CUSTOM_EVAL_BATCH_SIZE = 1
 CUSTOM_EVAL_NUM_WORKERS = 0

@@ -1,78 +1,79 @@
 {
   "manifest_path": "/Volumes/SSD/TGNN/ransomware_tgnn/results/custom_eval/zero_day_manifest.csv",
   "checkpoint_path": "/Volumes/SSD/TGNN/ransomware_tgnn/results/checkpoints/best_model.pt",
-  "checkpoint_epoch": 33,
-  "num_samples": 474,
-  "custom_eval_batch_size": 4,
+  "checkpoint_epoch": 34,
+  "num_samples": 389,
+  "custom_eval_batch_size": 1,
   "label_distribution": {
     "ransomware": 75,
     "benign": 200,
-    "other_malware": 199
+    "other_malware": 114
   },
   "origin_distribution": {
     "old_test": 169,
     "old_val": 161,
-    "new_unseen": 144
+    "new_unseen": 59
   },
   "metrics_3class": {
-    "accuracy": 0.6181434599156118,
+    "accuracy": 0.7480719794344473,
     "per_class_precision": [
-      0.9574468085106383,
-      0.5726744186046512,
-      0.6144578313253012
+      0.9565217391304348,
+      0.76171875,
+      0.5977011494252874
     ],
     "per_class_recall": [
-      0.6,
-      0.985,
-      0.2562814070351759
+      0.5866666666666667,
+      0.975,
+      0.45614035087719296
     ],
     "per_class_f1": [
-      0.7377049180327869,
-      0.7242647058823529,
-      0.3617021276595745
+      0.7272727272727273,
+      0.8552631578947368,
+      0.5174129353233831
     ],
     "per_class_support": [
       75,
       200,
-      199
+      114
     ],
-    "macro_precision": 0.7148596861468636,
-    "macro_recall": 0.6137604690117252,
-    "macro_f1": 0.6078905838582381,
-    "weighted_precision": 0.65109810715815,
-    "weighted_recall": 0.6181434599156118,
-    "weighted_f1": 0.5741762308716982,
+    "macro_precision": 0.7719805461852407,
+    "macro_recall": 0.6726023391812865,
+    "macro_f1": 0.6999829401636157,
+    "weighted_precision": 0.7512103122603224,
+    "weighted_recall": 0.7480719794344473,
+    "weighted_f1": 0.7315762487179114,
     "confusion_matrix": [
       [
-        45,
+        44,
         1,
-        29
+        30
       ],
       [
         0,
-        197,
-        3
+        195,
+        5
       ],
       [
         2,
-        146,
-        51
+        60,
+        52
       ]
     ],
-    "loss": 0.510572537238768
+    "loss": 0.2058402989973951,
+    "skipped_samples": 0
   },
   "metrics_threat_vs_benign": {
-    "TP": 127,
-    "FN": 147,
-    "TN": 197,
-    "FP": 3,
-    "threat_recall": 0.4635036496350365,
-    "threat_precision": 0.9769230769230769,
-    "threat_f1": 0.6287128712871287,
-    "benign_recall": 0.985,
-    "benign_precision": 0.5726744186046512,
-    "benign_f1": 0.7242647058823529,
-    "accuracy_2class": 0.6835443037974683,
-    "threats_missed": 147
+    "TP": 128,
+    "FN": 61,
+    "TN": 195,
+    "FP": 5,
+    "threat_recall": 0.6772486772486772,
+    "threat_precision": 0.9624060150375939,
+    "threat_f1": 0.7950310559006211,
+    "benign_recall": 0.975,
+    "benign_precision": 0.76171875,
+    "benign_f1": 0.8552631578947368,
+    "accuracy_2class": 0.8303341902313625,
+    "threats_missed": 61
   }
 }
