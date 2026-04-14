@@ -512,7 +512,6 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
 
     total_loss = 0.0
     total_mem_reg = 0.0
-    total_branch_reg = 0.0
     processed_batches = 0
 
     all_preds = []
@@ -520,7 +519,6 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
 
     task_loss_val = 0.0
     mem_reg_val = 0.0
-    branch_reg_val = 0.0
 
     pbar = tqdm(loader, desc=f"{'WARMUP ' if warmup else ''}Epoch {epoch}")
 
@@ -578,33 +576,17 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                     batch_skipped = True
                     break
 
-                # task_loss = criterion(logits, labels)
-                # mem_reg = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)
-                # loss = task_loss + mem_reg
                 task_loss = criterion(logits, labels)
                 mem_reg = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)
-
-                branch_reg = torch.tensor(0.0, device=device)
-                if hasattr(model, "branch_balance_loss"):
-                    branch_reg = model.branch_balance_loss(
-                        target_entropy=getattr(config, "BRANCH_GATE_TARGET_ENTROPY", 0.75),
-                        lambda_balance=getattr(config, "BRANCH_GATE_BALANCE_LAMBDA", 0.01),
-                    )
-
-                loss = task_loss + mem_reg + branch_reg
+                loss = task_loss + mem_reg
 
                 if not torch.isfinite(task_loss):
                     print(f"❌ Non-finite task_loss at batch {batch_idx} — skipping batch.")
                     batch_skipped = True
                     break
 
-                # if not torch.isfinite(mem_reg):
-                #     print(f"❌ Non-finite mem_reg at batch {batch_idx} — skipping batch.")
-                #     batch_skipped = True
-                #     break
-
-                if not torch.isfinite(branch_reg):
-                    print(f"❌ Non-finite branch_reg at batch {batch_idx} — skipping batch.")
+                if not torch.isfinite(mem_reg):
+                    print(f"❌ Non-finite mem_reg at batch {batch_idx} — skipping batch.")
                     batch_skipped = True
                     break
 
@@ -651,18 +633,11 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                         current_epoch=epoch,
                     )
 
-                # task_loss_val = float(task_loss.item())
-                # mem_reg_val = float(mem_reg.item())
-
-                # total_loss += task_loss_val
-                # total_mem_reg += mem_reg_val
                 task_loss_val = float(task_loss.item())
                 mem_reg_val = float(mem_reg.item())
-                branch_reg_val = float(branch_reg.item())
 
                 total_loss += task_loss_val
                 total_mem_reg += mem_reg_val
-                total_branch_reg += branch_reg_val
                 processed_batches += 1
 
                 preds = logits.argmax(dim=1).detach().cpu().numpy()
@@ -700,7 +675,6 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
             pbar.set_postfix(
                 loss=f"{task_loss_val:.4f}",
                 mem_reg=f"{mem_reg_val:.1e}",
-                branch_reg=f"{branch_reg_val:.1e}",
                 lr=f"{optimizer.param_groups[0]['lr']:.1e}",
             )
 
@@ -709,7 +683,6 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
 
     avg_loss = total_loss / max(processed_batches, 1)
     avg_mem_reg = total_mem_reg / max(processed_batches, 1)
-    avg_branch_reg = total_branch_reg / max(processed_batches, 1)
 
     # Safe fallback if every batch was skipped
     if len(all_preds) == 0 or len(all_labels) == 0:
@@ -728,13 +701,11 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
             "confusion_matrix": np.zeros((config.NUM_CLASSES, config.NUM_CLASSES), dtype=int),
             "loss": avg_loss,
             "mem_reg": avg_mem_reg,
-            "branch_reg": 0.0,
         }
 
     metrics = compute_metrics(all_preds, all_labels)
     metrics["loss"] = avg_loss
     metrics["mem_reg"] = avg_mem_reg
-    metrics["branch_reg"] = avg_branch_reg
     return metrics
 
 
@@ -866,12 +837,6 @@ def train():
     if config.RESUME_FROM_CHECKPOINT and checkpoint_path.exists():
         ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
         model.load_state_dict(ckpt["model_state_dict"])
-        # missing = model.load_state_dict(ckpt["model_state_dict"], strict=False)
-        print(f"🔁 Loaded checkpoint with strict=False")
-        if hasattr(missing, "missing_keys") and missing.missing_keys:
-            print(f"   Missing new keys: {missing.missing_keys}")
-        if hasattr(missing, "unexpected_keys") and missing.unexpected_keys:
-            print(f"   Unexpected keys: {missing.unexpected_keys}")
         if "optimizer_state_dict" in ckpt:
             optimizer.load_state_dict(ckpt["optimizer_state_dict"])
         if scheduler is not None and ckpt.get("scheduler_state_dict") is not None:
@@ -947,11 +912,11 @@ def train():
             f"\nTrain  loss={train_metrics['loss']:.4f}  "
             f"macro_f1={train_metrics['macro_f1']:.4f}  "
             f"mem_reg={train_metrics['mem_reg']:.6f}  "
-            f"branch_reg={train_metrics.get('branch_reg', 0.0):.6f}  "
             f"Ransom P={ransom_p:.3f} R={ransom_r:.3f}  "
             f"Benign P={benign_p:.3f} R={benign_r:.3f}  "
             f"Malware P={malware_p:.3f} R={malware_r:.3f}"
         )
+
         val_metrics = validate(
             model=model,
             loader=val_loader,
