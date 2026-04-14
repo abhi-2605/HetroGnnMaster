@@ -209,7 +209,7 @@ GRAD_CLIP = 1.0
 
 # Warmup
 USE_WARMUP = True
-WARMUP_EPOCHS = 5
+WARMUP_EPOCHS = 4
 WARMUP_LR = 1e-5
 
 # Device
@@ -241,11 +241,11 @@ USE_FOCAL_LOSS = True
 FOCAL_GAMMA = 2
 # FOCAL_ALPHA = [0.30, 0.40, 0.30]
 # FOCAL_ALPHA = [0.35, 0.35, 0.30] # 
-FOCAL_ALPHA = [0.39, 0.39, 0.43] # slight tweak to give more weight to ransomware and less to benign, while keeping other malware dominant
+FOCAL_ALPHA = [0.39, 0.39, 0.42] # slight tweak to give more weight to ransomware and less to benign, while keeping other malware dominant
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True
 OVERSAMPLE_WEIGHTS = {
-    0: 15, # RANSOMWARE: give it much higher weight to ensure it's well-represented in training batches
+    0: 12, # RANSOMWARE: give it much higher weight to ensure it's well-represented in training batches
     1: 5.0, # BENIGN: moderate weight to improve representation without overwhelming the model
     2: 1.3, # OTHER MALWARE: some oversampling to help model learn better, but not as much as ransomware
 }
