@@ -334,6 +334,31 @@ class HeteroTemporalGNN(nn.Module):
             num_heads=type_combiner_heads,
             dropout=dropout,
         )
+                # ══════════════════════════════════════════════════════════════════════
+        # 5b. Adaptive 3-branch fusion (semantic / structural / temporal)
+        # ══════════════════════════════════════════════════════════════════════
+        self.semantic_graph_projection = nn.Sequential(
+            nn.Linear(self.primary_hidden_dim, self.pooled_type_dim),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+        )
+
+        self.structural_primary_projection = nn.Sequential(
+            nn.Linear(self.primary_out_dim_per_layer, self.pooled_type_dim),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+        )
+
+        self.branch_gate = nn.Sequential(
+            nn.Linear(self.pooled_type_dim * 3, 128),
+            nn.LayerNorm(128),
+            nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(128, 3),
+        )
+
+        # cache last gate weights for branch regularization during training
+        self._last_branch_weights: Optional[torch.Tensor] = None
 
         # ══════════════════════════════════════════════════════════════════════
         # 6. Memory v2

@@ -486,3 +486,15 @@ CUSTOM_EVAL_SHUFFLE_BEFORE_SAMPLE = True
 
 
 OVERWRITE_ORIGINAL_METADATA = False
+
+# ============================================
+# ADAPTIVE BRANCH FUSION
+# ============================================
+USE_ADAPTIVE_BRANCH_FUSION = True
+
+# Small independent dropout on semantic / structural / temporal graph branches
+BRANCH_DROPOUT_P = 0.05
+
+# Penalize only when gate entropy becomes too low
+BRANCH_GATE_TARGET_ENTROPY = 0.75
+BRANCH_GATE_BALANCE_LAMBDA = 0.01
