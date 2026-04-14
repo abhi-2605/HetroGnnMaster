@@ -334,6 +334,31 @@ class HeteroTemporalGNN(nn.Module):
             num_heads=type_combiner_heads,
             dropout=dropout,
         )
+                # ══════════════════════════════════════════════════════════════════════
+        # 5b. Adaptive 3-branch fusion (semantic / structural / temporal)
+        # ══════════════════════════════════════════════════════════════════════
+        self.semantic_graph_projection = nn.Sequential(
+            nn.Linear(self.primary_hidden_dim, self.pooled_type_dim),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+        )
+
+        self.structural_primary_projection = nn.Sequential(
+            nn.Linear(self.primary_out_dim_per_layer, self.pooled_type_dim),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+        )
+
+        self.branch_gate = nn.Sequential(
+            nn.Linear(self.pooled_type_dim * 3, 128),
+            nn.LayerNorm(128),
+            nn.GELU(),
+            nn.Dropout(dropout),
+            nn.Linear(128, 3),
+        )
+
+        # cache last gate weights for branch regularization during training
+        self._last_branch_weights: Optional[torch.Tensor] = None
 
         # ══════════════════════════════════════════════════════════════════════
         # 6. Memory v2
@@ -761,7 +786,10 @@ class HeteroTemporalGNN(nn.Module):
                 f"zero_{self.primary_temporal_type}={self._temporal_diag['zero_primary']}"
             )
 
-        if self.primary_temporal_type not in batch_dict or batch_dict[self.primary_temporal_type].numel() == 0:
+        if (
+            self.primary_temporal_type not in batch_dict
+            or batch_dict[self.primary_temporal_type].numel() == 0
+        ):
             raise ValueError(
                 f"Batch has no '{self.primary_temporal_type}' nodes; "
                 f"cannot run temporal branch."
@@ -772,17 +800,34 @@ class HeteroTemporalGNN(nn.Module):
                 "Memory is active for the temporal type but api_indices is missing."
             )
 
-        batch_size = int(batch_dict[self.primary_temporal_type].max().item()) + 1
-
-        # 1. input projections
-        h_dict: Dict[str, torch.Tensor] = {}
+        # ------------------------------------------------------------------
+        # 1. Input projections
+        # ------------------------------------------------------------------
+        projected_inputs: Dict[str, torch.Tensor] = {}
         for nt, x in x_dict.items():
             if nt in self.input_projections:
-                h_dict[nt] = self.input_projections[nt](x)
+                projected_inputs[nt] = self.input_projections[nt](x)
             else:
-                h_dict[nt] = x
+                projected_inputs[nt] = x
 
-        # 2. stacked hetero GNN layers
+        h_dict: Dict[str, torch.Tensor] = dict(projected_inputs)
+
+        primary_batch = batch_dict[self.primary_temporal_type]
+        batch_size = int(primary_batch.max().item()) + 1
+
+        # Semantic branch: projected primary input before GNN / temporal mixing
+        semantic_primary_pooled = scatter(
+            projected_inputs[self.primary_temporal_type],
+            primary_batch,
+            dim=0,
+            dim_size=batch_size,
+            reduce="mean",
+        )
+        semantic_graph_emb = self.semantic_graph_projection(semantic_primary_pooled)
+
+        # ------------------------------------------------------------------
+        # 2. Stacked hetero GNN layers
+        # ------------------------------------------------------------------
         for gnn_layer, norm_dict in zip(self.gnn_layers, self.norm_layers):
             h_out = gnn_layer(
                 x_dict=h_dict,
@@ -806,12 +851,22 @@ class HeteroTemporalGNN(nn.Module):
 
             h_dict = h_out
 
-        # 3. Memory v2 on primary temporal stream (after GNN, before final LSTM pooling)
-        primary_batch = batch_dict[self.primary_temporal_type]
+        # ------------------------------------------------------------------
+        # 3. Memory v2 on primary temporal stream
+        # ------------------------------------------------------------------
         primary_hidden = h_dict[self.primary_temporal_type]  # [N_primary, primary_out_dim]
 
+        # Structural branch: post-GNN primary hidden before explicit temporal pooling
+        structural_primary_pooled = scatter(
+            primary_hidden,
+            primary_batch,
+            dim=0,
+            dim_size=batch_size,
+            reduce="mean",
+        )
+        structural_graph_emb = self.structural_primary_projection(structural_primary_pooled)
+
         if memory_active and self.memory is not None:
-            # preliminary temporal context from current primary hidden
             primary_ts = (
                 timestamps_dict.get(self.primary_temporal_type, None)
                 if timestamps_dict is not None else None
@@ -821,34 +876,33 @@ class HeteroTemporalGNN(nn.Module):
                 x=primary_hidden,
                 batch=primary_batch,
                 timestamps=primary_ts,
-            )  # [N_primary, lstm_output_dim]
+            )
 
             neighbor_context = self._build_primary_neighbor_context(
                 h_dict=h_dict,
                 edge_index_dict=edge_index_dict,
-            )  # [N_primary, primary_out_dim]
+            )
 
             memory_query_context = self._build_memory_query_context(
                 primary_hidden=primary_hidden,
                 temporal_context=prelim_temporal,
                 neighbor_context=neighbor_context,
                 batch_index=primary_batch,
-            )  # [N_primary, D_ctx]
+            )
 
             memory_vec = self.memory.read(
                 api_indices=api_indices.to(device),
                 node_features=primary_hidden,
                 query_context=memory_query_context,
                 enable_memory=True,
-            )  # [N_primary, memory_dim]
+            )
 
             fused_primary = self.memory_fusion(
                 torch.cat([primary_hidden, memory_vec], dim=-1)
-            )  # [N_primary, primary_out_dim]
+            )
 
             h_dict[self.primary_temporal_type] = fused_primary
 
-            # cache for weighted writes after optimizer step
             self._memory_cache = {
                 "api_indices": api_indices.detach(),
                 "write_node_features": primary_hidden.detach(),
@@ -865,7 +919,9 @@ class HeteroTemporalGNN(nn.Module):
                 "memory_enabled": False,
             }
 
-        # 4. explicit temporal branch on final primary temporal nodes
+        # ------------------------------------------------------------------
+        # 4. Explicit temporal branch on final primary temporal nodes
+        # ------------------------------------------------------------------
         primary_ts = (
             timestamps_dict.get(self.primary_temporal_type, None)
             if timestamps_dict is not None else None
@@ -882,18 +938,53 @@ class HeteroTemporalGNN(nn.Module):
             batch=primary_batch,
         )
 
-        # 5. fixed type slots + type combiner
-        type_slots, type_mask = self._build_type_slots(
-            h_dict=h_dict,
-            batch_dict=batch_dict,
-            temporal_graph_emb=temporal_graph_emb,
-            batch_size=batch_size,
-            device=device,
+        temporal_branch_emb = self.type_pool_projections[self.primary_temporal_type](
+            temporal_graph_emb
         )
 
-        graph_embedding = self.type_combiner(type_slots, type_mask)
+        # ------------------------------------------------------------------
+        # 5. Graph-level fusion
+        # ------------------------------------------------------------------
+        if getattr(config, "USE_ADAPTIVE_BRANCH_FUSION", False):
+            if self.training:
+                p_drop = getattr(config, "BRANCH_DROPOUT_P", 0.0)
 
-        # 6. behavioral features
+                if torch.rand(1, device=device).item() < p_drop:
+                    semantic_graph_emb = torch.zeros_like(semantic_graph_emb)
+                if torch.rand(1, device=device).item() < p_drop:
+                    structural_graph_emb = torch.zeros_like(structural_graph_emb)
+                if torch.rand(1, device=device).item() < p_drop:
+                    temporal_branch_emb = torch.zeros_like(temporal_branch_emb)
+
+            branch_stack = torch.cat(
+                [semantic_graph_emb, structural_graph_emb, temporal_branch_emb],
+                dim=-1,
+            )
+
+            gate_logits = self.branch_gate(branch_stack)
+            branch_weights = torch.softmax(gate_logits, dim=-1)
+
+            self._last_branch_weights = branch_weights
+
+            graph_embedding = (
+                branch_weights[:, 0:1] * semantic_graph_emb
+                + branch_weights[:, 1:2] * structural_graph_emb
+                + branch_weights[:, 2:3] * temporal_branch_emb
+            )
+        else:
+            type_slots, type_mask = self._build_type_slots(
+                h_dict=h_dict,
+                batch_dict=batch_dict,
+                temporal_graph_emb=temporal_graph_emb,
+                batch_size=batch_size,
+                device=device,
+            )
+            graph_embedding = self.type_combiner(type_slots, type_mask)
+            self._last_branch_weights = None
+
+        # ------------------------------------------------------------------
+        # 6. Behavioral features
+        # ------------------------------------------------------------------
         behav_feats = self._compute_behavioral_features(
             h_dict=h_dict,
             batch_dict=batch_dict,
@@ -901,7 +992,9 @@ class HeteroTemporalGNN(nn.Module):
             device=device,
         )
 
-        # 7. classifier
+        # ------------------------------------------------------------------
+        # 7. Classifier
+        # ------------------------------------------------------------------
         x = torch.cat([graph_embedding, behav_feats], dim=-1)
         z = self.shared_trunk(x)
 
@@ -978,6 +1071,33 @@ class HeteroTemporalGNN(nn.Module):
             device=next(self.parameters()).device,
             requires_grad=True,
         )
+
+    def branch_balance_loss(
+        self,
+        target_entropy: float = 0.75,
+        lambda_balance: float = 0.01,
+    ) -> torch.Tensor:
+        """
+        Softly penalize overly collapsed branch weights.
+
+        - Does NOT force equal branch usage
+        - Only adds penalty when gate entropy falls below target_entropy
+        """
+        if self._last_branch_weights is None:
+            return torch.tensor(
+                0.0,
+                device=next(self.parameters()).device,
+                requires_grad=True,
+            )
+
+        w = self._last_branch_weights.clamp_min(1e-8)
+
+        # normalize entropy to [0, 1] by dividing by log(3)
+        entropy = -(w * torch.log(w)).sum(dim=-1) / torch.log(
+            torch.tensor(3.0, device=w.device)
+        )
+
+        return lambda_balance * torch.relu(target_entropy - entropy).mean()
 
 
 # ══════════════════════════════════════════════════════════════════════════════
