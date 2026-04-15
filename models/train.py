@@ -866,7 +866,7 @@ def train():
     if config.RESUME_FROM_CHECKPOINT and checkpoint_path.exists():
         ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
         model.load_state_dict(ckpt["model_state_dict"])
-        # missing = model.load_state_dict(ckpt["model_state_dict"], strict=False)
+        missing = model.load_state_dict(ckpt["model_state_dict"], strict=False)
         print(f"🔁 Loaded checkpoint with strict=False")
         if hasattr(missing, "missing_keys") and missing.missing_keys:
             print(f"   Missing new keys: {missing.missing_keys}")
