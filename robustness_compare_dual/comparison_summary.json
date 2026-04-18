@@ -1,0 +1,2515 @@
+{
+  "unigram_attack": {
+    "name": "lexical_rename_plus_frequency_dilution",
+    "rename_fraction": 1.0,
+    "keep_core_apis": 0,
+    "use_suffix_variants": true,
+    "enable_padding": false,
+    "padding_ratio": 0.0,
+    "min_add": 0,
+    "max_add": 0
+  },
+  "bigram_attack": {
+    "name": "benign_interleaving",
+    "full_shuffle_preserve_first": false,
+    "full_shuffle_preserve_last": false,
+    "interleave_every_k": 1,
+    "interleave_ratio": 1.0,
+    "interleave_max_add": 3000
+  },
+  "combined_attack": {
+    "apply_unigram_first": true
+  },
+  "tfidf_variants": [
+    {
+      "name": "unigram",
+      "ngram_range": [
+        1,
+        1
+      ]
+    },
+    {
+      "name": "unigram_bigram",
+      "ngram_range": [
+        1,
+        2
+      ]
+    },
+    {
+      "name": "bigram",
+      "ngram_range": [
+        2,
+        2
+      ]
+    }
+  ],
+  "train_setup": {
+    "metadata_path": "/Volumes/SSD/TGNN/ransomware_tgnn/extracted_metadata_appended.csv",
+    "active_graph_dir": "/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched",
+    "custom_eval_manifest_path": "/Volumes/SSD/TGNN/ransomware_tgnn/results/custom_eval/zero_day_manifest.csv",
+    "malware_keep_frac_train": 0.8,
+    "apply_malware_subsample_to_train": true,
+    "api_seq_hard_limit": 100000,
+    "api_seq_reduced_to": 30000,
+    "excluded_train_ids": 0,
+    "train_samples_used": 5047,
+    "custom_eval_samples_used": 475
+  },
+  "eval_track_stats": {
+    "clean": {
+      "bigram_overlap_mean": 1.0,
+      "bigram_overlap_median": 1.0,
+      "unigram_overlap_mean": 1.0,
+      "unigram_overlap_median": 1.0,
+      "length_ratio_mean": 1.0,
+      "length_ratio_median": 1.0
+    },
+    "unigram_attack": {
+      "bigram_overlap_mean": 0.031578947368421054,
+      "bigram_overlap_median": 0.0,
+      "unigram_overlap_mean": 0.0,
+      "unigram_overlap_median": 0.0,
+      "length_ratio_mean": 1.0,
+      "length_ratio_median": 1.0
+    },
+    "bigram_attack": {
+      "bigram_overlap_mean": 0.6130881767140284,
+      "bigram_overlap_median": 0.790650406504065,
+      "unigram_overlap_mean": 0.998479063947208,
+      "unigram_overlap_median": 1.0,
+      "length_ratio_mean": 1.7269639531076337,
+      "length_ratio_median": 1.9565217391304348
+    },
+    "combined_attack": {
+      "bigram_overlap_mean": 0.03217214416630623,
+      "bigram_overlap_median": 0.0,
+      "unigram_overlap_mean": 0.0263621355053985,
+      "unigram_overlap_median": 0.017543859649122806,
+      "length_ratio_mean": 1.7269639531076337,
+      "length_ratio_median": 1.9565217391304348
+    }
+  },
+  "baseline": {
+    "random_forest": {
+      "unigram": {
+        "tfidf_vocab_size": 390,
+        "ngram_range": [
+          1,
+          1
+        ],
+        "train": {
+          "accuracy": 0.9976223499108381,
+          "per_class_precision": [
+            0.9828571428571429,
+            0.993566833452466,
+            1.0
+          ],
+          "per_class_recall": [
+            1.0,
+            1.0,
+            0.9965566714490675
+          ],
+          "per_class_f1": [
+            0.9913544668587896,
+            0.9967730369307995,
+            0.998275366484622
+          ],
+          "per_class_support": [
+            172,
+            1390,
+            3485
+          ],
+          "macro_precision": 0.9921413254365362,
+          "macro_recall": 0.9988522238163559,
+          "macro_f1": 0.9954676234247369,
+          "weighted_precision": 0.9976440117040533,
+          "weighted_recall": 0.9976223499108381,
+          "weighted_f1": 0.9976257463507887,
+          "confusion_matrix": [
+            [
+              172,
+              0,
+              0
+            ],
+            [
+              0,
+              1390,
+              0
+            ],
+            [
+              3,
+              9,
+              3473
+            ]
+          ]
+        },
+        "clean_custom_eval": {
+          "accuracy": 0.9031578947368422,
+          "per_class_precision": [
+            0.925,
+            0.9948979591836735,
+            0.8242677824267782
+          ],
+          "per_class_recall": [
+            0.49333333333333335,
+            0.975,
+            0.985
+          ],
+          "per_class_f1": [
+            0.6434782608695652,
+            0.9848484848484849,
+            0.89749430523918
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.9147219138701507,
+          "macro_recall": 0.8177777777777777,
+          "macro_f1": 0.8419403503190767,
+          "weighted_precision": 0.9120171543622955,
+          "weighted_recall": 0.9031578947368422,
+          "weighted_f1": 0.894167215963685,
+          "confusion_matrix": [
+            [
+              37,
+              1,
+              37
+            ],
+            [
+              0,
+              195,
+              5
+            ],
+            [
+              3,
+              0,
+              197
+            ]
+          ]
+        },
+        "clean_tvb": {
+          "TP": 274,
+          "FN": 1,
+          "TN": 195,
+          "FP": 5,
+          "threat_recall": 0.9963636363636363,
+          "threat_precision": 0.982078853046595,
+          "threat_f1": 0.9891696750902528,
+          "benign_recall": 0.975,
+          "benign_precision": 0.9948979591836735,
+          "benign_f1": 0.984848484848485,
+          "accuracy_2class": 0.9873684210526316,
+          "threats_missed": 1
+        },
+        "clean_stats": {
+          "bigram_overlap_mean": 1.0,
+          "bigram_overlap_median": 1.0,
+          "unigram_overlap_mean": 1.0,
+          "unigram_overlap_median": 1.0,
+          "length_ratio_mean": 1.0,
+          "length_ratio_median": 1.0
+        },
+        "unigram_attack_custom_eval": {
+          "accuracy": 0.42105263157894735,
+          "per_class_precision": [
+            0.0,
+            0.42105263157894735,
+            0.0
+          ],
+          "per_class_recall": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "per_class_f1": [
+            0.0,
+            0.5925925925925926,
+            0.0
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.14035087719298245,
+          "macro_recall": 0.3333333333333333,
+          "macro_f1": 0.19753086419753085,
+          "weighted_precision": 0.17728531855955676,
+          "weighted_recall": 0.42105263157894735,
+          "weighted_f1": 0.2495126705653021,
+          "confusion_matrix": [
+            [
+              0,
+              75,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ]
+          ]
+        },
+        "unigram_attack_tvb": {
+          "TP": 0,
+          "FN": 275,
+          "TN": 200,
+          "FP": 0,
+          "threat_recall": 0.0,
+          "threat_precision": 0.0,
+          "threat_f1": 0.0,
+          "benign_recall": 1.0,
+          "benign_precision": 0.42105263157894735,
+          "benign_f1": 0.5925925925925926,
+          "accuracy_2class": 0.42105263157894735,
+          "threats_missed": 275
+        },
+        "unigram_attack_stats": {
+          "bigram_overlap_mean": 0.031578947368421054,
+          "bigram_overlap_median": 0.0,
+          "unigram_overlap_mean": 0.0,
+          "unigram_overlap_median": 0.0,
+          "length_ratio_mean": 1.0,
+          "length_ratio_median": 1.0
+        },
+        "bigram_attack_custom_eval": {
+          "accuracy": 0.8547368421052631,
+          "per_class_precision": [
+            1.0,
+            0.9948453608247423,
+            0.746268656716418
+          ],
+          "per_class_recall": [
+            0.17333333333333334,
+            0.965,
+            1.0
+          ],
+          "per_class_f1": [
+            0.29545454545454547,
+            0.9796954314720813,
+            0.8547008547008547
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.91370467251372,
+          "macro_recall": 0.7127777777777777,
+          "macro_f1": 0.7099502772091605,
+          "weighted_precision": 0.8909953758068042,
+          "weighted_recall": 0.8547368421052631,
+          "weighted_f1": 0.8190281013551117,
+          "confusion_matrix": [
+            [
+              13,
+              1,
+              61
+            ],
+            [
+              0,
+              193,
+              7
+            ],
+            [
+              0,
+              0,
+              200
+            ]
+          ]
+        },
+        "bigram_attack_tvb": {
+          "TP": 274,
+          "FN": 1,
+          "TN": 193,
+          "FP": 7,
+          "threat_recall": 0.9963636363636363,
+          "threat_precision": 0.9750889679715302,
+          "threat_f1": 0.9856115107913669,
+          "benign_recall": 0.965,
+          "benign_precision": 0.9948453608247423,
+          "benign_f1": 0.9796954314720813,
+          "accuracy_2class": 0.9831578947368421,
+          "threats_missed": 1
+        },
+        "bigram_attack_stats": {
+          "bigram_overlap_mean": 0.6130881767140284,
+          "bigram_overlap_median": 0.790650406504065,
+          "unigram_overlap_mean": 0.998479063947208,
+          "unigram_overlap_median": 1.0,
+          "length_ratio_mean": 1.7269639531076337,
+          "length_ratio_median": 1.9565217391304348
+        },
+        "combined_attack_custom_eval": {
+          "accuracy": 0.42105263157894735,
+          "per_class_precision": [
+            0.0,
+            0.42105263157894735,
+            0.0
+          ],
+          "per_class_recall": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "per_class_f1": [
+            0.0,
+            0.5925925925925926,
+            0.0
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.14035087719298245,
+          "macro_recall": 0.3333333333333333,
+          "macro_f1": 0.19753086419753085,
+          "weighted_precision": 0.17728531855955676,
+          "weighted_recall": 0.42105263157894735,
+          "weighted_f1": 0.2495126705653021,
+          "confusion_matrix": [
+            [
+              0,
+              75,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ]
+          ]
+        },
+        "combined_attack_tvb": {
+          "TP": 0,
+          "FN": 275,
+          "TN": 200,
+          "FP": 0,
+          "threat_recall": 0.0,
+          "threat_precision": 0.0,
+          "threat_f1": 0.0,
+          "benign_recall": 1.0,
+          "benign_precision": 0.42105263157894735,
+          "benign_f1": 0.5925925925925926,
+          "accuracy_2class": 0.42105263157894735,
+          "threats_missed": 275
+        },
+        "combined_attack_stats": {
+          "bigram_overlap_mean": 0.03217214416630623,
+          "bigram_overlap_median": 0.0,
+          "unigram_overlap_mean": 0.0263621355053985,
+          "unigram_overlap_median": 0.017543859649122806,
+          "length_ratio_mean": 1.7269639531076337,
+          "length_ratio_median": 1.9565217391304348
+        },
+        "drop_clean_to_unigram_attack": {
+          "accuracy_drop": 0.4821052631578948,
+          "macro_f1_drop": 0.6444094861215458,
+          "weighted_f1_drop": 0.6446545453983828,
+          "ransomware_recall_drop": 0.49333333333333335,
+          "benign_recall_drop": -0.025000000000000022,
+          "other_malware_recall_drop": 0.985,
+          "threats_missed_increase": 274
+        },
+        "drop_clean_to_bigram_attack": {
+          "accuracy_drop": 0.04842105263157903,
+          "macro_f1_drop": 0.13199007310991617,
+          "weighted_f1_drop": 0.07513911460857325,
+          "ransomware_recall_drop": 0.32,
+          "benign_recall_drop": 0.010000000000000009,
+          "other_malware_recall_drop": -0.015000000000000013,
+          "threats_missed_increase": 0
+        },
+        "drop_clean_to_combined_attack": {
+          "accuracy_drop": 0.4821052631578948,
+          "macro_f1_drop": 0.6444094861215458,
+          "weighted_f1_drop": 0.6446545453983828,
+          "ransomware_recall_drop": 0.49333333333333335,
+          "benign_recall_drop": -0.025000000000000022,
+          "other_malware_recall_drop": 0.985,
+          "threats_missed_increase": 274
+        }
+      },
+      "unigram_bigram": {
+        "tfidf_vocab_size": 3000,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "train": {
+          "accuracy": 0.9976223499108381,
+          "per_class_precision": [
+            0.9828571428571429,
+            0.993566833452466,
+            1.0
+          ],
+          "per_class_recall": [
+            1.0,
+            1.0,
+            0.9965566714490675
+          ],
+          "per_class_f1": [
+            0.9913544668587896,
+            0.9967730369307995,
+            0.998275366484622
+          ],
+          "per_class_support": [
+            172,
+            1390,
+            3485
+          ],
+          "macro_precision": 0.9921413254365362,
+          "macro_recall": 0.9988522238163559,
+          "macro_f1": 0.9954676234247369,
+          "weighted_precision": 0.9976440117040533,
+          "weighted_recall": 0.9976223499108381,
+          "weighted_f1": 0.9976257463507887,
+          "confusion_matrix": [
+            [
+              172,
+              0,
+              0
+            ],
+            [
+              0,
+              1390,
+              0
+            ],
+            [
+              3,
+              9,
+              3473
+            ]
+          ]
+        },
+        "clean_custom_eval": {
+          "accuracy": 0.9052631578947369,
+          "per_class_precision": [
+            0.926829268292683,
+            1.0,
+            0.8242677824267782
+          ],
+          "per_class_recall": [
+            0.5066666666666667,
+            0.975,
+            0.985
+          ],
+          "per_class_f1": [
+            0.6551724137931034,
+            0.9873417721518988,
+            0.89749430523918
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.9170323502398204,
+          "macro_recall": 0.8222222222222223,
+          "macro_f1": 0.8466694970613942,
+          "weighted_precision": 0.9144542139101196,
+          "weighted_recall": 0.9052631578947369,
+          "weighted_f1": 0.8970634663425232,
+          "confusion_matrix": [
+            [
+              38,
+              0,
+              37
+            ],
+            [
+              0,
+              195,
+              5
+            ],
+            [
+              3,
+              0,
+              197
+            ]
+          ]
+        },
+        "clean_tvb": {
+          "TP": 275,
+          "FN": 0,
+          "TN": 195,
+          "FP": 5,
+          "threat_recall": 1.0,
+          "threat_precision": 0.9821428571428571,
+          "threat_f1": 0.9909909909909909,
+          "benign_recall": 0.975,
+          "benign_precision": 1.0,
+          "benign_f1": 0.9873417721518987,
+          "accuracy_2class": 0.9894736842105263,
+          "threats_missed": 0
+        },
+        "clean_stats": {
+          "bigram_overlap_mean": 1.0,
+          "bigram_overlap_median": 1.0,
+          "unigram_overlap_mean": 1.0,
+          "unigram_overlap_median": 1.0,
+          "length_ratio_mean": 1.0,
+          "length_ratio_median": 1.0
+        },
+        "unigram_attack_custom_eval": {
+          "accuracy": 0.42105263157894735,
+          "per_class_precision": [
+            0.0,
+            0.42105263157894735,
+            0.0
+          ],
+          "per_class_recall": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "per_class_f1": [
+            0.0,
+            0.5925925925925926,
+            0.0
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.14035087719298245,
+          "macro_recall": 0.3333333333333333,
+          "macro_f1": 0.19753086419753085,
+          "weighted_precision": 0.17728531855955676,
+          "weighted_recall": 0.42105263157894735,
+          "weighted_f1": 0.2495126705653021,
+          "confusion_matrix": [
+            [
+              0,
+              75,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ]
+          ]
+        },
+        "unigram_attack_tvb": {
+          "TP": 0,
+          "FN": 275,
+          "TN": 200,
+          "FP": 0,
+          "threat_recall": 0.0,
+          "threat_precision": 0.0,
+          "threat_f1": 0.0,
+          "benign_recall": 1.0,
+          "benign_precision": 0.42105263157894735,
+          "benign_f1": 0.5925925925925926,
+          "accuracy_2class": 0.42105263157894735,
+          "threats_missed": 275
+        },
+        "unigram_attack_stats": {
+          "bigram_overlap_mean": 0.031578947368421054,
+          "bigram_overlap_median": 0.0,
+          "unigram_overlap_mean": 0.0,
+          "unigram_overlap_median": 0.0,
+          "length_ratio_mean": 1.0,
+          "length_ratio_median": 1.0
+        },
+        "bigram_attack_custom_eval": {
+          "accuracy": 0.8273684210526315,
+          "per_class_precision": [
+            0.0,
+            0.9948453608247423,
+            0.7117437722419929
+          ],
+          "per_class_recall": [
+            0.0,
+            0.965,
+            1.0
+          ],
+          "per_class_f1": [
+            0.0,
+            0.9796954314720813,
+            0.8316008316008316
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.5688630443555783,
+          "macro_recall": 0.6549999999999999,
+          "macro_f1": 0.6037654210243043,
+          "weighted_precision": 0.7185638455017833,
+          "weighted_recall": 0.8273684210526315,
+          "weighted_f1": 0.7626510581359633,
+          "confusion_matrix": [
+            [
+              0,
+              1,
+              74
+            ],
+            [
+              0,
+              193,
+              7
+            ],
+            [
+              0,
+              0,
+              200
+            ]
+          ]
+        },
+        "bigram_attack_tvb": {
+          "TP": 274,
+          "FN": 1,
+          "TN": 193,
+          "FP": 7,
+          "threat_recall": 0.9963636363636363,
+          "threat_precision": 0.9750889679715302,
+          "threat_f1": 0.9856115107913669,
+          "benign_recall": 0.965,
+          "benign_precision": 0.9948453608247423,
+          "benign_f1": 0.9796954314720813,
+          "accuracy_2class": 0.9831578947368421,
+          "threats_missed": 1
+        },
+        "bigram_attack_stats": {
+          "bigram_overlap_mean": 0.6130881767140284,
+          "bigram_overlap_median": 0.790650406504065,
+          "unigram_overlap_mean": 0.998479063947208,
+          "unigram_overlap_median": 1.0,
+          "length_ratio_mean": 1.7269639531076337,
+          "length_ratio_median": 1.9565217391304348
+        },
+        "combined_attack_custom_eval": {
+          "accuracy": 0.42105263157894735,
+          "per_class_precision": [
+            0.0,
+            0.42105263157894735,
+            0.0
+          ],
+          "per_class_recall": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "per_class_f1": [
+            0.0,
+            0.5925925925925926,
+            0.0
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.14035087719298245,
+          "macro_recall": 0.3333333333333333,
+          "macro_f1": 0.19753086419753085,
+          "weighted_precision": 0.17728531855955676,
+          "weighted_recall": 0.42105263157894735,
+          "weighted_f1": 0.2495126705653021,
+          "confusion_matrix": [
+            [
+              0,
+              75,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ]
+          ]
+        },
+        "combined_attack_tvb": {
+          "TP": 0,
+          "FN": 275,
+          "TN": 200,
+          "FP": 0,
+          "threat_recall": 0.0,
+          "threat_precision": 0.0,
+          "threat_f1": 0.0,
+          "benign_recall": 1.0,
+          "benign_precision": 0.42105263157894735,
+          "benign_f1": 0.5925925925925926,
+          "accuracy_2class": 0.42105263157894735,
+          "threats_missed": 275
+        },
+        "combined_attack_stats": {
+          "bigram_overlap_mean": 0.03217214416630623,
+          "bigram_overlap_median": 0.0,
+          "unigram_overlap_mean": 0.0263621355053985,
+          "unigram_overlap_median": 0.017543859649122806,
+          "length_ratio_mean": 1.7269639531076337,
+          "length_ratio_median": 1.9565217391304348
+        },
+        "drop_clean_to_unigram_attack": {
+          "accuracy_drop": 0.48421052631578954,
+          "macro_f1_drop": 0.6491386328638633,
+          "weighted_f1_drop": 0.6475507957772211,
+          "ransomware_recall_drop": 0.5066666666666667,
+          "benign_recall_drop": -0.025000000000000022,
+          "other_malware_recall_drop": 0.985,
+          "threats_missed_increase": 275
+        },
+        "drop_clean_to_bigram_attack": {
+          "accuracy_drop": 0.07789473684210535,
+          "macro_f1_drop": 0.24290407603708986,
+          "weighted_f1_drop": 0.13441240820655986,
+          "ransomware_recall_drop": 0.5066666666666667,
+          "benign_recall_drop": 0.010000000000000009,
+          "other_malware_recall_drop": -0.015000000000000013,
+          "threats_missed_increase": 1
+        },
+        "drop_clean_to_combined_attack": {
+          "accuracy_drop": 0.48421052631578954,
+          "macro_f1_drop": 0.6491386328638633,
+          "weighted_f1_drop": 0.6475507957772211,
+          "ransomware_recall_drop": 0.5066666666666667,
+          "benign_recall_drop": -0.025000000000000022,
+          "other_malware_recall_drop": 0.985,
+          "threats_missed_increase": 275
+        }
+      },
+      "bigram": {
+        "tfidf_vocab_size": 3000,
+        "ngram_range": [
+          2,
+          2
+        ],
+        "train": {
+          "accuracy": 0.9970279373885477,
+          "per_class_precision": [
+            0.9772727272727273,
+            0.9921484653818701,
+            1.0
+          ],
+          "per_class_recall": [
+            1.0,
+            1.0,
+            0.9956958393113343
+          ],
+          "per_class_f1": [
+            0.9885057471264368,
+            0.9960587603009674,
+            0.9978432782171099
+          ],
+          "per_class_support": [
+            172,
+            1390,
+            3485
+          ],
+          "macro_precision": 0.9898070642181991,
+          "macro_recall": 0.9985652797704447,
+          "macro_f1": 0.9941359285481713,
+          "weighted_precision": 0.9970630624077093,
+          "weighted_recall": 0.9970279373885477,
+          "weighted_f1": 0.9970335823084446,
+          "confusion_matrix": [
+            [
+              172,
+              0,
+              0
+            ],
+            [
+              0,
+              1390,
+              0
+            ],
+            [
+              4,
+              11,
+              3470
+            ]
+          ]
+        },
+        "clean_custom_eval": {
+          "accuracy": 0.9052631578947369,
+          "per_class_precision": [
+            0.925,
+            1.0,
+            0.8242677824267782
+          ],
+          "per_class_recall": [
+            0.49333333333333335,
+            0.98,
+            0.985
+          ],
+          "per_class_f1": [
+            0.6434782608695652,
+            0.98989898989899,
+            0.89749430523918
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.9164225941422594,
+          "macro_recall": 0.8194444444444445,
+          "macro_f1": 0.8436238520025784,
+          "weighted_precision": 0.9141653820744329,
+          "weighted_recall": 0.9052631578947369,
+          "weighted_f1": 0.8962937444060028,
+          "confusion_matrix": [
+            [
+              37,
+              0,
+              38
+            ],
+            [
+              0,
+              196,
+              4
+            ],
+            [
+              3,
+              0,
+              197
+            ]
+          ]
+        },
+        "clean_tvb": {
+          "TP": 275,
+          "FN": 0,
+          "TN": 196,
+          "FP": 4,
+          "threat_recall": 1.0,
+          "threat_precision": 0.985663082437276,
+          "threat_f1": 0.9927797833935018,
+          "benign_recall": 0.98,
+          "benign_precision": 1.0,
+          "benign_f1": 0.98989898989899,
+          "accuracy_2class": 0.991578947368421,
+          "threats_missed": 0
+        },
+        "clean_stats": {
+          "bigram_overlap_mean": 1.0,
+          "bigram_overlap_median": 1.0,
+          "unigram_overlap_mean": 1.0,
+          "unigram_overlap_median": 1.0,
+          "length_ratio_mean": 1.0,
+          "length_ratio_median": 1.0
+        },
+        "unigram_attack_custom_eval": {
+          "accuracy": 0.42105263157894735,
+          "per_class_precision": [
+            0.0,
+            0.42105263157894735,
+            0.0
+          ],
+          "per_class_recall": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "per_class_f1": [
+            0.0,
+            0.5925925925925926,
+            0.0
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.14035087719298245,
+          "macro_recall": 0.3333333333333333,
+          "macro_f1": 0.19753086419753085,
+          "weighted_precision": 0.17728531855955676,
+          "weighted_recall": 0.42105263157894735,
+          "weighted_f1": 0.2495126705653021,
+          "confusion_matrix": [
+            [
+              0,
+              75,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ]
+          ]
+        },
+        "unigram_attack_tvb": {
+          "TP": 0,
+          "FN": 275,
+          "TN": 200,
+          "FP": 0,
+          "threat_recall": 0.0,
+          "threat_precision": 0.0,
+          "threat_f1": 0.0,
+          "benign_recall": 1.0,
+          "benign_precision": 0.42105263157894735,
+          "benign_f1": 0.5925925925925926,
+          "accuracy_2class": 0.42105263157894735,
+          "threats_missed": 275
+        },
+        "unigram_attack_stats": {
+          "bigram_overlap_mean": 0.031578947368421054,
+          "bigram_overlap_median": 0.0,
+          "unigram_overlap_mean": 0.0,
+          "unigram_overlap_median": 0.0,
+          "length_ratio_mean": 1.0,
+          "length_ratio_median": 1.0
+        },
+        "bigram_attack_custom_eval": {
+          "accuracy": 0.6105263157894737,
+          "per_class_precision": [
+            0.0,
+            0.6030769230769231,
+            0.6266666666666667
+          ],
+          "per_class_recall": [
+            0.0,
+            0.98,
+            0.47
+          ],
+          "per_class_f1": [
+            0.0,
+            0.7466666666666667,
+            0.5371428571428571
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.4099145299145299,
+          "macro_recall": 0.48333333333333334,
+          "macro_f1": 0.427936507936508,
+          "weighted_precision": 0.5177867746288799,
+          "weighted_recall": 0.6105263157894737,
+          "weighted_f1": 0.5405513784461152,
+          "confusion_matrix": [
+            [
+              0,
+              23,
+              52
+            ],
+            [
+              0,
+              196,
+              4
+            ],
+            [
+              0,
+              106,
+              94
+            ]
+          ]
+        },
+        "bigram_attack_tvb": {
+          "TP": 146,
+          "FN": 129,
+          "TN": 196,
+          "FP": 4,
+          "threat_recall": 0.5309090909090909,
+          "threat_precision": 0.9733333333333334,
+          "threat_f1": 0.6870588235294117,
+          "benign_recall": 0.98,
+          "benign_precision": 0.6030769230769231,
+          "benign_f1": 0.7466666666666667,
+          "accuracy_2class": 0.72,
+          "threats_missed": 129
+        },
+        "bigram_attack_stats": {
+          "bigram_overlap_mean": 0.6130881767140284,
+          "bigram_overlap_median": 0.790650406504065,
+          "unigram_overlap_mean": 0.998479063947208,
+          "unigram_overlap_median": 1.0,
+          "length_ratio_mean": 1.7269639531076337,
+          "length_ratio_median": 1.9565217391304348
+        },
+        "combined_attack_custom_eval": {
+          "accuracy": 0.42105263157894735,
+          "per_class_precision": [
+            0.0,
+            0.42105263157894735,
+            0.0
+          ],
+          "per_class_recall": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "per_class_f1": [
+            0.0,
+            0.5925925925925926,
+            0.0
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.14035087719298245,
+          "macro_recall": 0.3333333333333333,
+          "macro_f1": 0.19753086419753085,
+          "weighted_precision": 0.17728531855955676,
+          "weighted_recall": 0.42105263157894735,
+          "weighted_f1": 0.2495126705653021,
+          "confusion_matrix": [
+            [
+              0,
+              75,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ]
+          ]
+        },
+        "combined_attack_tvb": {
+          "TP": 0,
+          "FN": 275,
+          "TN": 200,
+          "FP": 0,
+          "threat_recall": 0.0,
+          "threat_precision": 0.0,
+          "threat_f1": 0.0,
+          "benign_recall": 1.0,
+          "benign_precision": 0.42105263157894735,
+          "benign_f1": 0.5925925925925926,
+          "accuracy_2class": 0.42105263157894735,
+          "threats_missed": 275
+        },
+        "combined_attack_stats": {
+          "bigram_overlap_mean": 0.03217214416630623,
+          "bigram_overlap_median": 0.0,
+          "unigram_overlap_mean": 0.0263621355053985,
+          "unigram_overlap_median": 0.017543859649122806,
+          "length_ratio_mean": 1.7269639531076337,
+          "length_ratio_median": 1.9565217391304348
+        },
+        "drop_clean_to_unigram_attack": {
+          "accuracy_drop": 0.48421052631578954,
+          "macro_f1_drop": 0.6460929878050475,
+          "weighted_f1_drop": 0.6467810738407007,
+          "ransomware_recall_drop": 0.49333333333333335,
+          "benign_recall_drop": -0.020000000000000018,
+          "other_malware_recall_drop": 0.985,
+          "threats_missed_increase": 275
+        },
+        "drop_clean_to_bigram_attack": {
+          "accuracy_drop": 0.2947368421052632,
+          "macro_f1_drop": 0.4156873440660704,
+          "weighted_f1_drop": 0.3557423659598876,
+          "ransomware_recall_drop": 0.49333333333333335,
+          "benign_recall_drop": 0.0,
+          "other_malware_recall_drop": 0.515,
+          "threats_missed_increase": 129
+        },
+        "drop_clean_to_combined_attack": {
+          "accuracy_drop": 0.48421052631578954,
+          "macro_f1_drop": 0.6460929878050475,
+          "weighted_f1_drop": 0.6467810738407007,
+          "ransomware_recall_drop": 0.49333333333333335,
+          "benign_recall_drop": -0.020000000000000018,
+          "other_malware_recall_drop": 0.985,
+          "threats_missed_increase": 275
+        }
+      }
+    },
+    "xgboost": {
+      "unigram": {
+        "tfidf_vocab_size": 390,
+        "ngram_range": [
+          1,
+          1
+        ],
+        "train": {
+          "accuracy": 0.9976223499108381,
+          "per_class_precision": [
+            0.9828571428571429,
+            0.993566833452466,
+            1.0
+          ],
+          "per_class_recall": [
+            1.0,
+            1.0,
+            0.9965566714490675
+          ],
+          "per_class_f1": [
+            0.9913544668587896,
+            0.9967730369307995,
+            0.998275366484622
+          ],
+          "per_class_support": [
+            172,
+            1390,
+            3485
+          ],
+          "macro_precision": 0.9921413254365362,
+          "macro_recall": 0.9988522238163559,
+          "macro_f1": 0.9954676234247369,
+          "weighted_precision": 0.9976440117040533,
+          "weighted_recall": 0.9976223499108381,
+          "weighted_f1": 0.9976257463507887,
+          "confusion_matrix": [
+            [
+              172,
+              0,
+              0
+            ],
+            [
+              0,
+              1390,
+              0
+            ],
+            [
+              3,
+              9,
+              3473
+            ]
+          ]
+        },
+        "clean_custom_eval": {
+          "accuracy": 0.9157894736842105,
+          "per_class_precision": [
+            0.9333333333333333,
+            0.9949238578680203,
+            0.8454935622317596
+          ],
+          "per_class_recall": [
+            0.56,
+            0.98,
+            0.985
+          ],
+          "per_class_f1": [
+            0.7,
+            0.9874055415617129,
+            0.9099307159353349
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.9245835844777045,
+          "macro_recall": 0.8416666666666667,
+          "macro_f1": 0.865778752499016,
+          "weighted_precision": 0.9222810189893811,
+          "weighted_recall": 0.9157894736842105,
+          "weighted_f1": 0.9094047399987569,
+          "confusion_matrix": [
+            [
+              42,
+              1,
+              32
+            ],
+            [
+              0,
+              196,
+              4
+            ],
+            [
+              3,
+              0,
+              197
+            ]
+          ]
+        },
+        "clean_tvb": {
+          "TP": 274,
+          "FN": 1,
+          "TN": 196,
+          "FP": 4,
+          "threat_recall": 0.9963636363636363,
+          "threat_precision": 0.9856115107913669,
+          "threat_f1": 0.9909584086799277,
+          "benign_recall": 0.98,
+          "benign_precision": 0.9949238578680203,
+          "benign_f1": 0.9874055415617129,
+          "accuracy_2class": 0.9894736842105263,
+          "threats_missed": 1
+        },
+        "clean_stats": {
+          "bigram_overlap_mean": 1.0,
+          "bigram_overlap_median": 1.0,
+          "unigram_overlap_mean": 1.0,
+          "unigram_overlap_median": 1.0,
+          "length_ratio_mean": 1.0,
+          "length_ratio_median": 1.0
+        },
+        "unigram_attack_custom_eval": {
+          "accuracy": 0.42105263157894735,
+          "per_class_precision": [
+            0.0,
+            0.42105263157894735,
+            0.0
+          ],
+          "per_class_recall": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "per_class_f1": [
+            0.0,
+            0.5925925925925926,
+            0.0
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.14035087719298245,
+          "macro_recall": 0.3333333333333333,
+          "macro_f1": 0.19753086419753085,
+          "weighted_precision": 0.17728531855955676,
+          "weighted_recall": 0.42105263157894735,
+          "weighted_f1": 0.2495126705653021,
+          "confusion_matrix": [
+            [
+              0,
+              75,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ]
+          ]
+        },
+        "unigram_attack_tvb": {
+          "TP": 0,
+          "FN": 275,
+          "TN": 200,
+          "FP": 0,
+          "threat_recall": 0.0,
+          "threat_precision": 0.0,
+          "threat_f1": 0.0,
+          "benign_recall": 1.0,
+          "benign_precision": 0.42105263157894735,
+          "benign_f1": 0.5925925925925926,
+          "accuracy_2class": 0.42105263157894735,
+          "threats_missed": 275
+        },
+        "unigram_attack_stats": {
+          "bigram_overlap_mean": 0.031578947368421054,
+          "bigram_overlap_median": 0.0,
+          "unigram_overlap_mean": 0.0,
+          "unigram_overlap_median": 0.0,
+          "length_ratio_mean": 1.0,
+          "length_ratio_median": 1.0
+        },
+        "bigram_attack_custom_eval": {
+          "accuracy": 0.8821052631578947,
+          "per_class_precision": [
+            0.9310344827586207,
+            0.9948717948717949,
+            0.7888446215139442
+          ],
+          "per_class_recall": [
+            0.36,
+            0.97,
+            0.99
+          ],
+          "per_class_f1": [
+            0.5192307692307693,
+            0.9822784810126582,
+            0.8780487804878049
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.9049169663814531,
+          "macro_recall": 0.7733333333333334,
+          "macro_f1": 0.7931860102437441,
+          "weighted_precision": 0.8980439357558828,
+          "weighted_recall": 0.8821052631578947,
+          "weighted_f1": 0.8652794947208429,
+          "confusion_matrix": [
+            [
+              27,
+              1,
+              47
+            ],
+            [
+              0,
+              194,
+              6
+            ],
+            [
+              2,
+              0,
+              198
+            ]
+          ]
+        },
+        "bigram_attack_tvb": {
+          "TP": 274,
+          "FN": 1,
+          "TN": 194,
+          "FP": 6,
+          "threat_recall": 0.9963636363636363,
+          "threat_precision": 0.9785714285714285,
+          "threat_f1": 0.9873873873873874,
+          "benign_recall": 0.97,
+          "benign_precision": 0.9948717948717949,
+          "benign_f1": 0.9822784810126582,
+          "accuracy_2class": 0.9852631578947368,
+          "threats_missed": 1
+        },
+        "bigram_attack_stats": {
+          "bigram_overlap_mean": 0.6130881767140284,
+          "bigram_overlap_median": 0.790650406504065,
+          "unigram_overlap_mean": 0.998479063947208,
+          "unigram_overlap_median": 1.0,
+          "length_ratio_mean": 1.7269639531076337,
+          "length_ratio_median": 1.9565217391304348
+        },
+        "combined_attack_custom_eval": {
+          "accuracy": 0.42105263157894735,
+          "per_class_precision": [
+            0.0,
+            0.42105263157894735,
+            0.0
+          ],
+          "per_class_recall": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "per_class_f1": [
+            0.0,
+            0.5925925925925926,
+            0.0
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.14035087719298245,
+          "macro_recall": 0.3333333333333333,
+          "macro_f1": 0.19753086419753085,
+          "weighted_precision": 0.17728531855955676,
+          "weighted_recall": 0.42105263157894735,
+          "weighted_f1": 0.2495126705653021,
+          "confusion_matrix": [
+            [
+              0,
+              75,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ]
+          ]
+        },
+        "combined_attack_tvb": {
+          "TP": 0,
+          "FN": 275,
+          "TN": 200,
+          "FP": 0,
+          "threat_recall": 0.0,
+          "threat_precision": 0.0,
+          "threat_f1": 0.0,
+          "benign_recall": 1.0,
+          "benign_precision": 0.42105263157894735,
+          "benign_f1": 0.5925925925925926,
+          "accuracy_2class": 0.42105263157894735,
+          "threats_missed": 275
+        },
+        "combined_attack_stats": {
+          "bigram_overlap_mean": 0.03217214416630623,
+          "bigram_overlap_median": 0.0,
+          "unigram_overlap_mean": 0.0263621355053985,
+          "unigram_overlap_median": 0.017543859649122806,
+          "length_ratio_mean": 1.7269639531076337,
+          "length_ratio_median": 1.9565217391304348
+        },
+        "drop_clean_to_unigram_attack": {
+          "accuracy_drop": 0.49473684210526314,
+          "macro_f1_drop": 0.6682478883014852,
+          "weighted_f1_drop": 0.6598920694334548,
+          "ransomware_recall_drop": 0.56,
+          "benign_recall_drop": -0.020000000000000018,
+          "other_malware_recall_drop": 0.985,
+          "threats_missed_increase": 274
+        },
+        "drop_clean_to_bigram_attack": {
+          "accuracy_drop": 0.03368421052631576,
+          "macro_f1_drop": 0.0725927422552719,
+          "weighted_f1_drop": 0.04412524527791406,
+          "ransomware_recall_drop": 0.20000000000000007,
+          "benign_recall_drop": 0.010000000000000009,
+          "other_malware_recall_drop": -0.0050000000000000044,
+          "threats_missed_increase": 0
+        },
+        "drop_clean_to_combined_attack": {
+          "accuracy_drop": 0.49473684210526314,
+          "macro_f1_drop": 0.6682478883014852,
+          "weighted_f1_drop": 0.6598920694334548,
+          "ransomware_recall_drop": 0.56,
+          "benign_recall_drop": -0.020000000000000018,
+          "other_malware_recall_drop": 0.985,
+          "threats_missed_increase": 274
+        }
+      },
+      "unigram_bigram": {
+        "tfidf_vocab_size": 3000,
+        "ngram_range": [
+          1,
+          2
+        ],
+        "train": {
+          "accuracy": 0.9976223499108381,
+          "per_class_precision": [
+            0.9828571428571429,
+            0.993566833452466,
+            1.0
+          ],
+          "per_class_recall": [
+            1.0,
+            1.0,
+            0.9965566714490675
+          ],
+          "per_class_f1": [
+            0.9913544668587896,
+            0.9967730369307995,
+            0.998275366484622
+          ],
+          "per_class_support": [
+            172,
+            1390,
+            3485
+          ],
+          "macro_precision": 0.9921413254365362,
+          "macro_recall": 0.9988522238163559,
+          "macro_f1": 0.9954676234247369,
+          "weighted_precision": 0.9976440117040533,
+          "weighted_recall": 0.9976223499108381,
+          "weighted_f1": 0.9976257463507887,
+          "confusion_matrix": [
+            [
+              172,
+              0,
+              0
+            ],
+            [
+              0,
+              1390,
+              0
+            ],
+            [
+              3,
+              9,
+              3473
+            ]
+          ]
+        },
+        "clean_custom_eval": {
+          "accuracy": 0.92,
+          "per_class_precision": [
+            0.9361702127659575,
+            1.0,
+            0.8491379310344828
+          ],
+          "per_class_recall": [
+            0.5866666666666667,
+            0.98,
+            0.985
+          ],
+          "per_class_f1": [
+            0.7213114754098361,
+            0.98989898989899,
+            0.9120370370370371
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.92843604793348,
+          "macro_recall": 0.8505555555555556,
+          "macro_f1": 0.8744158341152878,
+          "weighted_precision": 0.9264007413986175,
+          "weighted_recall": 0.92,
+          "weighted_f1": 0.9147064548272487,
+          "confusion_matrix": [
+            [
+              44,
+              0,
+              31
+            ],
+            [
+              0,
+              196,
+              4
+            ],
+            [
+              3,
+              0,
+              197
+            ]
+          ]
+        },
+        "clean_tvb": {
+          "TP": 275,
+          "FN": 0,
+          "TN": 196,
+          "FP": 4,
+          "threat_recall": 1.0,
+          "threat_precision": 0.985663082437276,
+          "threat_f1": 0.9927797833935018,
+          "benign_recall": 0.98,
+          "benign_precision": 1.0,
+          "benign_f1": 0.98989898989899,
+          "accuracy_2class": 0.991578947368421,
+          "threats_missed": 0
+        },
+        "clean_stats": {
+          "bigram_overlap_mean": 1.0,
+          "bigram_overlap_median": 1.0,
+          "unigram_overlap_mean": 1.0,
+          "unigram_overlap_median": 1.0,
+          "length_ratio_mean": 1.0,
+          "length_ratio_median": 1.0
+        },
+        "unigram_attack_custom_eval": {
+          "accuracy": 0.42105263157894735,
+          "per_class_precision": [
+            0.0,
+            0.42105263157894735,
+            0.0
+          ],
+          "per_class_recall": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "per_class_f1": [
+            0.0,
+            0.5925925925925926,
+            0.0
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.14035087719298245,
+          "macro_recall": 0.3333333333333333,
+          "macro_f1": 0.19753086419753085,
+          "weighted_precision": 0.17728531855955676,
+          "weighted_recall": 0.42105263157894735,
+          "weighted_f1": 0.2495126705653021,
+          "confusion_matrix": [
+            [
+              0,
+              75,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ]
+          ]
+        },
+        "unigram_attack_tvb": {
+          "TP": 0,
+          "FN": 275,
+          "TN": 200,
+          "FP": 0,
+          "threat_recall": 0.0,
+          "threat_precision": 0.0,
+          "threat_f1": 0.0,
+          "benign_recall": 1.0,
+          "benign_precision": 0.42105263157894735,
+          "benign_f1": 0.5925925925925926,
+          "accuracy_2class": 0.42105263157894735,
+          "threats_missed": 275
+        },
+        "unigram_attack_stats": {
+          "bigram_overlap_mean": 0.031578947368421054,
+          "bigram_overlap_median": 0.0,
+          "unigram_overlap_mean": 0.0,
+          "unigram_overlap_median": 0.0,
+          "length_ratio_mean": 1.0,
+          "length_ratio_median": 1.0
+        },
+        "bigram_attack_custom_eval": {
+          "accuracy": 0.8968421052631579,
+          "per_class_precision": [
+            0.7777777777777778,
+            0.9948979591836735,
+            0.84
+          ],
+          "per_class_recall": [
+            0.56,
+            0.975,
+            0.945
+          ],
+          "per_class_f1": [
+            0.6511627906976745,
+            0.9848484848484849,
+            0.8894117647058823
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.8708919123204838,
+          "macro_recall": 0.8266666666666667,
+          "macro_f1": 0.8418076800840139,
+          "weighted_precision": 0.8953956319369852,
+          "weighted_recall": 0.8968421052631579,
+          "weighted_f1": 0.8919773878172611,
+          "confusion_matrix": [
+            [
+              42,
+              1,
+              32
+            ],
+            [
+              1,
+              195,
+              4
+            ],
+            [
+              11,
+              0,
+              189
+            ]
+          ]
+        },
+        "bigram_attack_tvb": {
+          "TP": 274,
+          "FN": 1,
+          "TN": 195,
+          "FP": 5,
+          "threat_recall": 0.9963636363636363,
+          "threat_precision": 0.982078853046595,
+          "threat_f1": 0.9891696750902528,
+          "benign_recall": 0.975,
+          "benign_precision": 0.9948979591836735,
+          "benign_f1": 0.984848484848485,
+          "accuracy_2class": 0.9873684210526316,
+          "threats_missed": 1
+        },
+        "bigram_attack_stats": {
+          "bigram_overlap_mean": 0.6130881767140284,
+          "bigram_overlap_median": 0.790650406504065,
+          "unigram_overlap_mean": 0.998479063947208,
+          "unigram_overlap_median": 1.0,
+          "length_ratio_mean": 1.7269639531076337,
+          "length_ratio_median": 1.9565217391304348
+        },
+        "combined_attack_custom_eval": {
+          "accuracy": 0.42105263157894735,
+          "per_class_precision": [
+            0.0,
+            0.42105263157894735,
+            0.0
+          ],
+          "per_class_recall": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "per_class_f1": [
+            0.0,
+            0.5925925925925926,
+            0.0
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.14035087719298245,
+          "macro_recall": 0.3333333333333333,
+          "macro_f1": 0.19753086419753085,
+          "weighted_precision": 0.17728531855955676,
+          "weighted_recall": 0.42105263157894735,
+          "weighted_f1": 0.2495126705653021,
+          "confusion_matrix": [
+            [
+              0,
+              75,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ]
+          ]
+        },
+        "combined_attack_tvb": {
+          "TP": 0,
+          "FN": 275,
+          "TN": 200,
+          "FP": 0,
+          "threat_recall": 0.0,
+          "threat_precision": 0.0,
+          "threat_f1": 0.0,
+          "benign_recall": 1.0,
+          "benign_precision": 0.42105263157894735,
+          "benign_f1": 0.5925925925925926,
+          "accuracy_2class": 0.42105263157894735,
+          "threats_missed": 275
+        },
+        "combined_attack_stats": {
+          "bigram_overlap_mean": 0.03217214416630623,
+          "bigram_overlap_median": 0.0,
+          "unigram_overlap_mean": 0.0263621355053985,
+          "unigram_overlap_median": 0.017543859649122806,
+          "length_ratio_mean": 1.7269639531076337,
+          "length_ratio_median": 1.9565217391304348
+        },
+        "drop_clean_to_unigram_attack": {
+          "accuracy_drop": 0.4989473684210527,
+          "macro_f1_drop": 0.6768849699177569,
+          "weighted_f1_drop": 0.6651937842619465,
+          "ransomware_recall_drop": 0.5866666666666667,
+          "benign_recall_drop": -0.020000000000000018,
+          "other_malware_recall_drop": 0.985,
+          "threats_missed_increase": 275
+        },
+        "drop_clean_to_bigram_attack": {
+          "accuracy_drop": 0.023157894736842155,
+          "macro_f1_drop": 0.03260815403127393,
+          "weighted_f1_drop": 0.022729067009987558,
+          "ransomware_recall_drop": 0.026666666666666616,
+          "benign_recall_drop": 0.0050000000000000044,
+          "other_malware_recall_drop": 0.040000000000000036,
+          "threats_missed_increase": 1
+        },
+        "drop_clean_to_combined_attack": {
+          "accuracy_drop": 0.4989473684210527,
+          "macro_f1_drop": 0.6768849699177569,
+          "weighted_f1_drop": 0.6651937842619465,
+          "ransomware_recall_drop": 0.5866666666666667,
+          "benign_recall_drop": -0.020000000000000018,
+          "other_malware_recall_drop": 0.985,
+          "threats_missed_increase": 275
+        }
+      },
+      "bigram": {
+        "tfidf_vocab_size": 3000,
+        "ngram_range": [
+          2,
+          2
+        ],
+        "train": {
+          "accuracy": 0.9970279373885477,
+          "per_class_precision": [
+            0.9772727272727273,
+            0.9921484653818701,
+            1.0
+          ],
+          "per_class_recall": [
+            1.0,
+            1.0,
+            0.9956958393113343
+          ],
+          "per_class_f1": [
+            0.9885057471264368,
+            0.9960587603009674,
+            0.9978432782171099
+          ],
+          "per_class_support": [
+            172,
+            1390,
+            3485
+          ],
+          "macro_precision": 0.9898070642181991,
+          "macro_recall": 0.9985652797704447,
+          "macro_f1": 0.9941359285481713,
+          "weighted_precision": 0.9970630624077093,
+          "weighted_recall": 0.9970279373885477,
+          "weighted_f1": 0.9970335823084446,
+          "confusion_matrix": [
+            [
+              172,
+              0,
+              0
+            ],
+            [
+              0,
+              1390,
+              0
+            ],
+            [
+              4,
+              11,
+              3470
+            ]
+          ]
+        },
+        "clean_custom_eval": {
+          "accuracy": 0.9178947368421052,
+          "per_class_precision": [
+            0.9347826086956522,
+            1.0,
+            0.8454935622317596
+          ],
+          "per_class_recall": [
+            0.5733333333333334,
+            0.98,
+            0.985
+          ],
+          "per_class_f1": [
+            0.7107438016528925,
+            0.98989898989899,
+            0.9099307159353349
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.9267587236424707,
+          "macro_recall": 0.846111111111111,
+          "macro_f1": 0.8701911691624057,
+          "weighted_precision": 0.9246471749442651,
+          "weighted_recall": 0.9178947368421052,
+          "weighted_f1": 0.9121510027175409,
+          "confusion_matrix": [
+            [
+              43,
+              0,
+              32
+            ],
+            [
+              0,
+              196,
+              4
+            ],
+            [
+              3,
+              0,
+              197
+            ]
+          ]
+        },
+        "clean_tvb": {
+          "TP": 275,
+          "FN": 0,
+          "TN": 196,
+          "FP": 4,
+          "threat_recall": 1.0,
+          "threat_precision": 0.985663082437276,
+          "threat_f1": 0.9927797833935018,
+          "benign_recall": 0.98,
+          "benign_precision": 1.0,
+          "benign_f1": 0.98989898989899,
+          "accuracy_2class": 0.991578947368421,
+          "threats_missed": 0
+        },
+        "clean_stats": {
+          "bigram_overlap_mean": 1.0,
+          "bigram_overlap_median": 1.0,
+          "unigram_overlap_mean": 1.0,
+          "unigram_overlap_median": 1.0,
+          "length_ratio_mean": 1.0,
+          "length_ratio_median": 1.0
+        },
+        "unigram_attack_custom_eval": {
+          "accuracy": 0.42105263157894735,
+          "per_class_precision": [
+            0.0,
+            0.42105263157894735,
+            0.0
+          ],
+          "per_class_recall": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "per_class_f1": [
+            0.0,
+            0.5925925925925926,
+            0.0
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.14035087719298245,
+          "macro_recall": 0.3333333333333333,
+          "macro_f1": 0.19753086419753085,
+          "weighted_precision": 0.17728531855955676,
+          "weighted_recall": 0.42105263157894735,
+          "weighted_f1": 0.2495126705653021,
+          "confusion_matrix": [
+            [
+              0,
+              75,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ]
+          ]
+        },
+        "unigram_attack_tvb": {
+          "TP": 0,
+          "FN": 275,
+          "TN": 200,
+          "FP": 0,
+          "threat_recall": 0.0,
+          "threat_precision": 0.0,
+          "threat_f1": 0.0,
+          "benign_recall": 1.0,
+          "benign_precision": 0.42105263157894735,
+          "benign_f1": 0.5925925925925926,
+          "accuracy_2class": 0.42105263157894735,
+          "threats_missed": 275
+        },
+        "unigram_attack_stats": {
+          "bigram_overlap_mean": 0.031578947368421054,
+          "bigram_overlap_median": 0.0,
+          "unigram_overlap_mean": 0.0,
+          "unigram_overlap_median": 0.0,
+          "length_ratio_mean": 1.0,
+          "length_ratio_median": 1.0
+        },
+        "bigram_attack_custom_eval": {
+          "accuracy": 0.6357894736842106,
+          "per_class_precision": [
+            1.0,
+            0.620253164556962,
+            0.6513157894736842
+          ],
+          "per_class_recall": [
+            0.09333333333333334,
+            0.98,
+            0.495
+          ],
+          "per_class_f1": [
+            0.17073170731707318,
+            0.7596899224806202,
+            0.5625
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.7571896513435488,
+          "macro_recall": 0.5227777777777778,
+          "macro_f1": 0.49764054326589785,
+          "weighted_precision": 0.6932921911707984,
+          "weighted_recall": 0.6357894736842106,
+          "weighted_f1": 0.5836691843050622,
+          "confusion_matrix": [
+            [
+              7,
+              19,
+              49
+            ],
+            [
+              0,
+              196,
+              4
+            ],
+            [
+              0,
+              101,
+              99
+            ]
+          ]
+        },
+        "bigram_attack_tvb": {
+          "TP": 155,
+          "FN": 120,
+          "TN": 196,
+          "FP": 4,
+          "threat_recall": 0.5636363636363636,
+          "threat_precision": 0.9748427672955975,
+          "threat_f1": 0.7142857142857142,
+          "benign_recall": 0.98,
+          "benign_precision": 0.620253164556962,
+          "benign_f1": 0.7596899224806202,
+          "accuracy_2class": 0.7389473684210527,
+          "threats_missed": 120
+        },
+        "bigram_attack_stats": {
+          "bigram_overlap_mean": 0.6130881767140284,
+          "bigram_overlap_median": 0.790650406504065,
+          "unigram_overlap_mean": 0.998479063947208,
+          "unigram_overlap_median": 1.0,
+          "length_ratio_mean": 1.7269639531076337,
+          "length_ratio_median": 1.9565217391304348
+        },
+        "combined_attack_custom_eval": {
+          "accuracy": 0.42105263157894735,
+          "per_class_precision": [
+            0.0,
+            0.42105263157894735,
+            0.0
+          ],
+          "per_class_recall": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "per_class_f1": [
+            0.0,
+            0.5925925925925926,
+            0.0
+          ],
+          "per_class_support": [
+            75,
+            200,
+            200
+          ],
+          "macro_precision": 0.14035087719298245,
+          "macro_recall": 0.3333333333333333,
+          "macro_f1": 0.19753086419753085,
+          "weighted_precision": 0.17728531855955676,
+          "weighted_recall": 0.42105263157894735,
+          "weighted_f1": 0.2495126705653021,
+          "confusion_matrix": [
+            [
+              0,
+              75,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ],
+            [
+              0,
+              200,
+              0
+            ]
+          ]
+        },
+        "combined_attack_tvb": {
+          "TP": 0,
+          "FN": 275,
+          "TN": 200,
+          "FP": 0,
+          "threat_recall": 0.0,
+          "threat_precision": 0.0,
+          "threat_f1": 0.0,
+          "benign_recall": 1.0,
+          "benign_precision": 0.42105263157894735,
+          "benign_f1": 0.5925925925925926,
+          "accuracy_2class": 0.42105263157894735,
+          "threats_missed": 275
+        },
+        "combined_attack_stats": {
+          "bigram_overlap_mean": 0.03217214416630623,
+          "bigram_overlap_median": 0.0,
+          "unigram_overlap_mean": 0.0263621355053985,
+          "unigram_overlap_median": 0.017543859649122806,
+          "length_ratio_mean": 1.7269639531076337,
+          "length_ratio_median": 1.9565217391304348
+        },
+        "drop_clean_to_unigram_attack": {
+          "accuracy_drop": 0.49684210526315786,
+          "macro_f1_drop": 0.6726603049648748,
+          "weighted_f1_drop": 0.6626383321522388,
+          "ransomware_recall_drop": 0.5733333333333334,
+          "benign_recall_drop": -0.020000000000000018,
+          "other_malware_recall_drop": 0.985,
+          "threats_missed_increase": 275
+        },
+        "drop_clean_to_bigram_attack": {
+          "accuracy_drop": 0.28210526315789464,
+          "macro_f1_drop": 0.37255062589650784,
+          "weighted_f1_drop": 0.3284818184124787,
+          "ransomware_recall_drop": 0.48000000000000004,
+          "benign_recall_drop": 0.0,
+          "other_malware_recall_drop": 0.49,
+          "threats_missed_increase": 120
+        },
+        "drop_clean_to_combined_attack": {
+          "accuracy_drop": 0.49684210526315786,
+          "macro_f1_drop": 0.6726603049648748,
+          "weighted_f1_drop": 0.6626383321522388,
+          "ransomware_recall_drop": 0.5733333333333334,
+          "benign_recall_drop": -0.020000000000000018,
+          "other_malware_recall_drop": 0.985,
+          "threats_missed_increase": 275
+        }
+      }
+    }
+  },
+  "tgnn": {
+    "clean_custom_eval": {
+      "accuracy": 0.8926315789473684,
+      "per_class_precision": [
+        0.7735849056603774,
+        1.0,
+        0.8281938325991189
+      ],
+      "per_class_recall": [
+        0.5466666666666666,
+        0.975,
+        0.94
+      ],
+      "per_class_f1": [
+        0.640625,
+        0.9873417721518988,
+        0.8805620608899297
+      ],
+      "per_class_support": [
+        75,
+        200,
+        200
+      ],
+      "macro_precision": 0.8672595794198322,
+      "macro_recall": 0.8205555555555555,
+      "macro_f1": 0.8361762776806095,
+      "weighted_precision": 0.8919108093565307,
+      "weighted_recall": 0.8926315789473684,
+      "weighted_f1": 0.8876371402281383,
+      "confusion_matrix": [
+        [
+          41,
+          0,
+          34
+        ],
+        [
+          0,
+          195,
+          5
+        ],
+        [
+          12,
+          0,
+          188
+        ]
+      ],
+      "loss": 0.07856826284890607
+    },
+    "clean_tvb": {
+      "TP": 275,
+      "FN": 0,
+      "TN": 195,
+      "FP": 5,
+      "threat_recall": 1.0,
+      "threat_precision": 0.9821428571428571,
+      "threat_f1": 0.9909909909909909,
+      "benign_recall": 0.975,
+      "benign_precision": 1.0,
+      "benign_f1": 0.9873417721518987,
+      "accuracy_2class": 0.9894736842105263,
+      "threats_missed": 0
+    },
+    "clean_stats": {
+      "bigram_overlap_mean": 1.0,
+      "bigram_overlap_median": 1.0,
+      "unigram_overlap_mean": 1.0,
+      "unigram_overlap_median": 1.0,
+      "length_ratio_mean": 1.0,
+      "length_ratio_median": 1.0
+    },
+    "unigram_attack_custom_eval": {
+      "accuracy": 0.8863157894736842,
+      "per_class_precision": [
+        0.7407407407407407,
+        1.0,
+        0.8245614035087719
+      ],
+      "per_class_recall": [
+        0.5333333333333333,
+        0.965,
+        0.94
+      ],
+      "per_class_f1": [
+        0.6201550387596899,
+        0.9821882951653944,
+        0.8785046728971962
+      ],
+      "per_class_support": [
+        75,
+        200,
+        200
+      ],
+      "macro_precision": 0.8551007147498376,
+      "macro_recall": 0.8127777777777778,
+      "macro_f1": 0.8269493356074268,
+      "weighted_precision": 0.8851954447522314,
+      "weighted_recall": 0.8863157894736842,
+      "weighted_f1": 0.881368887409463,
+      "confusion_matrix": [
+        [
+          40,
+          0,
+          35
+        ],
+        [
+          2,
+          193,
+          5
+        ],
+        [
+          12,
+          0,
+          188
+        ]
+      ],
+      "loss": 0.09898775091975646
+    },
+    "unigram_attack_tvb": {
+      "TP": 275,
+      "FN": 0,
+      "TN": 193,
+      "FP": 7,
+      "threat_recall": 1.0,
+      "threat_precision": 0.975177304964539,
+      "threat_f1": 0.9874326750448834,
+      "benign_recall": 0.965,
+      "benign_precision": 1.0,
+      "benign_f1": 0.9821882951653944,
+      "accuracy_2class": 0.9852631578947368,
+      "threats_missed": 0
+    },
+    "unigram_attack_stats": {
+      "bigram_overlap_mean": 0.031578947368421054,
+      "bigram_overlap_median": 0.0,
+      "unigram_overlap_mean": 0.0,
+      "unigram_overlap_median": 0.0,
+      "length_ratio_mean": 1.0,
+      "length_ratio_median": 1.0
+    },
+    "bigram_attack_custom_eval": {
+      "accuracy": 0.88,
+      "per_class_precision": [
+        0.7213114754098361,
+        0.9704433497536946,
+        0.8388625592417062
+      ],
+      "per_class_recall": [
+        0.5866666666666667,
+        0.985,
+        0.885
+      ],
+      "per_class_f1": [
+        0.6470588235294118,
+        0.9776674937965261,
+        0.8613138686131386
+      ],
+      "per_class_support": [
+        75,
+        200,
+        200
+      ],
+      "macro_precision": 0.8435391281350789,
+      "macro_recall": 0.818888888888889,
+      "macro_f1": 0.8286800619796922,
+      "weighted_precision": 0.8757042999048797,
+      "weighted_recall": 0.88,
+      "weighted_f1": 0.876475124729766,
+      "confusion_matrix": [
+        [
+          44,
+          0,
+          31
+        ],
+        [
+          0,
+          197,
+          3
+        ],
+        [
+          17,
+          6,
+          177
+        ]
+      ],
+      "loss": 0.08766279044729876
+    },
+    "bigram_attack_tvb": {
+      "TP": 269,
+      "FN": 6,
+      "TN": 197,
+      "FP": 3,
+      "threat_recall": 0.9781818181818182,
+      "threat_precision": 0.9889705882352942,
+      "threat_f1": 0.9835466179159049,
+      "benign_recall": 0.985,
+      "benign_precision": 0.9704433497536946,
+      "benign_f1": 0.977667493796526,
+      "accuracy_2class": 0.9810526315789474,
+      "threats_missed": 6
+    },
+    "bigram_attack_stats": {
+      "bigram_overlap_mean": 0.6130881767140284,
+      "bigram_overlap_median": 0.790650406504065,
+      "unigram_overlap_mean": 0.998479063947208,
+      "unigram_overlap_median": 1.0,
+      "length_ratio_mean": 1.7269639531076337,
+      "length_ratio_median": 1.9565217391304348
+    },
+    "combined_attack_custom_eval": {
+      "accuracy": 0.8778947368421053,
+      "per_class_precision": [
+        0.7241379310344828,
+        0.9704433497536946,
+        0.8317757009345794
+      ],
+      "per_class_recall": [
+        0.56,
+        0.985,
+        0.89
+      ],
+      "per_class_f1": [
+        0.631578947368421,
+        0.9776674937965261,
+        0.8599033816425121
+      ],
+      "per_class_support": [
+        75,
+        200,
+        200
+      ],
+      "macro_precision": 0.8421189939075857,
+      "macro_recall": 0.8116666666666666,
+      "macro_f1": 0.8230499409358197,
+      "weighted_precision": 0.8731666420320864,
+      "weighted_recall": 0.8778947368421053,
+      "weighted_f1": 0.8734370445061878,
+      "confusion_matrix": [
+        [
+          42,
+          0,
+          33
+        ],
+        [
+          0,
+          197,
+          3
+        ],
+        [
+          16,
+          6,
+          178
+        ]
+      ],
+      "loss": 0.10070632812781545
+    },
+    "combined_attack_tvb": {
+      "TP": 269,
+      "FN": 6,
+      "TN": 197,
+      "FP": 3,
+      "threat_recall": 0.9781818181818182,
+      "threat_precision": 0.9889705882352942,
+      "threat_f1": 0.9835466179159049,
+      "benign_recall": 0.985,
+      "benign_precision": 0.9704433497536946,
+      "benign_f1": 0.977667493796526,
+      "accuracy_2class": 0.9810526315789474,
+      "threats_missed": 6
+    },
+    "combined_attack_stats": {
+      "bigram_overlap_mean": 0.03217214416630623,
+      "bigram_overlap_median": 0.0,
+      "unigram_overlap_mean": 0.0263621355053985,
+      "unigram_overlap_median": 0.017543859649122806,
+      "length_ratio_mean": 1.7269639531076337,
+      "length_ratio_median": 1.9565217391304348
+    },
+    "drop_clean_to_unigram_attack": {
+      "accuracy_drop": 0.006315789473684275,
+      "macro_f1_drop": 0.009226942073182753,
+      "weighted_f1_drop": 0.006268252818675379,
+      "ransomware_recall_drop": 0.013333333333333308,
+      "benign_recall_drop": 0.010000000000000009,
+      "other_malware_recall_drop": 0.0,
+      "threats_missed_increase": 0
+    },
+    "drop_clean_to_bigram_attack": {
+      "accuracy_drop": 0.012631578947368438,
+      "macro_f1_drop": 0.007496215700917297,
+      "weighted_f1_drop": 0.011162015498372369,
+      "ransomware_recall_drop": -0.040000000000000036,
+      "benign_recall_drop": -0.010000000000000009,
+      "other_malware_recall_drop": 0.05499999999999994,
+      "threats_missed_increase": 6
+    },
+    "drop_clean_to_combined_attack": {
+      "accuracy_drop": 0.01473684210526316,
+      "macro_f1_drop": 0.013126336744789802,
+      "weighted_f1_drop": 0.014200095721950579,
+      "ransomware_recall_drop": -0.01333333333333342,
+      "benign_recall_drop": -0.010000000000000009,
+      "other_malware_recall_drop": 0.04999999999999993,
+      "threats_missed_increase": 6
+    }
+  }
+}

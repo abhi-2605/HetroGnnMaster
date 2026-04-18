@@ -11,6 +11,15 @@ Selection policy from config.py:
     - 55 old malware from ACTIVE_GRAPH_DIR/{val,test}
     - all ransomware from ACTIVE_GRAPH_DIR/{val,test}
 
+This script mirrors train.py validation/test behavior as closely as possible:
+    - same schema setup
+    - same graph preprocessing path as RansomwareGraphDataset.__getitem__()
+    - same hetero_collate behavior
+    - same model forward path
+    - same focal loss
+    - same checkpoint loading style
+    - same val/test-style DataLoader batching using config.BATCH_SIZE
+
 Outputs:
     - manifest CSV
     - predictions CSV
@@ -50,7 +59,7 @@ from utils.schema_validator import validate_batch_or_raise, validate_graph_or_ra
 
 
 # ============================================================
-# Loss
+# Loss (same as train.py)
 # ============================================================
 
 class FocalLoss(nn.Module):
@@ -98,7 +107,7 @@ def label_to_name(label: int) -> str:
 
 
 # ============================================================
-# Metrics
+# Metrics (same style as train.py)
 # ============================================================
 
 def compute_metrics(predictions, labels):
@@ -338,12 +347,18 @@ def build_manifest() -> pd.DataFrame:
 # ============================================================
 
 class CustomManifestDataset(Dataset):
+    """
+    Custom manifest dataset that mirrors RansomwareGraphDataset.__getitem__()
+    as closely as possible, but loads graph paths from a manifest instead of
+    split folders.
+    """
+
     def __init__(
         self,
         manifest_csv: str | Path,
         schema: Dict,
         graph_processor,
-        validate_graphs: bool = False,
+        validate_graphs: bool = True,
     ):
         self.manifest_path = Path(manifest_csv)
         self.df = pd.read_csv(self.manifest_path)
@@ -358,80 +373,6 @@ class CustomManifestDataset(Dataset):
 
     def __len__(self):
         return len(self.df)
-
-    def _ensure_eval_temporal_path(self, graph):
-        """
-        Make eval robust for graphs where API nodes survive preprocessing
-        but no active incoming relation updates API width before the model LSTM.
-
-        The TGNN expects API features to be widened by relation message passing
-        before entering the explicit temporal LSTM. If all API-destination
-        relations are empty, API stays at base width (128) and the LSTM crashes,
-        because it expects 768.
-
-        For eval only, rebuild a simple api->temporal->api chain when needed.
-        """
-        if "api" not in graph.node_types:
-            return graph
-        if not hasattr(graph["api"], "x") or not isinstance(graph["api"].x, torch.Tensor):
-            return graph
-
-        num_api = int(graph["api"].x.size(0))
-        if num_api <= 0:
-            return graph
-
-        temporal_et = ("api", "temporal", "api")
-        proc_exec_et = ("process", "executes", "api")
-
-        def _num_edges(et):
-            if et not in graph.edge_types:
-                return 0
-            store = graph[et]
-            if not hasattr(store, "edge_index") or not isinstance(store.edge_index, torch.Tensor):
-                return 0
-            if store.edge_index.dim() != 2 or store.edge_index.size(0) != 2:
-                return 0
-            return int(store.edge_index.size(1))
-
-        has_api_receiver_edges = (_num_edges(temporal_et) > 0) or (_num_edges(proc_exec_et) > 0)
-        if has_api_receiver_edges:
-            return graph
-
-        # Rebuild a minimal temporal chain for eval robustness
-        if temporal_et not in graph.edge_types:
-            _ = graph[temporal_et]
-
-        store = graph[temporal_et]
-
-        if num_api == 1:
-            edge_index = torch.tensor([[0], [0]], dtype=torch.long)
-        else:
-            src = torch.arange(num_api - 1, dtype=torch.long)
-            dst = torch.arange(1, num_api, dtype=torch.long)
-            edge_index = torch.stack([src, dst], dim=0)
-
-        store.edge_index = edge_index
-
-        # Keep / create compatible edge_attr if temporal edge_attr exists in schema graphs
-        edge_attr_dim = 0
-        edge_attr_dtype = graph["api"].x.dtype
-        edge_attr_device = graph["api"].x.device
-
-        if hasattr(store, "edge_attr") and isinstance(store.edge_attr, torch.Tensor):
-            if store.edge_attr.dim() == 2:
-                edge_attr_dim = int(store.edge_attr.size(1))
-                edge_attr_dtype = store.edge_attr.dtype
-                edge_attr_device = store.edge_attr.device
-
-        if edge_attr_dim > 0:
-            store.edge_attr = torch.zeros(
-                edge_index.size(1),
-                edge_attr_dim,
-                dtype=edge_attr_dtype,
-                device=edge_attr_device,
-            )
-
-        return graph
 
     def __getitem__(self, idx: int):
         row = self.df.iloc[idx]
@@ -454,20 +395,6 @@ class CustomManifestDataset(Dataset):
         graph = self.graph_processor._behavior_aware_api_cap(graph)
         graph = self.graph_processor._ensure_api_aux_tensors(graph)
 
-        # Critical eval-only robustness fix
-        graph = self._ensure_eval_temporal_path(graph)
-
-        # make non-api stores consistent for batching
-        for node_type in graph.node_types:
-            if node_type != "api" and hasattr(graph[node_type], "timestamps"):
-                try:
-                    del graph[node_type]["timestamps"]
-                except Exception:
-                    try:
-                        delattr(graph[node_type], "timestamps")
-                    except Exception:
-                        pass
-
         if self.validate_graphs and config.FAIL_ON_SCHEMA_MISMATCH:
             validate_graph_or_raise(
                 graph,
@@ -481,8 +408,9 @@ class CustomManifestDataset(Dataset):
 
         return graph, label
 
+
 # ============================================================
-# Forward / validate helpers
+# Helpers (same as train.py)
 # ============================================================
 
 def _extract_timestamps(batch_data) -> dict:
@@ -529,88 +457,113 @@ def _validate_batch_before_forward(batch_data, schema, api_indices=None):
     )
 
 
+def custom_eval_collate(batch, schema, validate_batch=False):
+    """
+    Same hetero_collate path as train.py, but preserve sample-level metadata
+    for prediction export.
+    """
+    if not batch:
+        return None, None
+
+    sample_ids = []
+    graph_paths = []
+
+    for graph, _label in batch:
+        sample_ids.append(getattr(graph, "sample_id", ""))
+        graph_paths.append(getattr(graph, "graph_path", ""))
+
+    batched_graph, labels = hetero_collate(
+        batch,
+        schema=schema,
+        validate_batch=validate_batch,
+    )
+
+    if batched_graph is None or labels is None:
+        return batched_graph, labels
+
+    batched_graph.sample_id = sample_ids
+    batched_graph.graph_path = graph_paths
+    return batched_graph, labels
+
+
+# ============================================================
+# Eval loop (same style as train.py validate)
+# ============================================================
+
 @torch.no_grad()
 def run_eval(model, loader, criterion, vocab, schema, device, eval_epoch=None):
     model.eval()
 
+    total_loss = 0.0
     all_preds = []
     all_labels = []
     prediction_rows = []
-    total_loss = 0.0
-    total_graphs = 0
-    skipped_samples = []
 
-    for batch_data, labels in loader:
+    for batch_item in loader:
+        if batch_item is None:
+            continue
+
+        if not isinstance(batch_item, (tuple, list)) or len(batch_item) != 2:
+            continue
+
+        batch_data, labels = batch_item
         if batch_data is None or labels is None:
             continue
 
-        try:
-            labels = labels.to(device)
-            batch_data = batch_data.to(device)
+        labels = labels.to(device)
+        batch_data = batch_data.to(device)
 
-            api_indices = _extract_api_indices(batch_data, vocab, device)
-            _validate_batch_before_forward(batch_data, schema, api_indices=api_indices)
+        timestamps_dict = _extract_timestamps(batch_data)
+        api_indices = _extract_api_indices(batch_data, vocab, device)
 
-            logits = model(
-                x_dict=batch_data.x_dict,
-                edge_index_dict=batch_data.edge_index_dict,
-                edge_attr_dict=batch_data.edge_attr_dict if hasattr(batch_data, "edge_attr_dict") else None,
-                batch_dict=batch_data.batch_dict if hasattr(batch_data, "batch_dict") else None,
-                timestamps_dict=_extract_timestamps(batch_data),
-                api_indices=api_indices,
-                current_epoch=eval_epoch,
-            )
+        _validate_batch_before_forward(batch_data, schema, api_indices=api_indices)
 
-            loss = criterion(logits, labels)
+        logits = model(
+            x_dict=batch_data.x_dict,
+            edge_index_dict=batch_data.edge_index_dict,
+            edge_attr_dict=batch_data.edge_attr_dict if hasattr(batch_data, "edge_attr_dict") else None,
+            batch_dict=batch_data.batch_dict if hasattr(batch_data, "batch_dict") else None,
+            timestamps_dict=timestamps_dict,
+            api_indices=api_indices,
+            current_epoch=eval_epoch,
+        )
 
-            probs = torch.softmax(logits, dim=1)
-            preds = probs.argmax(dim=1)
+        loss = criterion(logits, labels)
+        total_loss += float(loss.item())
 
-            total_loss += float(loss.item()) * labels.size(0)
-            total_graphs += labels.size(0)
+        probs = torch.softmax(logits, dim=1)
+        preds = logits.argmax(dim=1)
 
-            all_preds.extend(preds.cpu().numpy().tolist())
-            all_labels.extend(labels.cpu().numpy().tolist())
+        all_preds.extend(preds.cpu().numpy().tolist())
+        all_labels.extend(labels.cpu().numpy().tolist())
 
-            sample_ids = getattr(batch_data, "sample_id", None)
-            graph_paths = getattr(batch_data, "graph_path", None)
+        sample_ids = getattr(batch_data, "sample_id", None)
+        graph_paths = getattr(batch_data, "graph_path", None)
 
-            if sample_ids is None:
-                sample_ids = [f"sample_{i}" for i in range(labels.size(0))]
-            if graph_paths is None:
-                graph_paths = [""] * labels.size(0)
+        if sample_ids is None:
+            sample_ids = [f"sample_{i}" for i in range(labels.size(0))]
+        if graph_paths is None:
+            graph_paths = [""] * labels.size(0)
 
-            for i in range(labels.size(0)):
-                prediction_rows.append({
-                    "sample_id": sample_ids[i] if isinstance(sample_ids, list) else str(sample_ids),
-                    "graph_path": graph_paths[i] if isinstance(graph_paths, list) else str(graph_paths),
-                    "true_label": int(labels[i].item()),
-                    "true_name": label_to_name(int(labels[i].item())),
-                    "pred_label": int(preds[i].item()),
-                    "pred_name": label_to_name(int(preds[i].item())),
-                    "prob_ransomware": float(probs[i, 0].item()),
-                    "prob_benign": float(probs[i, 1].item()),
-                    "prob_other_malware": float(probs[i, 2].item()),
-                    "correct": int(preds[i].item() == labels[i].item()),
-                })
-
-        except Exception as e:
-            sid = getattr(batch_data, "sample_id", "unknown")
-            gpath = getattr(batch_data, "graph_path", "unknown")
-            print(f"[WARN] Skipping eval sample due to forward failure: sample_id={sid} graph_path={gpath} error={e}")
-            skipped_samples.append({
-                "sample_id": sid,
-                "graph_path": gpath,
-                "error": str(e),
+        for i in range(labels.size(0)):
+            prediction_rows.append({
+                "sample_id": sample_ids[i] if isinstance(sample_ids, list) else str(sample_ids),
+                "graph_path": graph_paths[i] if isinstance(graph_paths, list) else str(graph_paths),
+                "true_label": int(labels[i].item()),
+                "true_name": label_to_name(int(labels[i].item())),
+                "pred_label": int(preds[i].item()),
+                "pred_name": label_to_name(int(preds[i].item())),
+                "prob_ransomware": float(probs[i, 0].item()),
+                "prob_benign": float(probs[i, 1].item()),
+                "prob_other_malware": float(probs[i, 2].item()),
+                "correct": int(preds[i].item() == labels[i].item()),
             })
-            continue
 
-    if total_graphs == 0:
-        raise RuntimeError("All evaluation samples were skipped or failed during forward pass.")
+    if len(all_labels) == 0:
+        raise RuntimeError("No evaluation samples were processed.")
 
     metrics = compute_metrics(all_preds, all_labels)
-    metrics["loss"] = total_loss / max(total_graphs, 1)
-    metrics["skipped_samples"] = len(skipped_samples)
+    metrics["loss"] = total_loss / max(len(loader), 1)
     return metrics, prediction_rows
 
 
@@ -647,22 +600,23 @@ def main():
         manifest_csv=config.CUSTOM_EVAL_MANIFEST_PATH,
         schema=active_schema,
         graph_processor=graph_processor,
-        validate_graphs=getattr(config, "CUSTOM_EVAL_VALIDATE_GRAPHS", False),
+        validate_graphs=getattr(config, "CUSTOM_EVAL_VALIDATE_GRAPHS", True),
     )
 
     collate = partial(
-        hetero_collate,
+        custom_eval_collate,
         schema=active_schema,
-        validate_batch=getattr(config, "CUSTOM_EVAL_VALIDATE_BATCH", False),
+        validate_batch=False,
     )
 
+    # Mirror train.py val/test loader behavior
     loader = DataLoader(
         dataset,
-        batch_size=config.CUSTOM_EVAL_BATCH_SIZE,
-        shuffle=getattr(config, "CUSTOM_EVAL_SHUFFLE", False),
+        batch_size=config.BATCH_SIZE,
+        shuffle=False,
         collate_fn=collate,
-        num_workers=config.CUSTOM_EVAL_NUM_WORKERS,
-        pin_memory=config.CUSTOM_EVAL_PIN_MEMORY,
+        num_workers=config.NUM_WORKERS,
+        pin_memory=config.PIN_MEMORY,
     )
 
     vocab = load_vocab(config.RESULTS_DIR / "api_vocabulary.json")
@@ -674,12 +628,19 @@ def main():
         raise FileNotFoundError(f"Checkpoint not found: {checkpoint_path}")
 
     ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
-    model.load_state_dict(ckpt["model_state_dict"])
+
+    missing = model.load_state_dict(ckpt["model_state_dict"], strict=False)
+    print("[INFO] Loaded checkpoint with strict=False")
+    if hasattr(missing, "missing_keys") and missing.missing_keys:
+        print(f"[INFO] Missing keys    : {missing.missing_keys}")
+    if hasattr(missing, "unexpected_keys") and missing.unexpected_keys:
+        print(f"[INFO] Unexpected keys : {missing.unexpected_keys}")
+
     eval_epoch = int(ckpt.get("epoch", config.EPOCHS))
 
-    print(f"[INFO] Loaded checkpoint: {checkpoint_path}")
-    print(f"[INFO] Checkpoint epoch : {eval_epoch}")
-    print(f"[INFO] Custom eval batch size: {config.CUSTOM_EVAL_BATCH_SIZE}")
+    print(f"[INFO] Loaded checkpoint : {checkpoint_path}")
+    print(f"[INFO] Checkpoint epoch  : {eval_epoch}")
+    print(f"[INFO] Eval batch size   : {config.BATCH_SIZE}")
 
     criterion = FocalLoss(alpha=config.FOCAL_ALPHA, gamma=config.FOCAL_GAMMA)
 
@@ -715,7 +676,7 @@ def main():
         "checkpoint_path": str(checkpoint_path),
         "checkpoint_epoch": eval_epoch,
         "num_samples": int(len(manifest_df)),
-        "custom_eval_batch_size": int(config.CUSTOM_EVAL_BATCH_SIZE),
+        "eval_batch_size": int(config.BATCH_SIZE),
         "label_distribution": {
             "ransomware": int((manifest_df["label"] == 0).sum()),
             "benign": int((manifest_df["label"] == 1).sum()),

@@ -9,7 +9,7 @@
   "apply_malware_subsample_to_train": true,
   "apply_malware_subsample_to_val": true,
   "apply_malware_subsample_to_test": true,
-  "train_samples": 5048,
+  "train_samples": 5047,
   "val_samples": 1072,
   "test_samples": 1096,
   "split_manifest_path": "",
