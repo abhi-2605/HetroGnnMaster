@@ -1071,6 +1071,58 @@ class HeteroTemporalGNN(nn.Module):
             device=next(self.parameters()).device,
             requires_grad=True,
         )
+    def get_hybrid_gate_stats(self) -> Dict[str, float]:
+        """
+        Collect monitoring statistics from HybridGATSAGEConv layers.
+
+        Safe helper:
+        - Does not affect forward pass
+        - Does not change gradients
+        - Returns empty dict if hybrid layer is not being used
+        """
+        gate_values = []
+        disagreement_values = []
+
+        for gnn_layer in self.gnn_layers:
+            if not hasattr(gnn_layer, "get_hybrid_gate_stats"):
+                continue
+
+            stats = gnn_layer.get_hybrid_gate_stats()
+            if not stats:
+                continue
+
+            for _, rel_stats in stats.items():
+                if "gate" in rel_stats and rel_stats["gate"] is not None:
+                    gate_values.append(rel_stats["gate"].detach().flatten())
+
+                if "disagreement" in rel_stats and rel_stats["disagreement"] is not None:
+                    disagreement_values.append(
+                        rel_stats["disagreement"].detach().flatten()
+                    )
+
+        if not gate_values:
+            return {}
+
+        gate_all = torch.cat(gate_values)
+
+        output = {
+            "hybrid_gate_mean": float(gate_all.mean().item()),
+            "hybrid_gate_std": float(gate_all.std(unbiased=False).item()),
+            "hybrid_gate_min": float(gate_all.min().item()),
+            "hybrid_gate_max": float(gate_all.max().item()),
+            "hybrid_sage_mean": float((1.0 - gate_all).mean().item()),
+        }
+
+        if disagreement_values:
+            disagreement_all = torch.cat(disagreement_values)
+            output["hybrid_disagreement_mean"] = float(
+                disagreement_all.mean().item()
+            )
+            output["hybrid_disagreement_std"] = float(
+                disagreement_all.std(unbiased=False).item()
+            )
+
+        return output
 
     def branch_balance_loss(
         self,

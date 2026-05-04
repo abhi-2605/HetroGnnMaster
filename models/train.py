@@ -47,7 +47,7 @@ warnings.filterwarnings("ignore")
 
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.append(str(PROJECT_ROOT))
-_ram_log: list[dict] = []          # epoch → MB used
+_ram_log: list[dict] = []
 _ram_lock = threading.Lock()
 
 
@@ -106,21 +106,25 @@ class FocalLoss(nn.Module):
 # ══════════════════════════════════════════════════════════════════════════════
 #  Metrics
 # ══════════════════════════════════════════════════════════════════════════════
+
 def _get_ram_mb() -> float:
     process = psutil.Process(os.getpid())
     return process.memory_info().rss / 1024 / 1024
+
 
 def _log_ram(epoch: int) -> None:
     with _ram_lock:
         _ram_log.append({"epoch": epoch, "ram_mb": _get_ram_mb()})
 
+
 def _print_ram_bar(epoch: int, total_epochs: int) -> None:
     ram_mb = _get_ram_mb()
     total_mb = psutil.virtual_memory().total / 1024 / 1024
     pct = ram_mb / total_mb * 100
-    filled = int(pct / 5)                       # 20-char bar
+    filled = int(pct / 5)
     bar = "█" * filled + "░" * (20 - filled)
     print(f"  ┌─ RAM  [{bar}] {pct:.1f}%  {ram_mb:.0f} MB / {total_mb:.0f} MB  (epoch {epoch}/{total_epochs})")
+
 
 def cleanup_cuda():
     """Free Python refs + unused CUDA cached memory."""
@@ -162,24 +166,20 @@ def compute_threat_vs_benign(confusion_mat: np.ndarray) -> dict:
     Collapse 3-class confusion matrix into Threat (Ransom+Malware) vs Benign.
     Assumes class order: 0=Ransomware, 1=Benign, 2=Malware
     """
-    # TP_threat = all threats predicted as threat (ransom or malware)
     TP = confusion_mat[0, 0] + confusion_mat[0, 2] + confusion_mat[2, 0] + confusion_mat[2, 2]
-    # FN = threats predicted as benign
     FN = confusion_mat[0, 1] + confusion_mat[2, 1]
-    # TN = benign predicted as benign
     TN = confusion_mat[1, 1]
-    # FP = benign predicted as threat
     FP = confusion_mat[1, 0] + confusion_mat[1, 2]
 
-    threat_recall    = TP / (TP + FN) if (TP + FN) > 0 else 0.0
+    threat_recall = TP / (TP + FN) if (TP + FN) > 0 else 0.0
     threat_precision = TP / (TP + FP) if (TP + FP) > 0 else 0.0
-    threat_f1        = (
+    threat_f1 = (
         2 * threat_precision * threat_recall / (threat_precision + threat_recall)
         if (threat_precision + threat_recall) > 0 else 0.0
     )
-    benign_recall    = TN / (TN + FP) if (TN + FP) > 0 else 0.0
+    benign_recall = TN / (TN + FP) if (TN + FP) > 0 else 0.0
     benign_precision = TN / (TN + FN) if (TN + FN) > 0 else 0.0
-    benign_f1        = (
+    benign_f1 = (
         2 * benign_precision * benign_recall / (benign_precision + benign_recall)
         if (benign_precision + benign_recall) > 0 else 0.0
     )
@@ -190,9 +190,8 @@ def compute_threat_vs_benign(confusion_mat: np.ndarray) -> dict:
         "threat_recall": threat_recall, "threat_precision": threat_precision, "threat_f1": threat_f1,
         "benign_recall": benign_recall, "benign_precision": benign_precision, "benign_f1": benign_f1,
         "accuracy_2class": accuracy,
-        "threats_missed": int(FN),   # most important number
+        "threats_missed": int(FN),
     }
-
 
 
 def print_metrics(metrics, split="Train", class_names=None):
@@ -254,9 +253,9 @@ def create_dataloaders(schema, use_weighted_sampling=True):
     print(f"Val:   {len(val_dataset)} graphs")
     print(f"Test:  {len(test_dataset)} graphs")
 
-    train_labels =  [
-    train_dataset.labels.get(graph_file.stem, 2)
-    for graph_file in train_dataset.graph_files
+    train_labels = [
+        train_dataset.labels.get(graph_file.stem, 2)
+        for graph_file in train_dataset.graph_files
     ]
     print("\nTrain class distribution:")
     for cls in range(config.NUM_CLASSES):
@@ -264,9 +263,8 @@ def create_dataloaders(schema, use_weighted_sampling=True):
         pct = 100 * count / len(train_labels) if train_labels else 0.0
         print(f"  {config.CLASS_NAMES[cls]}: {count} ({pct:.2f}%)")
 
-    collate = lambda batch: hetero_collate(batch, schema=schema, validate_batch=False) # currently turned off to reduce overhead
+    collate = lambda batch: hetero_collate(batch, schema=schema, validate_batch=False)
 
-    # ── build weights if weighted sampling is enabled ─────────────────────────
     sample_weights = None
     if use_weighted_sampling and config.USE_WEIGHTED_SAMPLING:
         sample_weights = [
@@ -276,47 +274,31 @@ def create_dataloaders(schema, use_weighted_sampling=True):
             for graph_file in train_dataset.graph_files
         ]
 
-    # ── choose sampler from config ────────────────────────────────────────────
     if getattr(config, "ENABLE_BUCKETED_BATCH_SAMPLER", False):
         print("\n⚡ Using weighted oversampling + bucketed batching..." if sample_weights is not None
               else "\n⚡ Using bucketed batching...")
 
         train_batch_sampler = BucketedBatchSampler(
-        dataset=train_dataset,
-        bucket_rules=getattr(config, "BUCKETED_BATCH_RULES", None),
-        shuffle=getattr(config, "BUCKETED_BATCH_SHUFFLE", True),
-        weights=sample_weights,
-        verbose=getattr(config, "BUCKETED_BATCH_VERBOSE", True),
-    )
+            dataset=train_dataset,
+            bucket_rules=getattr(config, "BUCKETED_BATCH_RULES", None),
+            shuffle=getattr(config, "BUCKETED_BATCH_SHUFFLE", True),
+            weights=sample_weights,
+            verbose=getattr(config, "BUCKETED_BATCH_VERBOSE", True),
+        )
     else:
         print("\n⚡ Using weighted oversampling + size-aware batching..." if sample_weights is not None
               else "\n⚡ Using size-aware batching...")
 
-        # train_batch_sampler = BucketedBatchSampler(
-        #     dataset=train_dataset,
-        #     bucket_rules=getattr(config, "BUCKETED_BATCH_RULES", None),
-        #     shuffle=getattr(config, "BUCKETED_BATCH_SHUFFLE", True),
-        #     weights=sample_weights,
-        #     verbose=getattr(config, "BUCKETED_BATCH_VERBOSE", True),
-        # )
         train_batch_sampler = SizeAwareBatchSampler(
             train_dataset,
             batch_size=config.BATCH_SIZE,
             shuffle=True,
-            weights=sample_weights,   # None → uniform, list → weighted
+            weights=sample_weights,
         )
-
-    # ── single size-aware sampler handles both cases ──────────────────────────
-    # size_sampler = SizeAwareBatchSampler(
-    #     train_dataset,
-    #     batch_size=config.BATCH_SIZE,
-    #     shuffle=True,
-    #     weights=sample_weights,   # None → uniform, list → weighted
-    # )
 
     train_loader = DataLoader(
         train_dataset,
-        batch_sampler=train_batch_sampler,   # replaces batch_size + sampler/shuffle
+        batch_sampler=train_batch_sampler,
         collate_fn=collate,
         num_workers=config.NUM_WORKERS,
         pin_memory=config.PIN_MEMORY,
@@ -340,7 +322,6 @@ def create_dataloaders(schema, use_weighted_sampling=True):
     )
 
     return train_loader, val_loader, test_loader
-
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -399,6 +380,80 @@ def _validate_batch_before_forward(batch_data, schema, api_indices=None):
     )
 
 
+def _maybe_perturb_edge_attr_dict(edge_attr_dict, training: bool):
+    """
+    Optional training-only edge feature perturbation for HybridGATSAGE.
+
+    Creates a new edge_attr_dict and does not mutate the batch object.
+    Validation/test remain clean when PERTURBATION_TRAIN_ONLY=True.
+    """
+    if edge_attr_dict is None:
+        return None
+
+    if not getattr(config, "USE_SEMANTIC_PERTURBATION", False):
+        return edge_attr_dict
+
+    if getattr(config, "PERTURBATION_TRAIN_ONLY", True) and not training:
+        return edge_attr_dict
+
+    target = getattr(config, "PERTURBATION_TARGET", "edge_attr")
+    if target not in {"edge_attr", "edge_attr_and_api_x"}:
+        return edge_attr_dict
+
+    prob = float(getattr(config, "PERTURBATION_PROB", 0.0))
+    std = float(getattr(config, "PERTURBATION_STD", 0.0))
+
+    if prob <= 0.0 or std <= 0.0:
+        return edge_attr_dict
+
+    first_tensor = next(
+        (v for v in edge_attr_dict.values() if isinstance(v, torch.Tensor)),
+        None,
+    )
+    if first_tensor is None:
+        return edge_attr_dict
+
+    if torch.rand(1, device=first_tensor.device).item() >= prob:
+        return edge_attr_dict
+
+    perturbed = {}
+    for edge_type, edge_attr in edge_attr_dict.items():
+        if not isinstance(edge_attr, torch.Tensor) or not torch.is_floating_point(edge_attr):
+            perturbed[edge_type] = edge_attr
+            continue
+
+        perturbed[edge_type] = edge_attr + torch.randn_like(edge_attr) * std
+
+    return perturbed
+
+
+def _accumulate_hybrid_gate_stats(model, collector: dict):
+    """Collect batch-level hybrid gate stats from the model, if available."""
+    if not hasattr(model, "get_hybrid_gate_stats"):
+        return
+
+    stats = model.get_hybrid_gate_stats()
+    if not stats:
+        return
+
+    collector["count"] += 1
+    for key, value in stats.items():
+        collector[key] += float(value)
+
+
+def _finalize_hybrid_gate_stats(collector: dict) -> dict:
+    """Average collected hybrid gate stats over processed batches."""
+    count = int(collector.get("count", 0))
+    if count <= 0:
+        return {}
+
+    return {
+        key: value / count
+        for key, value in collector.items()
+        if key != "count"
+    }
+
+
 def _build_memory_write_strength(model, logits, batch_data, api_indices, epoch):
     """
     Compose selective memory write strength using:
@@ -445,7 +500,7 @@ def _build_memory_write_strength(model, logits, batch_data, api_indices, epoch):
 
     confidence_factor = None
     if getattr(config, "USE_CONFIDENCE_AWARE_WRITE", True):
-        graph_conf = compute_prediction_confidence(logits.detach())  # [B]
+        graph_conf = compute_prediction_confidence(logits.detach())
         primary_type = model.primary_temporal_type
         node_batch = batch_data.batch_dict[primary_type]
         node_conf = expand_graph_confidence_to_nodes(graph_conf, node_batch)
@@ -517,6 +572,7 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
 
     all_preds = []
     all_labels = []
+    hybrid_gate_collector = defaultdict(float)
 
     task_loss_val = 0.0
     mem_reg_val = 0.0
@@ -525,7 +581,6 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
     pbar = tqdm(loader, desc=f"{'WARMUP ' if warmup else ''}Epoch {epoch}")
 
     for batch_idx, batch_item in enumerate(pbar):
-        # Guard against collate returning None/empty batch
         if batch_item is None:
             print(f"⚠️  Empty batch object at batch {batch_idx} — skipping.")
             continue
@@ -554,6 +609,11 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
 
                 optimizer.zero_grad(set_to_none=True)
 
+                edge_attr_dict = _maybe_perturb_edge_attr_dict(
+                    batch_data.edge_attr_dict,
+                    training=True,
+                )
+
                 use_amp = False
                 with torch.amp.autocast(
                     device_type="cuda",
@@ -563,24 +623,22 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                     logits = model(
                         x_dict=batch_data.x_dict,
                         edge_index_dict=batch_data.edge_index_dict,
-                        edge_attr_dict=batch_data.edge_attr_dict,
+                        edge_attr_dict=edge_attr_dict,
                         batch_dict=batch_data.batch_dict,
                         timestamps_dict=timestamps_dict,
                         api_indices=api_indices,
                         current_epoch=epoch,
                     )
 
-                # Compute losses OUTSIDE autocast for numerical stability
                 logits = logits.float()
+
+                _accumulate_hybrid_gate_stats(model, hybrid_gate_collector)
 
                 if not torch.isfinite(logits).all():
                     print(f"❌ Non-finite logits at batch {batch_idx} — skipping batch.")
                     batch_skipped = True
                     break
 
-                # task_loss = criterion(logits, labels)
-                # mem_reg = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)
-                # loss = task_loss + mem_reg
                 task_loss = criterion(logits, labels)
                 mem_reg = model.memory_loss(lambda_reg=config.MEMORY_LAMBDA)
 
@@ -597,11 +655,6 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                     print(f"❌ Non-finite task_loss at batch {batch_idx} — skipping batch.")
                     batch_skipped = True
                     break
-
-                # if not torch.isfinite(mem_reg):
-                #     print(f"❌ Non-finite mem_reg at batch {batch_idx} — skipping batch.")
-                #     batch_skipped = True
-                #     break
 
                 if not torch.isfinite(branch_reg):
                     print(f"❌ Non-finite branch_reg at batch {batch_idx} — skipping batch.")
@@ -651,11 +704,6 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
                         current_epoch=epoch,
                     )
 
-                # task_loss_val = float(task_loss.item())
-                # mem_reg_val = float(mem_reg.item())
-
-                # total_loss += task_loss_val
-                # total_mem_reg += mem_reg_val
                 task_loss_val = float(task_loss.item())
                 mem_reg_val = float(mem_reg.item())
                 branch_reg_val = float(branch_reg.item())
@@ -711,9 +759,8 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
     avg_mem_reg = total_mem_reg / max(processed_batches, 1)
     avg_branch_reg = total_branch_reg / max(processed_batches, 1)
 
-    # Safe fallback if every batch was skipped
     if len(all_preds) == 0 or len(all_labels) == 0:
-        return {
+        metrics = {
             "accuracy": 0.0,
             "per_class_precision": np.zeros(config.NUM_CLASSES, dtype=float),
             "per_class_recall": np.zeros(config.NUM_CLASSES, dtype=float),
@@ -730,11 +777,14 @@ def train_epoch(model, loader, criterion, optimizer, vocab, schema, device, epoc
             "mem_reg": avg_mem_reg,
             "branch_reg": 0.0,
         }
+        metrics.update(_finalize_hybrid_gate_stats(hybrid_gate_collector))
+        return metrics
 
     metrics = compute_metrics(all_preds, all_labels)
     metrics["loss"] = avg_loss
     metrics["mem_reg"] = avg_mem_reg
     metrics["branch_reg"] = avg_branch_reg
+    metrics.update(_finalize_hybrid_gate_stats(hybrid_gate_collector))
     return metrics
 
 
@@ -749,6 +799,7 @@ def validate(model, loader, criterion, vocab, schema, device, epoch=None):
     total_loss = 0.0
     all_preds = []
     all_labels = []
+    hybrid_gate_collector = defaultdict(float)
 
     with torch.no_grad():
         for batch_data, labels in tqdm(loader, desc="Validating"):
@@ -760,15 +811,22 @@ def validate(model, loader, criterion, vocab, schema, device, epoch=None):
 
             _validate_batch_before_forward(batch_data, schema, api_indices=api_indices)
 
+            edge_attr_dict = _maybe_perturb_edge_attr_dict(
+                batch_data.edge_attr_dict,
+                training=False,
+            )
+
             logits = model(
                 x_dict=batch_data.x_dict,
                 edge_index_dict=batch_data.edge_index_dict,
-                edge_attr_dict=batch_data.edge_attr_dict,
+                edge_attr_dict=edge_attr_dict,
                 batch_dict=batch_data.batch_dict,
                 timestamps_dict=timestamps_dict,
                 api_indices=api_indices,
                 current_epoch=epoch,
             )
+
+            _accumulate_hybrid_gate_stats(model, hybrid_gate_collector)
 
             loss = criterion(logits, labels)
             total_loss += loss.item()
@@ -790,6 +848,7 @@ def validate(model, loader, criterion, vocab, schema, device, epoch=None):
 
     metrics = compute_metrics(all_preds, all_labels)
     metrics["loss"] = total_loss / len(loader)
+    metrics.update(_finalize_hybrid_gate_stats(hybrid_gate_collector))
     return metrics
 
 
@@ -803,7 +862,6 @@ def train():
     device = torch.device(config.DEVICE)
     print(f"\n{'=' * 70}\nDevice: {device}")
 
-    # ── schema ────────────────────────────────────────────────────────────────
     schema = ensure_active_schema()
     schema_summary = summarize_schema(schema)
 
@@ -818,18 +876,14 @@ def train():
     print(f"Non-empty edges    : {schema_summary['nonempty_edge_types']}")
     print(f"Empty edges        : {schema_summary['empty_edge_types']}")
 
-    # ── vocab ─────────────────────────────────────────────────────────────────
     vocab = load_vocab(config.RESULTS_DIR / "api_vocabulary.json")
     print(f"[Train] Vocabulary loaded: {vocab.size()} APIs")
-    
 
-    # ── data ──────────────────────────────────────────────────────────────────
     train_loader, val_loader, test_loader = create_dataloaders(
         schema=schema,
         use_weighted_sampling=config.USE_WEIGHTED_SAMPLING,
     )
 
-    # ── model ─────────────────────────────────────────────────────────────────
     model = create_hetero_tgnn(use_memory=config.USE_MEMORY).to(device)
 
     print("\n🚀 Model architecture:")
@@ -839,7 +893,6 @@ def train():
     print(f"  LSTM output            : {model.lstm_output_dim}")
     print(f"  Total embedding        : {model.total_embedding_dim}")
 
-    # ── loss, optimiser, scheduler ───────────────────────────────────────────
     criterion = FocalLoss(alpha=config.FOCAL_ALPHA, gamma=config.FOCAL_GAMMA)
     optimizer = AdamW(
         model.parameters(),
@@ -857,12 +910,12 @@ def train():
             min_lr=config.LR_MIN,
         )
 
-    # ── resume checkpoint ─────────────────────────────────────────────────────
     checkpoint_path = config.CHECKPOINTS_DIR / "best_model.pt"
     best_metric = 0.0
     start_epoch = 1
     use_amp = False
     scaler = torch.amp.GradScaler("cuda", enabled=use_amp)
+
     if config.RESUME_FROM_CHECKPOINT and checkpoint_path.exists():
         ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)
         model.load_state_dict(ckpt["model_state_dict"])
@@ -876,7 +929,7 @@ def train():
             optimizer.load_state_dict(ckpt["optimizer_state_dict"])
         if scheduler is not None and ckpt.get("scheduler_state_dict") is not None:
             scheduler.load_state_dict(ckpt["scheduler_state_dict"])
-        if ckpt.get("scaler_state_dict") is not None:   
+        if ckpt.get("scaler_state_dict") is not None:
             scaler.load_state_dict(ckpt["scaler_state_dict"])
 
         best_metric = float(ckpt.get("best_metric", 0.0))
@@ -888,7 +941,6 @@ def train():
     else:
         print("ℹ️  No checkpoint — training from scratch.")
 
-    # ── logging ───────────────────────────────────────────────────────────────
     log_file = config.LOGS_DIR / f"training_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 
     def log(msg):
@@ -907,9 +959,7 @@ def train():
     if active_schema_path is not None:
         log(f"Schema path : {active_schema_path}")
 
-    # ── epoch loop ────────────────────────────────────────────────────────────
     for epoch in range(start_epoch, config.EPOCHS + 1):
-        # importlib.reload(config)  # hot-reload utils for dynamic config changes
         importlib.reload(config)
 
         criterion = FocalLoss(
@@ -930,11 +980,10 @@ def train():
             device=device,
             epoch=epoch,
             warmup=warmup,
-            scaler=scaler
+            scaler=scaler,
         )
         _log_ram(epoch)
         _print_ram_bar(epoch, config.EPOCHS)
-
 
         ransom_r = train_metrics["per_class_recall"][0]
         benign_r = train_metrics["per_class_recall"][1]
@@ -952,6 +1001,15 @@ def train():
             f"Benign P={benign_p:.3f} R={benign_r:.3f}  "
             f"Malware P={malware_p:.3f} R={malware_r:.3f}"
         )
+
+        if "hybrid_gate_mean" in train_metrics:
+            log(
+                f"Train  hybrid_gate={train_metrics['hybrid_gate_mean']:.4f}  "
+                f"hybrid_sage={train_metrics.get('hybrid_sage_mean', 0.0):.4f}  "
+                f"gate_std={train_metrics.get('hybrid_gate_std', 0.0):.4f}  "
+                f"disagreement={train_metrics.get('hybrid_disagreement_mean', 0.0):.4f}"
+            )
+
         val_metrics = validate(
             model=model,
             loader=val_loader,
@@ -977,7 +1035,14 @@ def train():
             f"Malware P={malware_v_p:.3f} R={malware_v_r:.3f}"
         )
 
-        # ── Threat vs Benign 2-class report ──────────────────────────────────
+        if "hybrid_gate_mean" in val_metrics:
+            log(
+                f"Val    hybrid_gate={val_metrics['hybrid_gate_mean']:.4f}  "
+                f"hybrid_sage={val_metrics.get('hybrid_sage_mean', 0.0):.4f}  "
+                f"gate_std={val_metrics.get('hybrid_gate_std', 0.0):.4f}  "
+                f"disagreement={val_metrics.get('hybrid_disagreement_mean', 0.0):.4f}"
+            )
+
         tvb = compute_threat_vs_benign(val_metrics["confusion_matrix"])
         log(
             f"  [Threat vs Benign]  "
@@ -1001,7 +1066,7 @@ def train():
         benign_recall = val_metrics["per_class_recall"][1]
 
         recall_floors = (
-            ransomware_recall >= config.MIN_RANSOMWARE_RECALL * 0.53 # was .64
+            ransomware_recall >= config.MIN_RANSOMWARE_RECALL * 0.53
             and benign_recall >= config.MIN_BENIGN_RECALL * 0.58
         )
 
@@ -1044,7 +1109,6 @@ def train():
             log(f"\n🛑 Early stopping at epoch {epoch}")
             break
 
-    # ── final test eval ───────────────────────────────────────────────────────
     log(f"\n{'=' * 70}\nTRAINING COMPLETE\nBest {config.CHECKPOINT_METRIC}: {best_metric:.4f}")
 
     ckpt = torch.load(checkpoint_path, map_location=device, weights_only=False)

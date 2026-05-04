@@ -171,7 +171,7 @@ TEMPORAL_EDGE_DIM = 14      # Temporal edge features
 # MODEL ARCHITECTURE
 # ============================================
 # Spatial aggregation
-SPATIAL_LAYER = "gat"       # Options: 'gat', 'transformer'
+# SPATIAL_LAYER = "gat"       # Options: 'gat', 'transformer'
 HIDDEN_DIM = 128            # Hidden dimension for GNN layers
 RESOURCE_HIDDEN_DIM = 64    # Resource node hidden dimension
 NUM_GNN_LAYERS = 2          # Number of spatial aggregation layers
@@ -503,3 +503,58 @@ BRANCH_GATE_BALANCE_LAMBDA = 0.01
 STATIC_COMPARE_TRAIN_FRAC = 0.50
 STATIC_REMOVE_API_SEMANTIC_FEATURES = True
 STATIC_API_FEATURE_REPLACEMENT = "zeros"
+
+
+
+# ============================================================
+# Spatial GNN layer
+# ============================================================
+
+# Options:
+# "gat"              -> TemporalGATConv only
+# "transformer"      -> TemporalTransformerConv only
+# "sage"             -> EdgeAwareSAGEConv only
+# "hybrid_gat_sage"  -> TemporalGATConv + EdgeAwareSAGEConv + learned gate
+SPATIAL_LAYER = "hybrid_gat_sage"
+
+
+# ============================================================
+# Hybrid GAT-SAGE settings
+# ============================================================
+
+HYBRID_GATE_MONITOR = True
+
+# Gate input uses:
+# [h_gat || h_sage || abs(h_gat - h_sage)]
+HYBRID_GATE_USE_DIFF = True
+
+# Dropout inside the gate MLP
+HYBRID_GATE_DROPOUT = 0.1
+
+# Optional: avoid gate collapsing too hard to GAT early
+HYBRID_GATE_REG_WEIGHT = 0.001
+
+
+# ============================================================
+# Perturbation training settings
+# ============================================================
+
+USE_SEMANTIC_PERTURBATION = True
+
+# Probability of applying perturbation to a training batch
+PERTURBATION_PROB = 0.2
+
+# Noise strength
+PERTURBATION_STD = 0.05
+
+# Apply perturbation only during training, never validation/test
+PERTURBATION_TRAIN_ONLY = True
+
+# What to perturb.
+# Recommended first: edge_attr, because edge-aware GAT/SAGE both use it.
+PERTURBATION_TARGET = "edge_attr"
+
+# Options you may support later:
+# "edge_attr"
+# "api_x"
+# "edge_attr_and_api_x"

@@ -4,9 +4,11 @@ Temporal layers for heterogeneous temporal GNNs.
 Components:
 1. TemporalGATConv: GAT-style relation conv with optional edge features
 2. TemporalTransformerConv: Transformer-style relation conv with optional edge features
-3. TemporalLSTM: explicit ordered sequence model for API temporal spine
-4. TemporalAttentionPooling: graph-level temporal pooling
-5. HeteroTemporalConv: schema-friendly heterogeneous relation message passing
+3a. EdgeAwareSAGEConv: GraphSAGE-style mean aggregation with edge features
+3b. HybridGATSAGEConv: GAT + EdgeAwareSAGE with disagreement-aware gating
+4. TemporalLSTM: explicit ordered sequence model for API temporal spine
+5. TemporalAttentionPooling: graph-level temporal pooling
+6. HeteroTemporalConv: schema-friendly heterogeneous relation message passing
 
 Important design note:
 - TemporalLSTM remains the explicit order-sensitive temporal branch.
@@ -213,7 +215,214 @@ class TemporalTransformerConv(MessagePassing):
 
 
 # ============================================================
-# 3. TemporalLSTM (explicit temporal spine)
+# 3a. EdgeAwareSAGEConv — inductive, edge-feature-preserving
+# ============================================================
+
+class EdgeAwareSAGEConv(MessagePassing):
+    """
+    GraphSAGE-style mean aggregation with edge feature support.
+
+    Edge features are fused additively into neighbour messages before mean
+    aggregation:
+        m_uv = h_u + W_e e_uv
+        h_v = W_self h_v + W_neigh MEAN(m_uv)
+
+    This preserves edge signal without introducing per-pair attention weights.
+    """
+
+    def __init__(
+        self,
+        in_channels: Union[int, Tuple[int, int]],
+        out_channels: int,
+        edge_dim: int = 0,
+        normalize: bool = True,
+        dropout: float = 0.0,
+        **kwargs,
+    ):
+        super().__init__(aggr="mean", node_dim=0, **kwargs)
+
+        if isinstance(in_channels, int):
+            self.in_src = in_channels
+            self.in_dst = in_channels
+        else:
+            self.in_src, self.in_dst = in_channels
+
+        self.out_channels = out_channels
+        self.edge_dim = edge_dim
+        self.normalize = normalize
+        self.dropout_p = dropout
+
+        self.lin_self = nn.Linear(self.in_dst, out_channels, bias=False)
+        self.lin_neigh = nn.Linear(self.in_src, out_channels, bias=False)
+
+        if edge_dim > 0:
+            self.lin_edge = nn.Linear(edge_dim, self.in_src, bias=False)
+        else:
+            self.lin_edge = None
+
+        self.bias = nn.Parameter(torch.zeros(out_channels))
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        nn.init.xavier_uniform_(self.lin_self.weight)
+        nn.init.xavier_uniform_(self.lin_neigh.weight)
+        if self.lin_edge is not None:
+            nn.init.xavier_uniform_(self.lin_edge.weight)
+        nn.init.zeros_(self.bias)
+
+    def forward(
+        self,
+        x: Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]],
+        edge_index: torch.Tensor,
+        edge_attr: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
+        if edge_index.dim() != 2 or edge_index.size(0) != 2:
+            raise ValueError(f"edge_index must have shape [2, E], got {tuple(edge_index.shape)}")
+
+        if isinstance(x, torch.Tensor):
+            x_src = x_dst = x
+        else:
+            x_src, x_dst = x
+
+        agg = self.propagate(
+            edge_index=edge_index,
+            x=x_src,
+            edge_attr=edge_attr,
+            size=(x_src.size(0), x_dst.size(0)),
+        )
+
+        out = self.lin_self(x_dst) + self.lin_neigh(agg) + self.bias
+
+        if self.normalize:
+            out = F.normalize(out, p=2, dim=-1)
+
+        out = F.dropout(out, p=self.dropout_p, training=self.training)
+        return out
+
+    def message(
+        self,
+        x_j: torch.Tensor,
+        edge_attr: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
+        if self.lin_edge is not None and edge_attr is not None:
+            if edge_attr.dim() == 1:
+                edge_attr = edge_attr.unsqueeze(-1)
+            return x_j + self.lin_edge(edge_attr)
+        return x_j
+
+
+# ============================================================
+# 3b. HybridGATSAGEConv — attention + inductive fallback
+# ============================================================
+
+class HybridGATSAGEConv(nn.Module):
+    """
+    Parallel TemporalGATConv + EdgeAwareSAGEConv with disagreement-aware gating.
+
+    Both branches receive the same relation input and edge_attr. The final output
+    has the same width as TemporalGATConv with concat=True:
+        output_dim = heads * out_channels
+
+    Fusion:
+        d = |h_gat - h_sage|
+        g = sigmoid(MLP([h_gat || h_sage || d]))
+        h = g * h_gat + (1 - g) * h_sage
+
+    Monitoring:
+        last_gate and last_disagreement are detached tensors from the latest
+        forward pass, intended for train/validation logging.
+    """
+
+    def __init__(
+        self,
+        in_channels: Union[int, Tuple[int, int]],
+        out_channels: int,
+        edge_dim: int = 0,
+        heads: int = 6,
+        dropout: float = 0.3,
+        gate_hidden_dim: Optional[int] = None,
+        **kwargs,
+    ):
+        super().__init__()
+
+        self.out_channels = out_channels
+        self.heads = heads
+        self.output_dim = heads * out_channels
+        self.dropout = dropout
+
+        self.gat_conv = TemporalGATConv(
+            in_channels=in_channels,
+            out_channels=out_channels,
+            edge_dim=edge_dim,
+            heads=heads,
+            dropout=dropout,
+            concat=True,
+            **kwargs,
+        )
+
+        self.sage_conv = EdgeAwareSAGEConv(
+            in_channels=in_channels,
+            out_channels=self.output_dim,
+            edge_dim=edge_dim,
+            normalize=True,
+            dropout=dropout,
+        )
+
+        if gate_hidden_dim is None:
+            gate_hidden_dim = max(self.output_dim // 2, 32)
+
+        self.gate_mlp = nn.Sequential(
+            nn.Linear(self.output_dim * 3, gate_hidden_dim),
+            nn.ReLU(),
+            nn.Dropout(dropout),
+            nn.Linear(gate_hidden_dim, self.output_dim),
+        )
+
+        self.last_gate: Optional[torch.Tensor] = None
+        self.last_disagreement: Optional[torch.Tensor] = None
+
+    def forward(
+        self,
+        x: Union[torch.Tensor, Tuple[torch.Tensor, torch.Tensor]],
+        edge_index: torch.Tensor,
+        edge_attr: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
+        h_gat = self.gat_conv(x, edge_index, edge_attr)
+        h_sage = self.sage_conv(x, edge_index, edge_attr)
+
+        diff = torch.abs(h_gat - h_sage)
+        gate_input = torch.cat([h_gat, h_sage, diff], dim=-1)
+        gate = torch.sigmoid(self.gate_mlp(gate_input))
+
+        out = gate * h_gat + (1.0 - gate) * h_sage
+
+        self.last_gate = gate.detach()
+        self.last_disagreement = diff.detach()
+
+        return out
+
+    def get_gate_stats(self) -> Dict[str, float]:
+        if self.last_gate is None:
+            return {}
+
+        gate = self.last_gate.float()
+        stats = {
+            "gate_mean": gate.mean().item(),
+            "gate_std": gate.std(unbiased=False).item(),
+            "gate_min": gate.min().item(),
+            "gate_max": gate.max().item(),
+            "sage_mean": (1.0 - gate).mean().item(),
+        }
+
+        if self.last_disagreement is not None:
+            stats["disagreement_mean"] = self.last_disagreement.float().mean().item()
+            stats["disagreement_std"] = self.last_disagreement.float().std(unbiased=False).item()
+
+        return stats
+
+
+# ============================================================
+# 4. TemporalLSTM (explicit temporal spine)
 # ============================================================
 
 class TemporalLSTM(nn.Module):
@@ -251,11 +460,11 @@ class TemporalLSTM(nn.Module):
         self.output_dim = hidden_dim * 2 if bidirectional else hidden_dim
 
     def forward(
-    self,
-    x: torch.Tensor,
-    batch: torch.Tensor,
-    timestamps: Optional[torch.Tensor] = None,
-) -> torch.Tensor:
+        self,
+        x: torch.Tensor,
+        batch: torch.Tensor,
+        timestamps: Optional[torch.Tensor] = None,
+    ) -> torch.Tensor:
         if x.size(0) == 0:
             return x.new_zeros((0, self.output_dim))
 
@@ -305,7 +514,7 @@ class TemporalLSTM(nn.Module):
             enforce_sorted=False,
         )
 
-            # ── FIX: force contiguous on packed data before LSTM ──
+        # FIX: force contiguous on packed data before LSTM
         packed = torch.nn.utils.rnn.PackedSequence(
             packed.data.contiguous(),
             packed.batch_sizes,
@@ -313,7 +522,6 @@ class TemporalLSTM(nn.Module):
             packed.unsorted_indices,
         )
 
-        # packed_out, _ = self.lstm(packed)
         self.lstm.flatten_parameters()
         with torch.backends.cudnn.flags(enabled=False):
             packed_out, _ = self.lstm(packed)
@@ -340,7 +548,7 @@ class TemporalLSTM(nn.Module):
 
 
 # ============================================================
-# 4. TemporalAttentionPooling
+# 5. TemporalAttentionPooling
 # ============================================================
 
 class TemporalAttentionPooling(nn.Module):
@@ -401,7 +609,7 @@ class TemporalAttentionPooling(nn.Module):
 
 
 # ============================================================
-# 5. HeteroTemporalConv
+# 6. HeteroTemporalConv
 # ============================================================
 
 class HeteroTemporalConv(nn.Module):
@@ -436,6 +644,7 @@ class HeteroTemporalConv(nn.Module):
         self.edge_dim_dict = dict(edge_dim_dict) if edge_dim_dict is not None else {}
         self.dropout = dropout
         self.aggr = aggr.lower()
+        self._last_hybrid_gate_stats: Dict[str, Dict[str, float]] = {}
 
         if self.aggr not in {"sum", "mean", "max"}:
             raise ValueError(f"Unsupported aggregation mode: {aggr}")
@@ -477,6 +686,22 @@ class HeteroTemporalConv(nn.Module):
                     dropout=dropout,
                     concat=True,
                 )
+            elif self.layer_type == "sage":
+                conv = EdgeAwareSAGEConv(
+                    in_channels=in_ch,
+                    out_channels=out_ch * num_heads,
+                    edge_dim=edge_dim,
+                    normalize=True,
+                    dropout=dropout,
+                )
+            elif self.layer_type in {"hybrid_gat_sage", "hybrid"}:
+                conv = HybridGATSAGEConv(
+                    in_channels=in_ch,
+                    out_channels=out_ch,
+                    edge_dim=edge_dim,
+                    heads=num_heads,
+                    dropout=dropout,
+                )
             else:
                 raise ValueError(f"Unknown layer_type: {layer_type}")
 
@@ -486,6 +711,15 @@ class HeteroTemporalConv(nn.Module):
 
     def get_registered_edge_types(self) -> List[EdgeType]:
         return list(self.edge_types)
+
+    def get_hybrid_gate_stats(self) -> Dict[str, Dict[str, float]]:
+        """
+        Return latest per-relation hybrid gate statistics.
+
+        Empty unless layer_type is hybrid_gat_sage/hybrid and a forward pass has
+        already been executed.
+        """
+        return dict(self._last_hybrid_gate_stats)
 
     def get_active_edge_types(
         self,
@@ -526,7 +760,7 @@ class HeteroTemporalConv(nn.Module):
             edge_attr = edge_attr_dict[edge_type]
             if edge_attr.dim() == 1:
                 edge_attr = edge_attr.unsqueeze(-1)
-            return edge_attr
+            return edge_attr.to(device=device, dtype=dtype)
 
         if expected_dim > 0:
             E = edge_index.size(1)
@@ -548,6 +782,7 @@ class HeteroTemporalConv(nn.Module):
         """
         out_dict: Dict[str, torch.Tensor] = {}
         contrib_count: Dict[str, int] = {}
+        self._last_hybrid_gate_stats = {}
 
         for edge_type in self.edge_types:
             if edge_type not in edge_index_dict:
@@ -590,6 +825,11 @@ class HeteroTemporalConv(nn.Module):
                 x_input = (x_src, x_dst)
 
             out = conv(x_input, edge_index, edge_attr)
+
+            if hasattr(conv, "get_gate_stats"):
+                stats = conv.get_gate_stats()
+                if stats:
+                    self._last_hybrid_gate_stats[edge_type_to_key(edge_type)] = stats
 
             if dst not in out_dict:
                 out_dict[dst] = out
