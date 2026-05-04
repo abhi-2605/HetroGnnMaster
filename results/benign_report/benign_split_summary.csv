@@ -1,0 +1,22 @@
+split,benign_op_type,description,count,percentage
+train,network_service,Background network service or daemon,426,30.65
+train,file_operation_app,"Document editor, file manager, archiver, or file-heavy tool",400,28.78
+train,system_tool_or_installer,"Installer, updater, or system-management utility",303,21.8
+train,system_configuration,Registry or system configuration utility,131,9.42
+train,web_or_cloud_app,"Browser, sync client, or web-connected desktop app",114,8.2
+train,system_monitor_or_utility,"Monitoring, diagnostics, or information utility",10,0.72
+train,simple_utility,Simple utility with weak or mixed signals,6,0.43
+val,network_service,Background network service or daemon,92,30.87
+val,file_operation_app,"Document editor, file manager, archiver, or file-heavy tool",80,26.85
+val,system_tool_or_installer,"Installer, updater, or system-management utility",60,20.13
+val,system_configuration,Registry or system configuration utility,35,11.74
+val,web_or_cloud_app,"Browser, sync client, or web-connected desktop app",26,8.72
+val,system_monitor_or_utility,"Monitoring, diagnostics, or information utility",3,1.01
+val,simple_utility,Simple utility with weak or mixed signals,2,0.67
+test,network_service,Background network service or daemon,99,33.11
+test,file_operation_app,"Document editor, file manager, archiver, or file-heavy tool",81,27.09
+test,system_tool_or_installer,"Installer, updater, or system-management utility",64,21.4
+test,system_configuration,Registry or system configuration utility,29,9.7
+test,web_or_cloud_app,"Browser, sync client, or web-connected desktop app",22,7.36
+test,simple_utility,Simple utility with weak or mixed signals,3,1.0
+test,system_monitor_or_utility,"Monitoring, diagnostics, or information utility",1,0.33

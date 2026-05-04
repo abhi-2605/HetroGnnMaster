@@ -1,0 +1,152 @@
+{
+  "split": "test",
+  "n_clean": 400,
+  "n_semantic_sub": 400,
+  "n_random_sub": 400,
+  "clean_metrics": {
+    "accuracy": 0.915,
+    "macro_f1": 0.7368724707201082,
+    "weighted_f1": 0.9238389832603912,
+    "per_class_precision": [
+      0.24,
+      0.9887640449438202,
+      0.951048951048951
+    ],
+    "per_class_recall": [
+      0.42857142857142855,
+      0.9361702127659575,
+      0.9315068493150684
+    ],
+    "per_class_f1": [
+      0.3076923076923077,
+      0.9617486338797814,
+      0.9411764705882353
+    ],
+    "per_class_support": [
+      14,
+      94,
+      292
+    ],
+    "confusion_matrix": [
+      [
+        6,
+        0,
+        8
+      ],
+      [
+        0,
+        88,
+        6
+      ],
+      [
+        19,
+        1,
+        272
+      ]
+    ]
+  },
+  "semantic_substitution_metrics": {
+    "accuracy": 0.91,
+    "macro_f1": 0.7331753442746652,
+    "weighted_f1": 0.9177932229767969,
+    "per_class_precision": [
+      0.25,
+      0.9565217391304348,
+      0.9507042253521126
+    ],
+    "per_class_recall": [
+      0.42857142857142855,
+      0.9361702127659575,
+      0.9246575342465754
+    ],
+    "per_class_f1": [
+      0.3157894736842105,
+      0.946236559139785,
+      0.9375
+    ],
+    "per_class_support": [
+      14,
+      94,
+      292
+    ],
+    "confusion_matrix": [
+      [
+        6,
+        0,
+        8
+      ],
+      [
+        0,
+        88,
+        6
+      ],
+      [
+        18,
+        4,
+        270
+      ]
+    ]
+  },
+  "random_substitution_metrics": {
+    "accuracy": 0.91,
+    "macro_f1": 0.729356101339024,
+    "weighted_f1": 0.9206334695443626,
+    "per_class_precision": [
+      0.2222222222222222,
+      0.9886363636363636,
+      0.9508771929824561
+    ],
+    "per_class_recall": [
+      0.42857142857142855,
+      0.925531914893617,
+      0.928082191780822
+    ],
+    "per_class_f1": [
+      0.2926829268292683,
+      0.9560439560439561,
+      0.9393414211438474
+    ],
+    "per_class_support": [
+      14,
+      94,
+      292
+    ],
+    "confusion_matrix": [
+      [
+        6,
+        0,
+        8
+      ],
+      [
+        1,
+        87,
+        6
+      ],
+      [
+        20,
+        1,
+        271
+      ]
+    ]
+  },
+  "semantic_substitution_comparison": {
+    "prediction_flip_rate": 0.0175,
+    "threat_to_benign_flip_rate": 0.0075,
+    "mean_realized_sub_fraction": 0.9925,
+    "mean_confidence_drop_on_clean_pred": 0.0053710084815975275
+  },
+  "random_substitution_comparison": {
+    "prediction_flip_rate": 0.055,
+    "threat_to_benign_flip_rate": 0.0025,
+    "mean_realized_sub_fraction": 0.9925,
+    "mean_confidence_drop_on_clean_pred": 0.035107941234018655
+  },
+  "settings": {
+    "substitute_fraction": 1.0,
+    "keep_top_k": 0,
+    "similarity_top_k": 5,
+    "semantic_dim": 768,
+    "apply_train_malware_subsample": true,
+    "train_malware_keep_frac": 0.8
+  }
+}

@@ -8,17 +8,17 @@
   "random_state": 42,
   "malware_keep_frac_train": 0.8,
   "apply_malware_subsample_to_train": true,
-  "train_samples": 5048,
-  "custom_eval_samples": 474,
+  "train_samples": 5047,
+  "custom_eval_samples": 475,
   "custom_eval_label_distribution": {
     "ransomware": 75,
     "benign": 200,
-    "other_malware": 199
+    "other_malware": 200
   },
   "custom_eval_origin_distribution": {
     "old_test": 169,
     "old_val": 161,
-    "new_unseen": 144
+    "new_unseen": 145
   },
   "xgboost_available": true
 }

@@ -254,150 +254,151 @@ aa0858e3b584d4d9fcf20fcb030a21aa,old_val,/Volumes/SSD/TGNN/ransomware_tgnn/cache
 4b594c89430b7fcf6742cf3d664f0f59,old_test,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4b594c89430b7fcf6742cf3d664f0f59.pkl,2,Other Malware,2,Other Malware,1,Random Forest
 170b90a483c3dc67779ed777ee9aba03,old_val,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/170b90a483c3dc67779ed777ee9aba03.pkl,2,Other Malware,2,Other Malware,1,Random Forest
 6bd2be69a7afe4aab06aad752e344dbc,old_test,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/6bd2be69a7afe4aab06aad752e344dbc.pkl,2,Other Malware,2,Other Malware,1,Random Forest
-mal_reports__000a3ea381d7d70be8b6fe1ee51dca22,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000a3ea381d7d70be8b6fe1ee51dca22.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__000adc56f2d8cd1f7b8f6b54912000e9,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000adc56f2d8cd1f7b8f6b54912000e9.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__000b28e7a5905b5bf3b80c6c60a5f828,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000b28e7a5905b5bf3b80c6c60a5f828.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__000c7ff25b87232407b0f3afdc1daf43,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000c7ff25b87232407b0f3afdc1daf43.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__000cbb278e4f0194e7c693160d7975bb,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000cbb278e4f0194e7c693160d7975bb.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__000ed458b787e6841c103a694d11962c,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000ed458b787e6841c103a694d11962c.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__000f6d35ea5397e40ffaa7931a9ae1d3,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__000f6d35ea5397e40ffaa7931a9ae1d3.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__001a255c29530c33702b244b5ade0b76,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__001a255c29530c33702b244b5ade0b76.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__001cfa63ad79aaf3e4a2b85a2e7f227f,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__001cfa63ad79aaf3e4a2b85a2e7f227f.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__001d106b8f74e8a92d8d19b39fb4afea,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__001d106b8f74e8a92d8d19b39fb4afea.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__001eaf022daacf081db1a0cfb72af1b0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__001eaf022daacf081db1a0cfb72af1b0.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__001ed0ac1fbb06d474213b1d37d60021,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__001ed0ac1fbb06d474213b1d37d60021.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00a03d37ba2cbcd9a532ff01d3d5e070,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a03d37ba2cbcd9a532ff01d3d5e070.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00a0f5fe1ba0102ed789b2aa85c3e316,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a0f5fe1ba0102ed789b2aa85c3e316.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00a38bce6818521bed3c78b14ddef25f,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a38bce6818521bed3c78b14ddef25f.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00a473640f8d7286e315317b03cc55ef,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a473640f8d7286e315317b03cc55ef.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00a4a67dc6a4f175affa93d45340c119,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a4a67dc6a4f175affa93d45340c119.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00a4b6a503d5cfd408c97091c914fd74,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a4b6a503d5cfd408c97091c914fd74.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00a4dab57de640e7846fdc35b2e4675a,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a4dab57de640e7846fdc35b2e4675a.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00a53241bf9c9425c6df8da44a5ca4f4,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a53241bf9c9425c6df8da44a5ca4f4.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00a80192730aaf79a2c444d66b6c5ae6,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a80192730aaf79a2c444d66b6c5ae6.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00a85c1a86a9553d6ff98195d15bff15,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00a85c1a86a9553d6ff98195d15bff15.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00aaa82e283450b7940acf8a5a675666,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00aaa82e283450b7940acf8a5a675666.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00aae6c41996b3d1631f605ad783f1f8,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00aae6c41996b3d1631f605ad783f1f8.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00b26c8964bf6c20183d13867e6dbcb0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00b26c8964bf6c20183d13867e6dbcb0.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00b2fa6a50ad6652627b3e9336b962c2,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00b2fa6a50ad6652627b3e9336b962c2.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00b35ea8173b4f5116e599d9f80e3611,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00b35ea8173b4f5116e599d9f80e3611.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00b3975f09b5c3fa3ff7a62db0033850,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00b3975f09b5c3fa3ff7a62db0033850.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00bb04604996c97b7b4f8b2c767c0f40,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00bb04604996c97b7b4f8b2c767c0f40.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00be655ad247b27495443d97ffc181d9,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00be655ad247b27495443d97ffc181d9.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00be6e324bb3f8e5266ad1ce10b6a859,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00be6e324bb3f8e5266ad1ce10b6a859.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00c03e47023be97861f53b0a05d1c0c8,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00c03e47023be97861f53b0a05d1c0c8.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00c1cf2ebdfe9dba60fe2b4ce609bf7a,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00c1cf2ebdfe9dba60fe2b4ce609bf7a.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00c3a93bad6ae2d3b082aabe3098b904,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00c3a93bad6ae2d3b082aabe3098b904.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00c4fbab0e10b68a77bb7e9289a0d54b,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00c4fbab0e10b68a77bb7e9289a0d54b.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00c60e1945d9584792f3691b82378bd0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00c60e1945d9584792f3691b82378bd0.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00cc33352ae8e526f7533119fb823cb1,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00cc33352ae8e526f7533119fb823cb1.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00ce1f799aa5dc2f43c366dc60dc6098,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00ce1f799aa5dc2f43c366dc60dc6098.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00ce45f73fa3bdbb862357983ce8989d,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00ce45f73fa3bdbb862357983ce8989d.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00d058aaf79abc4cd49524b4394818dd,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d058aaf79abc4cd49524b4394818dd.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00d3bedc5c6cf3614990a5a21592cebd,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d3bedc5c6cf3614990a5a21592cebd.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00d47e7738c972700d66c80d973ca1ba,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d47e7738c972700d66c80d973ca1ba.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00d5e8c917ee36e5a2544bbd4b8681d1,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d5e8c917ee36e5a2544bbd4b8681d1.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00d6ba82eed3ca0af8cf3a4342014bb1,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d6ba82eed3ca0af8cf3a4342014bb1.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00d7bcafe9e33ede2af6cf91cc33e176,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d7bcafe9e33ede2af6cf91cc33e176.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00d9d5a0319cddef48add9257d4721df,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00d9d5a0319cddef48add9257d4721df.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00db0e7fe43d5b235d6fd37937093d7c,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00db0e7fe43d5b235d6fd37937093d7c.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00e076e93aebd752f96f7704dd321c7f,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00e076e93aebd752f96f7704dd321c7f.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00e236527d4294fc5a75eb1cbc2eb141,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00e236527d4294fc5a75eb1cbc2eb141.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00e65efbe9d442aca345431bea267fa9,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00e65efbe9d442aca345431bea267fa9.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00e973ec1f36476287298965276d5989,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00e973ec1f36476287298965276d5989.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00ea535ecc3b6f358b73add6dfade641,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00ea535ecc3b6f358b73add6dfade641.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00ebc15103226de598bda6cd03b001d5,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00ebc15103226de598bda6cd03b001d5.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00ed79d8ffb56a853365fb673ece1680,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00ed79d8ffb56a853365fb673ece1680.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00f14956960aad9a31d4147db524c65c,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f14956960aad9a31d4147db524c65c.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00f1a2c951baaeb34418c67607b70f50,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f1a2c951baaeb34418c67607b70f50.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00f360494544f2243a5bdde710af3178,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f360494544f2243a5bdde710af3178.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00f5b7dd67cbb43dc1f03caaf1b702f0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f5b7dd67cbb43dc1f03caaf1b702f0.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00f5da8b1b4539508a418bda650f68b0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f5da8b1b4539508a418bda650f68b0.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00f6921f2a1ef6abcf691fb7e15bd997,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f6921f2a1ef6abcf691fb7e15bd997.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00f73b2fae33e9becc6f700194704774,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f73b2fae33e9becc6f700194704774.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00f8bbe855a32c75f4c0aaf65ff1b950,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f8bbe855a32c75f4c0aaf65ff1b950.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00f91c3f4a20d1c513aca8cdd3e16680,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00f91c3f4a20d1c513aca8cdd3e16680.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00faac7951328980fd09a2d46ca42cc4,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00faac7951328980fd09a2d46ca42cc4.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00fbcbd669f72cd2dc71ec3a4e971f14,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00fbcbd669f72cd2dc71ec3a4e971f14.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00fbeabd68a647ef625408848c39946c,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00fbeabd68a647ef625408848c39946c.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__00ffefc428396be826b239e04e5b5f1c,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__00ffefc428396be826b239e04e5b5f1c.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__0158ac8036bbd59df8de79133b0ecc58,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0158ac8036bbd59df8de79133b0ecc58.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01a1f3c3b1b11c7538d3bfeb2e97e5c0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a1f3c3b1b11c7538d3bfeb2e97e5c0.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01a33dfb20a3dafb2dfc0d30b8b94e10,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a33dfb20a3dafb2dfc0d30b8b94e10.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01a3f144a15edbbd08fc606ecbaca7da,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a3f144a15edbbd08fc606ecbaca7da.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01a43fa78b7b79fceeee8dfa7dda0e18,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a43fa78b7b79fceeee8dfa7dda0e18.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01a53acf19d8e1341b3ea97189fbbe00,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a53acf19d8e1341b3ea97189fbbe00.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01a8c4b8243edead1ff6de0a9d9f01d0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a8c4b8243edead1ff6de0a9d9f01d0.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01a8d99cc288fdff1aca1c4f00704321,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a8d99cc288fdff1aca1c4f00704321.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01a8fb9e746dd2d600ac3c1c26b7e4cb,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a8fb9e746dd2d600ac3c1c26b7e4cb.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01a98142b184b284e6540f933de8cc31,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a98142b184b284e6540f933de8cc31.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01a9d166e6f35c7fb1c59c5c6477f4c7,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01a9d166e6f35c7fb1c59c5c6477f4c7.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01ab6a23f7543b96544db55873079288,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01ab6a23f7543b96544db55873079288.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01aba858bc7c376bb3a549d6162ed256,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01aba858bc7c376bb3a549d6162ed256.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01ad91ef61505499209230963d195c47,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01ad91ef61505499209230963d195c47.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01aede06342d40843fbf99a1f2fb4d64,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01aede06342d40843fbf99a1f2fb4d64.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01b1859ddf8ba3549cd31f12d60ab9fc,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b1859ddf8ba3549cd31f12d60ab9fc.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01b1a6079054d5d82896773e2118ae5d,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b1a6079054d5d82896773e2118ae5d.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01b258d8142ed08a541a916386872be3,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b258d8142ed08a541a916386872be3.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01b2a2958e367d56dfd513a110e63aef,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b2a2958e367d56dfd513a110e63aef.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01b7204632e00e67d3691a35db06f6e0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b7204632e00e67d3691a35db06f6e0.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01b83a7d3052810627ac2a76e02818b9,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b83a7d3052810627ac2a76e02818b9.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01b85652db934fb4187921af8f7d0e90,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b85652db934fb4187921af8f7d0e90.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01b8f61129915211a90f950fa2053cb3,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b8f61129915211a90f950fa2053cb3.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01b925f630d42983d5942885aa4dfd90,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01b925f630d42983d5942885aa4dfd90.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01bbb5eee02be5c95726356c9e13d6d7,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01bbb5eee02be5c95726356c9e13d6d7.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01bcceb0ef77a9aaa1e2f044fbe94156,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01bcceb0ef77a9aaa1e2f044fbe94156.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01bd02b422cdc7b9b4dc5036d3ed3550,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01bd02b422cdc7b9b4dc5036d3ed3550.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01be967e73679d75ba8cdc67d6dcce00,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01be967e73679d75ba8cdc67d6dcce00.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01c0577725a79b9a300831ead296cec9,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01c0577725a79b9a300831ead296cec9.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01c0e709db088465f1700c41a5037e93,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01c0e709db088465f1700c41a5037e93.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01c75638b91bd9a36b996f5d3d80c7b8,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01c75638b91bd9a36b996f5d3d80c7b8.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01c7bf20e1560d95c00c2458e3925560,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01c7bf20e1560d95c00c2458e3925560.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01c900185a4004e7ec7c4e5c765226a0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01c900185a4004e7ec7c4e5c765226a0.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01ca4239e92121046252f528aa46d8e0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01ca4239e92121046252f528aa46d8e0.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01cbdb10ab96d7de94ac1db156ad0572,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01cbdb10ab96d7de94ac1db156ad0572.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01cc10f794a3bf364f583a1b7ab5a9c4,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01cc10f794a3bf364f583a1b7ab5a9c4.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01cc1baddec97a144acc941c52d3b9c8,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01cc1baddec97a144acc941c52d3b9c8.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01cc9354adbe2fe194eba691d7a225a9,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01cc9354adbe2fe194eba691d7a225a9.pkl,2,Other Malware,2,Other Malware,1,Random Forest
-mal_reports__01d2d1d522cd829ce71268764fe09b00,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01d2d1d522cd829ce71268764fe09b00.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01d34bb243ca15fc733964eb0e988d32,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01d34bb243ca15fc733964eb0e988d32.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01d51bbed8e7741e349dfc6019dab7b0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01d51bbed8e7741e349dfc6019dab7b0.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01d7e427369568446d28139170ee4022,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01d7e427369568446d28139170ee4022.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01d8ae207de44f7b1605bd255afb4744,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01d8ae207de44f7b1605bd255afb4744.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01dbac2cd5a08d4f2baf81f1c6da5e30,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01dbac2cd5a08d4f2baf81f1c6da5e30.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01dc216274bd9647a6fc12644d28bf39,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01dc216274bd9647a6fc12644d28bf39.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01dcc83d97fff22001b438c9c855cf2f,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01dcc83d97fff22001b438c9c855cf2f.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01de6b549881d64c54eabc0c6ad656a9,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01de6b549881d64c54eabc0c6ad656a9.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01e190f66e6075da60f81c07b4966e1b,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01e190f66e6075da60f81c07b4966e1b.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01e3756d1652a2d58bd170061aab9e92,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01e3756d1652a2d58bd170061aab9e92.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01e43e1719695e3b6d8911dc77de8460,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01e43e1719695e3b6d8911dc77de8460.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01e567e3325614213e9703e7d535c33a,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01e567e3325614213e9703e7d535c33a.pkl,2,Other Malware,2,Other Malware,1,Random Forest
-mal_reports__01e6bcad0754fdcd1c5903505a6b08ca,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01e6bcad0754fdcd1c5903505a6b08ca.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01e6ffd7879fe3df912da5f0dc217b6c,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01e6ffd7879fe3df912da5f0dc217b6c.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01eb2ede541f93859fd7af7f3ef5ac9a,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01eb2ede541f93859fd7af7f3ef5ac9a.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01ec8d7a957a6431ac98221b837ddc33,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01ec8d7a957a6431ac98221b837ddc33.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01ef8d188d5adfd338cae89b8e7afd40,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01ef8d188d5adfd338cae89b8e7afd40.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01f192b86d26813315a79f27be115bf3,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f192b86d26813315a79f27be115bf3.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01f317bb260b5a2781d19d47f41acda2,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f317bb260b5a2781d19d47f41acda2.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01f482620e6b1fad2de394116ad9da38,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f482620e6b1fad2de394116ad9da38.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01f52285f73e2da5e7a4869ff7a818ed,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f52285f73e2da5e7a4869ff7a818ed.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01f7371635f41f66ab259253b36488ca,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f7371635f41f66ab259253b36488ca.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01f76d92b36d98921a4321dc2d3654f5,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f76d92b36d98921a4321dc2d3654f5.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01f88257f06cc2858b384899e8dd809a,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f88257f06cc2858b384899e8dd809a.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01f911629156ce4bfcde07f7354b3e27,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01f911629156ce4bfcde07f7354b3e27.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01faa688773fab3ca20efc0bc214fbef,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01faa688773fab3ca20efc0bc214fbef.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01fb68b27ecb4ba9d255a2a9ce5403ef,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01fb68b27ecb4ba9d255a2a9ce5403ef.pkl,2,Other Malware,2,Other Malware,1,Random Forest
-mal_reports__01fbaf2f5afefc6632d65c5e02e99ebe,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01fbaf2f5afefc6632d65c5e02e99ebe.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01fc51a6e9a20f654d38eef554b59309,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01fc51a6e9a20f654d38eef554b59309.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01fcd050903f478a12be1ef937ff4b60,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01fcd050903f478a12be1ef937ff4b60.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01fda937a97602470b7b4585eb94a09a,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01fda937a97602470b7b4585eb94a09a.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__01fdbedebf7e07758be8713502ecdc1e,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__01fdbedebf7e07758be8713502ecdc1e.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__0293691cc41627c4f0a118b708a1b470,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0293691cc41627c4f0a118b708a1b470.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__0a03b1eafeb4c4a6f6b04f507562b1fb,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0a03b1eafeb4c4a6f6b04f507562b1fb.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__0a03b918736591eada58029dd071cc80,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0a03b918736591eada58029dd071cc80.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__0a050b8cfbe63674158e80376f1b236f,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0a050b8cfbe63674158e80376f1b236f.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__0a06fbd7930744b8a6b24c92007913ce,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0a06fbd7930744b8a6b24c92007913ce.pkl,2,Other Malware,1,Benign,0,Random Forest
-mal_reports__0a074c24e298f97a255cdf976a304ee7,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/mal_reports__0a074c24e298f97a255cdf976a304ee7.pkl,2,Other Malware,1,Benign,0,Random Forest
+009760025c4c11393b0db78152725564,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/009760025c4c11393b0db78152725564.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+02758b67b14376513986057a4220046f,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/02758b67b14376513986057a4220046f.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+033af330434151cced125c4ad9e544cc,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/033af330434151cced125c4ad9e544cc.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+03e9cb59a84fac1ca2391089f84168d3,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/03e9cb59a84fac1ca2391089f84168d3.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+041ab24a04e51c196d749c42345cc581,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/041ab24a04e51c196d749c42345cc581.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+04e8de258311888762742bbe5e736fb0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/04e8de258311888762742bbe5e736fb0.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+0709ccc1777135af2274071f3fed46d7,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/0709ccc1777135af2274071f3fed46d7.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+0961b751fd2a318ad404873423502c59,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/0961b751fd2a318ad404873423502c59.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+0b21e2096c16628022453b25ef21d4fb,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/0b21e2096c16628022453b25ef21d4fb.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+0c91e64832751d65c904f603d2c58560,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/0c91e64832751d65c904f603d2c58560.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+0d56f99288afe87d87d87cb25a0635f5,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/0d56f99288afe87d87d87cb25a0635f5.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+0edc42611fb4661272cf5eab4b754bf6,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/0edc42611fb4661272cf5eab4b754bf6.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+0f20631630cb0c2a9b302ff40bc5dcc3,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/0f20631630cb0c2a9b302ff40bc5dcc3.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+0f29225cf7fca87f9f8150169aec35c2,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/0f29225cf7fca87f9f8150169aec35c2.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+0f34e76131788ea7fae2b76c61983b5b,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/0f34e76131788ea7fae2b76c61983b5b.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+0fe81663d0d0889a39cfe93f54c83385,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/0fe81663d0d0889a39cfe93f54c83385.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+1289bcba2dedbc44dbf445a65b383a5d,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/1289bcba2dedbc44dbf445a65b383a5d.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+133fa5b626129d86cdbba5b121666bf9,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/133fa5b626129d86cdbba5b121666bf9.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+13f9745dc67493fb043f373e9c08e115,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/13f9745dc67493fb043f373e9c08e115.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+14165c40f9c3d473215634cd5d3c7cc4,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/14165c40f9c3d473215634cd5d3c7cc4.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+174951a43a99e4ae983dc1dfeb78f763,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/174951a43a99e4ae983dc1dfeb78f763.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+17b2e79b37c0412dd2b1ce53d8013857,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/17b2e79b37c0412dd2b1ce53d8013857.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+180e33ae16a876260f7e18b727a40503,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/180e33ae16a876260f7e18b727a40503.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+1a06cd05ebb5e3b0c2e62ed4bd9e495a,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/1a06cd05ebb5e3b0c2e62ed4bd9e495a.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+1a743472d3180dbc04f419dd53525794,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/1a743472d3180dbc04f419dd53525794.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+1b460db0b20ccca79054364f7f8507b5,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/1b460db0b20ccca79054364f7f8507b5.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+1b60c9216b7db3cbcb9464433c126d95,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/1b60c9216b7db3cbcb9464433c126d95.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+1c1ae9551995d8a3e275f838e9626fb1,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/1c1ae9551995d8a3e275f838e9626fb1.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+1cd797fda4bd24e7f1a1c17fbab93bee,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/1cd797fda4bd24e7f1a1c17fbab93bee.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+1d90cd0ccb735d85804a448fad48638c,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/1d90cd0ccb735d85804a448fad48638c.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+1e10522780554ee2d2828859a83c2128,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/1e10522780554ee2d2828859a83c2128.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+213ad2435693dd74063f0dadf45c0de1,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/213ad2435693dd74063f0dadf45c0de1.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+2146b3f99d2c356ca952d82536b45a10,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/2146b3f99d2c356ca952d82536b45a10.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+21b372c03e887c6744c5ed908a4bca94,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/21b372c03e887c6744c5ed908a4bca94.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+232013423d5d80cc215c20fd5c2c3ea5,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/232013423d5d80cc215c20fd5c2c3ea5.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+242a98941c8b43b4cc819d2855eb280c,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/242a98941c8b43b4cc819d2855eb280c.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+28be38e00d4606ba93f8f9a46b98870e,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/28be38e00d4606ba93f8f9a46b98870e.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+2945ebe3fddde4fb7d4736b6f13159b5,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/2945ebe3fddde4fb7d4736b6f13159b5.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+2d132a2d2ae50c030ec1a52f3a635362,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/2d132a2d2ae50c030ec1a52f3a635362.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+2d26ef80a6f757f2c68f4e9743330bcb,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/2d26ef80a6f757f2c68f4e9743330bcb.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+2d7485331ff8eb27fafaa33fde14cbc1,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/2d7485331ff8eb27fafaa33fde14cbc1.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+2e9c21d5fbfc60fea604c5c8a8b54fae,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/2e9c21d5fbfc60fea604c5c8a8b54fae.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+30a9ea42f5eb99a049890d950570858f,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/30a9ea42f5eb99a049890d950570858f.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+30e3cb012ea74c9d7440ef8f13a00283,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/30e3cb012ea74c9d7440ef8f13a00283.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+3170cad09bed94db2474b7b909313c40,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/3170cad09bed94db2474b7b909313c40.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+34e795e82d8a1a5f4e7adf31c30f05d3,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/34e795e82d8a1a5f4e7adf31c30f05d3.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+354b01e56fcab1f8f738b812f56d81dd,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/354b01e56fcab1f8f738b812f56d81dd.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+3813ef857fb08afb1b9d117ebd9db6eb,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/3813ef857fb08afb1b9d117ebd9db6eb.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+3aad95cf0d3eb42b8e4d13db9b541098,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/3aad95cf0d3eb42b8e4d13db9b541098.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+3b6a8649fbd89a180c0ed82bc516e462,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/3b6a8649fbd89a180c0ed82bc516e462.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+3bc159056cd9d91f07f19959564de94a,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/3bc159056cd9d91f07f19959564de94a.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+3c64d57d4df142b23a2eaeb9b7ddcfa2,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/3c64d57d4df142b23a2eaeb9b7ddcfa2.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+3dbe16ea7a72882785d8a7bb2b01059e,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/3dbe16ea7a72882785d8a7bb2b01059e.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+3dd7937c4ed725d7137311f4e053d23f,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/3dd7937c4ed725d7137311f4e053d23f.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+3e71fc86fe6e2a6bf19718493906524e,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/3e71fc86fe6e2a6bf19718493906524e.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+3e794ef3c649f92a87aeb10f24d8d3d4,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/3e794ef3c649f92a87aeb10f24d8d3d4.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+40083d7af3f4edfec284384b9036a112,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/40083d7af3f4edfec284384b9036a112.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+4119353cd98083146ff2346a71d1e5c4,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/4119353cd98083146ff2346a71d1e5c4.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+413acbaa38aa2ca9d9a02f8430543168,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/413acbaa38aa2ca9d9a02f8430543168.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+43734ece16b202b02e3a79c42b8c91df,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/43734ece16b202b02e3a79c42b8c91df.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+43bd5b45e6df150410a70fbed737cb80,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/43bd5b45e6df150410a70fbed737cb80.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+462336a71d8459da5425a9f084a73f2f,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/462336a71d8459da5425a9f084a73f2f.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+46bf2297fc4c4cbaa66ef1b0bc0aea60,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/46bf2297fc4c4cbaa66ef1b0bc0aea60.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+483c550de47001321953128d2278e95a,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/483c550de47001321953128d2278e95a.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+487430e1943de4bbf7c083c1cf2af57c,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/487430e1943de4bbf7c083c1cf2af57c.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+4934ba3dea82b269f38f43ffc709fa2e,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/4934ba3dea82b269f38f43ffc709fa2e.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+49751ff3b364f3ab8a723eada5df07ac,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/49751ff3b364f3ab8a723eada5df07ac.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+4ba35883a7856b91a4a0be66dbb65327,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/4ba35883a7856b91a4a0be66dbb65327.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+4cbc50b0f7d5bd24c6f9ab3139af9e39,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/4cbc50b0f7d5bd24c6f9ab3139af9e39.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+4cd9671e52b499f41d55b8813abde613,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/4cd9671e52b499f41d55b8813abde613.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+4d31dea4812735e6596676c51cc22095,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/4d31dea4812735e6596676c51cc22095.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+4d8f0978edfab6b4fe9a1eeea1d3fb4d,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/4d8f0978edfab6b4fe9a1eeea1d3fb4d.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+4fdb4962401aa2ed53a3cfe782793034,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/4fdb4962401aa2ed53a3cfe782793034.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+5019cd8345cef5e2b568ad3572784186,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/5019cd8345cef5e2b568ad3572784186.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+50fbfd3eab0e1807c69b3d9242edfbe6,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/50fbfd3eab0e1807c69b3d9242edfbe6.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+5107caa520f6ded226436ea041b38fa9,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/5107caa520f6ded226436ea041b38fa9.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+51bdf8f824aa7b8c7fa8d7ffb3663a55,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/51bdf8f824aa7b8c7fa8d7ffb3663a55.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+5218f44b88daa4e7c1bb203230af1e75,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/5218f44b88daa4e7c1bb203230af1e75.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+53fd1e7705a29b13d54c82a2537b72e6,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/53fd1e7705a29b13d54c82a2537b72e6.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+556ed10e34330075662ca5676c0065de,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/556ed10e34330075662ca5676c0065de.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+5843d930ede2b57f0643484631669c94,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/5843d930ede2b57f0643484631669c94.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+58caa12316efe3cdbd99911a0118f2d2,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/58caa12316efe3cdbd99911a0118f2d2.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+58d21d50f0ad43e136e316e0bc83aea4,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/58d21d50f0ad43e136e316e0bc83aea4.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+5a4d38cc74f84b008bc1c21f3addbf66,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/5a4d38cc74f84b008bc1c21f3addbf66.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+5a647b138f60bf6e81db826e13000598,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/5a647b138f60bf6e81db826e13000598.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+5b7fb2355d008a547d617566bdeb2216,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/5b7fb2355d008a547d617566bdeb2216.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+5cb74ed08e02d8ce3b79a26d0c93927f,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/5cb74ed08e02d8ce3b79a26d0c93927f.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+5d324d3addf8875a425c316ea5fe52a5,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/5d324d3addf8875a425c316ea5fe52a5.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+60169965f716f42db30f8bc3c066ec3b,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/60169965f716f42db30f8bc3c066ec3b.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+612a0090f1d95e7ea9283dd5c7d580e5,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/612a0090f1d95e7ea9283dd5c7d580e5.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+61f9a4db82cf2c18a778d63d24661ba1,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/61f9a4db82cf2c18a778d63d24661ba1.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+6265e9c9d56e4b4aa72c620a8d4c3616,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/6265e9c9d56e4b4aa72c620a8d4c3616.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+6291e6f296b033a4cffd2334db37f96c,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/6291e6f296b033a4cffd2334db37f96c.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+65b24079cacf485ad378116b1fe79ed5,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/65b24079cacf485ad378116b1fe79ed5.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+681e656da165ea1bec19f6df9621b11b,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/681e656da165ea1bec19f6df9621b11b.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+69f33b555f4a3349212fa0eb23be05cb,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/69f33b555f4a3349212fa0eb23be05cb.pkl,2,Other Malware,0,Ransomware,0,Random Forest
+6ac5ae13f8ce04fa18c5f8bcf5d6de23,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/6ac5ae13f8ce04fa18c5f8bcf5d6de23.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+6e194715028dbcfd22358c878d4c22dc,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/6e194715028dbcfd22358c878d4c22dc.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+6e7945f5a168f0a33a96a7067dc0592b,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/6e7945f5a168f0a33a96a7067dc0592b.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+6ef6ec48bce6c9166c199443c750b0ee,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/6ef6ec48bce6c9166c199443c750b0ee.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+6f9fc42bd60f1ba02ecdbbdce4901a7b,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/6f9fc42bd60f1ba02ecdbbdce4901a7b.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+6feff3a8bf84aaa1364daedf7bfb72e6,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/6feff3a8bf84aaa1364daedf7bfb72e6.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+71d0a33356b344229032eb00331e61db,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/71d0a33356b344229032eb00331e61db.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+7361e4abbb3a67be4c27e534a7722de7,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/7361e4abbb3a67be4c27e534a7722de7.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+746f7df0c1d2ff1c7c4fe90e3a24ae48,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/746f7df0c1d2ff1c7c4fe90e3a24ae48.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+78ff9724f102564163011c9267da3d17,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/78ff9724f102564163011c9267da3d17.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+7955d6bfeb4ae432c3ddb75f5914fb7f,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/7955d6bfeb4ae432c3ddb75f5914fb7f.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+79f843cc61ac7ebad4b1307efb14baf5,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/79f843cc61ac7ebad4b1307efb14baf5.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+7ae1205cb2f3770a329b5ec1ae9ac0f0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/7ae1205cb2f3770a329b5ec1ae9ac0f0.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+7b04d38b419cb4b0bcd44b868ed024c6,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/7b04d38b419cb4b0bcd44b868ed024c6.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+7c0f8fc780d78c3bf0dfcdab76daccc0,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/7c0f8fc780d78c3bf0dfcdab76daccc0.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+7cc63dd96a747bd98664c3f66b5f2166,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/7cc63dd96a747bd98664c3f66b5f2166.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+7f721fa8829da63c63ffd76b649fcdb5,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/7f721fa8829da63c63ffd76b649fcdb5.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+8050d5af7e84e3a74428a56c496c7336,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/8050d5af7e84e3a74428a56c496c7336.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+80e9db36293b1b6e1aa1b4213578779c,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/80e9db36293b1b6e1aa1b4213578779c.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+8154ce3c12c90b03ec4a6f4694592849,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/8154ce3c12c90b03ec4a6f4694592849.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+83791c2886fd43af7f675905b9f6aa84,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/83791c2886fd43af7f675905b9f6aa84.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+876da7eef0355a3a5fb21aba5c829033,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/876da7eef0355a3a5fb21aba5c829033.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+8aa4491a8a0e2e4b687c0c1308387951,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/8aa4491a8a0e2e4b687c0c1308387951.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+9cabc89381c2880bf977214425924ed9,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/9cabc89381c2880bf977214425924ed9.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+9d339b6084a7b5d0fa5b687f95d4804c,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/9d339b6084a7b5d0fa5b687f95d4804c.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+aa987d8bdd35675841b4b59df748eef1,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/aa987d8bdd35675841b4b59df748eef1.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+ad07926d2c8d7fedd597679324dffb5f,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/ad07926d2c8d7fedd597679324dffb5f.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+b20a7461e5651d526026554d5f32246f,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/b20a7461e5651d526026554d5f32246f.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+b84d16a69b314ce13935e7c7813460a4,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/b84d16a69b314ce13935e7c7813460a4.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+c8a0cecf11fe5ecfdba673d6ca0a67d3,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/c8a0cecf11fe5ecfdba673d6ca0a67d3.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+c972069dfdfcc74d55252a33ca09a690,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/c972069dfdfcc74d55252a33ca09a690.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+cf521ee55c34827921113c235c594b39,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/cf521ee55c34827921113c235c594b39.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+d255c5389c42dea20fc623b611e17755,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/d255c5389c42dea20fc623b611e17755.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+d808c29b4242eeba4f67f31a0669ddc5,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/d808c29b4242eeba4f67f31a0669ddc5.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+d947cedd475e7dad84da1cad5d0f09a1,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/d947cedd475e7dad84da1cad5d0f09a1.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+dd23562a4be68ffe5480e31e8a88780a,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/dd23562a4be68ffe5480e31e8a88780a.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+ded4019078e5fcba939178129eae9020,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/ded4019078e5fcba939178129eae9020.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+e1a6e162bd847bc11d7046af80002dba,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/e1a6e162bd847bc11d7046af80002dba.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+e4ba7cf39687581795600e8e963c1546,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/e4ba7cf39687581795600e8e963c1546.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+e59b6f501e3625b6f097d9666ec4abd5,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/e59b6f501e3625b6f097d9666ec4abd5.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+e815fc77490e3c0e7d59cddacf2a59fd,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/e815fc77490e3c0e7d59cddacf2a59fd.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+e82cfeb1cf20909ee69b46190ae8f672,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/e82cfeb1cf20909ee69b46190ae8f672.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+e876d378fb1fa11a17fa4451400d32fa,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/e876d378fb1fa11a17fa4451400d32fa.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+eb1f3cb323d6bb868cb39d2db6509882,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/eb1f3cb323d6bb868cb39d2db6509882.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+ed80fdee556f68a9ee04575aeadf345c,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/ed80fdee556f68a9ee04575aeadf345c.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+f7325a49f66f82cfec49a34e6674002a,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/f7325a49f66f82cfec49a34e6674002a.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+f939246005c1808c4d4b057d65432d68,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/f939246005c1808c4d4b057d65432d68.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+fa2fe0906e14b0b8d7aa3d539fad3045,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/fa2fe0906e14b0b8d7aa3d539fad3045.pkl,2,Other Malware,2,Other Malware,1,Random Forest
+fec7d6dfd6ed994e4eaf2297628b29f2,new_unseen,/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/old/fec7d6dfd6ed994e4eaf2297628b29f2.pkl,2,Other Malware,2,Other Malware,1,Random Forest
 0532e250400ded8515f6d042d388ff07,old_val,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/0532e250400ded8515f6d042d388ff07.pkl,0,Ransomware,2,Other Malware,0,Random Forest
 08eedaa70ca384e76b4eac39ff2683e1,old_val,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/08eedaa70ca384e76b4eac39ff2683e1.pkl,0,Ransomware,2,Other Malware,0,Random Forest
 0dd4bcb59beff511516725118e7b2f80,old_val,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/0dd4bcb59beff511516725118e7b2f80.pkl,0,Ransomware,2,Other Malware,0,Random Forest
@@ -432,7 +433,7 @@ mal_reports__0a074c24e298f97a255cdf976a304ee7,new_unseen,/Volumes/SSD/TGNN/ranso
 7a7b798c0772cbbe3654174737d08542,old_val,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7a7b798c0772cbbe3654174737d08542.pkl,0,Ransomware,0,Ransomware,1,Random Forest
 7b14479b7226662af6beffba4854c2e7,old_val,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7b14479b7226662af6beffba4854c2e7.pkl,0,Ransomware,0,Ransomware,1,Random Forest
 7f7f16a7dfad06ec4504220e4c130015,old_val,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7f7f16a7dfad06ec4504220e4c130015.pkl,0,Ransomware,0,Ransomware,1,Random Forest
-a95111407437bd851ae651f847b53e90,old_val,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a95111407437bd851ae651f847b53e90.pkl,0,Ransomware,1,Benign,0,Random Forest
+a95111407437bd851ae651f847b53e90,old_val,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a95111407437bd851ae651f847b53e90.pkl,0,Ransomware,2,Other Malware,0,Random Forest
 aef03ddd3134451e1efe137fb22e3a0c,old_val,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/aef03ddd3134451e1efe137fb22e3a0c.pkl,0,Ransomware,2,Other Malware,0,Random Forest
 09b06fa3f1fadb21006c1fa79c75c536,old_test,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/09b06fa3f1fadb21006c1fa79c75c536.pkl,0,Ransomware,2,Other Malware,0,Random Forest
 0c7e59536a7be4a446bbe8b4f22e5880,old_test,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0c7e59536a7be4a446bbe8b4f22e5880.pkl,0,Ransomware,2,Other Malware,0,Random Forest
@@ -445,7 +446,7 @@ aef03ddd3134451e1efe137fb22e3a0c,old_val,/Volumes/SSD/TGNN/ransomware_tgnn/cache
 2198677d22dd71f9e6108da020da059d,old_test,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2198677d22dd71f9e6108da020da059d.pkl,0,Ransomware,0,Ransomware,1,Random Forest
 229d05ae6fa046339d34419216dd3bae,old_test,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/229d05ae6fa046339d34419216dd3bae.pkl,0,Ransomware,0,Ransomware,1,Random Forest
 243852fce02f4f7d77949d75ccfddbac,old_test,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/243852fce02f4f7d77949d75ccfddbac.pkl,0,Ransomware,0,Ransomware,1,Random Forest
-24ad1ac3ddd67f08cbdd26803b5539a1,old_test,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/24ad1ac3ddd67f08cbdd26803b5539a1.pkl,0,Ransomware,0,Ransomware,1,Random Forest
+24ad1ac3ddd67f08cbdd26803b5539a1,old_test,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/24ad1ac3ddd67f08cbdd26803b5539a1.pkl,0,Ransomware,2,Other Malware,0,Random Forest
 28c80c4739056f200818d221ddf5a496,old_test,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/28c80c4739056f200818d221ddf5a496.pkl,0,Ransomware,0,Ransomware,1,Random Forest
 2b744b113946f905a9526f9fb82b22d3,old_test,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2b744b113946f905a9526f9fb82b22d3.pkl,0,Ransomware,2,Other Malware,0,Random Forest
 2e366bdc80e31e7678bf0681b8b6370c,old_test,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2e366bdc80e31e7678bf0681b8b6370c.pkl,0,Ransomware,2,Other Malware,0,Random Forest
