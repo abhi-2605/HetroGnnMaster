@@ -26,7 +26,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch_geometric.nn import MessagePassing, TransformerConv
 from torch_geometric.utils import softmax
-
+import config
 
 EdgeType = Tuple[str, str, str]
 
@@ -325,8 +325,14 @@ class HybridGATSAGEConv(nn.Module):
 
     Fusion:
         d = |h_gat - h_sage|
-        g = sigmoid(MLP([h_gat || h_sage || d]))
+        g = sigmoid(MLP([h_gat || h_sage || scale * d]))
         h = g * h_gat + (1 - g) * h_sage
+
+    The gate is initialized slightly toward SAGE:
+        gate ~= sigmoid(-0.85) ~= 0.30
+
+    So early training starts roughly as:
+        30% GAT + 70% SAGE
 
     Monitoring:
         last_gate and last_disagreement are detached tensors from the latest
@@ -349,6 +355,9 @@ class HybridGATSAGEConv(nn.Module):
         self.heads = heads
         self.output_dim = heads * out_channels
         self.dropout = dropout
+
+        self.gate_init_bias = float(getattr(config, "HYBRID_GATE_INIT_BIAS", -0.85))
+        self.disagreement_scale = float(getattr(config, "HYBRID_DISAGREEMENT_SCALE", 2.0))
 
         self.gat_conv = TemporalGATConv(
             in_channels=in_channels,
@@ -378,6 +387,11 @@ class HybridGATSAGEConv(nn.Module):
             nn.Linear(gate_hidden_dim, self.output_dim),
         )
 
+        # Start slightly biased toward SAGE:
+        # sigmoid(-0.85) ≈ 0.30 → 30% GAT / 70% SAGE.
+        if self.gate_mlp[-1].bias is not None:
+            nn.init.constant_(self.gate_mlp[-1].bias, self.gate_init_bias)
+
         self.last_gate: Optional[torch.Tensor] = None
         self.last_disagreement: Optional[torch.Tensor] = None
 
@@ -391,7 +405,12 @@ class HybridGATSAGEConv(nn.Module):
         h_sage = self.sage_conv(x, edge_index, edge_attr)
 
         diff = torch.abs(h_gat - h_sage)
-        gate_input = torch.cat([h_gat, h_sage, diff], dim=-1)
+
+        gate_input = torch.cat(
+            [h_gat, h_sage, self.disagreement_scale * diff],
+            dim=-1,
+        )
+
         gate = torch.sigmoid(self.gate_mlp(gate_input))
 
         out = gate * h_gat + (1.0 - gate) * h_sage

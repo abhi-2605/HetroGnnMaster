@@ -1071,6 +1071,7 @@ class HeteroTemporalGNN(nn.Module):
             device=next(self.parameters()).device,
             requires_grad=True,
         )
+
     def get_hybrid_gate_stats(self) -> Dict[str, float]:
         """
         Collect monitoring statistics from HybridGATSAGEConv layers.
@@ -1080,8 +1081,7 @@ class HeteroTemporalGNN(nn.Module):
         - Does not change gradients
         - Returns empty dict if hybrid layer is not being used
         """
-        gate_values = []
-        disagreement_values = []
+        collected = []
 
         for gnn_layer in self.gnn_layers:
             if not hasattr(gnn_layer, "get_hybrid_gate_stats"):
@@ -1092,38 +1092,27 @@ class HeteroTemporalGNN(nn.Module):
                 continue
 
             for _, rel_stats in stats.items():
-                if "gate" in rel_stats and rel_stats["gate"] is not None:
-                    gate_values.append(rel_stats["gate"].detach().flatten())
+                if rel_stats:
+                    collected.append(rel_stats)
 
-                if "disagreement" in rel_stats and rel_stats["disagreement"] is not None:
-                    disagreement_values.append(
-                        rel_stats["disagreement"].detach().flatten()
-                    )
-
-        if not gate_values:
+        if not collected:
             return {}
 
-        gate_all = torch.cat(gate_values)
+        def avg(key: str) -> float:
+            values = [float(s[key]) for s in collected if key in s]
+            return float(sum(values) / len(values)) if values else 0.0
 
-        output = {
-            "hybrid_gate_mean": float(gate_all.mean().item()),
-            "hybrid_gate_std": float(gate_all.std(unbiased=False).item()),
-            "hybrid_gate_min": float(gate_all.min().item()),
-            "hybrid_gate_max": float(gate_all.max().item()),
-            "hybrid_sage_mean": float((1.0 - gate_all).mean().item()),
+        return {
+            "hybrid_gate_mean": avg("gate_mean"),
+            "hybrid_gate_std": avg("gate_std"),
+            "hybrid_gate_min": avg("gate_min"),
+            "hybrid_gate_max": avg("gate_max"),
+            "hybrid_sage_mean": avg("sage_mean"),
+            "hybrid_disagreement_mean": avg("disagreement_mean"),
+            "hybrid_disagreement_std": avg("disagreement_std"),
         }
 
-        if disagreement_values:
-            disagreement_all = torch.cat(disagreement_values)
-            output["hybrid_disagreement_mean"] = float(
-                disagreement_all.mean().item()
-            )
-            output["hybrid_disagreement_std"] = float(
-                disagreement_all.std(unbiased=False).item()
-            )
-
-        return output
-
+        
     def branch_balance_loss(
         self,
         target_entropy: float = 0.75,
