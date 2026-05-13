@@ -47,7 +47,7 @@ ecf4df5c442e1ff302473aa13a9f1c5c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriche
 405,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/405.pkl,1,Benign,old_val,False,combined_attack,0.0,0.058823529411764705,10.84070796460177
 556,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/556.pkl,1,Benign,old_val,False,combined_attack,0.0028089887640449437,0.039473684210526314,5.239067055393586
 553a2deead3671112db16f78328b28d5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/553a2deead3671112db16f78328b28d5.pkl,1,Benign,old_test,False,combined_attack,0.007017543859649123,0.047619047619047616,4.036871053167651
-106,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/106.pkl,1,Benign,old_test,False,combined_attack,0.02631578947368421,0.047619047619047616,20.163636363636364
+106,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/106.pkl,1,Benign,old_test,False,combined_attack,0.0,0.047619047619047616,20.163636363636364
 784,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/784.pkl,1,Benign,old_test,False,combined_attack,0.0,0.1,64.4375
 a30897c37b12adf4d834791575d8e144,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a30897c37b12adf4d834791575d8e144.pkl,1,Benign,old_val,False,combined_attack,0.0014727540500736377,0.03125,2.6909681431829178
 7c37dc92088ae9ec102df7a4e4cf5aba,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7c37dc92088ae9ec102df7a4e4cf5aba.pkl,1,Benign,old_test,False,combined_attack,0.0,0.08695652173913043,9.345588235294118
@@ -124,7 +124,7 @@ bb03388131338158ea92b5408533a974,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriche
 453,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/453.pkl,1,Benign,old_val,False,combined_attack,0.0,0.038461538461538464,5.997159090909091
 371,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/371.pkl,1,Benign,old_val,False,combined_attack,0.0,0.2,126.875
 590,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/590.pkl,1,Benign,old_val,False,combined_attack,0.0,0.030303030303030304,5.9991289198606275
-484,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/484.pkl,1,Benign,old_test,False,combined_attack,0.0,0.06060606060606061,7.612359550561798
+484,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/484.pkl,1,Benign,old_test,False,combined_attack,0.012048192771084338,0.06060606060606061,7.612359550561798
 5af6b376e660805759683865437acbc0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5af6b376e660805759683865437acbc0.pkl,1,Benign,old_test,False,combined_attack,0.0,0.03571428571428571,2.2738389867520747
 57cac848fa14ae38f14f9441f8933282,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/57cac848fa14ae38f14f9441f8933282.pkl,1,Benign,old_val,False,combined_attack,1.0,0.0,1001.0
 551,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/551.pkl,1,Benign,old_val,False,combined_attack,0.0,0.029411764705882353,6.6465116279069765
@@ -182,7 +182,7 @@ a56ea46b5530e60b1291eb41a63da229,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriche
 156,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/156.pkl,1,Benign,old_val,False,combined_attack,0.0,0.0425531914893617,5.998394863563403
 1c1f8ed7316852f8248c62e0bd199c01,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1c1f8ed7316852f8248c62e0bd199c01.pkl,1,Benign,old_test,False,combined_attack,0.0,0.03125,5.998204667863555
 5ab171e34ae233588334898964713652,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5ab171e34ae233588334898964713652.pkl,1,Benign,old_val,False,combined_attack,0.0,0.034482758620689655,9.8046875
-10,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/10.pkl,1,Benign,old_test,False,combined_attack,0.0,0.06060606060606061,7.612359550561798
+10,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/10.pkl,1,Benign,old_test,False,combined_attack,0.012048192771084338,0.06060606060606061,7.612359550561798
 717,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/717.pkl,1,Benign,old_test,False,combined_attack,0.0,0.1,36.44827586206897
 a3f4107c68215616cebb0d787f66bcc9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/a3f4107c68215616cebb0d787f66bcc9.pkl,1,Benign,old_test,False,combined_attack,0.0017921146953405018,0.034482758620689655,2.942768244389968
 4779f59e00bcb80826e3deb3fb4af52a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4779f59e00bcb80826e3deb3fb4af52a.pkl,1,Benign,old_val,False,combined_attack,0.0,0.03773584905660377,2.616993706034802
