@@ -5,7 +5,7 @@ scripts/evaluate_zeroday.py
 Evaluate an already-trained TGNN checkpoint on a custom zero-day / mixed
 evaluation set built on the fly from existing graph folders.
 
-Selection policy from config.py:
+Selection policy from config.py: 
     - 200 benign from ACTIVE_GRAPH_DIR/{val,test}
     - all new unseen malware from CUSTOM_EVAL_NEW_MALWARE_DIR
     - 55 old malware from ACTIVE_GRAPH_DIR/{val,test}

@@ -2,7 +2,7 @@
 """
 scripts/component_attribution.py
 
-Branch-wise attribution for the trained TGNN using inference-time ablations.
+Branch-wise attribution for the trained TGNN using inference-time ablations. -- slide 10 
 
 Components:
     1. semantic   -> zero api.x[:, :768]

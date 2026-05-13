@@ -2,7 +2,7 @@
 """
 scripts/test_semantic_substitution_no_structure.py
 
-Purpose
+Purpose - slide 11
 -------
 Test whether semantic information still carries useful signal when structural
 edges are removed. This is the stronger follow-up experiment for the claim:

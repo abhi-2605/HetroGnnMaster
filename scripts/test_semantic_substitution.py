@@ -4,7 +4,7 @@ scripts/test_semantic_vector_substitution.py
 
 Semantic-vector substitution test for TGNN (SEMANTIC MEMORY OFF setting).
 
-Purpose
+Purpose -- slide 11 -- main 2 test ransdom and similar substitution for semantic vectors
 -------
 Test whether the trained TGNN is relying on exact semantic embedding identities
 ("mugging up") or whether it is robust to semantically similar substitutions
@@ -16,7 +16,7 @@ This version is appropriate when:
 Because in that case, changing api_names alone is not the correct intervention.
 The correct target is the semantic block inside API node features.
 
-What this script does
+What this script does --- slide 11
 ---------------------
 1. Loads the trained TGNN checkpoint
 2. Resolves split membership the same way as your other robust scripts

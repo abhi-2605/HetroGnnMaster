@@ -4,7 +4,7 @@ scripts/component_attribution_improved.py
 
 Improved TGNN component sensitivity / ablation analysis.
 
-What this improves over the old script
+What this improves over the old script -- slide 10 
 --------------------------------------
 1) Finer-grained ablations:
    - semantic_zero_bert
