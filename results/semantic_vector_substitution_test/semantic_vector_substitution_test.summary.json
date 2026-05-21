@@ -4,107 +4,23 @@
   "n_semantic_sub": 400,
   "n_random_sub": 400,
   "clean_metrics": {
-    "accuracy": 0.915,
-    "macro_f1": 0.7368724707201082,
-    "weighted_f1": 0.9238389832603912,
+    "accuracy": 0.945,
+    "macro_f1": 0.7934734184734186,
+    "weighted_f1": 0.9436957974457973,
     "per_class_precision": [
-      0.24,
-      0.9887640449438202,
-      0.951048951048951
-    ],
-    "per_class_recall": [
-      0.42857142857142855,
-      0.9361702127659575,
-      0.9315068493150684
-    ],
-    "per_class_f1": [
-      0.3076923076923077,
-      0.9617486338797814,
-      0.9411764705882353
-    ],
-    "per_class_support": [
-      14,
-      94,
-      292
-    ],
-    "confusion_matrix": [
-      [
-        6,
-        0,
-        8
-      ],
-      [
-        0,
-        88,
-        6
-      ],
-      [
-        19,
-        1,
-        272
-      ]
-    ]
-  },
-  "semantic_substitution_metrics": {
-    "accuracy": 0.91,
-    "macro_f1": 0.7331753442746652,
-    "weighted_f1": 0.9177932229767969,
-    "per_class_precision": [
-      0.25,
-      0.9565217391304348,
-      0.9507042253521126
-    ],
-    "per_class_recall": [
-      0.42857142857142855,
-      0.9361702127659575,
-      0.9246575342465754
-    ],
-    "per_class_f1": [
-      0.3157894736842105,
-      0.946236559139785,
-      0.9375
-    ],
-    "per_class_support": [
-      14,
-      94,
-      292
-    ],
-    "confusion_matrix": [
-      [
-        6,
-        0,
-        8
-      ],
-      [
-        0,
-        88,
-        6
-      ],
-      [
-        18,
-        4,
-        270
-      ]
-    ]
-  },
-  "random_substitution_metrics": {
-    "accuracy": 0.91,
-    "macro_f1": 0.729356101339024,
-    "weighted_f1": 0.9206334695443626,
-    "per_class_precision": [
-      0.2222222222222222,
+      0.5,
       0.9886363636363636,
-      0.9508771929824561
+      0.95
     ],
     "per_class_recall": [
       0.42857142857142855,
       0.925531914893617,
-      0.928082191780822
+      0.976027397260274
     ],
     "per_class_f1": [
-      0.2926829268292683,
+      0.46153846153846156,
       0.9560439560439561,
-      0.9393414211438474
+      0.9628378378378378
     ],
     "per_class_support": [
       14,
@@ -118,28 +34,112 @@
         8
       ],
       [
-        1,
+        0,
         87,
-        6
+        7
       ],
       [
-        20,
+        6,
         1,
-        271
+        285
+      ]
+    ]
+  },
+  "semantic_substitution_metrics": {
+    "accuracy": 0.9425,
+    "macro_f1": 0.7911470146636993,
+    "weighted_f1": 0.9411869936393527,
+    "per_class_precision": [
+      0.5,
+      0.9775280898876404,
+      0.9498327759197325
+    ],
+    "per_class_recall": [
+      0.42857142857142855,
+      0.925531914893617,
+      0.9726027397260274
+    ],
+    "per_class_f1": [
+      0.46153846153846156,
+      0.9508196721311475,
+      0.961082910321489
+    ],
+    "per_class_support": [
+      14,
+      94,
+      292
+    ],
+    "confusion_matrix": [
+      [
+        6,
+        0,
+        8
+      ],
+      [
+        0,
+        87,
+        7
+      ],
+      [
+        6,
+        2,
+        284
+      ]
+    ]
+  },
+  "random_substitution_metrics": {
+    "accuracy": 0.9375,
+    "macro_f1": 0.7789820929902759,
+    "weighted_f1": 0.9374579030866431,
+    "per_class_precision": [
+      0.42857142857142855,
+      0.9775280898876404,
+      0.9494949494949495
+    ],
+    "per_class_recall": [
+      0.42857142857142855,
+      0.925531914893617,
+      0.9657534246575342
+    ],
+    "per_class_f1": [
+      0.42857142857142855,
+      0.9508196721311475,
+      0.9575551782682513
+    ],
+    "per_class_support": [
+      14,
+      94,
+      292
+    ],
+    "confusion_matrix": [
+      [
+        6,
+        0,
+        8
+      ],
+      [
+        0,
+        87,
+        7
+      ],
+      [
+        8,
+        2,
+        282
       ]
     ]
   },
   "semantic_substitution_comparison": {
-    "prediction_flip_rate": 0.0175,
-    "threat_to_benign_flip_rate": 0.0075,
-    "mean_realized_sub_fraction": 0.9925,
-    "mean_confidence_drop_on_clean_pred": 0.0053710084815975275
-  },
-  "random_substitution_comparison": {
-    "prediction_flip_rate": 0.055,
+    "prediction_flip_rate": 0.0025,
     "threat_to_benign_flip_rate": 0.0025,
     "mean_realized_sub_fraction": 0.9925,
-    "mean_confidence_drop_on_clean_pred": 0.035107941234018655
+    "mean_confidence_drop_on_clean_pred": 0.001713978908956051
+  },
+  "random_substitution_comparison": {
+    "prediction_flip_rate": 0.0175,
+    "threat_to_benign_flip_rate": 0.005,
+    "mean_realized_sub_fraction": 0.9925,
+    "mean_confidence_drop_on_clean_pred": 0.007152504995465278
   },
   "settings": {
     "substitute_fraction": 1.0,

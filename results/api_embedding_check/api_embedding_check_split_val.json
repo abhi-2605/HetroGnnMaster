@@ -1,0 +1,23 @@
+{
+  "folder": "/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val",
+  "max_samples": null,
+  "total_files_checked": 1256,
+  "loaded_ok": 1256,
+  "load_errors": 0,
+  "has_api_node_type": 1256,
+  "has_api_store": 1256,
+  "has_api_x": 1256,
+  "has_api_names": 1256,
+  "has_embedding_like_field": 1256,
+  "has_api_embedding_attached": 1256,
+  "missing_api_embedding_attached": 0,
+  "api_feature_dim_counts": {
+    "775": 1256
+  },
+  "num_api_nodes": {
+    "mean": 4102.0573248407645,
+    "median": 1707.5,
+    "min": 1,
+    "max": 140402
+  }
+}

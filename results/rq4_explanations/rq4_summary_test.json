@@ -1,0 +1,26 @@
+{
+  "split": "test",
+  "checkpoint": "/Volumes/SSD/TGNN/ransomware_tgnn/results/checkpoints/best_model.pt",
+  "checkpoint_epoch": 10,
+  "num_requested": 1,
+  "num_processed": 1,
+  "num_errors": 0,
+  "accuracy_3class": 1.0,
+  "accuracy_threat_vs_benign": 1.0,
+  "predicted_class_counts": {
+    "Other Malwares": 1
+  },
+  "predicted_binary_counts": {
+    "Threat": 1
+  },
+  "branch_dominant_counts": {
+    "semantic": 1
+  },
+  "mean_branch_weights": {
+    "semantic": 0.4296005964279175,
+    "structural": 0.3330373466014862,
+    "temporal": 0.2373620718717575
+  },
+  "reports_dir": "/Volumes/SSD/TGNN/ransomware_tgnn/results/rq4_explanations/reports",
+  "summary_csv": "/Volumes/SSD/TGNN/ransomware_tgnn/results/rq4_explanations/predictions_test.csv"
+}

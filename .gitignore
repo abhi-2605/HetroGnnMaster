@@ -11,5 +11,5 @@ enriched_graphs.zip
 *.pth
 EOF
 enrichedB/
-.vscode
-./vscode/
+.vscode/
+venv/

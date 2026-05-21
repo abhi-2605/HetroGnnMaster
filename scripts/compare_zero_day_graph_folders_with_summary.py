@@ -1,33 +1,6 @@
 #!/usr/bin/env python3
 """
 scripts/compare_zero_day_graph_folders.py
-
-Compare .pkl graph files from two zero-day folders:
-
-    config.CACHE_DIR / "zero_day_unseen" / "old"
-    config.CACHE_DIR / "zero_day_unseen" / "all"
-
-Purpose:
-    Understand why unseen graphs are missed by comparing them against older /
-    same-family graphs at graph-structure, node-feature, edge-feature, API,
-    temporal, and schema levels.
-
-Outputs:
-    results/zero_day_compare/
-        graph_level_summary.csv
-        folder_level_summary.json
-        pairwise_same_filename_comparison.csv
-        api_token_frequency_old.csv
-        api_token_frequency_all.csv
-        api_token_frequency_delta.csv
-        node_type_stats_by_folder.csv
-        edge_type_stats_by_folder.csv
-        feature_distribution_by_folder.csv
-
-Notes:
-    - Works with PyG HeteroData-style graphs.
-    - Attempts to be defensive because cached graph objects can vary.
-    - Does not require the model/checkpoint.
 """
 
 from __future__ import annotations
@@ -37,7 +10,7 @@ import json
 import math
 import pickle
 import sys
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
@@ -128,7 +101,7 @@ def get_node_types(graph) -> List[str]:
         return list(graph.node_types)
     except Exception:
         try:
-            return [k for k in graph.x_dict.keys()]
+            return list(graph.x_dict.keys())
         except Exception:
             return []
 
@@ -174,9 +147,6 @@ def get_edge_attr(graph, edge_type: EdgeType) -> Optional[torch.Tensor]:
 
 
 def get_api_names(graph) -> List[str]:
-    """
-    Try multiple possible places where API names may be stored.
-    """
     candidates = []
 
     try:
@@ -269,12 +239,30 @@ def cosine_counter(c1: Counter, c2: Counter) -> float:
 
     n1 = np.linalg.norm(v1)
     n2 = np.linalg.norm(v2)
+
     if n1 == 0 and n2 == 0:
         return 1.0
     if n1 == 0 or n2 == 0:
         return 0.0
 
     return float(np.dot(v1, v2) / (n1 * n2))
+
+
+def parse_top_api_counter(raw: Any) -> Counter:
+    c = Counter()
+    if not isinstance(raw, str):
+        return c
+
+    for item in raw.split("|"):
+        if ":" not in item:
+            continue
+        name, count = item.rsplit(":", 1)
+        try:
+            c[name] += int(count)
+        except Exception:
+            pass
+
+    return c
 
 
 # ============================================================
@@ -301,7 +289,6 @@ def summarize_graph(graph_path: Path, folder_name: str) -> Dict[str, Any]:
     total_nodes = 0
     total_edges = 0
 
-    # Node stats
     for nt in node_types:
         x = get_node_x(graph, nt)
         n = int(x.size(0)) if isinstance(x, torch.Tensor) and x.dim() >= 1 else 0
@@ -311,10 +298,8 @@ def summarize_graph(graph_path: Path, folder_name: str) -> Dict[str, Any]:
         row[f"node_dim_{nt}"] = d
         total_nodes += n
 
-        stats = tensor_stats(x, f"x_{nt}")
-        row.update(stats)
+        row.update(tensor_stats(x, f"x_{nt}"))
 
-    # Edge stats
     for et in edge_types:
         key = edge_type_to_str(et)
         edge_index = get_edge_index(graph, et)
@@ -336,7 +321,6 @@ def summarize_graph(graph_path: Path, folder_name: str) -> Dict[str, Any]:
     row["total_edges"] = total_edges
     row["edge_node_ratio"] = float(total_edges / max(total_nodes, 1))
 
-    # API names / token stats
     api_names = get_api_names(graph)
     api_counter = Counter(api_names)
 
@@ -345,7 +329,6 @@ def summarize_graph(graph_path: Path, folder_name: str) -> Dict[str, Any]:
     row["api_repetition_ratio"] = float(1.0 - (len(api_counter) / max(len(api_names), 1)))
     row["api_top_20"] = "|".join([f"{k}:{v}" for k, v in api_counter.most_common(20)])
 
-    # Timestamp stats
     ts = get_api_timestamps(graph)
     if ts is not None and ts.numel() > 0:
         ts = ts[torch.isfinite(ts)]
@@ -399,14 +382,17 @@ def collect_graph_summaries(old_dir: Path, all_dir: Path) -> pd.DataFrame:
 
 def summarize_numeric_by_folder(df: pd.DataFrame, columns: List[str]) -> Dict[str, Any]:
     out = {}
+
     for folder, g in df.groupby("folder"):
         out[folder] = {}
         for col in columns:
             if col not in g.columns:
                 continue
+
             vals = pd.to_numeric(g[col], errors="coerce").dropna()
             if len(vals) == 0:
                 continue
+
             out[folder][col] = {
                 "mean": float(vals.mean()),
                 "std": float(vals.std(ddof=0)),
@@ -416,6 +402,7 @@ def summarize_numeric_by_folder(df: pd.DataFrame, columns: List[str]) -> Dict[st
                 "p75": float(vals.quantile(0.75)),
                 "max": float(vals.max()),
             }
+
     return out
 
 
@@ -425,6 +412,7 @@ def build_api_frequency_tables(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataF
     for _, row in df.iterrows():
         folder = row.get("folder")
         top_raw = row.get("api_top_20", "")
+
         if folder not in folder_counters or not isinstance(top_raw, str):
             continue
 
@@ -441,6 +429,10 @@ def build_api_frequency_tables(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataF
     all_df = pd.DataFrame(folder_counters["all"].most_common(), columns=["api_name", "count_all"])
 
     delta = pd.merge(old_df, all_df, on="api_name", how="outer").fillna(0)
+
+    if delta.empty:
+        return old_df, all_df, delta
+
     delta["count_old"] = delta["count_old"].astype(int)
     delta["count_all"] = delta["count_all"].astype(int)
 
@@ -461,6 +453,39 @@ def build_type_stats(df: pd.DataFrame, prefix: str) -> pd.DataFrame:
     cols = [c for c in df.columns if c.startswith(prefix)]
 
     for col in cols:
+        for folder, g in df.groupby("folder"):
+            vals = pd.to_numeric(g[col], errors="coerce").dropna()
+            if len(vals) == 0:
+                continue
+
+            rows.append({
+                "folder": folder,
+                "metric": col,
+                "mean": float(vals.mean()),
+                "std": float(vals.std(ddof=0)),
+                "min": float(vals.min()),
+                "median": float(vals.median()),
+                "max": float(vals.max()),
+            })
+
+    return pd.DataFrame(rows)
+
+
+def build_feature_summary(df: pd.DataFrame) -> pd.DataFrame:
+    feature_cols = [
+        c for c in df.columns
+        if (
+            c.endswith("_mean")
+            or c.endswith("_std")
+            or c.endswith("_zero_frac")
+            or c.endswith("_nan_frac")
+        )
+        and (c.startswith("x_") or c.startswith("edge_attr_"))
+    ]
+
+    rows = []
+
+    for col in feature_cols:
         for folder, g in df.groupby("folder"):
             vals = pd.to_numeric(g[col], errors="coerce").dropna()
             if len(vals) == 0:
@@ -500,7 +525,7 @@ def pairwise_same_filename_comparison(df: pd.DataFrame) -> pd.DataFrame:
         old_api = parse_top_api_counter(r_old.get("api_top_20", ""))
         all_api = parse_top_api_counter(r_all.get("api_top_20", ""))
 
-        row = {
+        rows.append({
             "sample_id": sample_id,
             "old_path": r_old.get("graph_path"),
             "all_path": r_all.get("graph_path"),
@@ -521,30 +546,140 @@ def pairwise_same_filename_comparison(df: pd.DataFrame) -> pd.DataFrame:
             "timestamp_span_old": safe_float(r_old.get("timestamp_span")),
             "timestamp_span_all": safe_float(r_all.get("timestamp_span")),
             "timestamp_span_delta": safe_float(r_all.get("timestamp_span")) - safe_float(r_old.get("timestamp_span")),
-        }
-
-        rows.append(row)
+        })
 
     return pd.DataFrame(rows)
 
 
-def parse_top_api_counter(raw: Any) -> Counter:
-    c = Counter()
-    if not isinstance(raw, str):
-        return c
+# ============================================================
+# Missed threat cross-reference
+# ============================================================
 
-    for item in raw.split("|"):
-        if ":" not in item:
-            continue
-        name, count = item.rsplit(":", 1)
-        try:
-            c[name] += int(count)
-        except Exception:
-            pass
+def cross_reference_missed_threats(
+    graph_df: pd.DataFrame,
+    predictions_csv: Optional[Path],
+    out_dir: Path,
+) -> Dict[str, Any]:
+    """
+    Optional:
+    Cross-reference missed threats from evaluate_zeroday.py with graph summaries.
 
-    return c
+    Expected predictions CSV columns:
+        sample_id, true_label, pred_label, origin, probabilities, branch weights
+    """
 
+    summary = {
+        "available": False,
+        "reason": "No predictions CSV provided or file does not exist.",
+        "count": 0,
+        "path": None,
+    }
 
+    if predictions_csv is None or not predictions_csv.exists():
+        return summary
+
+    pred_df = pd.read_csv(predictions_csv)
+
+    required = {"sample_id", "true_label", "pred_label"}
+    missing = required - set(pred_df.columns)
+    if missing:
+        summary["reason"] = f"Predictions CSV missing required columns: {sorted(missing)}"
+        return summary
+
+    missed = pred_df[
+        pred_df["true_label"].isin([0, 2])
+        & (pred_df["pred_label"] == 1)
+    ].copy()
+
+    if missed.empty:
+        out_path = out_dir / "missed_threat_graph_cross_reference.csv"
+        missed.to_csv(out_path, index=False)
+        return {
+            "available": True,
+            "reason": "No missed threats found.",
+            "count": 0,
+            "path": str(out_path),
+        }
+
+    graph_cols = [
+        "sample_id",
+        "folder",
+        "graph_path",
+        "total_nodes",
+        "total_edges",
+        "edge_node_ratio",
+        "api_name_count",
+        "api_unique_count",
+        "api_repetition_ratio",
+        "timestamp_span",
+        "timestamp_mean_gap",
+        "timestamp_max_gap",
+        "nodes_api",
+        "nodes_process",
+        "nodes_file",
+        "nodes_registry",
+        "nodes_network",
+        "edges_api__temporal__api",
+        "edges_process__executes__api",
+        "edges_api__operates_on__file",
+        "edges_api__modifies__registry",
+        "edges_api__connects_to__network",
+        "api_top_20",
+    ]
+
+    graph_cols = [c for c in graph_cols if c in graph_df.columns]
+
+    merged = missed.merge(
+        graph_df[graph_cols],
+        on="sample_id",
+        how="left",
+        suffixes=("_pred", "_graph"),
+    )
+
+    out_path = out_dir / "missed_threat_graph_cross_reference.csv"
+    merged.to_csv(out_path, index=False)
+
+    print("\n[INFO] Missed threat graph cross-reference")
+    print("=" * 80)
+    print(f"Missed threats predicted benign: {len(missed)}")
+    print(f"Saved: {out_path}")
+
+    if "origin" in missed.columns:
+        print("\nBy prediction origin:")
+        print(missed["origin"].value_counts().to_string())
+
+    if "folder" in merged.columns:
+        print("\nMatched graph folders:")
+        print(merged["folder"].value_counts(dropna=False).to_string())
+
+    print("\nTop missed-threat graph rows:")
+    preview_cols = [
+        "sample_id",
+        "origin",
+        "folder",
+        "true_label",
+        "pred_label",
+        "prob_benign",
+        "prob_other_malware",
+        "total_nodes",
+        "total_edges",
+        "api_name_count",
+        "api_unique_count",
+        "nodes_api",
+        "nodes_registry",
+        "nodes_network",
+    ]
+    preview_cols = [c for c in preview_cols if c in merged.columns]
+    print(merged[preview_cols].head(30).to_string(index=False))
+    print("=" * 80)
+
+    return {
+        "available": True,
+        "reason": "Cross-reference created.",
+        "count": int(len(missed)),
+        "path": str(out_path),
+        "matched_rows": int(merged["folder"].notna().sum()) if "folder" in merged.columns else 0,
+    }
 
 
 # ============================================================
@@ -559,7 +694,12 @@ def _folder_metric_mean(folder_summary: Dict[str, Any], folder: str, metric: str
 
 
 def _fmt_num(x: Optional[float], digits: int = 2) -> str:
-    if x is None or (isinstance(x, float) and (math.isnan(x) or math.isinf(x))):
+    if x is None:
+        return "n/a"
+    try:
+        if math.isnan(float(x)) or math.isinf(float(x)):
+            return "n/a"
+    except Exception:
         return "n/a"
     return f"{float(x):.{digits}f}"
 
@@ -583,17 +723,15 @@ def _direction_word(delta: Optional[float]) -> str:
 
 
 def _top_metric_differences(stats_df: pd.DataFrame, top_k: int = 8) -> pd.DataFrame:
-    """
-    Convert node/edge/feature stats to old-vs-all deltas.
-    Expects rows with columns: folder, metric, mean.
-    """
     if stats_df is None or stats_df.empty:
         return pd.DataFrame()
+
     required = {"folder", "metric", "mean"}
     if not required.issubset(stats_df.columns):
         return pd.DataFrame()
 
     pivot = stats_df.pivot_table(index="metric", columns="folder", values="mean", aggfunc="mean")
+
     if "old" not in pivot.columns or "all" not in pivot.columns:
         return pd.DataFrame()
 
@@ -601,6 +739,7 @@ def _top_metric_differences(stats_df: pd.DataFrame, top_k: int = 8) -> pd.DataFr
     pivot["delta_all_minus_old"] = pivot["all"] - pivot["old"]
     pivot["abs_delta"] = pivot["delta_all_minus_old"].abs()
     pivot = pivot.sort_values("abs_delta", ascending=False)
+
     return pivot.head(top_k)
 
 
@@ -612,12 +751,11 @@ def build_textual_summary(
     edge_stats_df: pd.DataFrame,
     feature_summary: pd.DataFrame,
     pair_df: pd.DataFrame,
+    missed_summary: Dict[str, Any],
     top_k: int = 10,
 ) -> str:
-    """
-    Build a plain-English summary of the main old-vs-all graph differences.
-    """
     lines: List[str] = []
+
     lines.append("=" * 80)
     lines.append("ZERO-DAY GRAPH FOLDER COMPARISON SUMMARY")
     lines.append("=" * 80)
@@ -625,10 +763,12 @@ def build_textual_summary(
     num_graphs = folder_summary.get("num_graphs", {})
     old_n = int(num_graphs.get("old", 0))
     all_n = int(num_graphs.get("all", 0))
+
     lines.append(f"Graphs compared: old={old_n}, all={all_n}")
     lines.append(f"Error count: {folder_summary.get('error_count', 0)}")
 
     lines.append("\n[1] High-level graph size / temporal shift")
+
     key_metrics = [
         ("total_nodes", "Total nodes"),
         ("total_edges", "Total edges"),
@@ -645,8 +785,10 @@ def build_textual_summary(
         old_mean = _folder_metric_mean(folder_summary, "old", metric)
         all_mean = _folder_metric_mean(folder_summary, "all", metric)
         pct = _pct_change(old_mean, all_mean)
-        direction = _direction_word(None if old_mean is None or all_mean is None else all_mean - old_mean)
+        delta = None if old_mean is None or all_mean is None else all_mean - old_mean
+        direction = _direction_word(delta)
         pct_text = "n/a" if pct is None else f"{pct:+.2f}%"
+
         lines.append(
             f"  - {label:<24}: old={_fmt_num(old_mean)} | all={_fmt_num(all_mean)} "
             f"| all is {direction} ({pct_text})"
@@ -654,6 +796,7 @@ def build_textual_summary(
 
     lines.append("\n[2] Structural shift by node type")
     node_diff = _top_metric_differences(node_stats_df, top_k=top_k)
+
     if node_diff.empty:
         lines.append("  - No node-type shift summary available.")
     else:
@@ -665,6 +808,7 @@ def build_textual_summary(
 
     lines.append("\n[3] Structural shift by edge type")
     edge_diff = _top_metric_differences(edge_stats_df, top_k=top_k)
+
     if edge_diff.empty:
         lines.append("  - No edge-type shift summary available.")
     else:
@@ -675,12 +819,15 @@ def build_textual_summary(
             )
 
     lines.append("\n[4] API token / behavior shift")
+
     if api_delta_df is None or api_delta_df.empty:
         lines.append("  - No API frequency delta summary available.")
     else:
         top_api = api_delta_df.sort_values("abs_freq_delta", ascending=False).head(top_k)
+
         for _, r in top_api.iterrows():
             direction = "more common in all" if r["freq_delta_all_minus_old"] > 0 else "less common in all"
+
             lines.append(
                 f"  - {str(r['api_name'])[:45]:<45} "
                 f"old_freq={r['freq_old']:.5f} all_freq={r['freq_all']:.5f} "
@@ -689,6 +836,7 @@ def build_textual_summary(
 
     lines.append("\n[5] Feature distribution shift")
     feat_diff = _top_metric_differences(feature_summary, top_k=top_k)
+
     if feat_diff.empty:
         lines.append("  - No feature-distribution shift summary available.")
     else:
@@ -699,11 +847,19 @@ def build_textual_summary(
             )
 
     lines.append("\n[6] Same-filename pairwise comparison")
+
     if pair_df is None or pair_df.empty:
-        lines.append("  - No same-filename pairs found. This is expected if old/all contain different samples.")
+        lines.append("  - No same-filename pairs found.")
     else:
         lines.append(f"  - Same-filename pairs found: {len(pair_df)}")
-        for metric in ["total_nodes_delta", "total_edges_delta", "api_name_count_delta", "api_unique_delta", "timestamp_span_delta"]:
+
+        for metric in [
+            "total_nodes_delta",
+            "total_edges_delta",
+            "api_name_count_delta",
+            "api_unique_delta",
+            "timestamp_span_delta",
+        ]:
             if metric in pair_df.columns:
                 vals = pd.to_numeric(pair_df[metric], errors="coerce").dropna()
                 if len(vals) > 0:
@@ -711,23 +867,36 @@ def build_textual_summary(
                         f"  - {metric:<24}: mean={vals.mean():+.2f}, median={vals.median():+.2f}, "
                         f"min={vals.min():+.2f}, max={vals.max():+.2f}"
                     )
+
         if "api_top20_cosine" in pair_df.columns:
             vals = pd.to_numeric(pair_df["api_top20_cosine"], errors="coerce").dropna()
             if len(vals) > 0:
                 lines.append(f"  - API top-20 cosine similarity: mean={vals.mean():.4f}, median={vals.median():.4f}")
 
-    lines.append("\n[7] Interpretation for missed unseen threats")
-    lines.append("  - If 'all' has much larger API length/node/edge counts, the unseen graphs may be longer or structurally denser than training-like graphs.")
-    lines.append("  - If API token deltas are large, the unseen family may use different API vocabulary or different behavior frequency patterns.")
-    lines.append("  - If edge-type counts differ strongly, SAGE/GAT may receive a different neighborhood structure than it learned on old graphs.")
-    lines.append("  - If feature means/std/zero fractions differ, the model may face feature-scale/domain shift even if node/edge types match.")
-    lines.append("  - If temporal gaps/spans differ, the LSTM temporal branch may be seeing a different execution rhythm.")
+    lines.append("\n[7] Missed-threat cross-reference")
 
-    lines.append("\n[8] What to inspect next")
-    lines.append("  - Open api_token_frequency_delta.csv and check top APIs overrepresented in all.")
-    lines.append("  - Open edge_type_stats_by_folder.csv and see whether temporal/process/file/registry/network edges shift.")
-    lines.append("  - Open feature_distribution_by_folder.csv and look for large x_api_* or edge_attr_* shifts.")
-    lines.append("  - Cross-check missed samples from zero-day predictions CSV against graph_level_summary.csv by sample_id.")
+    if missed_summary.get("available"):
+        lines.append(f"  - Missed threat rows: {missed_summary.get('count', 0)}")
+        lines.append(f"  - Cross-reference path: {missed_summary.get('path')}")
+        if "matched_rows" in missed_summary:
+            lines.append(f"  - Matched graph summary rows: {missed_summary.get('matched_rows')}")
+    else:
+        lines.append(f"  - Not available: {missed_summary.get('reason')}")
+
+    lines.append("\n[8] Interpretation for missed unseen threats")
+    lines.append("  - If all has much larger API length/node/edge counts, the unseen graphs are structurally outside the training-like distribution.")
+    lines.append("  - If API token deltas are large, the unseen malware uses different API behavior frequencies.")
+    lines.append("  - If edge-type counts differ strongly, the structural branch may classify malware as benign-like.")
+    lines.append("  - If feature means/std/zero fractions differ, there is feature-scale/domain shift despite matching tensor dimensions.")
+    lines.append("  - If temporal gaps/spans differ, the temporal branch may see a different execution rhythm.")
+
+    lines.append("\n[9] What to inspect next")
+    lines.append("  - missed_threat_graph_cross_reference.csv")
+    lines.append("  - api_token_frequency_delta.csv")
+    lines.append("  - edge_type_stats_by_folder.csv")
+    lines.append("  - feature_distribution_by_folder.csv")
+    lines.append("  - graph_level_summary.csv")
+
     lines.append("=" * 80)
 
     return "\n".join(lines)
@@ -747,24 +916,35 @@ def print_and_save_textual_summary(summary_text: str, out_dir: Path) -> Path:
 
 def main():
     parser = argparse.ArgumentParser(description="Compare zero-day .pkl graph folders.")
+
     parser.add_argument(
         "--old-dir",
         type=str,
         default=str(config.CACHE_DIR / "zero_day_unseen" / "old"),
         help="Folder containing older/same-family .pkl graphs.",
     )
+
     parser.add_argument(
         "--all-dir",
         type=str,
         default=str(config.CACHE_DIR / "zero_day_unseen" / "all"),
         help="Folder containing all/unseen .pkl graphs.",
     )
+
     parser.add_argument(
         "--out-dir",
         type=str,
         default=str(config.RESULTS_DIR / "zero_day_compare"),
         help="Output directory for CSV/JSON reports.",
     )
+
+    parser.add_argument(
+        "--predictions-csv",
+        type=str,
+        default=str(getattr(config, "CUSTOM_EVAL_PREDICTIONS_PATH", "")),
+        help="Optional predictions CSV from evaluate_zeroday.py for missed-threat cross-reference.",
+    )
+
     args = parser.parse_args()
 
     old_dir = Path(args.old_dir)
@@ -772,10 +952,13 @@ def main():
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
+    predictions_csv = Path(args.predictions_csv) if args.predictions_csv else None
+
     print("[INFO] Comparing graph folders")
-    print(f"       old_dir: {old_dir}")
-    print(f"       all_dir: {all_dir}")
-    print(f"       out_dir: {out_dir}")
+    print(f"       old_dir        : {old_dir}")
+    print(f"       all_dir        : {all_dir}")
+    print(f"       out_dir        : {out_dir}")
+    print(f"       predictions_csv: {predictions_csv}")
 
     df = collect_graph_summaries(old_dir=old_dir, all_dir=all_dir)
 
@@ -794,6 +977,7 @@ def main():
         "timestamp_max_gap",
         "timestamp_zero_gap_frac",
     ]
+
     folder_summary = {
         "old_dir": str(old_dir),
         "all_dir": str(all_dir),
@@ -804,15 +988,27 @@ def main():
         "error_count": int(df["error"].notna().sum()) if "error" in df.columns else 0,
     }
 
+    pair_df = pairwise_same_filename_comparison(df)
+    old_api_df, all_api_df, api_delta_df = build_api_frequency_tables(df)
+    node_stats_df = build_type_stats(df, prefix="nodes_")
+    edge_stats_df = build_type_stats(df, prefix="edges_")
+    feature_summary = build_feature_summary(df)
+
+    missed_summary = cross_reference_missed_threats(
+        graph_df=df,
+        predictions_csv=predictions_csv,
+        out_dir=out_dir,
+    )
+
+    folder_summary["missed_threat_cross_reference"] = missed_summary
+
     folder_summary_path = out_dir / "folder_level_summary.json"
     with open(folder_summary_path, "w", encoding="utf-8") as f:
         json.dump(folder_summary, f, indent=2)
 
-    pair_df = pairwise_same_filename_comparison(df)
     pair_path = out_dir / "pairwise_same_filename_comparison.csv"
     pair_df.to_csv(pair_path, index=False)
 
-    old_api_df, all_api_df, api_delta_df = build_api_frequency_tables(df)
     old_api_path = out_dir / "api_token_frequency_old.csv"
     all_api_path = out_dir / "api_token_frequency_all.csv"
     api_delta_path = out_dir / "api_token_frequency_delta.csv"
@@ -821,64 +1017,42 @@ def main():
     all_api_df.to_csv(all_api_path, index=False)
     api_delta_df.to_csv(api_delta_path, index=False)
 
-    node_stats_df = build_type_stats(df, prefix="nodes_")
     node_stats_path = out_dir / "node_type_stats_by_folder.csv"
-    node_stats_df.to_csv(node_stats_path, index=False)
-
-    edge_stats_df = build_type_stats(df, prefix="edges_")
     edge_stats_path = out_dir / "edge_type_stats_by_folder.csv"
-    edge_stats_df.to_csv(edge_stats_path, index=False)
-
-    feature_cols = [
-        c for c in df.columns
-        if (
-            c.endswith("_mean")
-            or c.endswith("_std")
-            or c.endswith("_zero_frac")
-            or c.endswith("_nan_frac")
-        )
-        and (c.startswith("x_") or c.startswith("edge_attr_"))
-    ]
-    feature_summary = build_type_stats(df, prefix="")
-    if feature_cols:
-        rows = []
-        for col in feature_cols:
-            for folder, g in df.groupby("folder"):
-                vals = pd.to_numeric(g[col], errors="coerce").dropna()
-                if len(vals) == 0:
-                    continue
-                rows.append({
-                    "folder": folder,
-                    "metric": col,
-                    "mean": float(vals.mean()),
-                    "std": float(vals.std(ddof=0)),
-                    "min": float(vals.min()),
-                    "median": float(vals.median()),
-                    "max": float(vals.max()),
-                })
-        feature_summary = pd.DataFrame(rows)
-
     feature_stats_path = out_dir / "feature_distribution_by_folder.csv"
+
+    node_stats_df.to_csv(node_stats_path, index=False)
+    edge_stats_df.to_csv(edge_stats_path, index=False)
     feature_summary.to_csv(feature_stats_path, index=False)
 
-    print("\n[INFO] Done. Saved reports:")
-    print(f"  Graph-level summary      : {graph_summary_path}")
-    print(f"  Folder-level summary     : {folder_summary_path}")
-    print(f"  Pairwise same-filename   : {pair_path}")
-    print(f"  API frequency old        : {old_api_path}")
-    print(f"  API frequency all        : {all_api_path}")
-    print(f"  API frequency delta      : {api_delta_path}")
-    print(f"  Node type stats          : {node_stats_path}")
-    print(f"  Edge type stats          : {edge_stats_path}")
-    print(f"  Feature distribution     : {feature_stats_path}")
-    print(f"  Textual summary          : {folder_summary_path}")
+    summary_text = build_textual_summary(
+        df=df,
+        folder_summary=folder_summary,
+        api_delta_df=api_delta_df,
+        node_stats_df=node_stats_df,
+        edge_stats_df=edge_stats_df,
+        feature_summary=feature_summary,
+        pair_df=pair_df,
+        missed_summary=missed_summary,
+        top_k=10,
+    )
 
-    print("\n[INFO] Quick interpretation guide:")
-    print("  - api_token_frequency_delta.csv shows APIs over/under-represented in all vs old.")
-    print("  - graph_level_summary.csv shows per-graph node/edge/API/timestamp differences.")
-    print("  - pairwise_same_filename_comparison.csv only helps if both folders share filenames.")
-    print("  - feature_distribution_by_folder.csv helps detect feature-scale/domain shift.")
-    print("  - node_type_stats_by_folder.csv and edge_type_stats_by_folder.csv show structural shift.")
+    textual_summary_path = print_and_save_textual_summary(summary_text, out_dir)
+
+    print("\n[INFO] Done. Saved reports:")
+    print(f"  Graph-level summary              : {graph_summary_path}")
+    print(f"  Folder-level summary             : {folder_summary_path}")
+    print(f"  Pairwise same-filename           : {pair_path}")
+    print(f"  API frequency old                : {old_api_path}")
+    print(f"  API frequency all                : {all_api_path}")
+    print(f"  API frequency delta              : {api_delta_path}")
+    print(f"  Node type stats                  : {node_stats_path}")
+    print(f"  Edge type stats                  : {edge_stats_path}")
+    print(f"  Feature distribution             : {feature_stats_path}")
+    print(f"  Textual summary                  : {textual_summary_path}")
+
+    if missed_summary.get("available"):
+        print(f"  Missed-threat cross-reference    : {missed_summary.get('path')}")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,2364 @@
+{
+  "sample_id": "db01ab26625151cc868e822f07513474",
+  "true_label": 2,
+  "true_name": "Other Malwares",
+  "true_binary": "Threat",
+  "pred_label": 2,
+  "pred_name": "Other Malwares",
+  "pred_binary": "Threat",
+  "correct_3class": true,
+  "correct_threat_vs_benign": true,
+  "probabilities": {
+    "ransomware": 0.15926189720630646,
+    "benign": 0.014584104530513287,
+    "other_malware": 0.8261540532112122
+  },
+  "logits": {
+    "ransomware": 0.3278801441192627,
+    "benign": -2.0627377033233643,
+    "other_malware": 1.9741114377975464
+  },
+  "branch_gate_weights": {
+    "semantic": 0.4296005964279175,
+    "structural": 0.3330373466014862,
+    "temporal": 0.2373620718717575,
+    "dominant": "semantic"
+  },
+  "hybrid_gat_sage_summary": {
+    "hybrid_gate_mean": 0.29731275141239166,
+    "hybrid_gate_std": 0.17719888873398304,
+    "hybrid_gate_min": 0.025365827372297645,
+    "hybrid_gate_max": 0.8636982291936874,
+    "hybrid_sage_mean": 0.7026872634887695,
+    "hybrid_disagreement_mean": 0.3290369175374508,
+    "hybrid_disagreement_std": 0.27061503753066063
+  },
+  "graph_basic_stats": {
+    "node_counts": {
+      "api": 12,
+      "file": 2,
+      "registry": 1,
+      "process": 1,
+      "network": 0,
+      "api_names": 0,
+      "api_name": 0,
+      "api_calls": 0,
+      "api_sequence": 0,
+      "raw_api_names": 0,
+      "names": 0,
+      "name": 0,
+      "calls": 0,
+      "call_names": 0,
+      "function_names": 0,
+      "syscall_names": 0,
+      "winapi_names": 0,
+      "labels": 0,
+      "label": 0,
+      "ids": 0,
+      "id": 0,
+      "node_ids": 0,
+      "raw_names": 0,
+      "raw_name": 0,
+      "objects": 0,
+      "object_names": 0,
+      "paths": 0,
+      "path": 0,
+      "values": 0,
+      "value": 0,
+      "keys": 0,
+      "key": 0,
+      "addresses": 0,
+      "address": 0,
+      "file_names": 0,
+      "file_paths": 0,
+      "filenames": 0,
+      "registry_keys": 0,
+      "registry_paths": 0,
+      "reg_keys": 0,
+      "process_names": 0,
+      "process_ids": 0,
+      "pids": 0,
+      "image_names": 0,
+      "cmdlines": 0,
+      "command_lines": 0,
+      "domains": 0,
+      "ips": 0,
+      "ip_addresses": 0,
+      "ports": 0,
+      "urls": 0,
+      "hosts": 0
+    },
+    "edge_counts": {
+      "api__temporal__api": 11,
+      "api__operates_on__file": 0,
+      "api__modifies__registry": 0,
+      "process__executes__api": 13
+    },
+    "api_count": 12,
+    "total_nodes": 16,
+    "total_edges": 24,
+    "edge_node_ratio": 1.5
+  },
+  "node_metadata_sources": {
+    "api": {
+      "source": "fallback_node_id",
+      "available": false,
+      "note": "No per-node metadata/name sequence found for node type 'api'. Using stable node IDs from graph indices."
+    },
+    "file": {
+      "source": "fallback_node_id",
+      "available": false,
+      "note": "No per-node metadata/name sequence found for node type 'file'. Using stable node IDs from graph indices."
+    },
+    "registry": {
+      "source": "fallback_node_id",
+      "available": false,
+      "note": "No per-node metadata/name sequence found for node type 'registry'. Using stable node IDs from graph indices."
+    },
+    "process": {
+      "source": "fallback_node_id",
+      "available": false,
+      "note": "No per-node metadata/name sequence found for node type 'process'. Using stable node IDs from graph indices."
+    },
+    "network": {
+      "source": "fallback_node_id",
+      "available": false,
+      "note": "No per-node metadata/name sequence found for node type 'network'. Using stable node IDs from graph indices."
+    }
+  },
+  "top_salient_api_nodes": [
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 1,
+        "display_name": "api_1",
+        "metadata_available": false,
+        "metadata_source": "fallback_node_id"
+      },
+      "saliency": 1.0,
+      "timestamp": 0.0,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 0,
+          "display_name": "api_0",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9621812701225281,
+          "time_gap_from_previous_api": null,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1,
+          "display_name": "api_1",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 1.0,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 2,
+          "display_name": "api_2",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8856838345527649,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.26600003242492676,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 3,
+          "display_name": "api_3",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": 0.26600003242492676,
+          "saliency": 0.8616237044334412,
+          "time_gap_from_previous_api": 0.26600003242492676,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 4,
+          "display_name": "api_4",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": 0.26600003242492676,
+          "saliency": 0.5225898027420044,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (4 zero-time gaps) plus delayed transitions (largest observed local gap=0.26600003242492676)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 0,
+        "display_name": "api_0",
+        "metadata_available": false,
+        "metadata_source": "fallback_node_id"
+      },
+      "saliency": 0.9621812701225281,
+      "timestamp": 0.0,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 0,
+          "display_name": "api_0",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9621812701225281,
+          "time_gap_from_previous_api": null,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1,
+          "display_name": "api_1",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 1.0,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 2,
+          "display_name": "api_2",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8856838345527649,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.26600003242492676,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 3,
+          "display_name": "api_3",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": 0.26600003242492676,
+          "saliency": 0.8616237044334412,
+          "time_gap_from_previous_api": 0.26600003242492676,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (3 zero-time gaps) plus delayed transitions (largest observed local gap=0.26600003242492676)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 2,
+        "display_name": "api_2",
+        "metadata_available": false,
+        "metadata_source": "fallback_node_id"
+      },
+      "saliency": 0.8856838345527649,
+      "timestamp": 0.0,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 0,
+          "display_name": "api_0",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9621812701225281,
+          "time_gap_from_previous_api": null,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1,
+          "display_name": "api_1",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 1.0,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 2,
+          "display_name": "api_2",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8856838345527649,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.26600003242492676,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 3,
+          "display_name": "api_3",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": 0.26600003242492676,
+          "saliency": 0.8616237044334412,
+          "time_gap_from_previous_api": 0.26600003242492676,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 4,
+          "display_name": "api_4",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": 0.26600003242492676,
+          "saliency": 0.5225898027420044,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 5,
+          "display_name": "api_5",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": 0.26600003242492676,
+          "saliency": 0.42064857482910156,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.26600003242492676,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (4 zero-time gaps) plus delayed transitions (largest observed local gap=0.26600003242492676)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 10,
+        "display_name": "api_10",
+        "metadata_available": false,
+        "metadata_source": "fallback_node_id"
+      },
+      "saliency": 0.8713115453720093,
+      "timestamp": 0.5320000648498535,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 7,
+          "display_name": "api_7",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5653824806213379,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 8,
+          "display_name": "api_8",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7322047352790833,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 9,
+          "display_name": "api_9",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8448747396469116,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 10,
+          "display_name": "api_10",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8713115453720093,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 11,
+          "display_name": "api_11",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.13696330785751343,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": null,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 4 immediate/zero-time API transitions."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 3,
+        "display_name": "api_3",
+        "metadata_available": false,
+        "metadata_source": "fallback_node_id"
+      },
+      "saliency": 0.8616237044334412,
+      "timestamp": 0.26600003242492676,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 0,
+          "display_name": "api_0",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": -0.26600003242492676,
+          "saliency": 0.9621812701225281,
+          "time_gap_from_previous_api": null,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1,
+          "display_name": "api_1",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": -0.26600003242492676,
+          "saliency": 1.0,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 2,
+          "display_name": "api_2",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": -0.26600003242492676,
+          "saliency": 0.8856838345527649,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.26600003242492676,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 3,
+          "display_name": "api_3",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8616237044334412,
+          "time_gap_from_previous_api": 0.26600003242492676,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 4,
+          "display_name": "api_4",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5225898027420044,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 5,
+          "display_name": "api_5",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.42064857482910156,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.26600003242492676,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 6,
+          "display_name": "api_6",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.26600003242492676,
+          "saliency": 0.6850650310516357,
+          "time_gap_from_previous_api": 0.26600003242492676,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (5 zero-time gaps) plus delayed transitions (largest observed local gap=0.26600003242492676)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 9,
+        "display_name": "api_9",
+        "metadata_available": false,
+        "metadata_source": "fallback_node_id"
+      },
+      "saliency": 0.8448747396469116,
+      "timestamp": 0.5320000648498535,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 6,
+          "display_name": "api_6",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6850650310516357,
+          "time_gap_from_previous_api": 0.26600003242492676,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 7,
+          "display_name": "api_7",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5653824806213379,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 8,
+          "display_name": "api_8",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7322047352790833,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 9,
+          "display_name": "api_9",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8448747396469116,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 10,
+          "display_name": "api_10",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8713115453720093,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 11,
+          "display_name": "api_11",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.13696330785751343,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": null,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 5 immediate/zero-time API transitions."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 8,
+        "display_name": "api_8",
+        "metadata_available": false,
+        "metadata_source": "fallback_node_id"
+      },
+      "saliency": 0.7322047352790833,
+      "timestamp": 0.5320000648498535,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 5,
+          "display_name": "api_5",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": -0.26600003242492676,
+          "saliency": 0.42064857482910156,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.26600003242492676,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 6,
+          "display_name": "api_6",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6850650310516357,
+          "time_gap_from_previous_api": 0.26600003242492676,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 7,
+          "display_name": "api_7",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5653824806213379,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 8,
+          "display_name": "api_8",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7322047352790833,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 9,
+          "display_name": "api_9",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8448747396469116,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 10,
+          "display_name": "api_10",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8713115453720093,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 11,
+          "display_name": "api_11",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.13696330785751343,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": null,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (5 zero-time gaps) plus delayed transitions (largest observed local gap=0.26600003242492676)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 6,
+        "display_name": "api_6",
+        "metadata_available": false,
+        "metadata_source": "fallback_node_id"
+      },
+      "saliency": 0.6850650310516357,
+      "timestamp": 0.5320000648498535,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 3,
+          "display_name": "api_3",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": -0.26600003242492676,
+          "saliency": 0.8616237044334412,
+          "time_gap_from_previous_api": 0.26600003242492676,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 4,
+          "display_name": "api_4",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": -0.26600003242492676,
+          "saliency": 0.5225898027420044,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 5,
+          "display_name": "api_5",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": -0.26600003242492676,
+          "saliency": 0.42064857482910156,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.26600003242492676,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 6,
+          "display_name": "api_6",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6850650310516357,
+          "time_gap_from_previous_api": 0.26600003242492676,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 7,
+          "display_name": "api_7",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5653824806213379,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 8,
+          "display_name": "api_8",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7322047352790833,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 9,
+          "display_name": "api_9",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8448747396469116,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (6 zero-time gaps) plus delayed transitions (largest observed local gap=0.26600003242492676)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 7,
+        "display_name": "api_7",
+        "metadata_available": false,
+        "metadata_source": "fallback_node_id"
+      },
+      "saliency": 0.5653824806213379,
+      "timestamp": 0.5320000648498535,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 4,
+          "display_name": "api_4",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": -0.26600003242492676,
+          "saliency": 0.5225898027420044,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 5,
+          "display_name": "api_5",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": -0.26600003242492676,
+          "saliency": 0.42064857482910156,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.26600003242492676,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 6,
+          "display_name": "api_6",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6850650310516357,
+          "time_gap_from_previous_api": 0.26600003242492676,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 7,
+          "display_name": "api_7",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5653824806213379,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 8,
+          "display_name": "api_8",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7322047352790833,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 9,
+          "display_name": "api_9",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8448747396469116,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 10,
+          "display_name": "api_10",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8713115453720093,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (6 zero-time gaps) plus delayed transitions (largest observed local gap=0.26600003242492676)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 4,
+        "display_name": "api_4",
+        "metadata_available": false,
+        "metadata_source": "fallback_node_id"
+      },
+      "saliency": 0.5225898027420044,
+      "timestamp": 0.26600003242492676,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 1,
+          "display_name": "api_1",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": -0.26600003242492676,
+          "saliency": 1.0,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 2,
+          "display_name": "api_2",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.0,
+          "relative_time_from_salient_api": -0.26600003242492676,
+          "saliency": 0.8856838345527649,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.26600003242492676,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 3,
+          "display_name": "api_3",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8616237044334412,
+          "time_gap_from_previous_api": 0.26600003242492676,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 4,
+          "display_name": "api_4",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5225898027420044,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 5,
+          "display_name": "api_5",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.42064857482910156,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.26600003242492676,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 6,
+          "display_name": "api_6",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.26600003242492676,
+          "saliency": 0.6850650310516357,
+          "time_gap_from_previous_api": 0.26600003242492676,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 7,
+          "display_name": "api_7",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id",
+          "timestamp": 0.5320000648498535,
+          "relative_time_from_salient_api": 0.26600003242492676,
+          "saliency": 0.5653824806213379,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (5 zero-time gaps) plus delayed transitions (largest observed local gap=0.26600003242492676)."
+    }
+  ],
+  "salient_behavioral_neighborhoods": {
+    "global_relation_counts_touching_salient_api_nodes": {
+      "api__temporal__api": 11,
+      "process__executes__api": 11
+    },
+    "connected_resource_summary": {
+      "process": {
+        "process_0": 11
+      }
+    },
+    "relation_summaries": [
+      {
+        "edge_type": "api__temporal__api",
+        "relation_meaning": "API execution/order transition",
+        "num_edges_touching_salient_api_nodes": 11,
+        "sampled_examples": [
+          {
+            "edge_index_position": 0,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 0,
+              "display_name": "api_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1,
+              "display_name": "api_1",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_0 was followed by api_1 in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1,
+              "display_name": "api_1",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 2,
+              "display_name": "api_2",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_1 was followed by api_2 in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 2,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 2,
+              "display_name": "api_2",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 3,
+              "display_name": "api_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_2 was followed by api_3 in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 3,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 3,
+              "display_name": "api_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 4,
+              "display_name": "api_4",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_3 was followed by api_4 in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 4,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 4,
+              "display_name": "api_4",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 5,
+              "display_name": "api_5",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_4 was followed by api_5 in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 5,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 5,
+              "display_name": "api_5",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 6,
+              "display_name": "api_6",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_5 was followed by api_6 in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 6,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 6,
+              "display_name": "api_6",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 7,
+              "display_name": "api_7",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_6 was followed by api_7 in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 7,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 7,
+              "display_name": "api_7",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 8,
+              "display_name": "api_8",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_7 was followed by api_8 in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 8,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 8,
+              "display_name": "api_8",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 9,
+              "display_name": "api_9",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_8 was followed by api_9 in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 9,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 9,
+              "display_name": "api_9",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 10,
+              "display_name": "api_10",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_9 was followed by api_10 in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 10,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 10,
+              "display_name": "api_10",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 11,
+              "display_name": "api_11",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_10 was followed by api_11 in the API temporal sequence."
+          }
+        ]
+      },
+      {
+        "edge_type": "process__executes__api",
+        "relation_meaning": "process executed or invoked API behavior",
+        "num_edges_touching_salient_api_nodes": 11,
+        "sampled_examples": [
+          {
+            "edge_index_position": 0,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 0,
+              "display_name": "api_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_0."
+          },
+          {
+            "edge_index_position": 1,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1,
+              "display_name": "api_1",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_1."
+          },
+          {
+            "edge_index_position": 2,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 2,
+              "display_name": "api_2",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_2."
+          },
+          {
+            "edge_index_position": 3,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 3,
+              "display_name": "api_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_3."
+          },
+          {
+            "edge_index_position": 4,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 4,
+              "display_name": "api_4",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_4."
+          },
+          {
+            "edge_index_position": 6,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 6,
+              "display_name": "api_6",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_6."
+          },
+          {
+            "edge_index_position": 7,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 7,
+              "display_name": "api_7",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_7."
+          },
+          {
+            "edge_index_position": 8,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 7,
+              "display_name": "api_7",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_7."
+          },
+          {
+            "edge_index_position": 9,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 8,
+              "display_name": "api_8",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_8."
+          },
+          {
+            "edge_index_position": 10,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 9,
+              "display_name": "api_9",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_9."
+          },
+          {
+            "edge_index_position": 11,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 10,
+              "display_name": "api_10",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_10."
+          }
+        ]
+      }
+    ],
+    "per_salient_api_neighborhoods": [
+      {
+        "api_index": 1,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 1,
+          "display_name": "api_1",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id"
+        },
+        "relation_counts": {
+          "api__temporal__api": 1,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 1,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 1,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1,
+              "display_name": "api_1",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_1."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 1,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1,
+              "display_name": "api_1",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 2,
+              "display_name": "api_2",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_1 was followed by api_2 in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "api_1 sits in model-salient relations: api__temporal__api:1, process__executes__api:1.",
+          "api_1 is directly connected to node types: api:1, process:1.",
+          "Incoming context into api_1: process:1.",
+          "Outgoing context from api_1: api:1."
+        ]
+      },
+      {
+        "api_index": 0,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 0,
+          "display_name": "api_0",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id"
+        },
+        "relation_counts": {
+          "api__temporal__api": 1,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 1,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 0,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 0,
+              "display_name": "api_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_0."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 0,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 0,
+              "display_name": "api_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1,
+              "display_name": "api_1",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_0 was followed by api_1 in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "api_0 sits in model-salient relations: api__temporal__api:1, process__executes__api:1.",
+          "api_0 is directly connected to node types: api:1, process:1.",
+          "Incoming context into api_0: process:1.",
+          "Outgoing context from api_0: api:1."
+        ]
+      },
+      {
+        "api_index": 2,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 2,
+          "display_name": "api_2",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id"
+        },
+        "relation_counts": {
+          "api__temporal__api": 1,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 1,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 2,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 2,
+              "display_name": "api_2",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_2."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 2,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 2,
+              "display_name": "api_2",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 3,
+              "display_name": "api_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_2 was followed by api_3 in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "api_2 sits in model-salient relations: api__temporal__api:1, process__executes__api:1.",
+          "api_2 is directly connected to node types: api:1, process:1.",
+          "Incoming context into api_2: process:1.",
+          "Outgoing context from api_2: api:1."
+        ]
+      },
+      {
+        "api_index": 10,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 10,
+          "display_name": "api_10",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id"
+        },
+        "relation_counts": {
+          "api__temporal__api": 1,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 1,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 11,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 10,
+              "display_name": "api_10",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_10."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 10,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 10,
+              "display_name": "api_10",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 11,
+              "display_name": "api_11",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_10 was followed by api_11 in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "api_10 sits in model-salient relations: api__temporal__api:1, process__executes__api:1.",
+          "api_10 is directly connected to node types: api:1, process:1.",
+          "Incoming context into api_10: process:1.",
+          "Outgoing context from api_10: api:1."
+        ]
+      },
+      {
+        "api_index": 3,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 3,
+          "display_name": "api_3",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id"
+        },
+        "relation_counts": {
+          "api__temporal__api": 1,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 1,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 3,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 3,
+              "display_name": "api_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_3."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 3,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 3,
+              "display_name": "api_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 4,
+              "display_name": "api_4",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_3 was followed by api_4 in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "api_3 sits in model-salient relations: api__temporal__api:1, process__executes__api:1.",
+          "api_3 is directly connected to node types: api:1, process:1.",
+          "Incoming context into api_3: process:1.",
+          "Outgoing context from api_3: api:1."
+        ]
+      },
+      {
+        "api_index": 9,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 9,
+          "display_name": "api_9",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id"
+        },
+        "relation_counts": {
+          "api__temporal__api": 1,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 1,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 10,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 9,
+              "display_name": "api_9",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_9."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 9,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 9,
+              "display_name": "api_9",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 10,
+              "display_name": "api_10",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_9 was followed by api_10 in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "api_9 sits in model-salient relations: api__temporal__api:1, process__executes__api:1.",
+          "api_9 is directly connected to node types: api:1, process:1.",
+          "Incoming context into api_9: process:1.",
+          "Outgoing context from api_9: api:1."
+        ]
+      },
+      {
+        "api_index": 8,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 8,
+          "display_name": "api_8",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id"
+        },
+        "relation_counts": {
+          "api__temporal__api": 1,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 1,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 9,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 8,
+              "display_name": "api_8",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_8."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 8,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 8,
+              "display_name": "api_8",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 9,
+              "display_name": "api_9",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_8 was followed by api_9 in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "api_8 sits in model-salient relations: api__temporal__api:1, process__executes__api:1.",
+          "api_8 is directly connected to node types: api:1, process:1.",
+          "Incoming context into api_8: process:1.",
+          "Outgoing context from api_8: api:1."
+        ]
+      },
+      {
+        "api_index": 6,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 6,
+          "display_name": "api_6",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 5,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 5,
+              "display_name": "api_5",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 6,
+              "display_name": "api_6",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_5 was followed by api_6 in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 6,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 6,
+              "display_name": "api_6",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_6."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 6,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 6,
+              "display_name": "api_6",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 7,
+              "display_name": "api_7",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_6 was followed by api_7 in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "api_6 sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "api_6 is directly connected to node types: api:2, process:1.",
+          "Incoming context into api_6: api:1, process:1.",
+          "Outgoing context from api_6: api:1."
+        ]
+      },
+      {
+        "api_index": 7,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 7,
+          "display_name": "api_7",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id"
+        },
+        "relation_counts": {
+          "api__temporal__api": 1,
+          "process__executes__api": 2
+        },
+        "connected_node_type_counts": {
+          "api": 1,
+          "process": 2
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 7,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 7,
+              "display_name": "api_7",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_7."
+          },
+          {
+            "edge_index_position": 8,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 7,
+              "display_name": "api_7",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_7."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 7,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 7,
+              "display_name": "api_7",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 8,
+              "display_name": "api_8",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_7 was followed by api_8 in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "api_7 sits in model-salient relations: api__temporal__api:1, process__executes__api:2.",
+          "api_7 is directly connected to node types: api:1, process:2.",
+          "Incoming context into api_7: process:2.",
+          "Outgoing context from api_7: api:1."
+        ]
+      },
+      {
+        "api_index": 4,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 4,
+          "display_name": "api_4",
+          "metadata_available": false,
+          "metadata_source": "fallback_node_id"
+        },
+        "relation_counts": {
+          "api__temporal__api": 1,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 1,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 4,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "process_0",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 4,
+              "display_name": "api_4",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "Process node process_0 executed or invoked API node api_4."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 4,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 4,
+              "display_name": "api_4",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 5,
+              "display_name": "api_5",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "plain_english": "api_4 was followed by api_5 in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "api_4 sits in model-salient relations: api__temporal__api:1, process__executes__api:1.",
+          "api_4 is directly connected to node types: api:1, process:1.",
+          "Incoming context into api_4: process:1.",
+          "Outgoing context from api_4: api:1."
+        ]
+      }
+    ]
+  },
+  "analyst_rationale": [
+    "The model predicted Other Malwares (Threat) with probability 0.8262.",
+    "The adaptive fusion leaned most on the semantic branch (semantic=0.430, structural=0.333, temporal=0.237); this means the raw/projected API-node feature summary carried the strongest graph-level signal.",
+    "The highest-saliency API nodes were: api_1, api_0, api_2, api_10, api_3, api_9, api_8, api_6, api_7, api_4. These are the API nodes whose feature vectors most influenced the selected class logit.",
+    "Those salient API nodes were embedded in these graph relations: api__temporal__api:11, process__executes__api:11.",
+    "The salient API regions touched external graph objects/resources: process nodes=['process_0'].",
+    "At whole-graph level, the dominant relation volumes were: process__executes__api:13, api__temporal__api:11.",
+    "Security interpretation: the model treated this graph as a threat because high-saliency API feature vectors occurred inside a structured behavioral context, especially temporal API transitions and process/API execution links. If file, registry, or network edges are present around salient APIs, those resource interactions strengthen the behavioral alert."
+  ],
+  "interpretability_basis": {
+    "saliency_method": "gradient_x_input over API node feature vectors",
+    "what_model_actually_used": [
+      "API node feature vectors",
+      "heterogeneous graph relations",
+      "hybrid GAT/SAGE spatial message passing",
+      "LSTM temporal sequence modeling",
+      "adaptive semantic/structural/temporal branch fusion",
+      "final classifier logits"
+    ],
+    "metadata_policy": "If real node names/metadata exist in the .pkl graph they are displayed. If not, stable graph node IDs such as api_1 or process_0 are used.",
+    "not_used_as_model_input": "No hand-written keyword suspiciousness labels are used to create the prediction."
+  },
+  "interpretation_note": "This explanation combines model saliency, graph connectivity, temporal context, adaptive branch weights, and available graph metadata. It is an analyst aid, not a formal causal proof."
+}
