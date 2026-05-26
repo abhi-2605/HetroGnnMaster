@@ -1,6 +1,6 @@
-# Ransomware TGNN
+# Threat Detection TGNN
 
-Temporal Graph Neural Network (TGNN) pipeline for dynamic ransomware and malware behavior detection. The project builds schema-aware heterogeneous graphs from sandbox execution reports, enriches API nodes with LLM embeddings, and trains a temporal-structural model to classify behavior into ransomware, benign, and other malware classes.
+Temporal Graph Neural Network (TGNN) pipeline for dynamic threat detection. The project builds schema-aware heterogeneous graphs from sandbox execution reports, enriches API nodes with LLM embeddings, and trains a temporal-structural model for behavioral classification. Threat categories can include ransomware, trojans, and other malicious families, while the final operational decision focuses on threat vs benign.
 
 ## What the model does
 
@@ -10,13 +10,13 @@ The model learns behavioral patterns from execution traces by combining three si
 - Temporal: sequence modeling over API call order and timing using temporal edges and an LSTM backbone.
 - Semantic: sentence-transformer embeddings for API names to reduce brittleness to API obfuscation.
 
-Output is a 3-class prediction per report: Ransomware, Benign, or Other Malware. For the final operational decision, results are also collapsed into Threat vs Benign where Threat = Ransomware or Other Malware. Training uses schema-aware validation to keep feature dimensions consistent across cached graph sources.
+Output is a 3-class prediction per report: Threat, Benign, or Other Malicious (family-specific). For the final operational decision, results are also collapsed into Threat vs Benign. Training uses schema-aware validation to keep feature dimensions consistent across cached graph sources.
 
 ## Threat vs Benign decision
 
 The training loop reports both 3-class metrics and a derived 2-class view:
 
-- Threat = Ransomware + Other Malware
+- Threat = Ransomware + Trojan + Other Malicious
 - Benign = Benign
 
 This mirrors the final usage, where the model is judged on its ability to separate malicious behavior from benign activity.
