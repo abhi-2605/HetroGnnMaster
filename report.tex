@@ -322,8 +322,8 @@ evolving cyber attacks targeting critical infrastructure and organisational syst
 \section{Thesis Objectives}
 \label{sec:objectives}
 
-This thesis aims to investigate the application of heterogeneous Temporal Graph Neural Networks
-(TGNNs) for dynamic behavioural threat detection in modern cybersecurity environments. The study
+This thesis aims to investigate a heterogeneous temporal graph-based learning framework
+for dynamic behavioural threat detection in modern cybersecurity environments. The study
 focuses on improving behavioural threat analysis through the integration of heterogeneous graph
 representation learning, semantic contextual understanding, and temporal execution modelling
 within a unified detection framework. In particular, the research explores how semantic embeddings,
@@ -348,7 +348,7 @@ execution patterns. The study aims to analyse whether semantic representations c
 behavioural generalisation compared to conventional handcrafted behavioural features.
 
 \item[\textbf{Objective 3.}]
-To design and evaluate a heterogeneous Temporal Graph Neural Network (TGNN) architecture
+To design and evaluate a heterogeneous temporal graph-based hybrid architecture
 integrating heterogeneous graph message passing, Hybrid GAT-SAGE aggregation, and
 bidirectional LSTM-based temporal sequence modelling for dynamic threat detection. This objective
 focuses on investigating how structural graph relationships and temporal execution dynamics can
@@ -671,7 +671,7 @@ framework proposed in this thesis.
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}lccccc@{}}
 \toprule
-\textbf{Approach} & \textbf{Semantic} & \textbf{Structural} & \textbf{Temporal} & \textbf{Heterogeneous} & \textbf{Explainable} \\
+\textbf{Approach} & \textbf{Semantic} & \textbf{Structural} & \textbf{Temporal} & \textbf{Heterogeneous} & \textbf{Attribution Support} \\
 \midrule
 Signature-based~\cite{ucci2019survey}       & $\times$           & $\times$           & $\times$           & $\times$           & \checkmark       \\
 Static ML~\cite{ye2017survey}               & $\times$           & \textit{Limited}   & $\times$           & $\times$           & \textit{Partial} \\
@@ -681,14 +681,21 @@ HetGNN~\cite{hetgnn2019}                    & $\times$           & \checkmark   
 TGN~\cite{tgn2020}                          & $\times$           & \checkmark         & \checkmark         & $\times$           & $\times$         \\
 BEACON~\cite{perera2023beacon}              & \checkmark         & $\times$           & $\times$           & $\times$           & \textit{Partial} \\
 \midrule
-\textbf{Proposed Framework}                 & \checkmark         & \checkmark         & \checkmark         & \checkmark         & \textit{Attention-Based} \\
+\textbf{Proposed Framework}                 & \checkmark         & \checkmark         & \checkmark         & \checkmark         & \textit{Attention/Attribution-Based} \\
 \bottomrule
 \end{tabular}
 }
 \caption{Comparison of behavioural threat detection approaches 
-(\checkmark~=~full; Limited~=~partial; Partial~=~attention only).}
+(\checkmark~=~full; Limited~=~partial capability; Partial~=~limited attribution support).}
 \label{tab:literature_comparison}
 \end{table}
+
+The comparison highlights a clear fragmentation within the current literature. While several
+approaches successfully address individual behavioural dimensions, the reviewed literature
+indicates limited exploration of frameworks that fully integrate semantic contextual understanding,
+heterogeneous structural reasoning, temporal behavioural modelling, and attribution-oriented
+interpretability within a single behavioural threat detection framework. This observation provides
+the primary motivation for the integrated framework proposed in this thesis.
 
 \section{Research Gap}
 \label{sec:research_gap}
@@ -760,8 +767,17 @@ modelling semantic context, temporal execution dynamics, and heterogeneous struc
 relationships while enabling analysis of their individual and collective contributions to threat
 detection. Such a framework is necessary not only to improve detection performance, but also to
 advance understanding of how different behavioural dimensions contribute to the manifestation and
-identification of malicious activity. The theoretical foundations required to support such a
-framework are introduced in the following chapter.
+identification of malicious activity.
+
+Furthermore, existing studies rarely investigate the individual contribution of semantic,
+structural, and temporal behavioural information through systematic ablation analysis.
+Consequently, the extent to which each behavioural dimension contributes to detection
+performance remains insufficiently understood. Addressing this limitation may provide both
+improved detection capability and deeper scientific understanding of behavioural threat
+characterisation.
+
+These gaps motivate the research questions presented next, while the theoretical foundations
+required to support the proposed framework are introduced in the following chapter.
 
 \endgroup
 \section{Research Questions}
@@ -769,7 +785,7 @@ framework are introduced in the following chapter.
 
 Building on the gap articulated in Section~\ref{sec:research_gap}, this thesis investigates the
 integration of semantic, structural, and temporal behavioural reasoning within a unified
-heterogeneous Temporal Graph Neural Network framework for dynamic threat detection. The
+heterogeneous temporal graph-based framework for dynamic threat detection. The
 investigation is organised around five research questions, each targeting a specific dimension
 of the identified gap.
 
@@ -782,15 +798,15 @@ that are previously unobserved during training? This question addresses the sema
 dimension of the gap and concerns whether contextual semantic understanding of API behaviour can
 substitute for, or complement, symbolic identity.
 
-\item[\textbf{RQ2 -- Temporal and Semantic Robustness.}]
-Does the joint integration of temporal behavioural characteristics and semantic API representations
-improve the robustness and generalisation capability of threat detection compared with approaches
-that rely primarily on static structural or static behavioural representations? This question targets
-the interaction between the temporal and semantic dimensions and examines whether their
-combination yields gains not achievable by either alone.
+\item[\textbf{RQ2 -- Complementarity of Semantic and Temporal Behavioural Signals.}]
+To what extent do semantic API representations and temporal behavioural characteristics provide
+complementary information for distinguishing malicious and benign execution behaviour? This
+question investigates whether semantic context and temporal execution dynamics capture different
+behavioural properties and whether their combined modelling provides insights beyond either
+dimension individually.
 
-\item[\textbf{RQ3 -- Unified TGNN Performance.}]
-How does the proposed heterogeneous, schema-aware Temporal Graph Neural Network --
+\item[\textbf{RQ3 -- Unified Temporal Graph-Based Performance.}]
+How does the proposed heterogeneous, schema-aware temporal graph-based hybrid framework --
 combining semantic, structural, and temporal reasoning within a single architecture -- perform
 when compared with representative baselines drawn from classical machine learning, sequential
 deep learning, static graph neural network, and LLM-based behavioural analysis families? This
@@ -798,17 +814,16 @@ question evaluates the overall efficacy of joint behavioural modelling against r
 baselines from each prior methodological stream.
 
 \item[\textbf{RQ4 -- Model Interpretability.}]
-Can the proposed framework produce attributable explanations capable of communicating to
-security analysts why a specific behavioural subgraph triggered a threat alert, and which behavioural
-dimension drove the decision? This question targets the interpretability gap and concerns whether
+Can the proposed framework provide attribution signals that help communicate to
+security analysts which behavioural subgraphs and behavioural dimensions contributed to a threat
+prediction? This question targets the interpretability gap and concerns whether
 multi-dimensional behavioural modelling can be made operationally informative rather than opaque.
 
 \item[\textbf{RQ5 -- Cross-Family Generalisation.}]
 Can the proposed framework generalise effectively across held-out threat families and behavioural
 perturbations while maintaining stable detection performance? This question addresses the
 operational requirement of robustness to evolving threats highlighted by~\cite{reategui2024}
-and~\cite{cen2021ransomware}, and is investigated conditional on the availability of sufficient
-family-level metadata and on time constraints.
+and~\cite{cen2021ransomware}.
 
 \end{description}
 
