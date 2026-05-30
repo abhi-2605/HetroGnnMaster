@@ -13,3 +13,6 @@ EOF
 enrichedB/
 .vscode/
 venv/
+report.*
+!report.tex
+!report.pdf
