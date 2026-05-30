@@ -76,8 +76,8 @@
 \usepackage{enumitem}
 
 % ── KOMA heading style ──────────────────────────────────────────────────────
-\setkomafont{chapter}{\large\bfseries}
-\setkomafont{section}{\normalsize\bfseries}
+\setkomafont{chapter}{\LARGE\bfseries}
+\setkomafont{section}{\large\bfseries}
 \setkomafont{subsection}{\normalsize\bfseries}
 \RedeclareSectionCommand[beforeskip=2.5ex plus 1ex minus .2ex,
                          afterskip=1.5ex plus .2ex]{chapter}
@@ -96,23 +96,26 @@
 \begin{titlepage}
 \begin{center}
 
-\includegraphics[width=0.45\textwidth]{img/UK_Logo.jpeg}\\[4cm]
+\includegraphics[width=0.40\textwidth]{img/UK_Logo.jpeg}\\[2cm]
 
 {\LARGE\bfseries
-Threat Detection Using Heterogeneous Graph Neural Networks\\[0.3em]
-with Semantic and Temporal Features}\\[2.5cm]
+Threat Detection Using\\[0.35em]
+Heterogeneous Graph Neural Networks\\[0.35em]
+with Semantic and Temporal Features}\\[1.4cm]
 
-{\Large Master's Thesis}\\[0.6cm]
+{\Large Master's Thesis}\\[0.45cm]
 
 {\normalsize
 Submitted in partial fulfillment of the requirements for\\[0.2em]
 the degree of Master of Science (M.Sc.)\\[0.2em]
-in Web and Data Science}\\[2.8cm]
+in Web and Data Science}\\[1.6cm]
 
 {\normalsize submitted by}\\[0.35cm]
-{\large\bfseries Kandenghat Abhishek Menon}\\[3.5cm]
+{\large\bfseries Kandenghat Abhishek Menon}
 
 \end{center}
+
+\vfill
 
 \noindent
 \begin{tabular}{@{}p{3.8cm}p{10cm}@{}}
@@ -122,7 +125,7 @@ Second supervisor: & Christopher Latz \\
                    & Institut f{\"u}r Wirtschafts- und Verwaltungsinformatik \\
 \end{tabular}
 
-\vfill
+\vspace{1cm}
 \noindent Koblenz, May 2026
 \end{titlepage}
 
@@ -131,8 +134,8 @@ Second supervisor: & Christopher Latz \\
 \addcontentsline{toc}{chapter}{Statement}
 
 I hereby certify that this thesis has been composed by me and is based on my own
-work, that I did not use any further resources than specified -- in particular no
-references unmentioned in the reference section -- and that I did not submit this
+work, that I did not use any further resources than specified, in particular no
+references unmentioned in the reference section, and that I did not submit this
 thesis to another examination before. The paper submission is identical to the
 submitted electronic version.
 
@@ -158,55 +161,44 @@ I agree to have this thesis published on the Internet.   & $\square$ & $\square$
 % ============================================================
 % ABSTRACT
 % ============================================================
+\begingroup
+\renewcommand*{\raggedchapter}{\centering}
 \chapter*{Abstract}
+\endgroup
 \addcontentsline{toc}{chapter}{Abstract}
 
-Cyber threats such as ransomware, trojans, bankers, adware, and related threat families
-continue to evolve through obfuscation, polymorphism, API substitution, and increasingly
-sophisticated execution strategies, thereby reducing the effectiveness of traditional
-signature-based and static machine learning detection systems. Existing approaches commonly
-rely on handcrafted features or static behavioural representations that fail to adequately
-capture the temporal evolution, semantic context, and structural dependencies inherent in
-malicious system activity. Although recent Graph Neural Network (GNN)-based approaches
-improve structural behavioural modelling, many existing methods continue to represent execution
-traces as static graphs and lack robust integration of temporal execution dynamics and semantic
-contextual understanding.
-
-Current threat detection research exhibits a fundamental limitation in simultaneously modelling
-three critical dimensions of malicious behaviour: temporal dynamics, semantic robustness, and
-heterogeneous structural relationships. Conventional machine learning approaches frequently
-discard execution ordering and relational dependencies, while existing GNN architectures often
-overlook temporal characteristics such as operation timing, acceleration, and burst behaviour.
-Similarly, recent Large Language Model (LLM)-based semantic approaches improve contextual
-interpretation of API behaviour but remain limited in modelling evolving execution dynamics over
-time. As a result, existing systems may struggle to reliably distinguish rapidly evolving malicious
-behaviour from legitimate software performing structurally similar operations across longer
-execution intervals.
-
-This thesis proposes a heterogeneous Temporal Graph Neural Network (TGNN) framework
-for dynamic threat detection using integrated semantic and temporal behavioural features. System
-execution traces collected from sandbox environments are transformed into schema-aware
-heterogeneous graphs in which API calls, processes, files, registry objects, and network
-interactions are represented as typed nodes connected through typed temporal relations. To
-improve robustness against API obfuscation and behavioural variation, node representations are
-enriched using LLM-based semantic embeddings generated through pretrained sentence-transformer
-models. The proposed architecture further integrates heterogeneous graph message passing,
-Hybrid GAT-SAGE aggregation, bidirectional LSTM-based temporal sequence modelling, and
-engineered temporal behavioural features including operation frequency, acceleration, and burst
-activity characteristics. In addition, an adaptive three-branch gated fusion mechanism is employed
-to jointly integrate semantic, structural, and temporal behavioural representations for threat
-classification.
-
-The proposed system classifies behavioural activity into Threat and Benign categories while
-improving robustness against previously unseen threat variants and evolving attack strategies. The
-framework is evaluated against static machine learning baselines, sequential deep learning models,
-static GNN architectures, and LLM-based behavioural approaches using metrics including accuracy,
-precision, recall, F1-score, AUPRC, false positive rate, and time-to-detect performance. A
-leave-family-out evaluation protocol is additionally employed to assess generalisation capability
-across previously unseen threat families. By integrating semantic understanding, temporal execution
-dynamics, and heterogeneous structural reasoning within a unified architecture, the proposed
-framework aims to improve behavioural threat detection and provide a stronger foundation for
-dynamic cybersecurity analysis in evolving threat environments.
+Modern cyber threats evolve through obfuscation, polymorphism, and API
+substitution, eroding signature-based and static machine-learning detection.
+Behavioural detection, which identifies malicious activity from runtime
+execution rather than static form, has become the dominant response, yet
+depends on how faithfully its representation captures observed behaviour.
+Existing approaches each capture only part of it: graph-based methods model
+execution traces as static graphs and rarely integrate temporal dynamics with
+semantic context, while Large Language Model (LLM)-based approaches capture
+contextual API meaning but discard relational structure and execution timing.
+Current systems therefore struggle to distinguish rapidly evolving threats from
+legitimate software that performs structurally similar operations. This thesis
+proposes a heterogeneous Temporal Graph Neural Network (TGNN) framework that
+unites these three dimensions (semantic context, relational structure, and
+temporal dynamics) within a single architecture. Sandbox execution traces are
+transformed into schema-aware heterogeneous graphs whose typed nodes (API
+calls, processes, files, registry objects, and network endpoints) are connected
+through typed temporal relations, with node representations enriched by
+pretrained sentence-transformer embeddings for robustness against API
+obfuscation and naming variation. A hybrid relational aggregator combining
+graph attention and inductive neighbourhood operators is paired with a
+bidirectional LSTM and engineered temporal features (operation frequency,
+acceleration, and burst activity), and an adaptive three-branch gated fusion
+mechanism integrates the semantic, structural, and temporal representations for
+classification. It is designed for evaluation against classical
+machine-learning, sequential deep-learning, static graph neural network, and
+LLM-based baselines using accuracy, precision, recall, F1-score, AUPRC, false
+positive rate, and time-to-detect, with a leave-family-out protocol assessing
+generalisation to unseen threat families and an ablation isolating each
+dimension's contribution. By uniting semantic understanding, temporal execution
+dynamics, and heterogeneous structural reasoning in one interpretable
+framework, this work aims to strengthen behavioural threat detection and
+improve early-stage discrimination of evolving threats in operational settings.
 
 % ============================================================
 \tableofcontents
@@ -223,170 +215,127 @@ dynamic cybersecurity analysis in evolving threat environments.
 \chapter{Introduction}
 \label{chap:introduction}
 
-The growing dependence on digital infrastructure, cloud computing, and interconnected systems
-has significantly increased the scale and complexity of modern cybersecurity
-threats~\cite{bilot2024survey}. Malicious software such as ransomware, trojans, bankers,
-spyware, and related threat families continues to evolve through sophisticated techniques
-designed to evade conventional security mechanisms~\cite{bilot2024survey, amer2025graphshield}.
-These threats frequently employ obfuscation, polymorphism, API substitution, and
-behaviour-altering execution strategies, making reliable threat detection increasingly challenging in
-modern computing environments~\cite{bilot2024survey, amer2025graphshield}. Among these
-threats, ransomware has emerged as one of the most disruptive forms of cyber attack due to its
-ability to encrypt critical data, interrupt organisational operations, and cause substantial financial
-and operational damage~\cite{bilot2023intrusion, amer2025graphshield}. The increasing frequency
-of attacks targeting healthcare systems, financial institutions, government organisations, and
-industrial infrastructure has highlighted the limitations of traditional reactive cybersecurity
-approaches and emphasised the need for more adaptive and intelligent behavioural detection
-methods~\cite{bilot2024survey, bilot2023intrusion}.
+The growing dependence on digital infrastructure, cloud computing, and
+interconnected systems has significantly increased the scale and complexity of
+modern cybersecurity threats~\cite{bilot2024survey}. Threats such as ransomware,
+trojans, bankers, spyware, and related families continue to evolve through
+obfuscation, polymorphism, API substitution, and behaviour-altering execution
+strategies~\cite{bilot2024survey, amer2025graphshield}. Among these, ransomware
+has emerged as one of the most disruptive forms of attack due to its ability to
+encrypt critical data, interrupt operations, and cause substantial financial and
+operational damage~\cite{bilot2023intrusion, amer2025graphshield}. The
+increasing frequency of attacks targeting healthcare, financial, government, and
+industrial systems has highlighted the limitations of traditional reactive
+cybersecurity approaches and created demand for more adaptive behavioural
+detection methods~\cite{bilot2024survey, bilot2023intrusion}.
 
-To address these challenges, machine learning and deep learning techniques have increasingly
-been explored for behavioural threat analysis~\cite{li2024imbalanced, bilot2024survey}. Unlike
-traditional signature-based approaches that rely on previously observed attack patterns, behavioural
-analysis focuses on identifying malicious activity through system execution behaviour, including API
-interactions, process activity, file operations, registry modifications, and network communication
-patterns~\cite{mimura2022nlp, amer2025graphshield}. Recent advances in Graph Neural Networks
-(GNNs) have demonstrated strong capability in modelling structural relationships between such
-system entities by representing behavioural activity as graph-structured
-data~\cite{hamilton2017graphsage, wang2019matchgnet, bilot2024survey}. Similarly, recent
-developments in Large Language Models (LLMs) and semantic embedding techniques have improved
-contextual understanding of behavioural operations and execution patterns~\cite{mimura2022nlp}.
-
-Despite recent progress, accurately modelling evolving malicious behaviour remains a challenging
-problem due to the complex temporal, semantic, and structural characteristics of modern cyber
-threats~\cite{bilot2024survey, haghshenas2023temporal}. Consequently, improving behavioural
-threat detection and strengthening generalisation capability against evolving attack variants
-continues to be an active area of cybersecurity
-research~\cite{li2024imbalanced, amer2025graphshield}.
+Machine learning and deep learning techniques have been widely explored in
+response~\cite{li2024imbalanced, bilot2024survey}. Behavioural analysis focuses
+on identifying malicious activity through execution behaviour rather than static
+signatures, including API interactions, process activity, file operations,
+registry modifications, and network communication
+patterns~\cite{mimura2022nlp, amer2025graphshield}. Graph Neural Networks
+(GNNs) model structural relationships between system entities by representing
+behavioural activity as graph-structured data~\cite{hamilton2017graphsage,
+wang2019matchgnet, bilot2024survey}, and Large Language Models (LLMs) together
+with semantic embedding techniques improve contextual understanding of
+behavioural operations~\cite{mimura2022nlp}. Despite this progress, accurately
+modelling evolving malicious behaviour remains challenging because the
+temporal, semantic, and structural characteristics of modern threats are rarely
+captured together within a single framework~\cite{bilot2024survey,
+haghshenas2023temporal}. Strengthening behavioural threat detection and
+improving generalisation to evolving variants is therefore an active and
+unresolved area of research~\cite{li2024imbalanced, amer2025graphshield}.
 
 \section{Motivation}
 \label{sec:motivation}
 
-The increasing sophistication of modern cyber threats has exposed significant limitations in
-conventional threat detection systems~\cite{bilot2024survey, guo2023zeroday}. Traditional
-signature-based security mechanisms primarily rely on previously observed attack patterns, static
-rules, and handcrafted indicators to identify malicious software~\cite{guo2023zeroday}. Although
-such approaches remain effective against known threats, they often struggle to detect evolving
-threat variants that employ obfuscation, polymorphism, API substitution, and behaviour-altering
-execution strategies~\cite{bilot2024survey, amer2025graphshield}. Even minor modifications to
-binary structure or execution behaviour can allow malicious software to evade static detection
-systems, reducing their effectiveness in modern cybersecurity
-environments~\cite{guo2023zeroday}.
+Behavioural analysis has displaced static signature matching as the dominant
+research direction in cybersecurity because runtime evidence is harder to
+conceal than surface form: packing, renaming, and polymorphism alter a
+binary's appearance without changing what it does once
+executed~\cite{amer2025graphshield}. Although such analysis is in principle
+robust to surface-level obfuscation, the practical effectiveness of existing
+learned detectors depends on how faithfully the chosen representation captures
+the three properties that jointly characterise malicious activity:
+\textbf{temporal evolution}, \textbf{semantic context}, and \textbf{relational
+structure}.
 
-To address these limitations, behavioural threat analysis has emerged as an important research
-direction in cybersecurity~\cite{bilot2024survey, amer2025graphshield}. Unlike static approaches
-that analyse binaries prior to execution, behavioural analysis focuses on monitoring runtime
-activities such as API interactions, process behaviour, file operations, registry modifications, and
-network communication patterns~\cite{amer2025graphshield}. Machine learning and deep learning
-techniques have been explored for this purpose due to their ability to learn complex behavioural
-patterns directly from execution traces~\cite{bilot2024survey, guo2023zeroday, li2024imbalanced}.
-However, many existing approaches continue to face important challenges in effectively modelling
-the dynamic and evolving nature of malicious activity~\cite{bilot2024survey, guo2023zeroday,
-haghshenas2023temporal}.
+These three properties cannot be substituted for one another. A benign backup
+process and a ransomware encryption phase may share their structural footprint
+(both write to many files across many directories) and their semantic content
+(both invoke file and cryptographic APIs) yet differ sharply in pace: ransomware
+compresses behaviour that benign software distributes across hours. A threat
+employing API substitution may differ symbolically from its training
+counterpart while remaining semantically and structurally identical. A
+multi-process loader may exhibit a cross-process topology that is invisible to
+homogeneous and sequence-only models. Each of these failure modes is well
+documented individually in the literature reviewed in
+Chapter~\ref{chap:literature}, yet existing detection systems address them in
+isolation rather than jointly.
 
-One major limitation of conventional machine learning approaches is their dependence on flat
-handcrafted feature representations that often discard structural relationships and execution
-ordering between behavioural events~\cite{bilot2024survey, guo2023zeroday}. Although Graph
-Neural Networks (GNNs) improve structural behavioural analysis by modelling interactions between
-system entities as graph-structured data, many existing graph-based approaches continue to
-represent execution traces as static graphs without explicitly incorporating temporal execution
-dynamics~\cite{bilot2024survey, haghshenas2023temporal, wang2019matchgnet}. As a result,
-important behavioural characteristics such as operation ordering, behavioural acceleration, frequency
-variation, and burst activity may not be adequately captured during
-learning~\cite{amer2025graphshield, haghshenas2023temporal}.
-
-Similarly, recent advances in Large Language Models (LLMs) and semantic embedding techniques
-have demonstrated promising capability in improving contextual understanding of API behaviour and
-execution semantics~\cite{amer2025graphshield, mimura2022nlp}. Semantic embeddings can
-improve robustness against API obfuscation and naming variation by learning contextual
-relationships between functionally related operations~\cite{amer2025graphshield, mimura2022nlp}.
-Nevertheless, many existing semantic approaches remain limited in their ability to jointly model
-temporal behavioural evolution and heterogeneous structural dependencies within dynamic execution
-environments~\cite{amer2025graphshield, haghshenas2023temporal}.
-
-These limitations represent a significant challenge for modern cybersecurity systems because
-malicious behaviour is inherently temporal, relational, and context-dependent~\cite{bilot2024survey,
-haghshenas2023temporal}. In practical environments, threats often evolve rapidly during execution,
-interact with multiple system entities simultaneously, and exhibit behavioural patterns that differ
-substantially across attack variants~\cite{bilot2024survey, amer2025graphshield}. Consequently,
-improving behavioural generalisation, adaptive threat detection, and temporal behavioural modelling
-remains an important research problem in cybersecurity~\cite{bilot2024survey, guo2023zeroday,
-amer2025graphshield}.
-
-Addressing these challenges has both academic and practical significance. From a research
-perspective, improving the integration of semantic understanding, structural reasoning, and
-temporal behavioural analysis may contribute toward more robust and generalizable threat detection
-methodologies. From an operational perspective, improved behavioural detection systems could
-strengthen early-stage threat identification, reduce detection delays, and improve resilience against
-evolving cyber attacks targeting critical infrastructure and organisational systems.
+Addressing this fragmentation has both research and operational significance.
+From a research perspective, integrating semantic understanding, structural
+reasoning, and temporal dynamics within a unified framework contributes toward
+more generalisable threat detection methodologies. From an operational
+perspective, improved detection systems could strengthen early-stage threat
+identification, reduce detection latency, and improve resilience against
+evolving attacks targeting critical infrastructure and organisational systems.
 
 \section{Thesis Objectives}
 \label{sec:objectives}
 
-This thesis aims to investigate a heterogeneous temporal graph-based learning framework
-for dynamic behavioural threat detection in modern cybersecurity environments. The study
-focuses on improving behavioural threat analysis through the integration of heterogeneous graph
-representation learning, semantic contextual understanding, and temporal execution modelling
-within a unified detection framework. In particular, the research explores how semantic embeddings,
-structural graph reasoning, and temporal behavioural dynamics can jointly improve threat detection
-capability, behavioural generalisation, and robustness against evolving malicious activity. The
-primary objectives of this thesis are structured as follows.
+This thesis investigates a heterogeneous temporal graph-based learning
+framework for dynamic behavioural threat detection. The investigation is
+organised around five objectives, each addressed by a corresponding research
+question presented in Chapter~\ref{chap:literature}.
 
 \begin{description}[leftmargin=0pt, labelwidth=0pt, labelsep=\parskip, style=nextline]
 
-\item[\textbf{Objective 1.}]
-To develop a schema-aware heterogeneous behavioural graph representation framework capable of
-transforming sandbox-generated execution traces into graph-structured behavioural data containing
-API calls, processes, files, registry objects, and network interactions. The objective is to preserve
-structural and relational dependencies between system entities that are often lost in conventional
-vector-based behavioural representations.
+\item[\textbf{Objective 1 -- Schema-aware heterogeneous representation.}]
+To develop a schema-aware heterogeneous graph representation that transforms
+sandbox-generated execution traces into graph-structured data in which API
+calls, processes, files, registry objects, and network endpoints are
+represented as typed nodes joined by typed relations. The objective is to
+preserve the structural and relational dependencies that conventional
+vector-based representations discard.
 
-\item[\textbf{Objective 2.}]
-To investigate the integration of pretrained Large Language Model (LLM)-based semantic
-embeddings into behavioural threat analysis in order to improve contextual understanding of API
-behaviour and strengthen robustness against API obfuscation, naming variation, and evolving
-execution patterns. The study aims to analyse whether semantic representations can improve
-behavioural generalisation compared to conventional handcrafted behavioural features.
+\item[\textbf{Objective 2 -- Semantic enrichment for behavioural generalisation.}]
+To integrate pretrained Large Language Model-based semantic embeddings into the
+behavioural representation in order to improve contextual understanding of API
+behaviour and strengthen robustness against API obfuscation, naming variation,
+and evolving execution patterns. This objective directly supports RQ1 and RQ2.
 
-\item[\textbf{Objective 3.}]
-To design and evaluate a heterogeneous temporal graph-based hybrid architecture
-integrating heterogeneous graph message passing, Hybrid GAT-SAGE aggregation, and
-bidirectional LSTM-based temporal sequence modelling for dynamic threat detection. This objective
-focuses on investigating how structural graph relationships and temporal execution dynamics can
-jointly improve behavioural threat classification.
+\item[\textbf{Objective 3 -- Hybrid heterogeneous-temporal architecture.}]
+To design and evaluate a hybrid architecture that integrates heterogeneous
+graph message passing, attention-based and inductive neighbourhood aggregation,
+and bidirectional LSTM-based temporal sequence modelling for dynamic threat
+detection. This objective supports RQ2 and RQ3 by investigating how structural
+and temporal reasoning interact within a single framework.
 
-\item[\textbf{Objective 4.}]
-To investigate the effectiveness of engineered temporal behavioural features including operation
-frequency, behavioural acceleration, and burst activity characteristics in capturing evolving
-malicious execution patterns. The objective is to assess whether explicit temporal behavioural
-modelling can improve detection capability compared to static graph-based approaches.
+\item[\textbf{Objective 4 -- Adaptive fusion and attribution.}]
+To develop an adaptive three-branch gated fusion mechanism that jointly
+integrates semantic, structural, and temporal representations within a unified
+classifier, and to analyse the contribution of each branch to threat
+classification. This objective supports RQ4 by enabling attribution of model
+decisions across the three behavioural dimensions.
 
-\item[\textbf{Objective 5.}]
-To develop and evaluate an adaptive fusion mechanism capable of integrating semantic, structural,
-and temporal behavioural representations within a unified learning framework. The study aims to
-analyse how different behavioural dimensions contribute toward threat classification, whether
-integrated multi-branch behavioural modelling improves detection robustness, and whether the
-learned fusion weights can provide attribution of semantic, structural, and temporal contributions
-to model decisions.
-
-\item[\textbf{Objective 6.}]
-To evaluate the proposed framework against multiple baseline approaches including static machine
-learning models, sequential deep learning architectures, static Graph Neural Network models, and
-semantic behavioural analysis approaches using evaluation metrics such as accuracy, precision,
-recall, F1-score, AUPRC, false positive rate, and time-to-detect performance.
-
-\item[\textbf{Objective 7.}]
-To assess the behavioural generalisation capability of the proposed framework using family-separated
-evaluation protocols designed to analyse robustness against evolving attack variants and diverse
-malicious behavioural patterns across different threat categories.
+\item[\textbf{Objective 5 -- Evaluation and cross-family generalisation.}]
+To evaluate the proposed framework against representative baselines drawn from
+classical machine learning, sequential deep learning, static graph neural
+network, and LLM-based behavioural analysis families, using accuracy,
+precision, recall, F1-score, AUPRC, false positive rate, and time-to-detect. A
+leave-family-out protocol additionally assesses behavioural generalisation
+across previously unseen threat families. This objective supports RQ3 and RQ5.
 
 \end{description}
 
-This research ultimately aims to contribute toward the development of more adaptive, robust, and
-semantically informed behavioural threat detection systems capable of modelling the temporal,
-structural, and contextual characteristics of modern cyber threats. By integrating semantic
-understanding, temporal behavioural analysis, and heterogeneous graph reasoning within a unified
-framework, the study seeks to strengthen dynamic cybersecurity analysis and improve intelligent
-behavioural threat detection in evolving attack environments.
+The remainder of this thesis is structured as follows.
+Chapter~\ref{chap:literature} surveys the relevant literature and formalises
+the research gap that motivates the proposed framework.
+Chapter~\ref{chap:theory} introduces the theoretical foundations on which the
+framework is built. Subsequent chapters describe the methodology, experimental
+design, results, and discussion.
 
 % ============================================================
 % CHAPTER 2: LITERATURE REVIEW
@@ -394,276 +343,306 @@ behavioural threat detection in evolving attack environments.
 \chapter{Literature Review}
 \label{chap:literature}
 
-The rapid evolution of modern cyber threats has increased the importance of intelligent behavioural
-threat detection within cybersecurity research. While traditional signature-based detection systems
-remain effective against previously observed threat variants, threats employing obfuscation,
-polymorphism, API substitution, and behaviour-altering execution strategies continue to challenge
-the effectiveness of existing detection approaches. As a result, recent research has increasingly
-focused on behavioural analysis techniques capable of modelling malicious activity through execution
-behaviour rather than relying solely on static signatures or handcrafted rules. This literature review
-examines the progression of threat detection research from traditional signature-based and static
-machine learning approaches toward recent deep learning, Graph Neural Network (GNN), Temporal
-Graph Neural Network (TGNN), and semantic embedding-based behavioural analysis methods.
-Particular attention is given to studies investigating temporal execution modelling, heterogeneous
-graph representations, API sequence analysis, semantic contextual understanding, and early-stage
-behavioural threat detection within dynamic cybersecurity environments.
+Chapter~\ref{chap:introduction} argued that effective behavioural threat
+detection must jointly model temporal evolution, semantic context, and
+relational structure. This chapter surveys how the threat-detection literature
+has approached each of these dimensions individually, identifies where these
+strands fail to meet, and formalises the research gap together with the five
+research questions that follow from it.
 
-The review process involved systematic exploration of academic databases and research repositories
-including Google Scholar, IEEE Xplore, ACM Digital Library, SpringerLink, ScienceDirect, arXiv,
-and proceedings from major cybersecurity and machine learning conferences. The literature search
-incorporated combinations of keywords such as ``behavioural threat detection,'' ``dynamic threat
-analysis,'' ``Graph Neural Networks,'' ``Temporal Graph Neural Networks,'' ``heterogeneous graph
-learning,'' ``semantic embeddings,'' ``LLM-based threat detection,'' ``API behavioural analysis,''
-and ``early-stage threat detection.'' Additional relevant studies were identified through
-citation tracing and reference analysis from closely related research works. Following relevance
-filtering and comparative analysis, the reviewed literature provides a broad foundation for
-understanding current advances and limitations in behavioural threat detection research.
+The review process involved systematic exploration of academic databases
+including Google Scholar, IEEE Xplore, ACM Digital Library, SpringerLink,
+ScienceDirect, arXiv, and the proceedings of major cybersecurity and machine
+learning conferences. Search keywords included ``behavioural threat
+detection,'' ``dynamic threat analysis,'' ``Graph Neural Networks,'' ``Temporal
+Graph Neural Networks,'' ``heterogeneous graph learning,'' ``semantic
+embeddings,'' ``LLM-based threat detection,'' ``API behavioural analysis,'' and
+``early-stage threat detection.'' Citation tracing and reference analysis from
+closely related works identified additional studies.
 
 \section{Existing Studies}
 \label{sec:existing_studies}
 
-The existing literature on behavioural threat detection can be broadly organised into seven
-methodological streams: (i)~signature-based and rule-based detection, (ii)~static machine
-learning over engineered behavioural features, (iii)~sequential deep learning over API call traces,
-(iv)~graph neural network-based behavioural modelling, (v)~heterogeneous and temporal graph
-neural network approaches, (vi)~semantic and Large Language Model (LLM)-driven behavioural
-analysis, and (vii)~early-stage detection. A final subsection examines interpretability, an emerging
-concern that cuts across all of these methodological streams. Each is reviewed critically with
-attention to its assumptions, contributions, and limitations relative to the requirements of modern
-dynamic threat detection.
+The existing literature on behavioural threat detection can be organised into
+seven methodological streams: (i)~signature-based and rule-based detection,
+(ii)~static machine learning over engineered features, (iii)~sequential deep
+learning over API call traces, (iv)~graph neural network-based behavioural
+modelling, (v)~heterogeneous and temporal graph neural network approaches,
+(vi)~semantic and Large Language Model (LLM)-driven analysis, and
+(vii)~early-stage detection. A final subsection
+examines interpretability, which cuts across all of these streams.
 
 \subsection{Signature-Based and Rule-Based Detection}
 \label{subsec:signature}
 
-Signature-based detection has historically constituted the foundation of commercial anti-malware
-systems, identifying threats by matching code patterns, file hashes, or behavioural signatures against
-curated databases of previously catalogued threats~\cite{ucci2019survey}. Although the approach
-offers fast inference and low false positive rates for known threats, it is fundamentally reactive:
-minor binary modifications -- function renaming, code reordering, packing, or polymorphic
-engines -- can invalidate a signature and bypass detection~\cite{guo2023zeroday}. More
-critically, evolving threat variants carry no existing signature, leaving signature-matching systems
-structurally unable to generalise to behaviours that were not observed during training. The approach
-is therefore unsuited to environments in which new variants emerge daily and exposure to
+Signature-based detection has historically constituted the foundation of
+commercial anti-malware (antivirus) systems, identifying threats by matching
+code patterns,
+file hashes, or behavioural signatures against curated databases of previously
+catalogued threats~\cite{ucci2019survey}. The approach offers fast inference
+and low false positive rates for known threats, but it is fundamentally
+reactive: minor binary modifications (function renaming, code reordering,
+packing, or polymorphic engines) can invalidate a signature and bypass
+detection~\cite{guo2023zeroday}. Evolving threat variants additionally carry no
+existing signature, leaving signature-matching systems structurally unable to
+generalise to behaviours unobserved during training. The approach is therefore
+unsuited to environments in which new variants emerge daily and exposure to
 previously unobserved attacks constitutes the dominant operational risk.
 
 \subsection{Static Machine Learning over Behavioural Features}
 \label{subsec:static_ml}
 
-Static machine learning methods such as Random Forests, Support Vector Machines, and XGBoost
-improve upon raw signatures by learning from engineered features extracted from execution traces,
-including API call frequencies, file operation counts, entropy measures, and registry access
-statistics~\cite{ucci2019survey, ye2017survey}. Ye et al.~\cite{ye2017survey} survey threat
-detection using data mining techniques, demonstrating that classical algorithms can achieve high
-accuracy on balanced datasets containing known threat families, while Mimura and
-Ohminami~\cite{mimura2022nlp} apply natural language processing techniques to threat
-detection, indicating that token-frequency representations of API traces carry meaningful
-discriminative information.
+Static machine learning methods such as Random Forests, Support Vector
+Machines, and XGBoost improve upon raw signatures by learning from engineered
+features extracted from execution traces, including API call frequencies, file
+operation counts, entropy measures, and registry access
+statistics~\cite{ucci2019survey, ye2017survey}. Ye et al.~\cite{ye2017survey}
+survey threat detection using data mining techniques and demonstrate that
+classical algorithms can achieve high accuracy on balanced datasets of known
+threat families. Mimura and Ohminami~\cite{mimura2022nlp} apply natural
+language processing to threat detection and show that token-frequency
+representations of API traces carry meaningful discriminative information.
 
-The conceptual appeal of classical machine learning for behavioural threat detection lay in its
-operational practicality: handcrafted features could be extracted efficiently from execution traces,
-models trained and inferred inexpensively, and predictions could be interpreted through standard
-feature-importance techniques. This combination of accessibility and tractability made classical
-models the dominant paradigm for behavioural threat detection through much of the 2010s.
-The fundamental conceptual limitation, however, was that summarizing an entire execution as a
-single feature vector implicitly assumed that the discriminative signal of malicious behaviour was
-distributionally separable in aggregate -- an assumption increasingly violated by threats that
-distribute their behavioural signature across time, processes, and system entities.
+The appeal of classical machine learning lay in its operational practicality:
+handcrafted features could be extracted efficiently, models trained and
+inferred inexpensively, and predictions interpreted through standard
+feature-importance techniques. This combination of accessibility and
+tractability made classical models the dominant paradigm for behavioural threat
+detection through much of the 2010s. The fundamental limitation, however, was
+that summarising an entire execution as a single feature vector assumes that
+the discriminative signal of malicious behaviour is distributionally separable
+in aggregate, an assumption increasingly violated by threats that distribute
+their behavioural signature across time, processes, and system entities.
 
-Despite their practical utility, these approaches exhibit fundamental limitations. Behavioural
-sequences are flattened into feature vectors, discarding information about operation ordering and
-relational dependencies between system entities~\cite{ucci2019survey, bilot2024survey}. Temporal
-information is largely absent: aggregate counts cannot distinguish behaviour compressed into a short
-malicious interval from the same behaviour distributed over an extended period of legitimate
-activity. Furthermore, reliance on handcrafted features makes these models susceptible to evasion
-through polymorphism, API substitution, and feature perturbation, with cross-distribution
-evaluations consistently reporting substantial degradation when models are tested against held-out
-threat families~\cite{reategui2024}. Static representations alone are therefore insufficient for
-robust detection of dynamically evolving threats.
+Two further weaknesses follow from this representation. Behavioural sequences
+are flattened into feature vectors, discarding operation ordering and
+relational dependencies between system entities~\cite{ucci2019survey,
+bilot2024survey}. Temporal information is largely absent: aggregate counts
+cannot distinguish behaviour compressed into a short malicious interval from
+the same behaviour distributed over an extended period of legitimate activity.
+Reliance on handcrafted features additionally exposes these models to evasion
+through polymorphism, API substitution, and feature perturbation, with
+cross-distribution evaluations consistently reporting substantial degradation
+when models are tested against held-out threat families~\cite{reategui2024,
+guo2023zeroday}.
+Static representations alone are therefore insufficient for robust detection of
+dynamically evolving threats.
 
 \subsection{Sequential Deep Learning over API Traces}
 \label{subsec:sequential_dl}
 
-The inability of static feature-based models to preserve execution ordering motivated the adoption
-of sequential deep learning architectures capable of modelling API call dependencies over time.
-This shift reflected a broader transition in behavioural threat analysis from aggregate statistical
-descriptors toward sequence-aware behavioural modelling.
-Pascanu et al.~\cite{pascanu2015} provide an early demonstration of this transition by applying
-recurrent neural networks to threat classification, establishing the feasibility of sequence-aware
-behavioural modelling and laying the groundwork for subsequent recurrent approaches.
-Athiwaratkun and Stokes~\cite{athiwaratkun2017} subsequently propose an LSTM- and
-GRU-based language model combined with a character-level CNN for threat classification,
-demonstrating that recurrent architectures encode short-range execution dependencies more
-effectively than bag-of-features models. Nguyen et al.~\cite{nguyen2023} extend this line to
-system call sequences using deep learning, reporting improved discrimination of behaviourally
-similar families. Karbab and Debbabi~\cite{karbab2019} further develop the data-driven direction
-with MalDy, a portable threat detection framework that combines natural language processing
-with classical machine learning over behavioural analysis reports, illustrating the broader
-applicability of sequence-aware behavioural analysis across diverse execution environments.
+The inability of static models to preserve execution ordering motivated the
+adoption of sequential deep learning architectures capable of modelling API
+call dependencies over time. This shift reflected a broader transition in
+behavioural threat analysis from aggregate statistical descriptors toward
+sequence-aware modelling. Pascanu et al.~\cite{pascanu2015} provide an early
+demonstration by applying recurrent neural networks to threat classification,
+establishing the feasibility of this approach and laying the groundwork for
+subsequent recurrent methods.
+Athiwaratkun and Stokes~\cite{athiwaratkun2017} extend this line with an LSTM-
+and GRU-based language model combined with a character-level CNN for threat
+classification, demonstrating that recurrent architectures encode short-range
+execution dependencies more effectively than bag-of-features models. Nguyen et
+al.~\cite{nguyen2023} extend the approach to system call sequences and report
+improved discrimination of behaviourally similar families. Karbab and
+Debbabi~\cite{karbab2019} develop MalDy, a portable threat detection framework
+combining natural language processing with classical machine learning over
+sandbox analysis reports, illustrating the broader applicability of
+sequence-aware analysis across diverse execution environments.
 
-While sequential models meaningfully advanced behavioural detection by preserving execution
-ordering, they continue to exhibit important limitations. Linear sequence models treat the API trace
-as a one-dimensional stream of tokens and therefore cannot represent the relational interactions
-between processes, files, registry objects, and network endpoints that characterise multi-stage
-malicious activity. API names are additionally represented as discrete symbolic identifiers,
-leaving the models vulnerable to semantically equivalent substitutions in which a functionally
-identical alternative is drawn from a different subsystem. These structural and semantic
-limitations subsequently motivated research into graph-based and embedding-based behavioural
-representations.
+Although sequential models meaningfully advance behavioural detection by
+preserving execution ordering, two limitations persist. Linear sequence models
+treat the API trace as a one-dimensional stream of tokens and cannot represent
+the relational interactions between processes, files, registry objects, and
+network endpoints that characterise multi-stage malicious activity. API names
+are represented as discrete symbolic identifiers, leaving the models vulnerable
+to semantically equivalent substitutions in which a functionally identical
+alternative is drawn from a different subsystem. These structural and semantic
+limitations subsequently motivated research into graph-based and
+embedding-based behavioural representations.
 
 \subsection{Graph Neural Networks for Behavioural Threat Detection}
 \label{subsec:gnn}
 
-Graph-based behavioural modelling represented an important conceptual transition from linear
-execution analysis toward relational reasoning over interacting system entities. Graph Neural
-Networks (GNNs)~\cite{scarselli2009, gilmer2017mpnn, kipf2017gcn} operate directly on
-graph-structured behavioural data and therefore address several of the representational shortcomings
-of flat-feature and sequence-only approaches; the expressive power of such message-passing
-architectures has been formally analysed by Xu et al.~\cite{xu2018powerful}, who establish
-their representational equivalence with the Weisfeiler-Lehman graph isomorphism test and
-motivate architectures capable of distinguishing graph structures that simpler aggregation functions
-cannot separate. Surveys by Bilot et al.~\cite{bilot2024survey} and Nisa et al.~\cite{nisa2020}
-document the rapid adoption of GNNs across threat analysis tasks, including system call graph
-classification, control flow graph analysis, and API interaction modelling. Amer et
-al.~\cite{amer2025graphshield} propose GraphShield, a dynamic graph-based threat detection
-framework that achieves competitive performance on behavioural benchmarks by leveraging graph
-attention mechanisms over system call graphs. Busch et al.~\cite{busch2022} further apply GNNs
-to network flow graphs for threat classification, demonstrating that relational learning improves
-the detection of behaviourally complex attacks compared with traditional flow-statistic approaches.
+Graph-based behavioural modelling represented a conceptual transition from
+linear execution analysis toward relational reasoning over interacting system
+entities. Graph Neural Networks (GNNs)~\cite{scarselli2009, gilmer2017mpnn,
+kipf2017gcn} operate directly on graph-structured data and address several of
+the representational shortcomings of flat-feature and sequence-only approaches. The expressive power of message-passing architectures has been
+formally analysed by Xu et al.~\cite{xu2018powerful}, who establish their
+representational equivalence with the Weisfeiler-Lehman graph isomorphism test
+and motivate architectures capable of distinguishing graph structures that
+simpler aggregation functions cannot separate. Surveys by Bilot et
+al.~\cite{bilot2024survey} and Nisa et al.~\cite{nisa2020} document the rapid
+adoption of GNNs across threat analysis tasks, including system call graph
+classification, control flow graph analysis, and API interaction modelling.
+Amer et al.~\cite{amer2025graphshield} propose GraphShield, a dynamic
+graph-based threat detection framework that achieves competitive performance by
+leveraging graph attention over system call graphs.
+Busch et al.~\cite{busch2022} apply GNNs to network flow graphs for threat
+classification, demonstrating that relational learning improves the detection
+of behaviourally complex attacks compared with traditional flow-statistic
+approaches.
 
-The choice of behavioural graph construction itself constitutes a significant design dimension
-within this line of research. System call graphs, in which nodes represent invoked system or
-library calls and edges represent execution-order or data-flow relationships, capture coarse-grained
-kernel-level behaviour and have been widely adopted for general-purpose threat classification.
-API interaction graphs extend this representation to richer user-mode interactions, modelling not
-only the sequence of API invocations but also the arguments and return-value dependencies
-between them. Process--resource graphs, by contrast, place processes and the system resources
-they touch -- files, registry keys, network endpoints -- on equal footing, capturing the relational
-topology of multi-process and multi-resource attacks that flat sequence representations cannot
-express. Control flow graphs operate at the static binary level rather than dynamic execution and
-represent intra-procedural and inter-procedural execution paths within the program itself. Each
-construction emphasizes a different aspect of behavioural structure, and the choice between them
-implicitly determines which classes of threats the resulting model can effectively discriminate.
+The choice of behavioural graph construction itself constitutes a significant
+design dimension within this line of research. System call graphs, in which
+nodes represent invoked system or library calls and edges represent
+execution-order or data-flow relationships, capture coarse-grained kernel-level
+behaviour and have been widely adopted for general-purpose threat
+classification. API interaction graphs extend this representation to richer
+user-mode interactions, modelling not only the sequence of API invocations but
+also the arguments and return-value dependencies between them.
+Process--resource graphs, by contrast, place processes and the system resources
+they touch (files, registry keys, network endpoints) on equal footing,
+capturing the relational topology of multi-process and multi-resource attacks
+that flat sequence representations cannot express. Control flow graphs operate
+at the static binary level rather than dynamic execution and represent
+intra-procedural and inter-procedural execution paths within the program
+itself. Each construction emphasises a different aspect of behavioural
+structure, and the choice between them implicitly determines which classes of
+threats the resulting model can discriminate.
 
-Despite these contributions, the majority of GNN-based behavioural detection systems represent
-execution traces as static, type-agnostic graphs in which all nodes and all relations are treated
-identically. This homogeneous abstraction collapses semantically meaningful distinctions between,
-for example, a file-write edge and a process-spawn edge, weakening the inductive bias of the
-network~\cite{bilot2024survey}. Moreover, static graph representations capture topological
-structure but discard the temporal dimension along which malicious activity actually unfolds, and
-consequently cannot represent the fine-grained behavioural evolution that distinguishes
-rapidly-acting threats from structurally similar but slower benign processes. These limitations
-motivated subsequent research into heterogeneous and temporal extensions of the graph learning
-paradigm.
+Despite these contributions, most GNN-based behavioural detection systems
+represent execution traces as static, type-agnostic graphs in which all nodes
+and all relations are treated identically. This homogeneous abstraction
+collapses semantically meaningful distinctions between, for example, a
+file-write edge and a process-spawn edge, weakening the inductive bias of the
+network~\cite{bilot2024survey}. Static graph representations additionally
+capture topological structure but discard the temporal dimension along which
+malicious activity actually unfolds, and consequently cannot represent the
+fine-grained behavioural evolution that distinguishes rapidly-acting threats
+from structurally similar but slower benign processes. These limitations
+motivated subsequent heterogeneous and temporal extensions of the graph
+learning paradigm.
 
 \subsection{Heterogeneous and Temporal Graph Neural Networks}
 \label{subsec:hetero_tgnn}
 
-To address the limitations of homogeneous and static graph representations, two complementary
-research directions have emerged: heterogeneous graph learning and temporal graph learning.
-Heterogeneous Graph Neural Networks introduce explicit typing of nodes and relations, allowing
-the model to maintain distinct message functions for each relation and thereby preserve the
-semantic distinctions that homogeneous GNNs collapse. Wang et al.~\cite{han2019} propose the
-Heterogeneous Graph Attention Network (HAN), which applies node-level and semantic-level
-attention over meta-path-based heterogeneous neighborhoods. Zhang et al.~\cite{hetgnn2019}
-introduce HetGNN, which jointly encodes heterogeneous node content and structural neighborhoods
-through type-aware aggregation. Zhang et al.~\cite{wang2019matchgnet} specifically apply
-heterogeneous graph matching networks to behavioural classification of threat variants not observed
-during training, while Li et al.~\cite{li2024imbalanced} propose a heterogeneous graph embedding
-model designed for imbalanced threat classification settings. These works collectively demonstrate
-that incorporating type information substantially improves behavioural discrimination compared
-with homogeneous baselines.
+To address the limitations of homogeneous and static graph representations,
+two complementary research directions have emerged: heterogeneous graph
+learning and temporal graph learning.
 
-In parallel, Temporal Graph Neural Networks have been developed to model graphs whose topology
-and interactions evolve over time. Trivedi et al.~\cite{dyrep2019} introduce DyRep, a
-representation learning framework over dynamic graphs that models both the topological evolution
-of the graph and the temporal point processes governing interaction arrivals. Rossi et
-al.~\cite{tgn2020} subsequently propose Temporal Graph Networks (TGN), a more general
-framework that combines node-level memory modules with graph-based operators to model
-continuous-time dynamic graphs and has since become a widely adopted foundation for temporal
-graph research. Within the cybersecurity domain, Haghshenas et al.~\cite{haghshenas2023temporal}
-apply a temporal GNN to cyber-attack detection and localisation in smart grids, showing that
-explicit modelling of time-stamped edges improves both accuracy and localisation compared with
-static graph baselines. Guo and Pope~\cite{guopope2023} adopt a spatial-temporal GNN
-architecture for container escape detection, combining temporal evolution with spatial structural
-reasoning. These approaches confirm that temporal graph reasoning is a viable paradigm for
-cybersecurity applications. However, existing TGNN studies in cybersecurity have typically been
-developed over homogeneous graphs and have not been integrated with semantic API understanding
-or with the fine-grained behavioural characteristics most relevant to early-stage threat
-discrimination. The joint integration of heterogeneous typing, temporal reasoning, and semantic
-enrichment within a unified framework therefore remains underexplored.
+Heterogeneous Graph Neural Networks introduce explicit typing of nodes and
+relations, allowing the model to maintain distinct message functions for each
+relation and thereby preserve the semantic distinctions that homogeneous GNNs
+collapse. Wang et al.~\cite{han2019} propose the Heterogeneous Graph Attention
+Network (HAN), which applies node-level and semantic-level attention over
+meta-path-based heterogeneous neighbourhoods. Zhang et al.~\cite{hetgnn2019}
+introduce HetGNN, which jointly encodes heterogeneous node content and
+structural neighbourhoods through type-aware aggregation. Wang et
+al.~\cite{wang2019matchgnet} apply heterogeneous graph matching networks to
+behavioural classification of threat variants not observed during training,
+and Li et al.~\cite{li2024imbalanced} propose a heterogeneous graph embedding
+model designed for imbalanced threat classification settings. These works
+collectively demonstrate that incorporating type information substantially
+improves behavioural discrimination compared with homogeneous baselines.
+
+In parallel, Temporal Graph Neural Networks have been developed to model graphs
+whose topology and interactions evolve over time. Trivedi et
+al.~\cite{dyrep2019} introduce DyRep, a representation learning framework over
+dynamic graphs that models both the topological evolution of the graph and the
+temporal point processes governing interaction arrivals. Rossi et
+al.~\cite{tgn2020} subsequently propose Temporal Graph Networks (TGN), a
+framework that combines node-level memory modules with graph-based operators
+to model continuous-time dynamic graphs, which has since become a widely
+adopted foundation for temporal graph research. Within cybersecurity,
+Haghshenas et al.~\cite{haghshenas2023temporal} apply a temporal GNN to
+cyber-attack detection and localisation in smart grids, showing that explicit
+modelling of time-stamped edges improves both accuracy and localisation
+compared with static graph baselines. Guo and Pope~\cite{guopope2023} adopt a
+spatial-temporal GNN architecture for container escape detection, combining
+temporal evolution with spatial structural reasoning.
+
+These approaches confirm that temporal graph reasoning is a viable paradigm
+for cybersecurity applications. Existing TGNN studies in cybersecurity have
+typically been developed over homogeneous graphs, however, and have not been
+integrated with semantic API understanding or with the fine-grained
+behavioural characteristics most relevant to early-stage threat
+discrimination. The joint integration of heterogeneous typing, temporal
+reasoning, and semantic enrichment within a unified framework therefore
+remains underexplored.
 
 \subsection{Semantic and LLM-Based Behavioural Analysis}
 \label{subsec:semantic_llm}
 
-The growing prevalence of API obfuscation and function substitution motivated the adoption of
-semantic embedding techniques capable of capturing functional similarity beyond symbolic API
-identity. Reimers and Gurevych~\cite{reimers2019sbert} introduce Sentence-BERT, a Siamese
-architecture producing semantically meaningful sentence embeddings applicable to short textual
-artefacts such as API names and argument strings. Devlin et al.~\cite{devlin2019bert} and Song
-et al.~\cite{mpnet2020} establish the broader paradigm of pre-trained transformer encoders, while
-Lee et al.~\cite{lee2024gecko} propose Gecko, a versatile text embedding model distilled from
-large language models. Perera and Jiang~\cite{perera2023beacon} introduce BEACON, an
-LLM-driven behavioural threat classification framework that interprets execution traces as
-natural-language behavioural descriptions, reporting promising results on dynamic threat datasets.
+The growing prevalence of API obfuscation and function substitution motivated
+the adoption of semantic embedding techniques capable of capturing functional
+similarity beyond symbolic API identity. Reimers and
+Gurevych~\cite{reimers2019sbert} introduce Sentence-BERT, a Siamese
+architecture producing semantically meaningful sentence embeddings applicable
+to short textual artefacts such as API names and argument strings. Devlin et
+al.~\cite{devlin2019bert} and Song et al.~\cite{mpnet2020} establish the
+broader paradigm of pretrained transformer encoders, and Lee et
+al.~\cite{lee2024gecko} propose Gecko, a versatile text embedding model
+distilled from large language models. Perera and
+Jiang~\cite{perera2023beacon} introduce BEACON, an LLM-driven behavioural
+threat classification framework that interprets execution traces as
+natural-language behavioural descriptions and reports promising results on
+dynamic threat datasets.
 
-Semantic embeddings address one of the core weaknesses of symbolic API representations:
-functionally equivalent APIs receive similar embedding vectors, providing inherent robustness to
-API substitution and naming variation. Nevertheless, current semantic approaches exhibit two
-important limitations. They typically treat the execution trace as a linear textual sequence and
-therefore inherit the relational limitations of sequence-only models, and they do not jointly model
-the temporal pace at which operations unfold. Even strong semantic models can therefore struggle
-to distinguish behaviours that share semantic content but differ sharply along the temporal
-dimension.
+Semantic embeddings address one of the core weaknesses of symbolic API
+representations: functionally equivalent APIs receive similar embedding
+vectors, providing inherent robustness to API substitution and naming
+variation. Two limitations remain. Current semantic approaches typically treat
+the execution trace as a linear textual sequence and inherit the relational
+limitations of sequence-only models, and they do not jointly model the
+temporal pace at which operations unfold. Even strong semantic models
+therefore struggle to distinguish behaviours that share semantic content but
+differ sharply along the temporal dimension.
 
 \subsection{Early-Stage Detection and Operational Considerations}
 \label{subsec:early_stage}
 
-A further body of work addresses the practical requirement of early threat detection, particularly
-for rapidly destructive threat classes such as ransomware. Min et al.~\cite{min2018content}
-propose a content-based threat detection mechanism integrated at the storage layer to enable
-early identification of encryption-based attacks. Cen et al.~\cite{cen2021ransomware} provide a
-comprehensive survey of ransomware early-detection research, identifying time-to-detect as a
-critical operational metric that is often underrepresented in academic evaluations focused solely
-on overall accuracy. Anand et al.~\cite{anand2022hiper} introduce HiPeR, which leverages
-hardware performance counters to achieve sub-second threat detection, demonstrating that
-fine-grained temporal signals are both available and informative for early-stage classification.
-Almomani et al.~\cite{almomani2021} propose an end-to-end threat detection system that
-integrates multiple behavioural signals, while Guo et al.~\cite{guo2023zeroday} survey machine
-learning approaches to zero-day attack detection and highlight the persistent difficulty of
-generalizing to held-out threat families.
+A further body of work addresses the practical requirement of early threat
+detection, particularly for rapidly destructive threat classes such as
+ransomware. Min et al.~\cite{min2018content} propose a content-based threat
+detection mechanism integrated at the storage layer to enable early
+identification of encryption-based attacks. Cen et al.~\cite{cen2021ransomware}
+survey ransomware early-detection research and identify time-to-detect as a
+critical operational metric that is underrepresented in academic evaluations
+focused solely on overall accuracy. Anand et al.~\cite{anand2022hiper}
+introduce HiPeR, which leverages hardware performance counters to achieve
+sub-second threat detection, demonstrating that fine-grained temporal signals
+are both available and informative for early-stage classification. Almomani et
+al.~\cite{almomani2021} propose an end-to-end threat detection system
+integrating multiple behavioural signals, and Guo et al.~\cite{guo2023zeroday}
+survey machine learning approaches to zero-day attack detection, highlighting
+the persistent difficulty of generalising to held-out threat families.
 
-These studies collectively underscore two operational requirements that academic detection
-systems frequently underspecify: low time-to-detect performance and robust generalisation to
-evolving threat families. They also indicate that effective early detection benefits from
-fine-grained temporal modelling rather than aggregate behavioural statistics computed over the
-full execution trace.
+Two operational requirements emerge from these studies that academic detection
+systems frequently underspecify: low time-to-detect performance and robust
+generalisation to evolving threat families. Effective early detection benefits
+from fine-grained temporal modelling rather than aggregate behavioural
+statistics computed over the full execution trace.
 
 \subsection{Interpretability for Security Operations}
 \label{subsec:interpretability}
 
-A further dimension of behavioural threat detection concerns the interpretability of model
-decisions in operational security environments. Attention-based GNN architectures such as the
-Graph Attention Network~\cite{velickovic2018gat} and HAN~\cite{han2019} provide attention
-coefficients that can be inspected post hoc to identify the most influential neighbours and
-relations. Bilot et al.~\cite{bilot2024survey} note in their survey of graph-based threat
-detection that interpretability remains an open challenge: while feature-importance methods such
-as SHAP can be applied to static-feature models, attributing a graph-level prediction to specific
-behavioural subgraphs, temporal events, or relation types is substantially more difficult. The
-absence of analyst-actionable explanations limits operational adoption of machine learning-based
-detection systems, since false positives carry significant operational costs and require rapid
-triage by human analysts.
+Interpretability of model decisions is a further dimension of behavioural
+threat detection in operational security environments. Attention-based GNN
+architectures such as the Graph Attention Network~\cite{velickovic2018gat} and
+HAN~\cite{han2019} provide attention coefficients that can be inspected post
+hoc to identify the most influential neighbours and relations. Bilot et
+al.~\cite{bilot2024survey} note in their survey of graph-based threat
+detection that interpretability remains an open challenge: while
+feature-importance methods such as SHAP can be applied to static-feature
+models, attributing a graph-level prediction to specific behavioural
+subgraphs, temporal events, or relation types is substantially more difficult.
+The absence of analyst-actionable explanations limits operational adoption of
+machine learning-based detection systems, since false positives carry
+significant operational costs and require rapid triage by human analysts.
 
 \subsection{Comparative Analysis of Existing Approaches}
 \label{subsec:comparison}
 
-The studies reviewed in the preceding sections demonstrate substantial progress in behavioural
-threat detection. However, each approach focuses primarily on a subset of the behavioural
-dimensions required for robust threat analysis. Table~\ref{tab:literature_comparison} summarizes
-representative approaches drawn from across the reviewed literature and compares their
-capabilities across five key dimensions: semantic understanding, structural reasoning, temporal
-modelling, heterogeneous graph representation, and interpretability. The comparison reveals
-that no existing approach simultaneously addresses all five dimensions, motivating the integrated
-framework proposed in this thesis.
+The studies surveyed above each address a subset of the behavioural dimensions
+required for robust threat analysis.
+Table~\ref{tab:literature_comparison} summarises representative approaches and
+compares their capabilities across five key dimensions: semantic
+understanding, structural reasoning, temporal modelling, heterogeneous graph
+representation, and attribution support. No existing approach simultaneously
+addresses all five dimensions, a finding that motivates the gap formalised in
+Section~\ref{sec:research_gap}.
 
 \begin{table}[H]
 \centering
@@ -676,7 +655,7 @@ framework proposed in this thesis.
 Signature-based~\cite{ucci2019survey}       & $\times$           & $\times$           & $\times$           & $\times$           & \checkmark       \\
 Static ML~\cite{ye2017survey}               & $\times$           & \textit{Limited}   & $\times$           & $\times$           & \textit{Partial} \\
 Sequential DL~\cite{athiwaratkun2017}       & \textit{Limited}   & $\times$           & \checkmark         & $\times$           & $\times$         \\
-GraphShield~\cite{amer2025graphshield}       & $\times$           & \checkmark         & $\times$           & $\times$           & \textit{Partial} \\
+GraphShield~\cite{amer2025graphshield}      & $\times$           & \checkmark         & $\times$           & $\times$           & \textit{Partial} \\
 HetGNN~\cite{hetgnn2019}                    & $\times$           & \checkmark         & $\times$           & \checkmark         & $\times$         \\
 TGN~\cite{tgn2020}                          & $\times$           & \checkmark         & \checkmark         & $\times$           & $\times$         \\
 BEACON~\cite{perera2023beacon}              & \checkmark         & $\times$           & $\times$           & $\times$           & \textit{Partial} \\
@@ -685,17 +664,10 @@ BEACON~\cite{perera2023beacon}              & \checkmark         & $\times$     
 \bottomrule
 \end{tabular}
 }
-\caption{Comparison of behavioural threat detection approaches 
+\caption{Comparison of behavioural threat detection approaches
 (\checkmark~=~full; Limited~=~partial capability; Partial~=~limited attribution support).}
 \label{tab:literature_comparison}
 \end{table}
-
-The comparison highlights a clear fragmentation within the current literature. While several
-approaches successfully address individual behavioural dimensions, the reviewed literature
-indicates limited exploration of frameworks that fully integrate semantic contextual understanding,
-heterogeneous structural reasoning, temporal behavioural modelling, and attribution-oriented
-interpretability within a single behavioural threat detection framework. This observation provides
-the primary motivation for the integrated framework proposed in this thesis.
 
 \section{Research Gap}
 \label{sec:research_gap}
@@ -703,138 +675,127 @@ the primary motivation for the integrated framework proposed in this thesis.
 \begingroup
 \sloppy
 
-The literature reviewed in Section~\ref{sec:existing_studies} collectively demonstrates
-substantial progress in behavioural threat detection: graph-based learning preserves relational
-structure that flat-feature models discard~\cite{amer2025graphshield, bilot2024survey};
-heterogeneous GNNs capture type-specific semantics across distinct system
-entities~\cite{wang2019matchgnet, li2024imbalanced, han2019, hetgnn2019}; temporal graph models
-incorporate the evolution of interactions over time~\cite{guopope2023, haghshenas2023temporal,
-tgn2020, dyrep2019}; and semantic embeddings derived from pre-trained language models improve
-robustness to API obfuscation and naming variation~\cite{reimers2019sbert, lee2024gecko}.
-Each direction, considered individually, contributes a meaningful capability to behavioural threat
-detection.
+Section~\ref{sec:existing_studies} demonstrates substantial progress across the
+seven methodological streams, yet each stream addresses one or two behavioural
+dimensions in isolation. A comparative reading reveals a persistent gap:
+\emph{no existing framework simultaneously models the three behavioural
+dimensions that jointly characterise modern dynamic threats}. A secondary gap
+concerns the interpretability of multi-dimensional decisions.
 
-A comparative analysis of these contributions reveals a deeper conceptual gap in the behavioural
-threat detection literature. Existing approaches investigate temporal dynamics, semantic
-understanding, and heterogeneous structural relationships largely in isolation, resulting in an
-incomplete understanding of how these behavioural dimensions interact during malicious execution.
-Consequently, it remains unclear whether effective threat detection arises primarily from structural
-patterns, temporal evolution, semantic contextual information, or from their joint interaction.
-This limitation constrains both the development of more robust detection models and the broader
+\textbf{Temporal execution dynamics} (the evolution, pacing, and variability
+with which operations unfold) are inadequately represented in static GNN
+models~\cite{amer2025graphshield, bilot2024survey, nisa2020} and absent from
+flat-feature classical machine learning approaches~\cite{ucci2019survey,
+ye2017survey}. Foundational temporal graph frameworks such as
+TGN~\cite{tgn2020} and DyRep~\cite{dyrep2019} have been developed in the
+general machine learning literature, but existing cybersecurity-oriented TGNN
+work~\cite{guopope2023, haghshenas2023temporal} addresses graph evolution at a
+high level and has not been combined with the fine-grained behavioural
+characteristics most relevant to early-stage discrimination.
+
+\textbf{Semantic robustness} (the ability to recognise that syntactically
+different APIs may be functionally equivalent) has been addressed by
+semantic embedding approaches~\cite{reimers2019sbert, lee2024gecko, mpnet2020}
+and by LLM-driven behavioural classifiers~\cite{perera2023beacon}. These
+approaches treat the execution trace as a linear textual sequence, however,
+and do not jointly model the relational structure between APIs, processes,
+files, registry objects, and network endpoints.
+
+\textbf{Heterogeneous structural relationships} (the explicit typing of
+behavioural nodes and the typed relations between them) are captured by
+heterogeneous GNN architectures~\cite{han2019, hetgnn2019} and applied in
+isolation to threat detection~\cite{wang2019matchgnet, li2024imbalanced}, but
+have not been combined with temporal reasoning and semantic enrichment within
+a unified detection framework.
+
+The operational consequence of this fragmentation is that current detection
+systems remain structurally unable to distinguish behaviours that differ along
+one dimension while remaining indistinguishable along the others, as
+illustrated by the three failure modes already described in
+Section~\ref{sec:motivation}.
+
+A secondary but operationally important gap concerns
+\textbf{interpretability}. Attention-based GNNs offer post-hoc inspection of
+neighbourhood importance~\cite{velickovic2018gat, han2019}, yet existing
+detection systems rarely expose explanations that identify which behavioural
+dimension drove a particular alert and how it relates to underlying system
+artefacts. The absence of multi-dimensional, attributable
+interpretability limits adoption in security operations, where rapid triage
+of alerts is essential~\cite{bilot2024survey}.
+
+A final methodological gap concerns \textbf{ablation analysis}. Existing
+studies rarely investigate the individual contribution of semantic,
+structural, and temporal information through systematic ablation, leaving the
+relative importance of each dimension insufficiently understood. Addressing
+this limitation provides both improved detection capability and deeper
 scientific understanding of behavioural threat characterisation.
 
-\textbf{Temporal execution dynamics} -- the evolution, pacing, and variability with which
-operations unfold -- are inadequately represented in static GNN
-models~\cite{amer2025graphshield, bilot2024survey, nisa2020} and absent from flat-feature
-classical machine learning approaches~\cite{ucci2019survey, ye2017survey}. Although foundational
-temporal graph frameworks such as TGN~\cite{tgn2020} and DyRep~\cite{dyrep2019} have been
-developed in the general machine learning literature, existing cybersecurity-oriented TGNN
-work~\cite{guopope2023, haghshenas2023temporal} addresses graph evolution at a high level but
-has not been combined with the fine-grained behavioural characteristics most relevant to
-early-stage discrimination.
-
-\textbf{Semantic robustness} -- the ability to recognize that syntactically different APIs may be
-functionally equivalent -- has been addressed by semantic embedding
-approaches~\cite{reimers2019sbert, lee2024gecko, mpnet2020} and by LLM-driven behavioural
-classifiers~\cite{perera2023beacon}. However, these approaches typically treat the execution
-trace as a linear textual sequence and do not jointly model the relational structure between APIs,
-processes, files, registry objects, and network endpoints.
-
-\textbf{Heterogeneous structural relationships} -- the explicit typing of behavioural nodes and
-the typed relations between them -- are captured by heterogeneous GNN
-architectures~\cite{han2019, hetgnn2019} and applied in isolation to threat
-detection~\cite{wang2019matchgnet, li2024imbalanced}, but have not been combined with temporal
-reasoning and semantic enrichment within a unified detection framework.
-
-The consequence of this fragmentation is that current detection systems remain structurally unable
-to distinguish behaviours that differ along one dimension while remaining indistinguishable along
-the others. A benign process that performs many file writes over an extended period is structurally
-similar to a ransomware encryption phase but differs sharply along the temporal dimension; a
-threat sample employing API substitution may differ symbolically from its training counterpart
-while remaining semantically and structurally identical; and a multi-process loader may exhibit a
-structurally distinctive cross-process topology that is invisible to homogeneous and sequence-only
-models.
-
-A secondary but operationally important gap concerns interpretability. Attention-based GNNs
-offer post-hoc inspection of neighbourhood importance~\cite{velickovic2018gat, han2019}, yet
-existing behavioural detection systems rarely expose explanations that identify which behavioural
-dimension drove a particular alert and how it relates to underlying system artefacts. The absence
-of multi-dimensional, attributable interpretability limits adoption in security operations, where
-rapid triage of alerts is essential~\cite{bilot2024survey}.
-
-Addressing these limitations requires a unified behavioural detection framework capable of jointly
-modelling semantic context, temporal execution dynamics, and heterogeneous structural
-relationships while enabling analysis of their individual and collective contributions to threat
-detection. Such a framework is necessary not only to improve detection performance, but also to
-advance understanding of how different behavioural dimensions contribute to the manifestation and
-identification of malicious activity.
-
-Furthermore, existing studies rarely investigate the individual contribution of semantic,
-structural, and temporal behavioural information through systematic ablation analysis.
-Consequently, the extent to which each behavioural dimension contributes to detection
-performance remains insufficiently understood. Addressing this limitation may provide both
-improved detection capability and deeper scientific understanding of behavioural threat
-characterisation.
-
-These gaps motivate the research questions presented next, while the theoretical foundations
-required to support the proposed framework are introduced in the following chapter.
+Addressing these limitations requires a unified detection framework capable of
+jointly modelling semantic context, temporal execution dynamics, and
+heterogeneous structural relationships while supporting interpretability and
+ablation-based attribution. The research questions in the following section
+operationalise this objective.
 
 \endgroup
+
 \section{Research Questions}
 \label{sec:research_questions}
 
-Building on the gap articulated in Section~\ref{sec:research_gap}, this thesis investigates the
-integration of semantic, structural, and temporal behavioural reasoning within a unified
-heterogeneous temporal graph-based framework for dynamic threat detection. The
-investigation is organised around five research questions, each targeting a specific dimension
-of the identified gap.
+The investigation is organised around five research questions, each targeting
+a specific dimension of the gap formalised in
+Section~\ref{sec:research_gap}.
 
 \begin{description}[leftmargin=0pt, labelwidth=0pt, labelsep=\parskip, style=nextline]
 
 \item[\textbf{RQ1 -- Semantic Generalisation.}]
-Can pretrained Large Language Model-based semantic embeddings improve the generalisation
-capability of behavioural threat detection models toward obfuscated or evolving threat behaviours
-that are previously unobserved during training? This question addresses the semantic robustness
-dimension of the gap and concerns whether contextual semantic understanding of API behaviour can
-substitute for, or complement, symbolic identity.
+Can pretrained Large Language Model-based semantic embeddings improve the
+generalisation capability of behavioural threat detection models toward
+obfuscated or evolving threat behaviours that are previously unobserved during
+training? This question addresses the semantic robustness dimension of the
+gap and concerns whether contextual semantic understanding of API behaviour
+can substitute for, or complement, symbolic identity.
 
-\item[\textbf{RQ2 -- Complementarity of Semantic and Temporal Behavioural Signals.}]
-To what extent do semantic API representations and temporal behavioural characteristics provide
-complementary information for distinguishing malicious and benign execution behaviour? This
-question investigates whether semantic context and temporal execution dynamics capture different
-behavioural properties and whether their combined modelling provides insights beyond either
-dimension individually.
+\item[\textbf{RQ2 -- Complementarity of Semantic and Temporal Signals.}]
+To what extent do semantic API representations and temporal behavioural
+characteristics provide complementary information for distinguishing
+malicious and benign execution behaviour, and does their combined modelling
+yield gains not achievable by either dimension alone? This question
+investigates whether semantic context and temporal execution dynamics capture
+distinct behavioural properties, and whether their integration provides
+additional insight beyond examining either dimension independently.
 
 \item[\textbf{RQ3 -- Unified Temporal Graph-Based Performance.}]
-How does the proposed heterogeneous, schema-aware temporal graph-based hybrid framework --
-combining semantic, structural, and temporal reasoning within a single architecture -- perform
-when compared with representative baselines drawn from classical machine learning, sequential
-deep learning, static graph neural network, and LLM-based behavioural analysis families? This
-question evaluates the overall efficacy of joint behavioural modelling against representative
-baselines from each prior methodological stream.
+How does the proposed heterogeneous, schema-aware temporal graph-based
+framework (combining semantic, structural, and temporal reasoning within a
+single architecture) perform when compared with representative baselines
+drawn from classical machine learning, sequential deep learning, static graph
+neural network, and LLM-based behavioural analysis families? This question
+evaluates whether joint modelling of semantic, structural, and temporal
+behaviour provides measurable advantages over representative single-paradigm
+detection approaches.
 
 \item[\textbf{RQ4 -- Model Interpretability.}]
-Can the proposed framework provide attribution signals that help communicate to
-security analysts which behavioural subgraphs and behavioural dimensions contributed to a threat
-prediction? This question targets the interpretability gap and concerns whether
-multi-dimensional behavioural modelling can be made operationally informative rather than opaque.
+Can the proposed framework provide attribution signals that communicate to
+security analysts which behavioural subgraphs and which dimensions contributed
+to a threat prediction? This question targets the interpretability gap and
+concerns whether multi-dimensional modelling can be made operationally
+informative rather than opaque.
 
 \item[\textbf{RQ5 -- Cross-Family Generalisation.}]
-Can the proposed framework generalise effectively across held-out threat families and behavioural
-perturbations while maintaining stable detection performance? This question addresses the
-operational requirement of robustness to evolving threats highlighted by~\cite{reategui2024}
-and~\cite{cen2021ransomware}.
+Can the proposed framework generalise effectively across held-out threat
+families and behavioural perturbations while maintaining stable detection
+performance? This question addresses the operational requirement of
+robustness to evolving threats highlighted by~\cite{reategui2024} and
+by~\cite{cen2021ransomware}.
 
 \end{description}
 
-These five research questions map directly onto the three-dimensional gap articulated in
-Section~\ref{sec:research_gap}: RQ1 and RQ2 address the semantic and temporal dimensions,
-RQ3 evaluates their joint integration, RQ4 addresses interpretability, and RQ5 examines
-cross-family generalisation. Addressing these questions requires a foundation in behavioural
-threat analysis, graph representation learning, temporal graph modelling, attention mechanisms,
-recurrent neural networks, and semantic representation learning. These theoretical foundations
-are introduced in the next chapter and provide the basis for the methodological framework
-presented subsequently in Chapter~4.
+Addressing these questions requires a foundation in behavioural threat
+analysis, graph
+representation learning, temporal graph modelling, attention mechanisms,
+recurrent neural networks, and semantic representation learning. These
+foundations are introduced in Chapter~\ref{chap:theory} and provide the basis
+for the methodological framework presented in Chapter~4.
 
 % ============================================================
 % CHAPTER 3: THEORETICAL BACKGROUND
@@ -842,48 +803,60 @@ presented subsequently in Chapter~4.
 \chapter{Theoretical Background}
 \label{chap:theory}
 
-This chapter introduces the scientific concepts and mathematical formalisms required for the
-remainder of the thesis. The discussion proceeds from behavioural threat analysis as the
-observational substrate, through graph representation learning and its heterogeneous and temporal
-extensions, to attention mechanisms, recurrent sequence models, and transformer-based semantic
-representations. Each concept is presented with formal notation and grounded in the relevant
-literature; concrete architectural and implementation choices are deferred to Chapter~4.
+The framework developed in this thesis composes seven theoretical building
+blocks: behavioural threat analysis as the observational substrate; graph
+representation learning and its heterogeneous and temporal extensions;
+attention mechanisms; edge-aware and inductive aggregation; recurrent sequence
+modelling; and transformer-based semantic representation. Each section that
+follows opens with the role the concept plays in the proposed architecture,
+then develops the formal notation and grounding in the relevant literature.
+Concrete architectural and implementation choices are deferred to Chapter~4.
 
 \section{Behavioural Threat Analysis}
 \label{sec:behavioural_threat}
 
+Behavioural threat analysis defines the input to the proposed framework: a
+time-ordered sequence of API invocations collected from sandboxed execution.
+This section formalises that input and motivates why downstream representation
+choices matter.
+
 \subsection{Static and Dynamic Analysis}
 \label{subsec:static_dynamic}
 
-Threat analysis is conventionally divided into two complementary paradigms. \textit{Static
-analysis} examines a program in its non-executing form: the binary, its disassembly, embedded
-strings, control-flow graph, imported libraries, section permissions, and structural metadata.
-Because no execution takes place, static analysis is computationally inexpensive and trivially
-parallelisable. Its representational fidelity, however, is bounded by the surface form of the
-program, and surface form can be modified through code-transformation techniques such as
-packing, encryption, polymorphism, and metamorphism while leaving runtime behaviour
+Threat analysis is conventionally divided into two complementary paradigms.
+\textit{Static analysis} examines a program in its non-executing form: the
+binary, its disassembly, embedded strings, control-flow graph, imported
+libraries, section permissions, and structural metadata. Because no execution
+takes place, static analysis is computationally inexpensive and trivially
+parallelisable. Its representational fidelity, however, is bounded by the
+surface form of the program, and surface form can be modified through
+code-transformation techniques such as packing, encryption, polymorphism, and
+metamorphism while leaving runtime behaviour
 unchanged~\cite{ucci2019survey, ye2017survey}.
 
-\textit{Dynamic analysis} observes a program while it executes, typically inside an instrumented
-sandbox or a hypervisor-monitored virtual machine. The runtime evidence collected includes API
-invocations, process creations and terminations, file-system reads and writes, registry
-modifications, memory allocations, and network communications~\cite{mimura2022nlp}. Because
-behaviour cannot be entirely concealed if the program is to fulfil its purpose, dynamic traces tend
-to be more robust to surface-level obfuscation than static features. The two paradigms are
-commonly combined, but the present work is concerned with the dynamic regime, in which
-observable execution behaviour serves as the primary input to learning.
+\textit{Dynamic analysis} observes a program while it executes, typically
+inside an instrumented sandbox or a hypervisor-monitored virtual machine. The
+runtime evidence collected includes API invocations, process creations and
+terminations, file-system reads and writes, registry modifications, memory
+allocations, and network communications~\cite{mimura2022nlp}. Because behaviour
+cannot be entirely concealed if the program is to fulfil its purpose, dynamic
+traces tend to be more robust to surface-level obfuscation than static
+features. The proposed framework operates entirely in the dynamic regime,
+taking observable execution behaviour as its primary input.
 
 \subsection{API Call Traces as Behavioural Evidence}
 \label{subsec:api_traces}
 
-Application Programming Interface (API) calls form the principal channel through which
-user-space programs request services from the operating system kernel. Almost any operational
-effect -- file manipulation, persistence, code injection, privilege escalation, network
-communication -- is ultimately expressed as a sequence of API invocations. API traces have
-therefore been a central evidentiary source in behavioural threat
-research~\cite{ucci2019survey, nguyen2023, guo2023zeroday}.
+Application Programming Interface (API) calls form the principal channel
+through which user-space programs request services from the operating system
+kernel. Almost any operational effect (file manipulation, persistence, code
+injection, privilege escalation, network communication) is ultimately
+expressed as a sequence of API invocations. API traces are therefore a central
+evidentiary source in behavioural threat research~\cite{ucci2019survey,
+nguyen2023, guo2023zeroday}.
 
-Formally, an API call trace can be represented as a finite, time-ordered sequence
+Formally, an API call trace can be represented as a finite, time-ordered
+sequence
 \begin{equation}
   \mathcal{T} = \bigl\langle (a_1, p_1, t_1, \pi_1),\;
                               (a_2, p_2, t_2, \pi_2),\;
@@ -891,53 +864,63 @@ Formally, an API call trace can be represented as a finite, time-ordered sequenc
                               (a_n, p_n, t_n, \pi_n) \bigr\rangle,
   \label{eq:api_trace}
 \end{equation}
-where $a_i$ denotes the API name, $p_i$ the issuing process, $t_i$ the timestamp, and $\pi_i$
-the structured argument list of the $i$-th call. Token-level representations of $\mathcal{T}$ --
-for example, one-hot encodings or $n$-gram histograms -- discard two structurally significant
-properties: the relational links between APIs and the resources they act upon, and the dense
-semantic similarities among functionally related calls. Modern behavioural detection methods
-address these limitations by lifting the trace to a relational structure and by mapping symbolic
-names into a continuous representation space, as developed in Sections~\ref{sec:graph_rl}
-and~\ref{sec:semantic}.
+where $a_i$ denotes the API name, $p_i$ the issuing process, $t_i$ the
+timestamp, and $\pi_i$ the structured argument list of the $i$-th call.
+Token-level representations of $\mathcal{T}$ (for example, one-hot encodings
+or $n$-gram histograms) discard two structurally significant properties: the
+relational links between APIs and the resources they act upon, and the dense
+semantic similarities among functionally related calls. The proposed
+framework therefore lifts the trace to a relational structure
+(Section~\ref{sec:graph_rl}) and maps symbolic names into a continuous
+embedding space (Section~\ref{sec:semantic}).
 
 \section{Graph Representation Learning}
 \label{sec:graph_rl}
 
+Graph representation learning provides the relational substrate on which the
+proposed framework operates. The execution trace defined above is converted
+into a graph in which APIs, processes, files, registry objects, and network
+endpoints become nodes joined by typed relations. The remainder of this
+section develops the formal machinery used in subsequent chapters.
+
 \subsection{Graphs as Data Structures}
 \label{subsec:graph_notation}
 
-A graph $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ consists of a set of nodes $\mathcal{V}$
-and a set of edges $\mathcal{E} \subseteq \mathcal{V} \times \mathcal{V}$. Each node
-$v \in \mathcal{V}$ may carry a feature vector $\mathbf{x}_v \in \mathbb{R}^d$; each edge
-$(u, v) \in \mathcal{E}$ may carry attributes $\mathbf{e}_{uv} \in \mathbb{R}^{d'}$. Graphs
-are a natural representation for systems composed of interacting entities, in which information
-resides not only in the entities themselves but in the topology of their interactions. Behavioural
-traces meet this description: a running program does not execute isolated actions but interacts
-with operating-system resources through connected events.
+A graph $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ consists of a set of nodes
+$\mathcal{V}$ and a set of edges $\mathcal{E} \subseteq \mathcal{V} \times
+\mathcal{V}$. Each node $v \in \mathcal{V}$ may carry a feature vector
+$\mathbf{x}_v \in \mathbb{R}^d$; each edge $(u, v) \in \mathcal{E}$ may carry
+attributes $\mathbf{e}_{uv} \in \mathbb{R}^{d'}$. Graphs are a natural
+representation for systems composed of interacting entities, in which
+information resides not only in the entities themselves but in the topology of
+their interactions. Behavioural traces meet this description: a running
+program does not execute isolated actions but interacts with operating-system
+resources through connected events.
 
 \subsection{Graph Neural Networks}
 \label{subsec:gnn_general}
 
-Graph Neural Networks (GNNs) are a family of neural architectures that operate directly on
-graph-structured input. The original formulation by Scarselli et al.~\cite{scarselli2009} defined
-GNNs as recurrent operators that propagate node states until convergence. Modern GNN
-architectures are more commonly presented through the message-passing framework of Gilmer et
-al.~\cite{gilmer2017mpnn}, in which each layer updates every node representation by aggregating
-information from its immediate neighbours. After $L$ layers, each node embedding integrates
-information from its $L$-hop neighbourhood, a property analogous to the growing receptive field
-of stacked convolutional layers in image-based deep learning.
-
-Graph-based learning has become widely adopted in threat analysis precisely because it
-preserves the structural dependencies that flat feature vectors
-discard~\cite{bilot2024survey, nisa2020}. Both homogeneous and heterogeneous variants of the
-framework have been investigated.
+Graph Neural Networks (GNNs) are a family of neural architectures that operate
+directly on graph-structured input. The original formulation by Scarselli et
+al.~\cite{scarselli2009} defined GNNs as recurrent operators that propagate
+node states until convergence. Modern GNN architectures are more commonly
+presented through the message-passing framework of Gilmer et
+al.~\cite{gilmer2017mpnn}, in which each layer updates every node
+representation by aggregating information from its immediate neighbours. After
+$L$ layers, each node embedding integrates information from its $L$-hop
+neighbourhood, a property analogous to the growing receptive field of stacked
+convolutional layers in image-based deep learning. Graph-based learning has
+become widely adopted in threat analysis precisely because it preserves the
+structural dependencies that flat feature vectors
+discard~\cite{bilot2024survey, nisa2020}. Both homogeneous and heterogeneous
+variants of the framework have been investigated.
 
 \subsection{The Message-Passing Framework}
 \label{subsec:mpnn}
 
-Following Gilmer et al.~\cite{gilmer2017mpnn}, a single message-passing layer is defined by
-two functions: a message function $\psi$ and an update function $\varphi$. The representation
-of node $v$ at layer $k+1$ is computed as
+Following Gilmer et al.~\cite{gilmer2017mpnn}, a single message-passing layer
+is defined by two functions: a message function $\psi$ and an update function
+$\varphi$. The representation of node $v$ at layer $k+1$ is computed as
 \begin{equation}
   \mathbf{m}_v^{(k+1)} = \bigoplus_{u \in \mathcal{N}(v)}
     \psi\!\left( \mathbf{h}_u^{(k)}, \mathbf{h}_v^{(k)}, \mathbf{e}_{uv} \right),
@@ -947,34 +930,44 @@ of node $v$ at layer $k+1$ is computed as
   \mathbf{h}_v^{(k+1)} = \varphi\!\left( \mathbf{h}_v^{(k)},\; \mathbf{m}_v^{(k+1)} \right),
   \label{eq:mpnn_update}
 \end{equation}
-where $\mathcal{N}(v)$ denotes the neighbourhood of node $v$, $\mathbf{h}_v^{(k)}$ is the
-representation of $v$ at layer $k$, $\mathbf{e}_{uv}$ represents optional edge attributes, and
-$\bigoplus$ is a permutation-invariant aggregator such as sum, mean, or maximum. The message
-function $\psi$ is typically a small differentiable transformation that may incorporate edge
-features; the update function $\varphi$ is usually a multilayer perceptron with a non-linear
-activation. Permutation invariance of $\bigoplus$ ensures that the layer output depends on the set
-of neighbours but not on any arbitrary ordering imposed upon them -- a necessary property for
+where $\mathcal{N}(v)$ denotes the neighbourhood of node $v$,
+$\mathbf{h}_v^{(k)}$ is the representation of $v$ at layer $k$,
+$\mathbf{e}_{uv}$ represents optional edge attributes, and $\bigoplus$ is a
+permutation-invariant aggregator such as sum, mean, or maximum. The message
+function $\psi$ is typically a small differentiable transformation that may
+incorporate edge features; the update function $\varphi$ is usually a
+multilayer perceptron with a non-linear activation. Permutation invariance of
+$\bigoplus$ ensures that the layer output depends on the set of neighbours but
+not on any arbitrary ordering imposed upon them, a necessary property for
 any node-level function defined over graphs of varying topology.
 
-The message-passing framework subsumes a broad family of specific architectures, including the
-Graph Convolutional Network of Kipf and Welling~\cite{kipf2017gcn}, the Graph Attention
-Network of Veli\v{c}kovi\'{c} et al.~\cite{velickovic2018gat}, and the GraphSAGE family of
-Hamilton, Ying, and Leskovec~\cite{hamilton2017graphsage}. These specialisations differ chiefly
-in their choice of $\psi$ and $\bigoplus$ and are discussed in
-Sections~\ref{sec:attention}~and~\ref{sec:edge_inductive}.
+The message-passing framework subsumes a broad family of specific
+architectures, including the Graph Convolutional Network of Kipf and
+Welling~\cite{kipf2017gcn}, the Graph Attention Network of Veli\v{c}kovi\'{c}
+et al.~\cite{velickovic2018gat}, and the GraphSAGE family of Hamilton, Ying,
+and Leskovec~\cite{hamilton2017graphsage}. These specialisations differ
+chiefly in their choice of $\psi$ and $\bigoplus$ and are discussed in
+Sections~\ref{sec:attention} and~\ref{sec:edge_inductive}.
 
 \section{Heterogeneous Graph Neural Networks}
 \label{sec:heterogeneous_graphs}
 
+The proposed framework distinguishes five node types (API, process, file,
+registry, network) and several typed relations between them. Heterogeneous
+graph learning provides the formal apparatus for representing such typed
+graphs and for training type-aware message functions.
+
 \subsection{Heterogeneous Graphs}
 \label{subsec:hetero_def}
 
-A homogeneous graph treats all nodes and edges as instances of a single abstract type. Many
-real-world systems, however, contain qualitatively distinct entities connected by qualitatively
-distinct relations. Behavioural execution data contains API invocations, processes, files, registry
-objects, and network endpoints, joined by a variety of relations such as temporal succession,
-process hierarchy, and resource access. Modelling such data with a single relation type collapses
-semantically meaningful distinctions and weakens the inductive bias of the network.
+A homogeneous graph treats all nodes and edges as instances of a single
+abstract type. Many real-world systems, however, contain qualitatively
+distinct entities connected by qualitatively distinct relations. Behavioural
+execution data contains API invocations, processes, files, registry objects,
+and network endpoints, joined by a variety of relations such as temporal
+succession, process hierarchy, and resource access. Modelling such data with
+a single relation type collapses semantically meaningful distinctions and
+weakens the inductive bias of the network.
 
 A heterogeneous (or typed) graph is formally defined as a tuple
 \begin{equation}
@@ -982,20 +975,24 @@ A heterogeneous (or typed) graph is formally defined as a tuple
   \phi_\mathcal{V}, \phi_\mathcal{E}),
   \label{eq:hetero_graph}
 \end{equation}
-where $\mathcal{T}_\mathcal{V}$ is a finite set of node types, $\mathcal{T}_\mathcal{E}$ is a
-finite set of edge (relation) types, $\phi_\mathcal{V}: \mathcal{V} \to \mathcal{T}_\mathcal{V}$
-maps each node to its type, and $\phi_\mathcal{E}: \mathcal{E} \to \mathcal{T}_\mathcal{E}$
-maps each edge to its relation. The structural complexity of a heterogeneous graph thus carries
-an additional semantic dimension -- the type information -- that distinguishes it from its
-homogeneous counterpart~\cite{wang2019matchgnet, li2024imbalanced}.
+where $\mathcal{T}_\mathcal{V}$ is a finite set of node types,
+$\mathcal{T}_\mathcal{E}$ is a finite set of edge (relation) types,
+$\phi_\mathcal{V}: \mathcal{V} \to \mathcal{T}_\mathcal{V}$ maps each node to
+its type, and $\phi_\mathcal{E}: \mathcal{E} \to \mathcal{T}_\mathcal{E}$ maps
+each edge to its relation. The structural complexity of a heterogeneous graph
+thus carries an additional semantic dimension (the type information) that
+distinguishes it from its homogeneous
+counterpart~\cite{wang2019matchgnet, li2024imbalanced}.
 
 \subsection{Relation-Specific Message Passing}
 \label{subsec:type_aware_mp}
 
-Treating all relations identically is a strong and frequently inappropriate assumption, because
-different relations encode different statistical and semantic phenomena. Relation-specific message
-passing addresses this by maintaining a separate message function $\psi_r$ for each relation type
-$r \in \mathcal{T}_\mathcal{E}$. The update for a node $v$ of type $\tau$ becomes
+Treating all relations identically is a strong and frequently inappropriate
+assumption, because different relations encode different statistical and
+semantic phenomena. Relation-specific message passing addresses this by
+maintaining a separate message function $\psi_r$ for each relation type
+$r \in \mathcal{T}_\mathcal{E}$. The update for a node $v$ of type $\tau$
+becomes
 \begin{equation}
   \mathbf{h}_v^{(k+1)} = \varphi_\tau\!\left(
     \mathbf{h}_v^{(k)},\;
@@ -1007,83 +1004,111 @@ $r \in \mathcal{T}_\mathcal{E}$. The update for a node $v$ of type $\tau$ become
   \right),
   \label{eq:hetero_agg}
 \end{equation}
-where $\mathcal{N}_r(v)$ is the set of in-neighbours of $v$ under relation $r$, and $\oplus$ is
-an outer aggregator (commonly a sum) that combines per-relation messages. The update function
-$\varphi_\tau$ is itself indexed by node type, ensuring that nodes of different semantic kinds are
-updated by distinct parameter sets. This formulation generalises the Relational Graph Convolutional
-Network of Schlichtkrull et al.~\cite{schlichtkrull2018} to permit attention-based and inductive
-aggregators within each relation, and underlies many heterogeneous graph models including the
-Heterogeneous Graph Attention Network (HAN)~\cite{han2019} and the Heterogeneous Graph
-Neural Network (HetGNN)~\cite{hetgnn2019}.
+where $\mathcal{N}_r(v)$ is the set of in-neighbours of $v$ under relation
+$r$, and $\oplus$ is an outer aggregator (commonly a sum) that combines
+per-relation messages. The update function $\varphi_\tau$ is itself indexed by
+node type, ensuring that nodes of different semantic kinds are updated by
+distinct parameter sets. This formulation generalises the Relational Graph
+Convolutional Network of Schlichtkrull et al.~\cite{schlichtkrull2018} to
+permit attention-based and inductive aggregators within each relation, and
+underlies many heterogeneous graph models including the Heterogeneous Graph
+Attention Network (HAN)~\cite{han2019} and the Heterogeneous Graph Neural
+Network (HetGNN)~\cite{hetgnn2019}.
 
 \section{Temporal Graph Learning}
 \label{sec:temporal_graph}
 
+Static graphs preserve relational structure but discard the temporal axis
+along which malicious behaviour actually unfolds. The proposed framework
+attaches timestamps to edges and processes the resulting time-ordered
+sequence through a recurrent module. The conceptual basis for that design is
+summarised here.
+
 \subsection{Time-Dependent Interactions}
 \label{subsec:temporal_dependencies}
 
-Many real-world graphs are not static. Interactions among entities occur at specific times, and
-their ordering, density, and pacing convey information that the topological structure alone does
-not capture. In behavioural data, the same set of operations can correspond to qualitatively
-different intents depending on the temporal pattern with which they are issued: occasional file
-reads followed by sparse writes describe routine activity, whereas the same operations issued
-thousands of times within a short interval characterise a different regime of behaviour.
+Many real-world graphs are not static. Interactions among entities occur at
+specific times, and their ordering, density, and pacing convey information
+that the topological structure alone does not capture. In behavioural data,
+the same set of operations can correspond to qualitatively different intents
+depending on the temporal pattern with which they are issued: the pacing and
+burst structure of an operation sequence, rather than its composition alone,
+often separates routine activity from a malicious regime.
 
-Static graph representations preserve structural relationships between entities but do not
-explicitly model temporal ordering. Temporal graph learning extends graph representations by
-incorporating time-dependent interactions and execution dynamics as first-class quantities.
+Static graph representations preserve structural relationships between
+entities but do not explicitly model temporal ordering. Temporal graph
+learning extends graph representations by incorporating time-dependent
+interactions and execution dynamics as first-class quantities.
 
 \subsection{Temporal Graph Neural Networks}
 \label{subsec:tgnn}
 
-Temporal Graph Neural Networks (TGNNs) extend the static graph formalism by associating each
-edge -- and, in some variants, each node -- with a timestamp $t \in \mathbb{R}$. A temporal
-edge can be written as a quadruple
+Temporal Graph Neural Networks (TGNNs) extend the static graph formalism by
+associating each edge (and, in some variants, each node) with a timestamp
+$t \in \mathbb{R}$. A temporal edge can be written as a quadruple
 \begin{equation}
   e = (u,\; v,\; t,\; \mathbf{a}),
   \label{eq:temporal_edge}
 \end{equation}
-where $u$ and $v$ are the connected entities, $t$ is the time of interaction, and
-$\mathbf{a} \in \mathbb{R}^{d'}$ is an optional attribute vector. Two broad TGNN paradigms
-exist. Discrete-time models operate on a sequence of static graph snapshots, capturing temporal
-evolution as a sequence of topological updates. Continuous-time models treat the graph as an
-event stream and update node states asynchronously as new edges arrive. Representative
-architectures include the Temporal Graph Network (TGN) of Rossi et al.~\cite{tgn2020}, the
-JODIE model of Kumar et al., and EvolveGCN of Pareja et al. Applications to cybersecurity are
-comparatively recent; Haghshenas et al.~\cite{haghshenas2023temporal} apply a temporal GNN to
-attack detection and localisation in smart grids, and Guo and Pope~\cite{guopope2023} apply a
-spatio-temporal GNN to container escape detection.
+where $u$ and $v$ are the connected entities, $t$ is the time of interaction,
+and $\mathbf{a} \in \mathbb{R}^{d'}$ is an optional attribute vector. Two
+broad TGNN paradigms exist. Discrete-time models operate on a sequence of
+static graph snapshots, capturing temporal evolution as a sequence of
+topological updates. Continuous-time models treat the graph as an event
+stream and update node states asynchronously as new edges arrive.
+Representative architectures include the Temporal Graph Network (TGN) of
+Rossi et al.~\cite{tgn2020}, the JODIE model of Kumar et
+al.~\cite{kumar2019jodie}, and EvolveGCN of Pareja et
+al.~\cite{pareja2020evolvegcn}. Applications to cybersecurity are
+comparatively recent;
+Haghshenas et al.~\cite{haghshenas2023temporal} apply a temporal GNN to
+attack detection and localisation in smart grids, and Guo and
+Pope~\cite{guopope2023} apply a spatio-temporal GNN to container escape
+detection.
 
-Temporal information may be introduced into a graph model at two distinct levels. At the edge
-level, each temporal edge carries an attribute vector that summarises the time of interaction and
-its derived properties (inter-event delay, pacing, burst indicators). At the sequence level, the
-ordered series of node interactions is processed by a model specifically designed for sequential
-data, such as a recurrent network or a self-attention encoder. The two strategies are
-complementary rather than mutually exclusive.
+Temporal information may be introduced into a graph model at two distinct
+levels. At the edge level, each temporal edge carries an attribute vector
+that summarises the time of interaction and its derived properties
+(inter-event delay, pacing, burst indicators). At the sequence level, the
+ordered series of node interactions is processed by a model specifically
+designed for sequential data, such as a recurrent network or a self-attention
+encoder. The two strategies are complementary rather than mutually exclusive,
+and the proposed framework employs both.
 
 \section{Attention Mechanisms in Graph Learning}
 \label{sec:attention}
+
+Attention provides the first of the two complementary aggregation operators
+combined in the proposed hybrid relational aggregator. The Graph Attention
+Network defines learned per-neighbour importance weights, allowing the model
+to emphasise behaviourally salient relations while suppressing the rest, and
+the resulting weights additionally support post-hoc attribution analysis
+required for RQ4.
 
 \subsection{Graph Attention Networks}
 \label{subsec:gat}
 
 Graph Attention Networks (GATs), introduced by Veli\v{c}kovi\'{c} et
-al.~\cite{velickovic2018gat}, extend the message-passing template by learning, rather than
-fixing, the importance of each neighbour in the aggregation step. In domains where neighbours
-contribute unequally to the representation of the target node, attention-based aggregation can
-substantially improve representational quality compared to uniform mean aggregation.
+al.~\cite{velickovic2018gat}, extend the message-passing template by
+learning, rather than fixing, the importance of each neighbour in the
+aggregation step. In domains where neighbours contribute unequally to the
+representation of the target node, attention-based aggregation can
+substantially improve representational quality compared to uniform mean
+aggregation.
 
-The attention coefficient between a target node $i$ and a candidate neighbour $j$ is computed
-in two stages. An unnormalised score is produced by a small parameterised function:
+The attention coefficient between a target node $i$ and a candidate neighbour
+$j$ is computed in two stages. An unnormalised score is produced by a small
+parameterised function:
 \begin{equation}
   e_{ij} = \mathrm{LeakyReLU}\!\left(
     \mathbf{a}^\top \bigl[ \mathbf{W} \mathbf{h}_i \,\|\, \mathbf{W} \mathbf{h}_j \bigr]
   \right),
   \label{eq:gat_score}
 \end{equation}
-where $\mathbf{W}$ is a learnable linear transformation, $\mathbf{a}$ is a learnable attention
-vector, and $\|$ denotes concatenation. The unnormalised scores over the neighbourhood of $i$
-are then normalised by a softmax operation:
+where $\mathbf{W}$ is a learnable linear transformation, $\mathbf{a}$ is a
+learnable attention vector, and $\|$ denotes concatenation. The unnormalised
+scores over the neighbourhood of $i$ are then normalised by a softmax
+operation:
 \begin{equation}
   \alpha_{ij} = \frac{\exp(e_{ij})}{\sum_{k \in \mathcal{N}(i)} \exp(e_{ik})}.
   \label{eq:gat_alpha}
@@ -1095,57 +1120,69 @@ The aggregated representation of node $i$ is the weighted sum
   \right),
   \label{eq:gat_agg}
 \end{equation}
-where $\sigma$ is a non-linear activation. The learned coefficients $\alpha_{ij}$ are
-interpretable: a large value indicates that node $j$ contributes strongly to the representation of
-node $i$, while a small value suppresses its influence. Attention weights are commonly used as a
-post-hoc interpretability signal.
+where $\sigma$ is a non-linear activation. The learned coefficients
+$\alpha_{ij}$ are interpretable: a large value indicates that node $j$
+contributes strongly to the representation of node $i$, while a small value
+suppresses its influence. Attention weights are commonly used as a post-hoc
+interpretability signal, which the proposed framework exploits in the
+attribution analysis associated with RQ4.
 
 \subsection{Multi-Head Attention}
 \label{subsec:multihead}
 
-A single attention mechanism concentrates relational reasoning into one parameterised function
-and can be unstable when the training signal is sparse or noisy. Multi-head attention runs $H$
-independent attention mechanisms in parallel, each with its own parameters, and concatenates
-their outputs:
+A single attention mechanism concentrates relational reasoning into one
+parameterised function and can be unstable when the training signal is sparse
+or noisy. Multi-head attention runs $H$ independent attention mechanisms in
+parallel, each with its own parameters, and concatenates their outputs:
 \begin{equation}
   \mathbf{h}_i' = \Big\|_{h=1}^{H}\; \sigma\!\left(
     \sum_{j \in \mathcal{N}(i)} \alpha_{ij}^{(h)}\, \mathbf{W}^{(h)} \mathbf{h}_j
   \right),
   \label{eq:multihead}
 \end{equation}
-where $\|$ denotes concatenation and $\alpha_{ij}^{(h)}, \mathbf{W}^{(h)}$ are the
-head-specific parameters. Multiple heads tend to specialise on different relational patterns and
-provide both stability and expressive capacity~\cite{velickovic2018gat, vaswani2017}. In the
-limit, multi-head attention can be interpreted as an ensemble of attention operators sharing the
+where $\|$ denotes concatenation and $\alpha_{ij}^{(h)}, \mathbf{W}^{(h)}$ are
+the head-specific parameters. Multiple heads tend to specialise on different
+relational patterns and provide both stability and expressive
+capacity~\cite{velickovic2018gat, vaswani2017}. In the limit, multi-head
+attention can be interpreted as an ensemble of attention operators sharing the
 same input.
 
 \section{Edge-Aware Message Passing and Inductive Aggregation}
 \label{sec:edge_inductive}
 
+Inductive aggregation is the second operator combined in the proposed hybrid
+aggregator. Where attention learns importance weights, GraphSAGE learns the
+aggregation function itself and supports inference on previously unseen
+graphs, a property essential for any system that must classify execution
+traces it did not observe during training.
+
 \subsection{Edge Features in Message Passing}
 \label{subsec:edge_features}
 
-Edges in a graph are often more than abstract connectors. In behavioural data they may carry
-timestamps, inter-event delays, access types, transition counts, and other contextual information.
-A message-passing layer that ignores edge attributes discards potentially informative signal.
+Edges in a graph are often more than abstract connectors. In behavioural data
+they may carry timestamps, inter-event delays, access types, transition
+counts, and other contextual information. A message-passing layer that
+ignores edge attributes discards potentially informative signal.
 
 A general edge-aware message takes the form
 \begin{equation}
   \mathbf{m}_{uv} = \psi\!\left( \mathbf{h}_u, \mathbf{h}_v, \mathbf{e}_{uv} \right),
   \label{eq:edge_message}
 \end{equation}
-in which the edge attribute vector $\mathbf{e}_{uv}$ contributes directly to the message passed
-from $u$ to $v$. With this construction, two edges with identical endpoints but different
-attributes generate different messages, and the model can therefore distinguish between
-interactions that connect the same entities under different conditions.
+in which the edge attribute vector $\mathbf{e}_{uv}$ contributes directly to
+the message passed from $u$ to $v$. With this construction, two edges with
+identical endpoints but different attributes generate different messages, and
+the model can therefore distinguish between interactions that connect the
+same entities under different conditions.
 
 \subsection{GraphSAGE and Inductive Aggregation}
 \label{subsec:graphsage}
 
-GraphSAGE, introduced by Hamilton, Ying, and Leskovec~\cite{hamilton2017graphsage}, departs
-from earlier transductive graph learning approaches by learning an aggregation function rather
-than fixed embeddings for specific nodes. A representative GraphSAGE layer using mean
-aggregation has the form
+GraphSAGE, introduced by Hamilton, Ying, and
+Leskovec~\cite{hamilton2017graphsage}, departs from earlier transductive
+graph learning approaches by learning an aggregation function rather than
+fixed embeddings for specific nodes. A representative GraphSAGE layer using
+mean aggregation has the form
 \begin{equation}
   \mathbf{h}_v^{(k+1)} = \sigma\!\left(
     \mathbf{W} \cdot \mathrm{CONCAT}\!\left(
@@ -1155,38 +1192,61 @@ aggregation has the form
   \right),
   \label{eq:graphsage}
 \end{equation}
-where $\mathrm{AGG}$ is a permutation-invariant aggregator (mean, max, LSTM, or pooling).
-The inductive property of GraphSAGE is significant for settings in which new nodes appear
-continuously and the model must generalise to graphs containing entities that were not present at
-training time. Because the model learns how to aggregate neighbourhood information rather than
-memorising specific node embeddings, it can be applied to unseen graphs at inference time
-without retraining.
+where $\mathrm{AGG}$ is a permutation-invariant aggregator (mean, max, LSTM,
+or pooling). The inductive property of GraphSAGE is significant for settings
+in which new nodes appear continuously and the model must generalise to
+graphs containing entities that were not present at training time. Because
+the model learns how to aggregate neighbourhood information rather than
+memorising specific node embeddings, it can be applied to unseen graphs at
+inference time without retraining.
+
+\subsection{Hybrid GAT-SAGE Aggregation}
+\label{subsec:hybrid}
+
+Attention-based and inductive aggregators offer complementary strengths.
+Attention learns per-neighbour importance, sharpens the inductive bias toward
+salient relations, and provides interpretable weights that support
+post-hoc attribution. Inductive aggregation supports generalisation to unseen
+nodes and unseen graph topologies, both of which arise routinely in
+behavioural threat detection where the set of files, processes, and network
+endpoints encountered at test time is open-ended. The proposed framework
+therefore combines the two within a relation-specific aggregator: per-relation
+messages are first weighted by an attention mechanism, and the resulting
+per-relation embeddings are then combined through an inductive operator. The
+detailed instantiation of this hybrid is presented in Chapter~4.
 
 \section{Sequential Learning with Recurrent Networks}
 \label{sec:lstm}
 
+The temporal branch of the proposed framework processes the ordered API
+sequence with a bidirectional LSTM. This section develops the recurrent
+foundations underlying that choice.
+
 \subsection{Recurrent Networks and the Vanishing-Gradient Problem}
 \label{subsec:vanishing_grad}
 
-Recurrent neural networks process sequential input by maintaining a hidden state $\mathbf{h}_t$
-that is updated as a non-linear function of the previous hidden state and the current input. In
-principle, recurrent networks are universal approximators for sequence-to-sequence mappings. In
-practice, the plain recurrent formulation exhibits a well-known pathology: the gradient of an
-early-step loss with respect to an early-step parameter contains a product of many Jacobians, and
-the magnitude of such a product tends to zero or infinity as the sequence length grows. This
-vanishing-and-exploding-gradient phenomenon limits plain recurrent networks to dependencies
-spanning at most a few dozen time steps.
+Recurrent neural networks process sequential input by maintaining a hidden
+state $\mathbf{h}_t$ that is updated as a non-linear function of the previous
+hidden state and the current input. In principle, recurrent networks are
+universal approximators for sequence-to-sequence mappings. In practice, the
+plain recurrent formulation exhibits a well-known pathology: the gradient of
+an early-step loss with respect to an early-step parameter contains a product
+of many Jacobians, and the magnitude of such a product tends to zero or
+infinity as the sequence length grows. This vanishing-and-exploding-gradient
+phenomenon limits plain recurrent networks to dependencies spanning at most a
+few dozen time steps.
 
 \subsection{Long Short-Term Memory}
 \label{subsec:lstm}
 
 The Long Short-Term Memory (LSTM) network, introduced by Hochreiter and
-Schmidhuber~\cite{hochreiter1997}, was designed to remedy the vanishing-gradient problem. An
-LSTM cell maintains a cell state $\mathbf{c}_t$ in addition to the hidden state $\mathbf{h}_t$
-and modulates information flow through three multiplicative gates: the input gate $\mathbf{i}_t$,
-the forget gate $\mathbf{f}_t$, and the output gate $\mathbf{o}_t$. Given an input
-$\mathbf{x}_t$ and previous states $(\mathbf{h}_{t-1}, \mathbf{c}_{t-1})$, the LSTM update
-equations are
+Schmidhuber~\cite{hochreiter1997}, was designed to remedy the
+vanishing-gradient problem. An LSTM cell maintains a cell state $\mathbf{c}_t$
+in addition to the hidden state $\mathbf{h}_t$ and modulates information flow
+through three multiplicative gates: the input gate $\mathbf{i}_t$, the forget
+gate $\mathbf{f}_t$, and the output gate $\mathbf{o}_t$. Given an input
+$\mathbf{x}_t$ and previous states $(\mathbf{h}_{t-1}, \mathbf{c}_{t-1})$, the
+LSTM update equations are
 \begin{subequations}
 \begin{align}
   \mathbf{i}_t &= \sigma\!\left( \mathbf{W}_i \mathbf{x}_t + \mathbf{U}_i \mathbf{h}_{t-1} + \mathbf{b}_i \right), \label{eq:lstm_i}\\
@@ -1197,106 +1257,130 @@ equations are
   \mathbf{h}_t &= \mathbf{o}_t \odot \tanh(\mathbf{c}_t), \label{eq:lstm_h}
 \end{align}
 \end{subequations}
-where $\sigma$ is the logistic sigmoid, $\odot$ is elementwise multiplication, and the
-$\mathbf{W}_\cdot, \mathbf{U}_\cdot, \mathbf{b}_\cdot$ are learnable parameters. The cell state
-$\mathbf{c}_t$ is updated additively: the forget gate determines which information to retain from
-$\mathbf{c}_{t-1}$, and the input gate determines which new candidate information
-$\tilde{\mathbf{c}}_t$ to incorporate. Because $\mathbf{c}_t$ is updated by addition rather than
-by repeated non-linear multiplication, gradients can flow through it across long horizons without
-the multiplicative collapse that afflicts plain recurrent networks. This is the architectural
-innovation that makes long-range temporal credit assignment tractable in LSTMs.
+where $\sigma$ is the logistic sigmoid, $\odot$ is elementwise
+multiplication, and the $\mathbf{W}_\cdot, \mathbf{U}_\cdot, \mathbf{b}_\cdot$
+are learnable parameters. The cell state $\mathbf{c}_t$ is updated additively:
+the forget gate determines which information to retain from $\mathbf{c}_{t-1}$,
+and the input gate determines which new candidate information
+$\tilde{\mathbf{c}}_t$ to incorporate. Because $\mathbf{c}_t$ is updated by
+addition rather than by repeated non-linear multiplication, gradients can
+flow through it across long horizons without the multiplicative collapse that
+afflicts plain recurrent networks. This is the architectural innovation that
+makes long-range temporal credit assignment tractable in LSTMs.
 
 \subsection{Bidirectional LSTM}
 \label{subsec:bilstm}
 
-A unidirectional LSTM processes the sequence in chronological order and produces a hidden state
-$\mathbf{h}_t$ that depends only on past inputs. When the complete sequence is available at
-inference time -- as is typical for classification tasks over fully observed sequences -- both
-past and future context can be exploited.
+A unidirectional LSTM processes the sequence in chronological order and
+produces a hidden state $\mathbf{h}_t$ that depends only on past inputs. When
+the complete sequence is available at inference time, as is typical for
+classification tasks over fully observed sequences, both past and future
+context can be exploited.
 
-A bidirectional LSTM consists of two LSTM modules with separate parameters: a forward LSTM
-that processes $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n$ in increasing time order and
-produces hidden states $\overrightarrow{\mathbf{h}}_t$, and a backward LSTM that processes the
-same sequence in reverse order and produces $\overleftarrow{\mathbf{h}}_t$. The per-timestep
-representation is the concatenation
+A bidirectional LSTM consists of two LSTM modules with separate parameters: a
+forward LSTM that processes $\mathbf{x}_1, \mathbf{x}_2, \ldots, \mathbf{x}_n$
+in increasing time order and produces hidden states
+$\overrightarrow{\mathbf{h}}_t$, and a backward LSTM that processes the same
+sequence in reverse order and produces $\overleftarrow{\mathbf{h}}_t$. The
+per-timestep representation is the concatenation
 \begin{equation}
   \mathbf{h}_t = \bigl[ \overrightarrow{\mathbf{h}}_t \;\|\; \overleftarrow{\mathbf{h}}_t \bigr]
   \in \mathbb{R}^{2H},
   \label{eq:bilstm}
 \end{equation}
-where $H$ is the per-direction hidden dimensionality. Each output position is thus contextualised
-by the entire sequence, not only its history.
+where $H$ is the per-direction hidden dimensionality. Each output position is
+thus contextualised by the entire sequence, not only its history.
 
 \section{Semantic Representation Learning}
 \label{sec:semantic}
 
+The semantic branch of the proposed framework replaces symbolic API
+identifiers with dense vectors produced by a pretrained sentence-transformer
+encoder. This section establishes why such embeddings provide a more
+discriminative input space than sparse one-hot encodings.
+
 \subsection{Sparse and Dense Representations}
 \label{subsec:sparse_dense}
 
-Categorical entities such as API names, system calls, or symbolic identifiers must be converted
-into numerical form before they can be consumed by a neural model. Two broad strategies exist.
+Categorical entities such as API names, system calls, or symbolic identifiers
+must be converted into numerical form before they can be consumed by a neural
+model. Two broad strategies exist.
 
-\textit{Sparse representations} encode each distinct symbol as a one-hot indicator or as a
-frequency-based vector. Such representations are simple and transparent, but they do not preserve
-semantic similarity: functionally related symbols receive orthogonal vectors. Two API calls that
-perform near-identical operations under different names -- for example, \texttt{CreateFileW} and
-\texttt{NtCreateFile} -- are represented as maximally dissimilar.
+\textit{Sparse representations} encode each distinct symbol as a one-hot
+indicator or as a frequency-based vector. Such representations are simple and
+transparent, but they do not preserve semantic similarity: functionally
+related symbols receive orthogonal vectors. Two API calls that perform
+near-identical operations under different names (for example,
+\texttt{CreateFileW} and \texttt{NtCreateFile}) are represented as
+maximally dissimilar.
 
-\textit{Dense representations} map each symbol to a point in a continuous vector space such that
-semantically similar symbols are mapped to nearby points. The resulting embedding space is
-metric, and the semantic relationships among symbols become directly accessible to the model
-through geometric operations such as cosine similarity. Dense representations have largely
-replaced sparse representations in modern natural-language processing and increasingly in
-domain-specific applications, including threat analysis~\cite{amer2025graphshield}.
+\textit{Dense representations} map each symbol to a point in a continuous
+vector space such that semantically similar symbols are mapped to nearby
+points. The resulting embedding space is metric, and the semantic
+relationships among symbols become directly accessible to the model through
+geometric operations such as cosine similarity. Dense representations have
+largely replaced sparse representations in modern natural-language processing
+and increasingly in domain-specific applications, including threat
+analysis~\cite{amer2025graphshield}.
 
 \subsection{Transformer-Based Sentence Embeddings}
 \label{subsec:transformer}
 
-The Transformer architecture, introduced by Vaswani et al.~\cite{vaswani2017}, underpins modern
-natural-language representation learning. Transformer-based encoders such as
-BERT~\cite{devlin2019bert} produce contextualised representations of text by stacking
-self-attention layers; the resulting embeddings encode lexical, syntactic, and semantic similarity
-in their geometry. To obtain a fixed-length representation of an entire phrase, the contextualised
-token embeddings must be pooled. Na\"ive pooling of the output of a generic Transformer encoder,
-however, has been shown to produce semantically poor sentence-level vectors.
+The Transformer architecture, introduced by Vaswani et
+al.~\cite{vaswani2017}, underpins modern natural-language representation
+learning. Transformer-based encoders such as BERT~\cite{devlin2019bert}
+produce contextualised representations of text by stacking self-attention
+layers; the resulting embeddings encode lexical, syntactic, and semantic
+similarity in their geometry. To obtain a fixed-length representation of an
+entire phrase, the contextualised token embeddings must be pooled. Na\"ive
+pooling of the output of a generic Transformer encoder, however, has been
+shown to produce semantically poor sentence-level vectors.
 
-Sentence-BERT (SBERT), proposed by Reimers and Gurevych~\cite{reimers2019sbert}, addresses
-this limitation by fine-tuning a Transformer encoder under a Siamese architecture with a
-contrastive or regression objective. The fine-tuned encoder produces a single fixed-length vector
-per input phrase such that cosine similarity in the embedding space correlates with semantic
-similarity. SBERT and its successors have become the dominant choice when dense sentence-level
-representations are required.
+Sentence-BERT (SBERT), proposed by Reimers and
+Gurevych~\cite{reimers2019sbert}, addresses this limitation by fine-tuning a
+Transformer encoder under a Siamese architecture with a contrastive or
+regression objective. The fine-tuned encoder produces a single fixed-length
+vector per input phrase such that cosine similarity in the embedding space
+correlates with semantic similarity. SBERT and its successors have become the
+dominant choice when dense sentence-level representations are required.
 
 \subsection{Pretrained Sentence Encoders}
 \label{subsec:sentence_transformer}
 
-A number of publicly released sentence encoders descend from the SBERT methodology. They
-differ chiefly in their backbone language model and in the corpora and objectives used during
-fine-tuning. Representative examples include encoders based on the original BERT~\cite{devlin2019bert},
-on RoBERTa, on DistilBERT, and on MPNet~\cite{mpnet2020}. MPNet itself improves upon BERT
-by combining the bidirectional masked-language-model objective of BERT with the
-permuted-language-model objective of XLNet, addressing the input-discrepancy and position-bias
-limitations of each. The MPNet-based SBERT variant is widely used as a general-purpose
-semantic encoder and produces dense 768-dimensional embeddings.
+A number of publicly released sentence encoders descend from the SBERT
+methodology. They differ chiefly in their backbone language model and in the
+corpora and objectives used during fine-tuning. Representative examples
+include encoders based on the original BERT~\cite{devlin2019bert}, on
+RoBERTa, on DistilBERT, and on MPNet~\cite{mpnet2020}. MPNet itself improves
+upon BERT by combining the bidirectional masked-language-model objective of
+BERT with the permuted-language-model objective of XLNet, addressing the
+input-discrepancy and position-bias limitations of each. The MPNet-based
+SBERT variant is widely used as a general-purpose semantic encoder and
+produces dense 768-dimensional embeddings.
 
-More recent encoder families, such as the Gecko family of Lee et al.~\cite{lee2024gecko},
-explore distillation from larger language models as a route to compact, high-quality embeddings.
-The choice of encoder is largely empirical and depends on the trade-off between embedding
-quality, dimensionality, and inference cost.
+More recent encoder families, such as the Gecko family of Lee et
+al.~\cite{lee2024gecko}, explore distillation from larger language models as
+a route to compact, high-quality embeddings. The choice of encoder is largely
+empirical and depends on the trade-off between embedding quality,
+dimensionality, and inference cost.
 
 \section{Chapter Summary}
 \label{sec:theory_summary}
 
-This chapter has introduced the scientific foundations on which subsequent chapters depend.
-The discussion began with behavioural threat analysis and the formalisation of API call traces
-as time-ordered sequences. It then developed graph representation learning, the message-passing
-framework, and its extensions to heterogeneous and temporal graphs. Attention mechanisms were
-introduced at the level of neighbourhood aggregation through the Graph Attention Network, and
-at the level of multi-head specialisation. Edge-aware aggregation and inductive aggregation were
-presented as complementary operators. Recurrent sequence modelling was developed through the
-LSTM cell and its bidirectional variant. Dense semantic representations were introduced through
-Transformer-based sentence encoders and the SBERT family of models. Chapter~4 describes how
-the building blocks introduced here are composed into the system evaluated in this thesis.
+This chapter introduced the scientific foundations on which subsequent
+chapters depend. The discussion began with behavioural threat analysis and
+the formalisation of API call traces as time-ordered sequences. It then
+developed graph representation learning, the message-passing framework, and
+its extensions to heterogeneous and temporal graphs. Attention mechanisms
+were introduced at the level of neighbourhood aggregation through the Graph
+Attention Network, and at the level of multi-head specialisation. Edge-aware
+aggregation and inductive aggregation were presented as complementary
+operators and combined explicitly in the proposed hybrid relational
+aggregator. Recurrent sequence modelling was developed through the LSTM cell
+and its bidirectional variant. Dense semantic representations were introduced
+through Transformer-based sentence encoders and the SBERT family of models.
+Chapter~4 describes how the building blocks introduced here are composed into
+the system evaluated in this thesis.
 
 % ============================================================
 % BIBLIOGRAPHY
