@@ -542,8 +542,7 @@ class TemporalLSTM(nn.Module):
         )
 
         self.lstm.flatten_parameters()
-        with torch.backends.cudnn.flags(enabled=False):
-            packed_out, _ = self.lstm(packed)
+        packed_out, _ = self.lstm(packed)
         out_padded, _ = torch.nn.utils.rnn.pad_packed_sequence(
             packed_out,
             batch_first=True,
@@ -803,6 +802,12 @@ class HeteroTemporalConv(nn.Module):
         contrib_count: Dict[str, int] = {}
         self._last_hybrid_gate_stats = {}
 
+        # Gate the per-relation stats computation behind HYBRID_GATE_MONITOR.
+        # When True (default) behavior is identical to before; when False we
+        # skip get_gate_stats() and its ~5-7 .item() GPU syncs per hybrid conv
+        # (downstream collectors already handle an empty stats dict gracefully).
+        monitor_gate = getattr(config, "HYBRID_GATE_MONITOR", True)
+
         for edge_type in self.edge_types:
             if edge_type not in edge_index_dict:
                 continue
@@ -845,7 +850,7 @@ class HeteroTemporalConv(nn.Module):
 
             out = conv(x_input, edge_index, edge_attr)
 
-            if hasattr(conv, "get_gate_stats"):
+            if monitor_gate and hasattr(conv, "get_gate_stats"):
                 stats = conv.get_gate_stats()
                 if stats:
                     self._last_hybrid_gate_stats[edge_type_to_key(edge_type)] = stats

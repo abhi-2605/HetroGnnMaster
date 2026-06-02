@@ -429,6 +429,23 @@ class HeteroTemporalGNN(nn.Module):
         # ══════════════════════════════════════════════════════════════════════
         self.behav_dim = len(self.type_slot_order) * 3
 
+        # ── Pipeline-invariant feature standardization (#1) ──────────────────
+        # Per-dimension BatchNorm on edge_attr == z-score with training running
+        # stats, applied identically at inference. ModuleDict keyed by a
+        # dot-free edge-type string.
+        self.standardize_edge_attr = getattr(config, "STANDARDIZE_EDGE_ATTR", False)
+        if self.standardize_edge_attr:
+            self.edge_attr_norm = nn.ModuleDict()
+            for et in self.edge_types:
+                d = int(self.edge_dims.get(et, 0) or 0)
+                if d > 0:
+                    self.edge_attr_norm["__".join(et)] = nn.BatchNorm1d(d)
+        else:
+            self.edge_attr_norm = None
+
+        self.standardize_behavioral = getattr(config, "STANDARDIZE_BEHAVIORAL", False)
+        self.behav_norm = nn.LayerNorm(self.behav_dim) if self.standardize_behavioral else None
+
         # ══════════════════════════════════════════════════════════════════════
         # 8. Classifier
         # ══════════════════════════════════════════════════════════════════════
@@ -812,6 +829,22 @@ class HeteroTemporalGNN(nn.Module):
 
         h_dict: Dict[str, torch.Tensor] = dict(projected_inputs)
 
+        # Standardize edge attributes for pipeline/scale invariance (#1).
+        if edge_attr_dict is not None and self.edge_attr_norm is not None:
+            normed_edge_attr: Dict[EdgeType, torch.Tensor] = {}
+            for et, ea in edge_attr_dict.items():
+                key = "__".join(et)
+                if (
+                    ea is not None
+                    and ea.numel() > 0
+                    and key in self.edge_attr_norm
+                    and (ea.size(0) > 1 or not self.training)
+                ):
+                    normed_edge_attr[et] = self.edge_attr_norm[key](ea)
+                else:
+                    normed_edge_attr[et] = ea
+            edge_attr_dict = normed_edge_attr
+
         primary_batch = batch_dict[self.primary_temporal_type]
         batch_size = int(primary_batch.max().item()) + 1
 
@@ -991,6 +1024,8 @@ class HeteroTemporalGNN(nn.Module):
             batch_size=batch_size,
             device=device,
         )
+        if self.behav_norm is not None:
+            behav_feats = self.behav_norm(behav_feats)
 
         # ------------------------------------------------------------------
         # 7. Classifier
