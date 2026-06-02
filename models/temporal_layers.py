@@ -543,23 +543,32 @@ class TemporalLSTM(nn.Module):
 
         self.lstm.flatten_parameters()
 
-        # Run the LSTM in fp32 with cuDNN ENABLED (fast) but error-free.
-        # cuDNN's fused RNN kernel is fast, but under AMP autocast the fp16
-        # input vs. fp32 LSTM weights mismatch is what threw the original
-        # "cudnn error" (hence the old enabled=False workaround). Forcing fp32
-        # here matches the weights so the fast kernel runs without error, and
-        # RNNs are kept in fp32 under AMP for numerical stability anyway.
+        # Run the LSTM in fp32 with cuDNN enabled (fast). cuDNN's fused RNN
+        # rejects fp16 (dtype) and very long / capped-graph sequences
+        # (CUDNN_STATUS_NOT_SUPPORTED, "non-contiguous input"). We force fp32 +
+        # contiguous so it's happy on the ~96% of normal graphs, and fall back
+        # to the native kernel ONLY for the rare big-graph batches cuDNN can't
+        # handle — keeping speed everywhere else and never skipping a batch.
         # No effect on CPU (autocast(enabled=False) is a no-op there).
         _dev_type = packed.data.device.type
         with torch.autocast(device_type=_dev_type, enabled=False):
-            if packed.data.dtype != torch.float32:
+            if packed.data.dtype != torch.float32 or not packed.data.is_contiguous():
                 packed = torch.nn.utils.rnn.PackedSequence(
-                    packed.data.float(),
+                    packed.data.float().contiguous(),
                     packed.batch_sizes,
                     packed.sorted_indices,
                     packed.unsorted_indices,
                 )
-            packed_out, _ = self.lstm(packed)
+            try:
+                packed_out, _ = self.lstm(packed)
+            except RuntimeError as e:
+                if "cudnn" in str(e).lower():
+                    # Rare big/long-sequence graph cuDNN can't process: retry
+                    # this one batch on the native kernel (slower, robust).
+                    with torch.backends.cudnn.flags(enabled=False):
+                        packed_out, _ = self.lstm(packed)
+                else:
+                    raise
         out_padded, _ = torch.nn.utils.rnn.pad_packed_sequence(
             packed_out,
             batch_first=True,

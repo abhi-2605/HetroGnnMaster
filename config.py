@@ -226,6 +226,9 @@ DEVICE = (
 # to keep a fast GPU fed. 0 on macOS/CPU (fork issues + no benefit).
 # Each worker holds PREFETCH_FACTOR * batch large graphs in RAM, so cap to
 # avoid host-RAM blowup; tune down if you see OOM in system memory.
+# file_system sharing strategy (set in train.py) removes the FD-exhaustion
+# crash, so worker count is now purely a speed<->host-RAM dial, not a stability
+# one. Keep it high to feed the GPU; watch `free -h` if host RAM is tight.
 NUM_WORKERS = min(16, (os.cpu_count() or 8)) if DEVICE == "cuda" else 0
 PREFETCH_FACTOR = 2
 PIN_MEMORY = True if DEVICE == "cuda" else False

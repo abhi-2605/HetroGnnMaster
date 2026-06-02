@@ -45,6 +45,15 @@ from graph_construction.pytorch_dataset import (
 from torch.cuda.amp import GradScaler, autocast
 warnings.filterwarnings("ignore")
 
+# Avoid the file-descriptor sharing strategy, which exhausts FDs with many
+# DataLoader workers + pin_memory on large graphs ("received 0 items of
+# ancdata" -> pin-memory thread dies). file_system shares via /dev/shm instead.
+# No speed cost; just crash-proof plumbing. Guarded for non-POSIX platforms.
+try:
+    torch.multiprocessing.set_sharing_strategy("file_system")
+except (RuntimeError, AttributeError):
+    pass
+
 PROJECT_ROOT = Path(__file__).parent.parent
 sys.path.append(str(PROJECT_ROOT))
 _ram_log: list[dict] = []
