@@ -422,7 +422,7 @@ class EdgeFeatureEnricher:
             periodicity_scores,    # 12: new
             sudden_changes         # 13: new
         ])
-        
+
         # Convert to tensor
         new_features = torch.tensor(new_features, dtype=torch.float32)
         

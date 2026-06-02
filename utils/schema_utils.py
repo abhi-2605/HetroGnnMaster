@@ -51,7 +51,50 @@ def load_schema(schema_path: Optional[Path] = None) -> Dict[str, Any]:
         )
 
     with open(path, "r", encoding="utf-8") as f:
-        return json.load(f)
+        schema = json.load(f)
+
+    return _augment_schema_with_reverse_edges(schema)
+
+
+def _augment_schema_with_reverse_edges(schema: Dict[str, Any]) -> Dict[str, Any]:
+    """Inject reverse API-context edge types into a loaded schema in-memory.
+
+    Gated by config.USE_REVERSE_API_EDGES. The on-disk schema.json is left
+    untouched; this only augments the in-memory dict so get_edge_types(),
+    get_canonical_edge_dims() and the validator all agree that the reverse
+    relations are expected. Idempotent and a no-op when the flag is off or the
+    forward relation isn't present in this schema.
+    """
+    if not getattr(config, "USE_REVERSE_API_EDGES", False):
+        return schema
+
+    specs = getattr(config, "REVERSE_API_EDGE_SPECS", [])
+    summary = schema.setdefault("schema_summary", {})
+    found = summary.setdefault("edge_types_found", [])
+    etypes = schema.setdefault("edge_types", {})
+
+    for fwd, rev_name in specs:
+        src, _, dst = fwd
+        fwd_str = edge_type_to_str(tuple(fwd))
+        rev_str = edge_type_to_str((dst, rev_name, src))
+
+        # Only mirror relations that actually exist in this schema.
+        if fwd_str not in found and fwd_str not in etypes:
+            continue
+        if rev_str in found:
+            continue
+
+        found.append(rev_str)
+        # Reverse edges carry no edge_attr -> canonical edge dim None (edge_dim 0).
+        # Mark as non-empty so the model treats the relation as active.
+        fwd_total = int((etypes.get(fwd_str) or {}).get("total_edges", 0)) or 1
+        etypes[rev_str] = {
+            "edge_attr": False,
+            "edge_attr_dims": [],
+            "total_edges": fwd_total,
+        }
+
+    return schema
 
 
 def get_active_schema() -> Dict[str, Any]:

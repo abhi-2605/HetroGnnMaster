@@ -2,6 +2,7 @@
 Configuration file for Ransomware TGNN project.
 """
 
+import os
 import torch
 import random
 import numpy as np
@@ -220,11 +221,16 @@ DEVICE = (
 )
 
 # DataLoader
-NUM_WORKERS = 4 if DEVICE == "cuda" else 0  # -- was 4
+# Heavy per-graph CPU preprocessing in __getitem__ (compression/cap/validate)
+# is the real bottleneck, not GPU compute — so on CUDA scale workers to cores
+# to keep a fast GPU fed. 0 on macOS/CPU (fork issues + no benefit).
+# Each worker holds PREFETCH_FACTOR * batch large graphs in RAM, so cap to
+# avoid host-RAM blowup; tune down if you see OOM in system memory.
+NUM_WORKERS = min(16, (os.cpu_count() or 8)) if DEVICE == "cuda" else 0
 PREFETCH_FACTOR = 2
 PIN_MEMORY = True if DEVICE == "cuda" else False
 
-RESUME_FROM_CHECKPOINT = True
+RESUME_FROM_CHECKPOINT = True  # new norm/standardization params -> train fresh; can't resume old checkpoint
 
 # ═══════════════════════════════════════════════════════════
 # DATALOADER (macOS FIX)
@@ -494,7 +500,7 @@ OVERWRITE_ORIGINAL_METADATA = False
 USE_ADAPTIVE_BRANCH_FUSION = True
 
 # Small independent dropout on semantic / structural / temporal graph branches
-BRANCH_DROPOUT_P = 0.05
+BRANCH_DROPOUT_P = 0.10
 
 # Penalize only when gate entropy becomes too low
 BRANCH_GATE_TARGET_ENTROPY = 0.75
@@ -523,7 +529,7 @@ SPATIAL_LAYER = "hybrid_gat_sage"
 # Hybrid GAT-SAGE settings
 # ============================================================
 
-HYBRID_GATE_MONITOR = True
+HYBRID_GATE_MONITOR = False  # Whether to track gate stats for analysis
 
 # Gate input uses:
 # [h_gat || h_sage || abs(h_gat - h_sage)]
@@ -559,3 +565,54 @@ PERTURBATION_TARGET = "edge_attr"
 # "edge_attr"
 # "api_x"
 # "edge_attr_and_api_x"
+
+
+# ============================================================
+# PIPELINE-INVARIANT FEATURE HANDLING
+# ============================================================
+# Motivation: the model overfit to the *enriched* pipeline's absolute
+# edge_attr / timestamp scales. Graphs from a different extraction pipeline
+# (e.g. cuckoo_cape_raw_style) land out-of-distribution and get confidently
+# misclassified as Benign. These flags make the model robust to feature
+# magnitude / pipeline scale. NOTE: enabling any of these requires retraining.
+
+# (#1) Standardize the 14-dim temporal edge_attr inside the model with a
+# per-dimension BatchNorm (= z-score using training running statistics,
+# applied identically at inference). Stops the huge-magnitude time/speed dims
+# from dominating and re-centers cross-pipeline scale differences.
+STANDARDIZE_EDGE_ATTR = True
+
+# (#1b) LayerNorm the 15-dim behavioral summary features before the classifier.
+STANDARDIZE_BEHAVIORAL = True
+
+# (#2) Make the raw-magnitude temporal edge features scale-invariant via
+# signed-log compression of the absolute dims (time_delta, speed,
+# acceleration, burst_intensity, window_mean, window_std). Dims 7/8/9
+# (time_from_start, time_to_end, seq_position) are already relative.
+# Applied at LOAD time in hetero_collate (NOT baked into the cache), so
+# NO re-enrichment is needed — it hits train and eval identically. Just set
+# this True and retrain. Off by default.
+USE_RELATIVE_TEMPORAL_FEATURES = True
+RELATIVE_TEMPORAL_LOG_DIMS = [0, 3, 4, 5, 10, 11]
+
+
+# ============================================================
+# REVERSE (BIDIRECTIONAL) API-CONTEXT EDGES
+# ============================================================
+# Today an api node only RECEIVES messages from temporal (api->api) and
+# executes (process->api); it SENDS to file/registry/network but hears nothing
+# back. These reverse edges (file->api, registry->api, network->api) let api
+# absorb context from the resources it touched.
+#
+# Added at LOAD time in the loader (no cache rebuild) and injected in-memory
+# into the schema so the model builds convs for them and validation passes.
+# Reverse edges carry no edge_attr (edge_dim 0), so they reuse the same
+# bipartite + attr-less conv path that executes/operates_on already use.
+# Fully reversible: set False to restore the exact baseline. Requires retraining.
+USE_REVERSE_API_EDGES = False
+# (forward_edge_type, reverse_relation_name) -> reverse edge = (dst, rev_name, src)
+REVERSE_API_EDGE_SPECS = [
+    (("api", "operates_on", "file"),    "rev_operates_on"),
+    (("api", "modifies", "registry"),   "rev_modifies"),
+    (("api", "connects_to", "network"), "rev_connects_to"),
+]

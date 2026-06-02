@@ -613,9 +613,12 @@ class RansomwareGraphDataset(Dataset):
                 edge_attr_dtype = old_ea.dtype
                 edge_attr_device = old_ea.device
 
-                for k in range(old_ei.size(1)):
-                    s = int(old_ei[0, k].item())
-                    d = int(old_ei[1, k].item())
+                # Vectorized endpoint extraction: two C-level .tolist() calls
+                # instead of 2*E per-element .item() calls. Behavior-identical
+                # (same keys, values, order, last-wins on duplicates).
+                src_list = old_ei[0].tolist()
+                dst_list = old_ei[1].tolist()
+                for k, (s, d) in enumerate(zip(src_list, dst_list)):
                     old_temporal_attr_map[(s, d)] = old_ea[k]
 
         new_num_api = len(runs)
@@ -1106,8 +1109,13 @@ class RansomwareGraphDataset(Dataset):
                 strict=config.SCHEMA_STRICT_VALIDATION,
             )
 
-        if self.enable_augmentation and label == 1:
-            if random.random() < 0.7:
+        if self.enable_augmentation:
+            # Augment ALL classes (not just benign) so the model learns invariant
+            # behavior instead of memorizing exact training graphs. Rarer classes
+            # get more variation; abundant other-malware gets less.
+            #   0 = Ransomware, 1 = Benign, 2 = Other Malwares
+            aug_prob = {0: 0.85, 1: 0.70, 2: 0.40}
+            if random.random() < aug_prob.get(label, 0.40):
                 data = self.augment_benign_graph(data)
                 if config.NORMALIZE_NODE_FEATURE_DIMS:
                     data = normalize_graph_node_features(data, schema=self.schema, inplace=True)
@@ -1117,6 +1125,19 @@ class RansomwareGraphDataset(Dataset):
 
     def augment_benign_graph(self, data: HeteroData) -> HeteroData:
         data = copy.deepcopy(data)
+
+        # ── API semantic perturbation ─────────────────────────────────────────
+        # Add small Gaussian noise ONLY to the 768-dim sentence-transformer part
+        # of each API node. The trailing 7 metadata dims (timestamp, pid, category
+        # flags) are left untouched, and node count is unchanged, so api_names,
+        # timestamps, and temporal edges stay perfectly aligned. Teaches the model
+        # the embedding *neighborhood* of an API instead of one exact point.
+        if "api" in data.node_types and hasattr(data["api"], "x"):
+            api_x = data["api"].x
+            if isinstance(api_x, torch.Tensor) and api_x.numel() > 0 and api_x.size(1) >= 768:
+                api_x = api_x.clone()
+                api_x[:, :768] = api_x[:, :768] + 0.02 * torch.randn_like(api_x[:, :768])
+                data["api"].x = api_x
 
         resource_node_types = ["file", "registry", "process", "network"]
 
@@ -1152,6 +1173,25 @@ class RansomwareGraphDataset(Dataset):
                         if hasattr(store, "edge_attr") and isinstance(store.edge_attr, torch.Tensor):
                             if store.edge_attr.size(0) == E:
                                 store.edge_attr = store.edge_attr[keep_mask]
+
+        # ── Drop a few api→temporal→api edges ─────────────────────────────────
+        # Gentle (5%) drop on the temporal spine. This perturbs only the GNN's
+        # structural message passing — the LSTM orders nodes by timestamp, not by
+        # these edges — so the call sequence the temporal branch sees is preserved.
+        # Only applied to graphs with enough temporal edges to stay connected.
+        temporal_et = ("api", "temporal", "api")
+        if temporal_et in data.edge_types:
+            store = data[temporal_et]
+            if hasattr(store, "edge_index") and isinstance(store.edge_index, torch.Tensor):
+                E = store.edge_index.size(1)
+                if E > 4:
+                    keep_mask = torch.rand(E, device=store.edge_index.device) > 0.05
+                    if keep_mask.sum() == 0:
+                        keep_mask[torch.randint(0, E, (1,), device=keep_mask.device)] = True
+                    store.edge_index = store.edge_index[:, keep_mask]
+                    if hasattr(store, "edge_attr") and isinstance(store.edge_attr, torch.Tensor):
+                        if store.edge_attr.size(0) == E:
+                            store.edge_attr = store.edge_attr[keep_mask]
 
         return data
 
@@ -1289,6 +1329,68 @@ def _clean_graph_for_batching(graph: HeteroData) -> HeteroData:
     return graph
 
 
+def _add_reverse_api_edges(graph):
+    """Add reverse API-context edges (file->api, registry->api, network->api).
+
+    Lets api nodes receive messages from the resources they touched. Built by
+    flipping the existing forward edge_index (no edge_attr). Applied at load
+    time so the cache is untouched; gated by config.USE_REVERSE_API_EDGES and
+    idempotent (skips a reverse relation already present). The matching reverse
+    edge types are injected into the schema by schema_utils, so the model builds
+    convs for them and validation accepts them.
+    """
+    if not getattr(config, "USE_REVERSE_API_EDGES", False):
+        return graph
+
+    for fwd, rev_name in getattr(config, "REVERSE_API_EDGE_SPECS", []):
+        fwd = tuple(fwd)
+        src, _, dst = fwd
+        rev_et = (dst, rev_name, src)
+
+        if rev_et in graph.edge_types:      # idempotent
+            continue
+        if fwd not in graph.edge_types:
+            continue
+
+        ei = getattr(graph[fwd], "edge_index", None)
+        if not isinstance(ei, torch.Tensor) or ei.numel() == 0:
+            continue
+
+        # flip rows: [src_idx, dst_idx] -> [dst_idx, src_idx]
+        graph[rev_et].edge_index = ei.flip(0).contiguous()
+
+    return graph
+
+
+def _apply_relative_temporal_features(graph):
+    """Signed-log compression of the absolute-magnitude temporal edge dims.
+
+    Collapses the wide dynamic range of the raw time/speed dims so any
+    multiplicative pipeline scale becomes an additive shift that the model's
+    edge_attr BatchNorm (#1) absorbs. Relative dims 7/8/9 are left untouched.
+    Applied at load time so no cache regeneration is required; gated by
+    config.USE_RELATIVE_TEMPORAL_FEATURES (off by default).
+    """
+    if not getattr(config, "USE_RELATIVE_TEMPORAL_FEATURES", False):
+        return graph
+
+    et = ("api", "temporal", "api")
+    if et not in graph.edge_types:
+        return graph
+    store = graph[et]
+    ea = getattr(store, "edge_attr", None)
+    if not isinstance(ea, torch.Tensor) or ea.numel() == 0:
+        return graph
+
+    ea = ea.clone()
+    for d in getattr(config, "RELATIVE_TEMPORAL_LOG_DIMS", [0, 3, 4, 5, 10, 11]):
+        if 0 <= d < ea.size(1):
+            col = ea[:, d]
+            ea[:, d] = torch.sign(col) * torch.log1p(col.abs())
+    store.edge_attr = ea
+    return graph
+
+
 def hetero_collate(
     batch,
     schema: Optional[Dict] = None,
@@ -1339,6 +1441,15 @@ def hetero_collate(
     for graph in graphs:
         if config.NORMALIZE_NODE_FEATURE_DIMS:
             graph = normalize_graph_node_features(graph, schema=schema, inplace=True)
+
+        # (#2) Pipeline-invariant temporal features, applied at LOAD time (not
+        # baked into the cache). Identical math to enrichment-time, so no
+        # re-enrichment is needed and train/eval stay consistent.
+        graph = _apply_relative_temporal_features(graph)
+
+        # Reverse API-context edges (file/registry/network -> api), so api
+        # absorbs context from the resources it touched. Idempotent.
+        graph = _add_reverse_api_edges(graph)
 
         if validate_batch and config.FAIL_ON_SCHEMA_MISMATCH:
             validate_graph_or_raise(
