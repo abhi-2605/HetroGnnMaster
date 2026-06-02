@@ -542,7 +542,24 @@ class TemporalLSTM(nn.Module):
         )
 
         self.lstm.flatten_parameters()
-        packed_out, _ = self.lstm(packed)
+
+        # Run the LSTM in fp32 with cuDNN ENABLED (fast) but error-free.
+        # cuDNN's fused RNN kernel is fast, but under AMP autocast the fp16
+        # input vs. fp32 LSTM weights mismatch is what threw the original
+        # "cudnn error" (hence the old enabled=False workaround). Forcing fp32
+        # here matches the weights so the fast kernel runs without error, and
+        # RNNs are kept in fp32 under AMP for numerical stability anyway.
+        # No effect on CPU (autocast(enabled=False) is a no-op there).
+        _dev_type = packed.data.device.type
+        with torch.autocast(device_type=_dev_type, enabled=False):
+            if packed.data.dtype != torch.float32:
+                packed = torch.nn.utils.rnn.PackedSequence(
+                    packed.data.float(),
+                    packed.batch_sizes,
+                    packed.sorted_indices,
+                    packed.unsorted_indices,
+                )
+            packed_out, _ = self.lstm(packed)
         out_padded, _ = torch.nn.utils.rnn.pad_packed_sequence(
             packed_out,
             batch_first=True,
