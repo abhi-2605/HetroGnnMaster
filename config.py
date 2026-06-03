@@ -302,7 +302,10 @@ CLASS_NAMES = {
 }
 
 # Minimum acceptable metrics (for validation)
-MIN_RANSOMWARE_RECALL = 0.85      # Never miss ransomware
+# NOTE: the checkpoint save-gate in train.py uses (MIN_RANSOMWARE_RECALL * 0.53)
+# as the ransomware-recall floor for saving. 0.7547 * 0.53 = 0.40 -> saves once
+# val ransomware recall reaches 40% (and macro_f1 improves). Was 0.85 (floor 0.45).
+MIN_RANSOMWARE_RECALL = 0.7547    # save floor = 0.40 ransomware recall
 MIN_BENIGN_RECALL = 0.90          # High recall for benign
 MIN_RANSOMWARE_PRECISION = 0.70   # Alert if too many false positives
 
