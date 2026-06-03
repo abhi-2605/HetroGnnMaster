@@ -7,6 +7,7 @@ cache/
 # results/
 # checkpoints/
 enriched_graphs.zip
+enriched_graphs_new.7z
 # *.pt
 *.pth
 EOF
