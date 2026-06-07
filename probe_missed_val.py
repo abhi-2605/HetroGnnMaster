@@ -3,11 +3,13 @@ identify exactly which threats (label 0=ransom / 2=malware) get predicted Benign
 (label 1) -- the "Threats missed" count -- with class probabilities and the
 behavioral stats (api/uniq-api/resource counts) that explain why.
 
-GPU BOX ONLY (mamba backbone is CUDA-only). Read-only; writes one CSV.
-Run:  /venv/main/bin/python -u probe_missed_val.py 2>&1 | tee ~/logs/probe_missed_val.log
+Works on either split — pass "val" (default) or "test" as the first arg.
+GPU BOX ONLY (mamba backbone is CUDA-only). Read-only; writes one CSV per split.
+Run:  /venv/main/bin/python -u probe_missed_val.py [val|test] 2>&1 | tee ~/logs/probe_missed.log
 """
 import csv
 import pickle
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -32,8 +34,11 @@ from models.train import (
 CLASS = {0: "Ransom", 1: "Benign", 2: "Malware"}
 ROOT = Path(config.PROJECT_ROOT)
 
+SPLIT = sys.argv[1].lower() if len(sys.argv) > 1 else "val"
+assert SPLIT in ("val", "test", "train"), f"split must be val/test/train, got {SPLIT!r}"
+
 device = torch.device(config.DEVICE)
-print(f"device = {device} | backbone = {config.TEMPORAL_BACKBONE}")
+print(f"device = {device} | backbone = {config.TEMPORAL_BACKBONE} | SPLIT = {SPLIT}")
 
 schema = ensure_active_schema()
 vocab = load_vocab(config.RESULTS_DIR / "api_vocabulary.json")
@@ -41,13 +46,13 @@ print(f"vocab APIs: {vocab.size()}")
 
 val_dataset = RansomwareGraphDataset(
     data_dir=str(config.DATA_DIR),
-    split="val",
+    split=SPLIT,
     cache_dir=str(config.ACTIVE_GRAPH_DIR),
     schema=schema,
     validate_graphs=True,
 )
 graph_files = val_dataset.graph_files          # index order == loader order (shuffle=False)
-print(f"VAL graphs: {len(graph_files)}")
+print(f"{SPLIT.upper()} graphs: {len(graph_files)}")
 
 val_loader = DataLoader(
     val_dataset,
@@ -143,7 +148,7 @@ if borderline:
         print(f"  {md5[:16]}  true={CLASS[labels[i]]} pred={CLASS[preds[i]]}  "
               f"P[r/b/m]={p[0]:.3f}/{p[1]:.3f}/{p[2]:.3f}")
 
-out = ROOT / "missed_val_threats.csv"
+out = ROOT / f"missed_{SPLIT}_threats.csv"
 with open(out, "w", newline="") as f:
     w = csv.writer(f)
     w.writerow(["md5", "true", "P_ransom", "P_benign", "P_malware",
