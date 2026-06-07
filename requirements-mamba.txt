@@ -9,8 +9,9 @@
 # Install order matters (mamba-ssm's build needs causal-conv1d present):
 #
 #   pip install -r requirements.txt
-#   pip install causal-conv1d>=1.4.0
-#   pip install mamba-ssm>=2.2.0 --no-build-isolation
+#   pip install "causal-conv1d>=1.4.0"
+#   pip install "mamba-ssm>=2.2.0" --no-build-isolation
+#   (quote the version spec — an unquoted >= is read by the shell as a redirect)
 #
 # Notes:
 #  - Requires a CUDA toolkit (nvcc) matching your installed PyTorch CUDA build.
@@ -30,4 +31,4 @@ mamba-ssm>=2.2.0
 # on the GPU box, after the main install:
 # pip install -r requirements.txt
 # pip install "causal-conv1d>=1.4.0"
-# pip install mamba-ssm>=2.2.0 --no-build-isolation
+# pip install "mamba-ssm>=2.2.0" --no-build-isolation
