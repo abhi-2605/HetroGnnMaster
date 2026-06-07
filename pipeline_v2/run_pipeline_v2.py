@@ -55,6 +55,7 @@ class PipelineStatsV2:
     skipped_already_present: int = 0
     skipped_invalid_reports: int = 0
     skipped_memory_issues: int = 0
+    skipped_low_activity: int = 0
 
     adapted_saved: int = 0
     raw_graphs_saved: int = 0
@@ -176,6 +177,18 @@ class PipelineRunnerV2:
 
                 graph = self.builder.build_graph(adapted)
 
+                # Skip low-activity / failed-detonation graphs (no behaviour to
+                # detect) BEFORE the expensive enrichment, so they are never
+                # produced and the run moves on to the next report.
+                if getattr(cfg, "SKIP_LOW_ACTIVITY_GRAPHS", False):
+                    n_api = int(graph["api"].x.shape[0]) if "api" in graph.node_types else 0
+                    if n_api <= int(getattr(cfg, "MIN_API_NODES_TO_BUILD", 10)):
+                        self.stats.raw_reports_skipped += 1
+                        self.stats.skipped_low_activity += 1
+                        self._record_low_activity(adapted.get("report_id", raw_path.stem), n_api)
+                        print(f"[run_pipeline_v2] Skipping {raw_path.name}: low activity ({n_api} api nodes)")
+                        continue
+
                 if cfg.SAVE_RAW_GRAPHS:
                     self._save_raw_graph(graph, raw_path)
 
@@ -206,6 +219,16 @@ class PipelineRunnerV2:
                     )
                     if cfg.VERBOSE:
                         traceback.print_exc()
+                    self._cleanup_memory()
+                    continue
+
+                # A malformed/corrupt report (bad JSON, bad unicode escape) must
+                # be SKIPPED, not fatal — only genuine dim/contract mismatches in
+                # graph building should abort the run under FAIL_ON_DIM_MISMATCH.
+                if isinstance(e, (json.JSONDecodeError, UnicodeDecodeError)):
+                    self.stats.raw_reports_skipped += 1
+                    self.stats.skipped_invalid_reports += 1
+                    print(f"[run_pipeline_v2] Skipping {raw_path.name}: malformed report -> {e}")
                     self._cleanup_memory()
                     continue
 
@@ -428,6 +451,10 @@ class PipelineRunnerV2:
     # SAVE HELPERS
     # ============================================================
     def _make_unique_id(self, raw_path: Path, report_id: str) -> str:
+        # Clean "<md5>" names so they match metadata md5s and the eval's
+        # disjoint-leakage check (which compares bare filename stems).
+        if getattr(cfg, "STRIP_REPORT_PREFIX_ON_SAVE", True):
+            return report_id
         parent_name = raw_path.parent.name
         return f"{parent_name}__{report_id}"
 
@@ -445,9 +472,45 @@ class PipelineRunnerV2:
         self.builder.save_graph(graph, out)
         self.stats.raw_graphs_saved += 1
 
+    def _record_low_activity(self, md5: str, n_api: int) -> None:
+        """Append an excluded low-activity sample to the log (idempotent header)."""
+        path = Path(getattr(cfg, "LOW_ACTIVITY_EXCLUDED_PATH", cfg.DATA_DIR / "low_activity_excluded_md5s.csv"))
+        path.parent.mkdir(parents=True, exist_ok=True)
+        new = not path.exists()
+        with open(path, "a", newline="") as f:
+            w = csv.writer(f)
+            if new:
+                w.writerow(["md5", "api_nodes", "reason"])
+            w.writerow([md5, n_api, "low_activity_<=MIN_API_NODES_TO_BUILD"])
+
+    def _conform_to_training_schema(self, graph: Any) -> Any:
+        """Strip v2-only build-time attributes so the saved graph's attribute
+        set matches the training graphs exactly (required for PyG batching with
+        train/val/test/old graphs). Safe: called only at save time, after
+        enrichment has already consumed timestamps/pids/api_names/etc."""
+        for nt in list(graph.node_types):
+            allow = {"x", "api_names", "num_nodes"} if nt == "api" else {"x", "num_nodes"}
+            for k in list(graph[nt].keys()):
+                if k not in allow:
+                    del graph[nt][k]
+        for et in list(graph.edge_types):
+            for k in list(graph[et].keys()):
+                if k not in {"edge_index", "edge_attr"}:
+                    del graph[et][k]
+        gs = graph._global_store
+        keep_global = {"graph_features", "num_apis", "num_files",
+                       "num_network", "num_processes", "num_registry"}
+        for k in list(gs.keys()):
+            if k not in keep_global:
+                del gs[k]
+        return graph
+
     def _save_enriched_graph(self, graph: Any, adapted: Dict[str, Any], raw_path: Path) -> None:
         unique_id = self._make_unique_id(raw_path, adapted["report_id"])
-        out = cfg.ENRICHED_GRAPHS_DIR / "all" / f"{unique_id}.pkl"
+        if getattr(cfg, "CONFORM_TO_TRAINING_SCHEMA", True):
+            graph = self._conform_to_training_schema(graph)
+        # Write straight into the zero-day bucket the model's eval reads from.
+        out = cfg.ZERO_DAY_OUTPUT_DIR / f"{unique_id}.pkl"
         out.parent.mkdir(parents=True, exist_ok=True)
         with open(out, "wb") as f:
             pickle.dump(graph, f, protocol=pickle.HIGHEST_PROTOCOL)
@@ -538,7 +601,7 @@ class PipelineRunnerV2:
         try:
             ensure_active_schema(
                 auto_refresh=True,
-                graph_root=cfg.ENRICHED_GRAPHS_DIR,
+                graph_root=cfg.ZERO_DAY_OUTPUT_DIR,
                 schema_path=cfg.SCHEMA_JSON_PATH,
                 schema_summary_path=cfg.SCHEMA_SUMMARY_PATH,
                 source_name=cfg.ENRICHED_SOURCE_NAME,
@@ -571,6 +634,7 @@ class PipelineRunnerV2:
         print(f"ADAPTED_REPORTS_DIR     : {cfg.ADAPTED_REPORTS_DIR}")
         print(f"RAW_GRAPHS_DIR          : {cfg.RAW_GRAPHS_DIR}")
         print(f"ENRICHED_GRAPHS_DIR     : {cfg.ENRICHED_GRAPHS_DIR}")
+        print(f"ZERO_DAY_OUTPUT_DIR     : {cfg.ZERO_DAY_OUTPUT_DIR}  (variant={cfg.ZERO_DAY_VARIANT})")
         print(f"SCHEMA_JSON_PATH        : {cfg.SCHEMA_JSON_PATH}")
         print(f"MAX_SUCCESSFUL_GRAPHS   : {getattr(cfg, 'MAX_SUCCESSFUL_GRAPHS', None)}")
         print("=" * 80)
@@ -585,6 +649,7 @@ class PipelineRunnerV2:
         print(f"  - already present         : {self.stats.skipped_already_present}")
         print(f"  - invalid reports         : {self.stats.skipped_invalid_reports}")
         print(f"  - memory/semaphore issues : {self.stats.skipped_memory_issues}")
+        print(f"  - low activity            : {self.stats.skipped_low_activity}")
         print(f"Raw reports failed          : {self.stats.raw_reports_failed}")
         print(f"Adapted reports saved       : {self.stats.adapted_saved}")
         print(f"Raw graphs saved            : {self.stats.raw_graphs_saved}")

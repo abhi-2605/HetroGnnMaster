@@ -1,0 +1,33 @@
+# ============================================================
+# OPTIONAL — Mamba temporal backbone (CUDA GPU ONLY)
+# ============================================================
+# Needed ONLY if config.TEMPORAL_BACKBONE = "mamba".
+# These compile CUDA kernels at install time, so they will FAIL on CPU/macOS —
+# that is why they are NOT in the main requirements.txt. Install on the GPU box
+# AFTER the main requirements, and only there.
+#
+# Install order matters (mamba-ssm's build needs causal-conv1d present):
+#
+#   pip install -r requirements.txt
+#   pip install causal-conv1d>=1.4.0
+#   pip install mamba-ssm>=2.2.0 --no-build-isolation
+#
+# Notes:
+#  - Requires a CUDA toolkit (nvcc) matching your installed PyTorch CUDA build.
+#  - RTX PRO 6000 / Blackwell (sm_120) is very new: prebuilt wheels may not cover
+#    it. If the wheel errors on the arch, build from source with the latest
+#    version, e.g.:
+#       MAMBA_FORCE_BUILD=TRUE pip install mamba-ssm --no-build-isolation
+#    (and ensure TORCH_CUDA_ARCH_LIST includes 12.0 if needed).
+#  - The toggle is the safety net: if this won't install/build, keep
+#    TEMPORAL_BACKBONE="lstm" and nothing is lost.
+
+causal-conv1d>=1.4.0
+mamba-ssm>=2.2.0
+
+
+
+# on the GPU box, after the main install:
+# pip install -r requirements.txt
+# pip install causal-conv1d>=1.4.0
+# pip install mamba-ssm>=2.2.0 --no-build-isolation

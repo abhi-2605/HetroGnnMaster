@@ -26,3 +26,7 @@ jupyterlab>=4.0.0
 # For reproducibility and utilities
 python-dotenv>=1.0.0
 psutil
+
+# Optional GPU-only extra (Mamba temporal backbone): see requirements-mamba.txt
+# Do NOT add mamba-ssm/causal-conv1d here — they compile CUDA kernels and would
+# break install on CPU/macOS. Install separately on the GPU box only.

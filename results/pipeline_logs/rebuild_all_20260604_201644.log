@@ -1,0 +1,232 @@
+================================================================================
+RUN PIPELINE V2
+================================================================================
+RAW_REPORTS_DIR         : /Volumes/SSD/TGNN/ransomware_tgnn/data/new_reports
+RAW_LABELS_CSV          : /Volumes/SSD/TGNN/ransomware_tgnn/data/new_reports_labels.csv
+SKIP_EXISTING_MD5_CSV   : None
+ADAPTED_REPORTS_DIR     : /Volumes/SSD/TGNN/ransomware_tgnn/cache/adapted_reports_v2
+RAW_GRAPHS_DIR          : /Volumes/SSD/TGNN/ransomware_tgnn/cache/graphs_v2
+ENRICHED_GRAPHS_DIR     : /Volumes/SSD/TGNN/ransomware_tgnn/cache/cuckoo_enriched_v2
+ZERO_DAY_OUTPUT_DIR     : /Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all  (variant=all)
+SCHEMA_JSON_PATH        : /Volumes/SSD/TGNN/ransomware_tgnn/results/schema/cuckoo_enriched_v2/schema.json
+MAX_SUCCESSFUL_GRAPHS   : 140
+================================================================================
+[run_pipeline_v2] Found 3103 raw report(s) under /Volumes/SSD/TGNN/ransomware_tgnn/data/new_reports
+[run_pipeline_v2] Target successful graphs: 140
+[run_pipeline_v2] Loaded 15406 existing md5 value(s) from /Volumes/SSD/TGNN/ransomware_tgnn/data/extracted_metadata_appended.csv
+[run_pipeline_v2] Skipping 000a3ea381d7d70be8b6fe1ee51dca22.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 000adc56f2d8cd1f7b8f6b54912000e9.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 000b28e7a5905b5bf3b80c6c60a5f828.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 000c7ff25b87232407b0f3afdc1daf43.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 000cbb278e4f0194e7c693160d7975bb.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 000ed458b787e6841c103a694d11962c.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 000f6d35ea5397e40ffaa7931a9ae1d3.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 001a255c29530c33702b244b5ade0b76.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 001cfa63ad79aaf3e4a2b85a2e7f227f.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 001d106b8f74e8a92d8d19b39fb4afea.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 001eaf022daacf081db1a0cfb72af1b0.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 001ed0ac1fbb06d474213b1d37d60021.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00a03d37ba2cbcd9a532ff01d3d5e070.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00a0f5fe1ba0102ed789b2aa85c3e316.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00a38bce6818521bed3c78b14ddef25f.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00a473640f8d7286e315317b03cc55ef.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00a4a67dc6a4f175affa93d45340c119.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00a4b6a503d5cfd408c97091c914fd74.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00a4dab57de640e7846fdc35b2e4675a.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00a53241bf9c9425c6df8da44a5ca4f4.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00a80192730aaf79a2c444d66b6c5ae6.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00a85c1a86a9553d6ff98195d15bff15.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00aaa82e283450b7940acf8a5a675666.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00aae6c41996b3d1631f605ad783f1f8.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00b26c8964bf6c20183d13867e6dbcb0.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00b2fa6a50ad6652627b3e9336b962c2.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00b35ea8173b4f5116e599d9f80e3611.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00b3975f09b5c3fa3ff7a62db0033850.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00bb04604996c97b7b4f8b2c767c0f40.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00be655ad247b27495443d97ffc181d9.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00be6e324bb3f8e5266ad1ce10b6a859.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00c03e47023be97861f53b0a05d1c0c8.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00c1cf2ebdfe9dba60fe2b4ce609bf7a.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00c3a93bad6ae2d3b082aabe3098b904.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00c4fbab0e10b68a77bb7e9289a0d54b.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00c60e1945d9584792f3691b82378bd0.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00cc33352ae8e526f7533119fb823cb1.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00ce1f799aa5dc2f43c366dc60dc6098.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00ce45f73fa3bdbb862357983ce8989d.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00d058aaf79abc4cd49524b4394818dd.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00d3bedc5c6cf3614990a5a21592cebd.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00d47e7738c972700d66c80d973ca1ba.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00d5e8c917ee36e5a2544bbd4b8681d1.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00d6ba82eed3ca0af8cf3a4342014bb1.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00d7bcafe9e33ede2af6cf91cc33e176.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00d9d5a0319cddef48add9257d4721df.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00db0e7fe43d5b235d6fd37937093d7c.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00e076e93aebd752f96f7704dd321c7f.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00e236527d4294fc5a75eb1cbc2eb141.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00e65efbe9d442aca345431bea267fa9.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00e973ec1f36476287298965276d5989.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00ea535ecc3b6f358b73add6dfade641.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00ebc15103226de598bda6cd03b001d5.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00ed79d8ffb56a853365fb673ece1680.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00f14956960aad9a31d4147db524c65c.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00f1a2c951baaeb34418c67607b70f50.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00f360494544f2243a5bdde710af3178.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00f5b7dd67cbb43dc1f03caaf1b702f0.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00f5da8b1b4539508a418bda650f68b0.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00f6921f2a1ef6abcf691fb7e15bd997.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00f73b2fae33e9becc6f700194704774.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00f8bbe855a32c75f4c0aaf65ff1b950.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00f91c3f4a20d1c513aca8cdd3e16680.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00faac7951328980fd09a2d46ca42cc4.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00fbcbd669f72cd2dc71ec3a4e971f14.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00fbeabd68a647ef625408848c39946c.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 00ffefc428396be826b239e04e5b5f1c.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 0158ac8036bbd59df8de79133b0ecc58.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01a1f3c3b1b11c7538d3bfeb2e97e5c0.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01a33dfb20a3dafb2dfc0d30b8b94e10.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01a3f144a15edbbd08fc606ecbaca7da.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01a43fa78b7b79fceeee8dfa7dda0e18.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01a53acf19d8e1341b3ea97189fbbe00.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01a8c4b8243edead1ff6de0a9d9f01d0.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01a8d99cc288fdff1aca1c4f00704321.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01a8fb9e746dd2d600ac3c1c26b7e4cb.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01a98142b184b284e6540f933de8cc31.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01a9d166e6f35c7fb1c59c5c6477f4c7.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01ab6a23f7543b96544db55873079288.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01aba858bc7c376bb3a549d6162ed256.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01ad91ef61505499209230963d195c47.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01aede06342d40843fbf99a1f2fb4d64.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01b1859ddf8ba3549cd31f12d60ab9fc.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01b1a6079054d5d82896773e2118ae5d.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01b258d8142ed08a541a916386872be3.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01b2a2958e367d56dfd513a110e63aef.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01b7204632e00e67d3691a35db06f6e0.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01b83a7d3052810627ac2a76e02818b9.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01b85652db934fb4187921af8f7d0e90.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01b8f61129915211a90f950fa2053cb3.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01b925f630d42983d5942885aa4dfd90.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01bbb5eee02be5c95726356c9e13d6d7.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01bcceb0ef77a9aaa1e2f044fbe94156.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01bd02b422cdc7b9b4dc5036d3ed3550.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01be967e73679d75ba8cdc67d6dcce00.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01c0577725a79b9a300831ead296cec9.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01c0e709db088465f1700c41a5037e93.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01c75638b91bd9a36b996f5d3d80c7b8.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01c7bf20e1560d95c00c2458e3925560.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01c900185a4004e7ec7c4e5c765226a0.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01ca4239e92121046252f528aa46d8e0.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01cbdb10ab96d7de94ac1db156ad0572.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01cc10f794a3bf364f583a1b7ab5a9c4.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01cc1baddec97a144acc941c52d3b9c8.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01cc9354adbe2fe194eba691d7a225a9.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01d2d1d522cd829ce71268764fe09b00.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01d34bb243ca15fc733964eb0e988d32.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01d51bbed8e7741e349dfc6019dab7b0.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01d7e427369568446d28139170ee4022.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01d8ae207de44f7b1605bd255afb4744.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01dbac2cd5a08d4f2baf81f1c6da5e30.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01dc216274bd9647a6fc12644d28bf39.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01dcc83d97fff22001b438c9c855cf2f.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01de6b549881d64c54eabc0c6ad656a9.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01e190f66e6075da60f81c07b4966e1b.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01e3756d1652a2d58bd170061aab9e92.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01e43e1719695e3b6d8911dc77de8460.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01e567e3325614213e9703e7d535c33a.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01e6bcad0754fdcd1c5903505a6b08ca.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01e6ffd7879fe3df912da5f0dc217b6c.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01eb2ede541f93859fd7af7f3ef5ac9a.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01ec8d7a957a6431ac98221b837ddc33.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01ef8d188d5adfd338cae89b8e7afd40.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01f192b86d26813315a79f27be115bf3.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01f317bb260b5a2781d19d47f41acda2.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01f482620e6b1fad2de394116ad9da38.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01f52285f73e2da5e7a4869ff7a818ed.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01f7371635f41f66ab259253b36488ca.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01f76d92b36d98921a4321dc2d3654f5.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01f88257f06cc2858b384899e8dd809a.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01f911629156ce4bfcde07f7354b3e27.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01faa688773fab3ca20efc0bc214fbef.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01fb68b27ecb4ba9d255a2a9ce5403ef.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01fbaf2f5afefc6632d65c5e02e99ebe.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01fc51a6e9a20f654d38eef554b59309.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01fcd050903f478a12be1ef937ff4b60.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01fda937a97602470b7b4585eb94a09a.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 01fdbedebf7e07758be8713502ecdc1e.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 0293691cc41627c4f0a118b708a1b470.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 0a03b1eafeb4c4a6f6b04f507562b1fb.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 0a03b918736591eada58029dd071cc80.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 0a050b8cfbe63674158e80376f1b236f.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 0a06fbd7930744b8a6b24c92007913ce.json: already present in external md5 CSV
+[run_pipeline_v2] Skipping 0a074c24e298f97a255cdf976a304ee7.json: already present in external md5 CSV
+[run_pipeline_v2] scanned 150/3103 | successful graphs: 6/140
+[run_pipeline_v2] scanned 175/3103 | successful graphs: 31/140
+[run_pipeline_v2] scanned 200/3103 | successful graphs: 56/140
+[run_pipeline_v2] Skipping 0a5ebf792be2e1d1f5d9265e9f610dc0.json: malformed report -> Invalid \uXXXX escape: line 524093 column 14979 (char 252836142)
+[run_pipeline_v2] scanned 225/3103 | successful graphs: 80/140
+[run_pipeline_v2] scanned 250/3103 | successful graphs: 105/140
+[run_pipeline_v2] scanned 275/3103 | successful graphs: 130/140
+[run_pipeline_v2] Reached target of 140 successful graph(s). Stopping.
+
+[SchemaManager] Regenerating schema for source: cuckoo_enriched_v2
+[SchemaManager] Graph root: /Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all
+[SchemaManager] Schema JSON: /Volumes/SSD/TGNN/ransomware_tgnn/results/schema/cuckoo_enriched_v2/schema.json
+================================================================================
+SCHEMA INSPECTION
+================================================================================
+Active source     : cuckoo_enriched_v2
+Graph root        : /Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all
+Schema JSON out   : /Volumes/SSD/TGNN/ransomware_tgnn/results/schema/cuckoo_enriched_v2/schema.json
+Schema summary out: /Volumes/SSD/TGNN/ransomware_tgnn/results/schema/cuckoo_enriched_v2/schema_summary.txt
+
+⚠ Missing split directory: /Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/train
+
+⚠ Missing split directory: /Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/val
+
+⚠ Missing split directory: /Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all/test
+
+✓ Saved schema JSON    : /Volumes/SSD/TGNN/ransomware_tgnn/results/schema/cuckoo_enriched_v2/schema.json
+✓ Saved schema summary : /Volumes/SSD/TGNN/ransomware_tgnn/results/schema/cuckoo_enriched_v2/schema_summary.txt
+
+================================================================================
+INSPECTION COMPLETE
+================================================================================
+Source       : cuckoo_enriched_v2
+Total graphs : 0
+Node types   : []
+Edge types   : []
+Failed files : 0
+
+[SchemaManager] Active schema ready.
+[SchemaManager] Source       : cuckoo_enriched_v2
+[SchemaManager] Graph root   : /Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all
+[SchemaManager] Node types   : []
+[SchemaManager] Edge types   : []
+
+================================================================================
+PIPELINE SUMMARY
+================================================================================
+Raw reports found           : 3103
+Raw reports processed       : 140
+Raw reports skipped         : 145
+  - already present         : 144
+  - invalid reports         : 1
+  - memory/semaphore issues : 0
+Raw reports failed          : 0
+Adapted reports saved       : 0
+Raw graphs saved            : 0
+Enriched graphs saved       : 140
+Labels CSV created          : 0
+Rich reports                : 139
+Low activity reports        : 0
+Very sparse reports         : 0
+Invalid reports             : 1
+Placeholder graphs          : 7
+Graphs with reg edges       : 104
+Graphs with net edges       : 129
+Graphs with 0 temp edges    : 7
+Label ransomware            : 0
+Label benign                : 0
+Label malware               : 140
+Label unknown               : 0
+Schema inspection ran       : 1
+================================================================================

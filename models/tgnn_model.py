@@ -35,6 +35,7 @@ from models.temporal_layers import (
     HeteroTemporalConv,
     TemporalAttentionPooling,
     TemporalLSTM,
+    TemporalMamba,
 )
 from models.semantic_memory import build_semantic_memory
 from models.memory_utils import memory_regularization_loss
@@ -279,13 +280,32 @@ class HeteroTemporalGNN(nn.Module):
         # ══════════════════════════════════════════════════════════════════════
         # 3. Explicit temporal branch on primary temporal node sequence
         # ══════════════════════════════════════════════════════════════════════
-        self.temporal_lstm = TemporalLSTM(
-            input_dim=self.primary_out_dim_per_layer,
-            hidden_dim=lstm_hidden_dim,
-            num_layers=lstm_num_layers,
-            dropout=lstm_dropout,
-            bidirectional=bidirectional,
-        )
+        # Swappable temporal backbone (gated; default "lstm" == current behaviour).
+        self.temporal_backbone_kind = str(getattr(config, "TEMPORAL_BACKBONE", "lstm")).lower()
+        self.use_temporal_time_features = bool(getattr(config, "USE_TEMPORAL_TIME_FEATURES", False))
+        self.temporal_time_feature_dim = int(getattr(config, "TEMPORAL_EDGE_DIM", 14))
+        self._use_mamba = (self.temporal_backbone_kind == "mamba")
+
+        if self._use_mamba:
+            # Drop-in: same output dim (lstm_output_dim) so pooling/fusion are untouched.
+            self.temporal_lstm = TemporalMamba(
+                input_dim=self.primary_out_dim_per_layer,
+                output_dim=self.lstm_output_dim,
+                d_model=int(getattr(config, "MAMBA_D_MODEL", 256)),
+                num_layers=int(getattr(config, "MAMBA_NUM_LAYERS", lstm_num_layers)),
+                bidirectional=bidirectional,
+                time_embed_dim=(int(getattr(config, "TEMPORAL_TIME_EMBED_DIM", 16))
+                                if self.use_temporal_time_features else 0),
+                time_feature_dim=self.temporal_time_feature_dim,
+            )
+        else:
+            self.temporal_lstm = TemporalLSTM(
+                input_dim=self.primary_out_dim_per_layer,
+                hidden_dim=lstm_hidden_dim,
+                num_layers=lstm_num_layers,
+                dropout=lstm_dropout,
+                bidirectional=bidirectional,
+            )
 
         self.temporal_pooling = TemporalAttentionPooling(
             input_dim=self.lstm_output_dim,
@@ -772,6 +792,35 @@ class HeteroTemporalGNN(nn.Module):
     # forward
     # ──────────────────────────────────────────────────────────────────────────
 
+    def _per_node_temporal_features(self, edge_index_dict, edge_attr_dict, num_nodes, device):
+        """Map the 14-dim temporal edge_attr onto primary (api) nodes: each node's
+        *incoming* temporal edge carries its 'time since previous call' features.
+        Nodes with no incoming temporal edge (sequence starts) stay zero."""
+        et = (self.primary_temporal_type, "temporal", self.primary_temporal_type)
+        feats = torch.zeros(num_nodes, self.temporal_time_feature_dim, device=device)
+        if (edge_index_dict is not None and edge_attr_dict is not None
+                and et in edge_index_dict and et in edge_attr_dict
+                and edge_attr_dict.get(et) is not None):
+            ei = edge_index_dict[et]
+            ea = edge_attr_dict[et]
+            if ei.numel() > 0 and ea is not None and ea.size(0) == ei.size(1):
+                feats[ei[1]] = ea.to(feats.dtype)
+        return feats
+
+    def _run_temporal(self, x, batch, timestamps, edge_index_dict=None, edge_attr_dict=None):
+        """Call the temporal backbone. LSTM path is identical to before; the
+        Mamba path additionally receives the per-node 14-dim timing features."""
+        if not self._use_mamba:
+            return self.temporal_lstm(x=x, batch=batch, timestamps=timestamps)
+        step_features = None
+        if self.use_temporal_time_features:
+            step_features = self._per_node_temporal_features(
+                edge_index_dict, edge_attr_dict, x.size(0), x.device
+            )
+        return self.temporal_lstm(
+            x=x, batch=batch, timestamps=timestamps, step_features=step_features
+        )
+
     def forward(
         self,
         x_dict: Dict[str, torch.Tensor],
@@ -905,10 +954,9 @@ class HeteroTemporalGNN(nn.Module):
                 if timestamps_dict is not None else None
             )
 
-            prelim_temporal = self.temporal_lstm(
-                x=primary_hidden,
-                batch=primary_batch,
-                timestamps=primary_ts,
+            prelim_temporal = self._run_temporal(
+                primary_hidden, primary_batch, primary_ts,
+                edge_index_dict, edge_attr_dict,
             )
 
             neighbor_context = self._build_primary_neighbor_context(
@@ -960,10 +1008,9 @@ class HeteroTemporalGNN(nn.Module):
             if timestamps_dict is not None else None
         )
 
-        temporal_hidden = self.temporal_lstm(
-            x=h_dict[self.primary_temporal_type],
-            batch=primary_batch,
-            timestamps=primary_ts,
+        temporal_hidden = self._run_temporal(
+            h_dict[self.primary_temporal_type], primary_batch, primary_ts,
+            edge_index_dict, edge_attr_dict,
         )
 
         temporal_graph_emb = self.temporal_pooling(

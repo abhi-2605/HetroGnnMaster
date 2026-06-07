@@ -1,0 +1,105 @@
+{
+  "source": {
+    "name": "cuckoo_enriched_v2",
+    "graph_root": "/Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all"
+  },
+  "paths": {
+    "project_root": "/Volumes/SSD/TGNN/ransomware_tgnn",
+    "cache_dir": "/Volumes/SSD/TGNN/ransomware_tgnn/cache",
+    "results_dir": "/Volumes/SSD/TGNN/ransomware_tgnn/results",
+    "schema_json": "/Volumes/SSD/TGNN/ransomware_tgnn/results/schema/cuckoo_enriched_v2/schema.json",
+    "schema_summary": "/Volumes/SSD/TGNN/ransomware_tgnn/results/schema/cuckoo_enriched_v2/schema_summary.txt"
+  },
+  "global": {
+    "total_graphs": 0,
+    "graphs_with_label_tuple": 0,
+    "graphs_without_label_tuple": 0,
+    "failed_files": [],
+    "graph_object_types": {},
+    "label_distribution_detected": {}
+  },
+  "splits": {
+    "train": {
+      "num_files": 0,
+      "missing": true,
+      "failed_files": []
+    },
+    "val": {
+      "num_files": 0,
+      "missing": true,
+      "failed_files": []
+    },
+    "test": {
+      "num_files": 0,
+      "missing": true,
+      "failed_files": []
+    }
+  },
+  "schema_summary": {
+    "node_types_found": [],
+    "edge_types_found": [],
+    "num_node_types_found": 0,
+    "num_edge_types_found": 0
+  },
+  "node_types": {},
+  "edge_types": {},
+  "expected_from_config": {
+    "node_types": [
+      "api",
+      "file",
+      "registry",
+      "process",
+      "network"
+    ],
+    "edge_types": [
+      "api::temporal::api",
+      "api::operates_on::file",
+      "api::modifies::registry",
+      "process::executes::api",
+      "api::connects_to::network"
+    ],
+    "default_node_type_order": [
+      "api",
+      "file",
+      "registry",
+      "process",
+      "network"
+    ],
+    "default_edge_type_order": [
+      "api::temporal::api",
+      "api::operates_on::file",
+      "api::modifies::registry",
+      "process::executes::api",
+      "api::connects_to::network"
+    ],
+    "api_node_dim": 775,
+    "resource_node_dim": 6,
+    "temporal_edge_dim": 14
+  },
+  "compatibility_checks": {
+    "api_feature_dim_ok": null,
+    "resource_feature_dims_ok": {
+      "file": false,
+      "registry": false,
+      "process": false,
+      "network": false
+    },
+    "temporal_edge_dim_ok": null,
+    "missing_expected_node_types": [
+      "api",
+      "file",
+      "network",
+      "process",
+      "registry"
+    ],
+    "missing_expected_edge_types": [
+      "api::connects_to::network",
+      "api::modifies::registry",
+      "api::operates_on::file",
+      "api::temporal::api",
+      "process::executes::api"
+    ],
+    "unexpected_node_types": [],
+    "unexpected_edge_types": []
+  }
+}

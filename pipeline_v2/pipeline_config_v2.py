@@ -74,6 +74,39 @@ RAW_GRAPHS_DIR = CACHE_DIR / "graphs_v2"
 # Final enriched graph cache used by schema/training
 ENRICHED_GRAPHS_DIR = CACHE_DIR / ENRICHED_SOURCE_NAME
 
+# ------------------------------------------------------------
+# ZERO-DAY OUTPUT WIRING
+# ------------------------------------------------------------
+# Final graphs are written straight into the location the model's zero-day
+# eval reads from (main config.CUSTOM_EVAL_NEW_MALWARE_DIR ==
+# cache/zero_day_unseen/<variant>), so no manual move step is needed.
+# Flip ZERO_DAY_VARIANT to repopulate a different bucket.
+ZERO_DAY_VARIANT = "all"  # which zero-day bucket to populate: "all" | "old"
+ZERO_DAY_OUTPUT_DIR = CACHE_DIR / "zero_day_unseen" / ZERO_DAY_VARIANT
+
+# Save clean "<md5>.pkl" filenames (strip the "<report_folder>__" prefix) so
+# names match metadata md5s and the eval's disjoint-leakage check works.
+STRIP_REPORT_PREFIX_ON_SAVE = True
+
+# Strip v2-only build-time attributes (pids, arguments_text, categories,
+# statuses, time_sources, timestamps, process/network metadata, global meta)
+# from the saved graph so its attribute set EXACTLY matches the training graphs
+# (api: x/api_names/num_nodes; resources: x/num_nodes; edges: edge_index/
+# edge_attr). Required — otherwise PyG cannot batch new graphs together with
+# train/val/test/old graphs (KeyError on the extra attrs).
+CONFORM_TO_TRAINING_SCHEMA = True
+
+# Skip low-activity / failed-detonation reports (graphs with <= this many api
+# nodes). These captured essentially no behavior (failed exec, evasion, short
+# run), so they carry no malware signal and just read benign in the eval —
+# they aren't valid zero-day detection cases. Skipping them at BUILD time means
+# they are never produced again, and the run continues to the next report to
+# still reach MAX_SUCCESSFUL_GRAPHS of real-activity graphs. Excluded md5s are
+# logged to LOW_ACTIVITY_EXCLUDED_PATH.
+SKIP_LOW_ACTIVITY_GRAPHS = True
+MIN_API_NODES_TO_BUILD = 10  # skip if api node count <= this
+LOW_ACTIVITY_EXCLUDED_PATH = DATA_DIR / "low_activity_excluded_md5s.csv"
+
 # Schema output for the new source
 SCHEMA_DIR = RESULTS_DIR / "schema" / ENRICHED_SOURCE_NAME
 SCHEMA_JSON_PATH = SCHEMA_DIR / "schema.json"
@@ -89,6 +122,7 @@ for path in [
     ADAPTED_REPORTS_DIR,
     RAW_GRAPHS_DIR,
     ENRICHED_GRAPHS_DIR,
+    ZERO_DAY_OUTPUT_DIR,
     SCHEMA_DIR,
     PIPELINE_LOG_DIR,
     PIPELINE_AUDIT_DIR,
@@ -197,6 +231,26 @@ RESOURCE_NODE_DIMS = {
     "process": PROCESS_NODE_DIM,
     "network": NETWORK_NODE_DIM,
 }
+
+# ============================================================
+# TRAINING-PATTERN API FEATURE ALIGNMENT
+# ============================================================
+# Build the 775-dim api features the SAME way the training (cape_enriched)
+# graphs were built, so zero-day graphs land in the training distribution.
+# CRITICAL: the kept checkpoint has NO model-side normalization to absorb a
+# feature shift, so this must match training exactly.
+#   - 768 semantic = NAME-ONLY embedding via the training api_embeddings.pkl
+#     lookup (NOT v2's default rich "api=..|category=..|args=.." re-encode).
+#   - 7 raw dims   = [time_norm, pid/10000, is_file, is_registry, is_process,
+#                     is_network, is_crypto]  (name-substring category flags,
+#                     matching data_processing/graph_builder.py:add_api_nodes).
+MATCH_TRAINING_API_FEATURES = True
+TRAINING_API_EMBEDDINGS_PATH = CACHE_DIR / "api_embeddings.pkl"
+# Unknown (zero-day) API names not in the lookup:
+#   True  = encode name-only with the same model (better for new APIs, keeps
+#           them in the same semantic space; what the user asked for earlier).
+#   False = zeros (strict training behaviour for unknown APIs).
+ENCODE_UNKNOWN_APIS_BY_NAME = True
 
 # ============================================================
 # EDGE FEATURE POLICY

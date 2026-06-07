@@ -450,6 +450,7 @@ class GraphBuilderV2:
         arguments_texts = []
         categories = []
         statuses = []
+        pids = []
 
         for node in api_nodes:
             api_names.append(node["api_name"])
@@ -457,6 +458,7 @@ class GraphBuilderV2:
             categories.append(node["category"])
             statuses.append(node["status"])
             time_sources.append(node["time_source"])
+            pids.append(self._safe_float(node.get("pid"), default=0.0))
 
             timestamps.append(float(node["time"]))
 
@@ -473,6 +475,7 @@ class GraphBuilderV2:
 
         graph["api"].x = self._tensor_2d(x, self.API_RAW_DIM)
         graph["api"].timestamps = torch.tensor(timestamps, dtype=torch.float32)
+        graph["api"].pids = torch.tensor(pids, dtype=torch.float32)
         graph["api"].api_names = api_names
         graph["api"].arguments_text = arguments_texts
         graph["api"].categories = categories

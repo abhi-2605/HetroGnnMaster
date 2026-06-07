@@ -185,6 +185,19 @@ LSTM_NUM_LAYERS = 2         # Number of LSTM layers
 BIDIRECTIONAL = True        # Use bidirectional LSTM
 LSTM_DROPOUT = 0.2          # LSTM dropout
 
+# ── Swappable temporal backbone (drop-in, gated; default = current LSTM) ──
+# "lstm"  -> current TemporalLSTM, byte-identical behaviour (existing checkpoint loads)
+# "mamba" -> TemporalMamba (state-space, native long-range, no chunking). New model,
+#            requires retrain + `pip install causal-conv1d mamba-ssm` on the CUDA box.
+TEMPORAL_BACKBONE = "lstm"
+# Inject the 14-dim temporal edge features into the backbone as per-step timing
+# (signed-log per-dim + Time2Vec + learnable encoder, meaning-preserving).
+USE_TEMPORAL_TIME_FEATURES = False
+TEMPORAL_TIME_EMBED_DIM = 16
+# Mamba-only hyperparameters
+MAMBA_D_MODEL = 256
+MAMBA_NUM_LAYERS = 2
+
 # Temporal attention pooling
 TEMPORAL_HEADS = 6          # Multi-head attention (temporal)
 
@@ -586,10 +599,10 @@ PERTURBATION_TARGET = "edge_attr"
 # per-dimension BatchNorm (= z-score using training running statistics,
 # applied identically at inference). Stops the huge-magnitude time/speed dims
 # from dominating and re-centers cross-pipeline scale differences.
-STANDARDIZE_EDGE_ATTR = True
+STANDARDIZE_EDGE_ATTR = False  # OFF: kept (pre-norm) checkpoint has no edge_attr_norm layers
 
 # (#1b) LayerNorm the 15-dim behavioral summary features before the classifier.
-STANDARDIZE_BEHAVIORAL = True
+STANDARDIZE_BEHAVIORAL = False  # OFF: kept (pre-norm) checkpoint has no behav_norm layer
 
 # (#2) Make the raw-magnitude temporal edge features scale-invariant via
 # signed-log compression of the absolute dims (time_delta, speed,
@@ -598,7 +611,7 @@ STANDARDIZE_BEHAVIORAL = True
 # Applied at LOAD time in hetero_collate (NOT baked into the cache), so
 # NO re-enrichment is needed — it hits train and eval identically. Just set
 # this True and retrain. Off by default.
-USE_RELATIVE_TEMPORAL_FEATURES = True
+USE_RELATIVE_TEMPORAL_FEATURES = False  # OFF: kept (pre-norm) checkpoint trained on RAW temporal
 RELATIVE_TEMPORAL_LOG_DIMS = [0, 3, 4, 5, 10, 11]
 
 

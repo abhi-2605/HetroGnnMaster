@@ -592,6 +592,194 @@ class TemporalLSTM(nn.Module):
 
 
 # ============================================================
+# 4b. Time-feature encoding + Mamba temporal backbone (OPTIONAL, drop-in)
+#     Additive: does NOT modify TemporalLSTM. mamba-ssm is imported lazily so
+#     this file still imports fine on machines without it (LSTM path unaffected).
+# ============================================================
+
+def signed_log(x: torch.Tensor) -> torch.Tensor:
+    """Monotonic, per-element scale compression. Preserves sign, order and
+    relative magnitude (bigger stays bigger) while bounding huge values
+    (1e6 -> ~14). Deterministic — no batch/chunk statistics — so it never
+    flattens discrimination or shifts branch balance the way BatchNorm did,
+    and it is invariant to batching/chunking."""
+    return torch.sign(x) * torch.log1p(torch.abs(x))
+
+
+class Time2Vec(nn.Module):
+    """Learnable time encoding: one linear term + (out_dim-1) periodic (sin)
+    bases, so the model can represent *periodicity* directly — the
+    'these events recur at interval X' signal — not just magnitude."""
+
+    def __init__(self, out_dim: int):
+        super().__init__()
+        assert out_dim >= 2, "Time2Vec out_dim must be >= 2"
+        self.lin = nn.Linear(1, 1)
+        self.per = nn.Linear(1, out_dim - 1)
+
+    def forward(self, t: torch.Tensor) -> torch.Tensor:   # t: [N, 1]
+        return torch.cat([self.lin(t), torch.sin(self.per(t))], dim=-1)  # [N, out_dim]
+
+
+class TimingEncoder(nn.Module):
+    """Encode the per-node temporal edge features (the 14 dims) into a compact,
+    learned time embedding WITHOUT killing the meaning of each value:
+      - signed-log per-dim  -> bounds scale, keeps order/sign/identity (each
+                               feature stays in its own slot; bigger stays bigger)
+      - Time2Vec on delta   -> makes periodicity representable
+      - small MLP           -> the model LEARNS what each value means / how it
+                               weighs in (can amplify, not just dampen)
+      - LayerNorm on OUTPUT -> keeps the embedding on a scale comparable to the
+                               node embedding so the backbone actually USES it
+                               (not 'pulled down' to a tiny ignored signal)
+    NOTE: normalization is on the LEARNED embedding, not a global flatten of the
+    raw features (the latter is what caused the earlier semantic monoculture)."""
+
+    def __init__(self, n_features: int = 14, embed_dim: int = 16,
+                 t2v_dim: int = 8, delta_index: int = 0):
+        super().__init__()
+        self.delta_index = delta_index
+        self.t2v = Time2Vec(t2v_dim)
+        self.mlp = nn.Sequential(
+            nn.Linear(n_features + t2v_dim, embed_dim * 2),
+            nn.GELU(),
+            nn.Linear(embed_dim * 2, embed_dim),
+        )
+        self.norm = nn.LayerNorm(embed_dim)
+        self.embed_dim = embed_dim
+
+    def forward(self, feats: torch.Tensor) -> torch.Tensor:  # feats: [N, n_features] raw
+        x = signed_log(feats)
+        delta = signed_log(feats[:, self.delta_index:self.delta_index + 1])
+        z = torch.cat([x, self.t2v(delta)], dim=-1)
+        return self.norm(self.mlp(z))   # [N, embed_dim]
+
+
+class TemporalMamba(nn.Module):
+    """Drop-in replacement for TemporalLSTM.
+
+    Same interface — forward(x, batch, timestamps) — plus an optional
+    `step_features` arg carrying the raw 14-dim per-node timing (encoded
+    internally by TimingEncoder). Handles long sequences natively (linear,
+    strong long-range), so NO chunking is needed. Bidirectional via a forward
+    pass + a separately-padded reversed pass (padding never contaminates the
+    SSM state). Output is projected to `output_dim` (== lstm_output_dim) so the
+    rest of the model (pooling/fusion/classifier) is untouched.
+
+    mamba-ssm is imported lazily: this class is only constructed when the
+    'mamba' backbone is selected, so the module imports fine without it."""
+
+    def __init__(self, input_dim: int, output_dim: int, d_model: int = 256,
+                 num_layers: int = 2, bidirectional: bool = True,
+                 time_embed_dim: int = 0, time_feature_dim: int = 14):
+        super().__init__()
+        try:
+            from mamba_ssm import Mamba
+        except ImportError as e:
+            raise ImportError(
+                "TEMPORAL_BACKBONE='mamba' needs mamba-ssm. On the CUDA GPU box:\n"
+                "    pip install causal-conv1d mamba-ssm\n"
+                "(Blackwell/sm_120 may require a source build of a recent version.)"
+            ) from e
+
+        self.bidirectional = bidirectional
+        self.output_dim = output_dim
+        self.time_encoder = (
+            TimingEncoder(time_feature_dim, time_embed_dim) if time_embed_dim > 0 else None
+        )
+        eff_in = input_dim + (time_embed_dim if self.time_encoder is not None else 0)
+        self.in_proj = nn.Linear(eff_in, d_model)
+
+        self.fwd_blocks = nn.ModuleList([Mamba(d_model=d_model) for _ in range(num_layers)])
+        self.fwd_norms = nn.ModuleList([nn.LayerNorm(d_model) for _ in range(num_layers)])
+        if bidirectional:
+            self.bwd_blocks = nn.ModuleList([Mamba(d_model=d_model) for _ in range(num_layers)])
+            self.bwd_norms = nn.ModuleList([nn.LayerNorm(d_model) for _ in range(num_layers)])
+
+        self.out_proj = nn.Linear(d_model * (2 if bidirectional else 1), output_dim)
+        self._warned_fp32 = False   # one-time slow-path guard (see forward)
+
+    @staticmethod
+    def _run_stack(seq, blocks, norms):   # seq: [B, L, d_model] -> [B, L, d_model]
+        h = seq
+        for blk, nrm in zip(blocks, norms):
+            h = h + blk(nrm(h))           # pre-norm residual
+        return h
+
+    def forward(self, x, batch, timestamps=None, step_features=None):
+        if x.size(0) == 0:
+            return x.new_zeros((0, self.output_dim))
+
+        # fp32-speed guard: Mamba's fused kernel is fastest in bf16/fp16 (autocast).
+        # Running on CUDA OUTSIDE autocast = slow fp32 path. Warn ONCE so a silent
+        # slowdown can't sneak in (LSTM speed is unaffected — this is mamba-only).
+        if (not self._warned_fp32) and x.is_cuda:
+            try:
+                in_autocast = torch.is_autocast_enabled()
+            except Exception:
+                in_autocast = True  # don't false-alarm if the API differs by version
+            if not in_autocast:
+                import warnings
+                warnings.warn(
+                    "TemporalMamba is running on CUDA OUTSIDE autocast (fp32 = SLOW "
+                    "path). Run under torch.autocast(bf16/fp16) for full speed; the "
+                    "LSTM's fp32 carve-out must NOT wrap the Mamba backbone.",
+                    RuntimeWarning,
+                )
+            self._warned_fp32 = True
+
+        if self.time_encoder is not None and step_features is not None:
+            x = torch.cat([x, self.time_encoder(step_features)], dim=-1)
+        x = self.in_proj(x)
+
+        batch_size = int(batch.max().item()) + 1
+        seqs, idxs, invs = [], [], []
+        for b in range(batch_size):
+            idx = (batch == b).nonzero(as_tuple=False).squeeze(-1)
+            if idx.numel() == 0:
+                continue
+            x_b = x[idx]
+            if timestamps is not None:
+                order = torch.argsort(timestamps[idx])
+                x_b = x_b[order]
+                invs.append(torch.argsort(order))
+            else:
+                invs.append(None)
+            seqs.append(x_b)
+            idxs.append(idx)
+
+        if not seqs:
+            return x.new_zeros((0, self.output_dim))
+
+        lengths = [s.size(0) for s in seqs]
+        padded = torch.nn.utils.rnn.pad_sequence(seqs, batch_first=True)   # [B, Lmax, d_model]
+        out_f = self._run_stack(padded, self.fwd_blocks, self.fwd_norms)
+        if self.bidirectional:
+            # reverse each REAL sequence, then pad -> padding stays on the right,
+            # so it never feeds the SSM before the real tokens.
+            rev = torch.nn.utils.rnn.pad_sequence(
+                [torch.flip(s, dims=[0]) for s in seqs], batch_first=True
+            )
+            out_b = self._run_stack(rev, self.bwd_blocks, self.bwd_norms)
+
+        feat_dim = out_f.size(-1) * (2 if self.bidirectional else 1)
+        combined = x.new_zeros((batch.size(0), feat_dim))
+        for j in range(len(seqs)):
+            L = lengths[j]
+            f = out_f[j, :L]
+            if self.bidirectional:
+                b = torch.flip(out_b[j, :L], dims=[0])   # undo the reversal
+                so = torch.cat([f, b], dim=-1)
+            else:
+                so = f
+            if invs[j] is not None:
+                so = so[invs[j]]                          # back to original node order
+            combined[idxs[j]] = so
+
+        return self.out_proj(combined)                    # [N, output_dim]
+
+
+# ============================================================
 # 5. TemporalAttentionPooling
 # ============================================================
 

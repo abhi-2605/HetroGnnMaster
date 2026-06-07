@@ -288,6 +288,109 @@ class GraphEnricherV2:
         self.window_size = window_size
 
         self.stats = EnrichmentStats(backend=self.embedder.backend)
+
+        # Lazy-loaded training api_embeddings.pkl lookup (name -> 768 vec),
+        # used when MATCH_TRAINING_API_FEATURES is on.
+        self._train_emb = None
+        self._train_emb_dim = None
+
+    def _load_training_embeddings(self) -> dict:
+        """Load the training name->embedding lookup once and cache it."""
+        if self._train_emb is not None:
+            return self._train_emb
+        import pickle
+        path = Path(cfg.TRAINING_API_EMBEDDINGS_PATH)
+        if not path.exists():
+            raise FileNotFoundError(
+                f"MATCH_TRAINING_API_FEATURES is on but training embeddings "
+                f"not found at {path}"
+            )
+        with open(path, "rb") as f:
+            self._train_emb = pickle.load(f)
+        if not isinstance(self._train_emb, dict) or not self._train_emb:
+            raise ValueError(f"Training embeddings lookup is empty/invalid: {path}")
+        self._train_emb_dim = len(next(iter(self._train_emb.values())))
+        expected = cfg.API_NODE_DIM - 7
+        if self._train_emb_dim != expected:
+            raise ValueError(
+                f"Training embedding dim {self._train_emb_dim} != expected "
+                f"{expected} (API_NODE_DIM {cfg.API_NODE_DIM} - 7 raw dims)"
+            )
+        return self._train_emb
+
+    @staticmethod
+    def _training_category_flags(api_name: str) -> list:
+        """5 name-substring category flags, matching the original training
+        builder (data_processing/graph_builder.py:add_api_nodes)."""
+        n = (api_name or "").lower()
+        return [
+            1.0 if any(x in n for x in ("file", "read", "write")) else 0.0,
+            1.0 if any(x in n for x in ("reg", "key")) else 0.0,
+            1.0 if any(x in n for x in ("process", "thread")) else 0.0,
+            1.0 if any(x in n for x in ("socket", "connect", "send")) else 0.0,
+            1.0 if any(x in n for x in ("crypt", "encrypt")) else 0.0,
+        ]
+
+    def _enrich_api_nodes_training_match(self, graph: HeteroData) -> None:
+        """Build api.x exactly like the training (cape_enriched) pipeline:
+        [name-only embedding (768)] + [time_norm, pid/10000, 5 category flags]."""
+        raw_x = graph["api"].x
+        if raw_x.ndim != 2 or raw_x.shape[1] != 7:
+            raise ValueError(
+                f"Raw api.x must be [N,7] before enrichment, got {tuple(raw_x.shape)}"
+            )
+
+        lookup = self._load_training_embeddings()
+        dim = self._train_emb_dim
+        api_names = list(getattr(graph["api"], "api_names", []))
+        num_api = raw_x.shape[0]
+
+        pids = getattr(graph["api"], "pids", None)
+        pid_arr = (
+            pids.cpu().numpy().astype(np.float32)
+            if pids is not None
+            else np.zeros(num_api, dtype=np.float32)
+        )
+        time_norm = raw_x[:, 0].cpu().numpy().astype(np.float32)  # v2 dim 0 == time_norm
+
+        sem = np.zeros((num_api, dim), dtype=np.float32)
+        unknown_idx, unknown_names = [], []
+        placeholder_count = 0
+        for i in range(num_api):
+            name = api_names[i] if i < len(api_names) else ""
+            is_placeholder = bool(raw_x[i, 6].item() > 0)
+            if is_placeholder:
+                placeholder_count += 1
+                continue  # placeholder -> zero embedding (matches training dummy)
+            vec = lookup.get(name)
+            if vec is not None:
+                sem[i] = np.asarray(vec, dtype=np.float32)
+            else:
+                unknown_idx.append(i)
+                unknown_names.append(name)
+
+        # Unknown (zero-day) APIs: encode name-only with the same model, or leave 0.
+        if unknown_names and getattr(cfg, "ENCODE_UNKNOWN_APIS_BY_NAME", True):
+            enc = np.asarray(self.embedder.encode(unknown_names), dtype=np.float32)
+            for k, i in enumerate(unknown_idx):
+                sem[i] = enc[k]
+            self.stats_unknown_apis = getattr(self, "stats_unknown_apis", 0) + len(unknown_idx)
+
+        flags = np.array(
+            [self._training_category_flags(api_names[i] if i < len(api_names) else "")
+             for i in range(num_api)],
+            dtype=np.float32,
+        ).reshape(num_api, 5)
+        raw7 = np.column_stack([time_norm, pid_arr / 10000.0, flags]).astype(np.float32)
+
+        enriched = np.concatenate([sem, raw7], axis=1)
+        if enriched.shape[1] != cfg.API_NODE_DIM:
+            raise ValueError(
+                f"Training-match api.x dim {enriched.shape[1]} != {cfg.API_NODE_DIM}"
+            )
+        graph["api"].x = torch.tensor(enriched, dtype=torch.float32)
+        graph["api"].placeholder_count = torch.tensor([placeholder_count], dtype=torch.long)
+
     def _sanitize_for_embedding(self, s: str, max_len: int = 512) -> str:
         """
         Make text safe and semantically useful for sentence-transformer encoding.
@@ -463,6 +566,12 @@ class GraphEnricherV2:
     def _enrich_api_nodes(self, graph: HeteroData) -> None:
         if "api" not in graph.node_types:
             raise ValueError("Graph missing required node type: api")
+
+        # Build features the SAME way training did (name-only embedding + the
+        # original 7 raw dims), so zero-day graphs match the training pattern.
+        if getattr(cfg, "MATCH_TRAINING_API_FEATURES", False):
+            self._enrich_api_nodes_training_match(graph)
+            return
 
         raw_x = graph["api"].x
         if raw_x.ndim != 2:

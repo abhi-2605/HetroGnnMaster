@@ -1,0 +1,26 @@
+================================================================================
+ENRICHED GRAPH SCHEMA SUMMARY
+================================================================================
+Source name : cuckoo_enriched_v2
+Graph root  : /Volumes/SSD/TGNN/ransomware_tgnn/cache/zero_day_unseen/all
+Total graphs: 0
+
+NODE TYPES FOUND:
+
+EDGE TYPES FOUND:
+
+COMPATIBILITY CHECKS:
+  - api_feature_dim_ok: None
+  - resource_feature_dims_ok: {'file': False, 'registry': False, 'process': False, 'network': False}
+  - temporal_edge_dim_ok: None
+  - missing_expected_node_types: ['api', 'file', 'network', 'process', 'registry']
+  - missing_expected_edge_types: ['api::connects_to::network', 'api::modifies::registry', 'api::operates_on::file', 'api::temporal::api', 'process::executes::api']
+  - unexpected_node_types: []
+  - unexpected_edge_types: []
+
+SPLITS:
+  - train: num_files=0 missing=True failed_files=0
+  - val: num_files=0 missing=True failed_files=0
+  - test: num_files=0 missing=True failed_files=0
+
+================================================================================
