@@ -124,4 +124,5 @@ Val    loss=0.0237  macro_f1=0.7960  Ransom P=0.500 R=0.389  Benign P=1.000 R=0.
 ======================================================================
 Epoch 4/125
 ======================================================================
-WARMUP Epoch 4:   0%|          | 0/171 [00:00<?, ?it/s]
+WARMUP Epoch 4:   0%|          | 0/171 [00:00<?, ?it/s]INFO:graph_construction.pytorch_dataset:🔧 Behavior-aware API cap: 110030 -> 30000 (protected=110030, threshold=100000, max=30000)
+INFO:graph_construction.pytorch_dataset:🔧 Behavior-aware API cap: 110030 -> 30000 (protected=110030, threshold=100000, max=30000)
