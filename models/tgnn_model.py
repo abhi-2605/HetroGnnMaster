@@ -297,6 +297,7 @@ class HeteroTemporalGNN(nn.Module):
                 time_embed_dim=(int(getattr(config, "TEMPORAL_TIME_EMBED_DIM", 16))
                                 if self.use_temporal_time_features else 0),
                 time_feature_dim=self.temporal_time_feature_dim,
+                dropout=lstm_dropout,
             )
         else:
             self.temporal_lstm = TemporalLSTM(

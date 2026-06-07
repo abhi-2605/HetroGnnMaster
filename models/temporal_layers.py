@@ -671,7 +671,8 @@ class TemporalMamba(nn.Module):
 
     def __init__(self, input_dim: int, output_dim: int, d_model: int = 256,
                  num_layers: int = 2, bidirectional: bool = True,
-                 time_embed_dim: int = 0, time_feature_dim: int = 14):
+                 time_embed_dim: int = 0, time_feature_dim: int = 14,
+                 dropout: float = 0.0):
         super().__init__()
         try:
             from mamba_ssm import Mamba
@@ -697,6 +698,7 @@ class TemporalMamba(nn.Module):
             self.bwd_norms = nn.ModuleList([nn.LayerNorm(d_model) for _ in range(num_layers)])
 
         self.out_proj = nn.Linear(d_model * (2 if bidirectional else 1), output_dim)
+        self.dropout = nn.Dropout(dropout)
         self._warned_fp32 = False   # one-time slow-path guard (see forward)
 
     @staticmethod
@@ -776,7 +778,7 @@ class TemporalMamba(nn.Module):
                 so = so[invs[j]]                          # back to original node order
             combined[idxs[j]] = so
 
-        return self.out_proj(combined)                    # [N, output_dim]
+        return self.out_proj(self.dropout(combined))      # [N, output_dim]
 
 
 # ============================================================
