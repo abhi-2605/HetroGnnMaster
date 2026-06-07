@@ -215,7 +215,7 @@ EPOCHS = 125
 MAX_EPOCHS = 135
 
 # Early stopping
-EARLY_STOPPING_PATIENCE = 6
+EARLY_STOPPING_PATIENCE = 10
 CHECKPOINT_METRIC = "macro_f1"  # Options: 'macro_f1', 'val_loss', 'accuracy'
 
 # Gradient clipping
