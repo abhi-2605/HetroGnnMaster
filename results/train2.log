@@ -614,4 +614,6 @@ Val    loss=0.0348  macro_f1=0.7930  Ransom P=0.600 R=0.333  Benign P=0.990 R=0.
 ======================================================================
 Epoch 18/125
 ======================================================================
-Epoch 18:   0%|          | 0/171 [00:00<?, ?it/s]
+Epoch 18:   0%|          | 0/171 [00:00<?, ?it/s]INFO:graph_construction.pytorch_dataset:🔧 Behavior-aware API cap: 110030 -> 30000 (protected=110030, threshold=100000, max=30000)
+INFO:graph_construction.pytorch_dataset:🔧 Behavior-aware API cap: 110030 -> 30000 (protected=110030, threshold=100000, max=30000)
+INFO:graph_construction.pytorch_dataset:🔧 Behavior-aware API cap: 125541 -> 30000 (protected=125541, threshold=100000, max=30000)
