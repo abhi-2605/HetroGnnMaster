@@ -473,4 +473,6 @@ New best macro_f1: 0.8208 | Ransom recall: 0.417 | Benign recall: 0.956 — save
 ======================================================================
 Epoch 14/125
 ======================================================================
-Epoch 14:   0%|          | 0/171 [00:00<?, ?it/s]
+Epoch 14:   0%|          | 0/171 [00:00<?, ?it/s]INFO:graph_construction.pytorch_dataset:🔧 Behavior-aware API cap: 110030 -> 30000 (protected=110030, threshold=100000, max=30000)
+INFO:graph_construction.pytorch_dataset:🔧 Behavior-aware API cap: 125541 -> 30000 (protected=125541, threshold=100000, max=30000)
+INFO:graph_construction.pytorch_dataset:🔧 Behavior-aware API cap: 110030 -> 30000 (protected=110030, threshold=100000, max=30000)
