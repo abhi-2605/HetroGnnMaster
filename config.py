@@ -189,7 +189,7 @@ LSTM_DROPOUT = 0.2          # LSTM dropout
 # "lstm"  -> current TemporalLSTM, byte-identical behaviour (existing checkpoint loads)
 # "mamba" -> TemporalMamba (state-space, native long-range, no chunking). New model,
 #            requires retrain + `pip install causal-conv1d mamba-ssm` on the CUDA box.
-TEMPORAL_BACKBONE = "lstm"
+TEMPORAL_BACKBONE = "mamba"
 # Inject the 14-dim temporal edge features into the backbone as per-step timing
 # (signed-log per-dim + Time2Vec + learnable encoder, meaning-preserving).
 USE_TEMPORAL_TIME_FEATURES = False
