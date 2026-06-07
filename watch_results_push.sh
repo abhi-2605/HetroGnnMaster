@@ -3,7 +3,7 @@ set -euo pipefail
 
 RESULTS_DIR="results"
 CHECKPOINT_DIR="results/checkpoints"
-TRAIN_LOG="results/train.log"
+TRAIN_LOG="results/train2.log"
 INTERVAL=1200   # 20 min
 
 BRANCH="$(git rev-parse --abbrev-ref HEAD)"
