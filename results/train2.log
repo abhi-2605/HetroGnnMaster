@@ -1,0 +1,93 @@
+
+======================================================================
+Device: cuda
+
+[SchemaManager] Active schema ready.
+[SchemaManager] Source       : cape_enriched
+[SchemaManager] Graph root   : /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched
+[SchemaManager] Node types   : ['api', 'file', 'registry', 'process', 'network']
+[SchemaManager] Edge types   : ['api::temporal::api', 'api::operates_on::file', 'api::modifies::registry', 'process::executes::api', 'api::connects_to::network']
+
+======================================================================
+ACTIVE SCHEMA
+======================================================================
+Source             : cape_enriched
+Graph root         : /Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched
+Node types         : ['api', 'file', 'registry', 'process', 'network']
+Edge types         : ['api::temporal::api', 'api::operates_on::file', 'api::modifies::registry', 'process::executes::api', 'api::connects_to::network']
+Canonical node dims: {'api': 775, 'file': 7, 'network': 6, 'process': 6, 'registry': 6}
+Non-empty edges    : ['api::temporal::api', 'api::operates_on::file', 'api::modifies::registry', 'process::executes::api', 'api::connects_to::network']
+Empty edges        : []
+INFO:graph_construction.vocabulary:Vocabulary loaded ← /workspace/project/TGNN/results/api_vocabulary.json  (size=325)
+[Train] Vocabulary loaded: 325 APIs
+Loading datasets...
+Active graph source: cape_enriched
+Active graph dir   : /workspace/project/TGNN/cache/enriched
+INFO:graph_construction.pytorch_dataset:Loaded 6593 HeteroData graphs for train split
+INFO:graph_construction.pytorch_dataset:Using graph root: /workspace/project/TGNN/cache/enriched
+INFO:graph_construction.pytorch_dataset:Loaded 16306 labels from metadata CSV
+INFO:graph_construction.pytorch_dataset:  train split:
+INFO:graph_construction.pytorch_dataset:    - Ransomware: 172
+INFO:graph_construction.pytorch_dataset:    - Benign: 1390
+INFO:graph_construction.pytorch_dataset:    - Other malware: 5031
+INFO:graph_construction.pytorch_dataset:Loaded 1356 HeteroData graphs for val split
+INFO:graph_construction.pytorch_dataset:Using graph root: /workspace/project/TGNN/cache/enriched
+INFO:graph_construction.pytorch_dataset:Loaded 16306 labels from metadata CSV
+INFO:graph_construction.pytorch_dataset:  val split:
+INFO:graph_construction.pytorch_dataset:    - Ransomware: 36
+INFO:graph_construction.pytorch_dataset:    - Benign: 298
+INFO:graph_construction.pytorch_dataset:    - Other malware: 1022
+INFO:graph_construction.pytorch_dataset:Loaded 1385 HeteroData graphs for test split
+INFO:graph_construction.pytorch_dataset:Using graph root: /workspace/project/TGNN/cache/enriched
+INFO:graph_construction.pytorch_dataset:Loaded 16306 labels from metadata CSV
+INFO:graph_construction.pytorch_dataset:  test split:
+INFO:graph_construction.pytorch_dataset:    - Ransomware: 39
+INFO:graph_construction.pytorch_dataset:    - Benign: 299
+INFO:graph_construction.pytorch_dataset:    - Other malware: 1047
+Train: 6593 graphs
+Val:   1356 graphs
+Test:  1385 graphs
+
+Train class distribution:
+  Ransomware: 172 (2.61%)
+  Benign: 1390 (21.08%)
+  Other Malwares: 5031 (76.31%)
+
+⚡ Using weighted oversampling + bucketed batching...
+📏 Measuring API node counts for bucketed batching...
+📦 Bucketed batch sampler summary:
+   Bucket 1: api_nodes <= 10,000          | graphs=6143  ( 93.2%) | batch_size=64 | avg_nodes=2,963.7
+   Bucket 2: api_nodes 10,001 .. 25,000   | graphs=257   (  3.9%) | batch_size=16 | avg_nodes=15,715.2
+   Bucket 3: api_nodes 25,001 .. 50,000   | graphs=111   (  1.7%) | batch_size=8  | avg_nodes=35,689.6
+   Bucket 4: api_nodes 50,001 .. 100,000  | graphs=51    (  0.8%) | batch_size=4  | avg_nodes=66,087.1
+   Bucket 5: api_nodes 100,001 .. 10,000,000 | graphs=31    (  0.5%) | batch_size=1  | avg_nodes=202,738.2
+   Total batches per epoch: 171
+[Model] SemanticMemory OFF │ api memory disabled
+[Model] Primary temporal type : api
+[Model] Active node types      : ['api', 'file', 'registry', 'process', 'network']
+[Model] Active edge types      : [('api', 'temporal', 'api'), ('api', 'operates_on', 'file'), ('api', 'modifies', 'registry'), ('process', 'executes', 'api'), ('api', 'connects_to', 'network')]
+[Model] Non-empty edge types   : [('api', 'temporal', 'api'), ('api', 'operates_on', 'file'), ('api', 'modifies', 'registry'), ('process', 'executes', 'api'), ('api', 'connects_to', 'network')]
+[Model] Type slot order        : ['api', 'file', 'registry', 'process', 'network']
+[Model] Canonical node dims    : {'api': 775, 'file': 7, 'network': 6, 'process': 6, 'registry': 6}
+[Model] Final hidden dims      : {'api': 768, 'file': 384, 'registry': 384, 'process': 64, 'network': 384}
+[Model] Graph embedding dim    : 128
+[Model] Behavioral feat dim    : 15
+
+🚀 Model architecture:
+  Primary temporal type  : api
+  Primary output / layer : 768
+  Other output / layer   : 384
+  LSTM output            : 252
+  Total embedding        : 128
+🔁 Loaded checkpoint with strict=False
+🔁 Checkpoint loaded — resuming epoch 3 | best macro_f1=0.7776
+======================================================================
+TRAINING START
+======================================================================
+Graph source: cape_enriched
+Graph dir   : /workspace/project/TGNN/cache/enriched
+
+======================================================================
+Epoch 3/125
+======================================================================
+WARMUP Epoch 3:   0%|          | 0/171 [00:00<?, ?it/s]
