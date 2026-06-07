@@ -1,0 +1,2 @@
+md5,true,P_ransom,P_benign,P_malware,n_api,uniq_api,n_file,n_reg,n_proc,n_net
+7ea95de222ac8fefa0fedabcd873898b,Malware,0.0088,0.5695,0.4217,10000,37,25,9,1,0
