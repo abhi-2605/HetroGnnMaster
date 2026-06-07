@@ -10,38 +10,38 @@
     "other_malware": 165
   },
   "origin_distribution": {
-    "old_test": 175,
-    "old_val": 155,
+    "old_test": 177,
+    "old_val": 153,
     "new_unseen": 110
   },
   "metrics_3class": {
-    "accuracy": 0.8886363636363637,
+    "accuracy": 0.8909090909090909,
     "per_class_precision": [
-      0.9705882352941176,
       1.0,
-      0.7735849056603774
+      1.0,
+      0.7746478873239436
     ],
     "per_class_recall": [
       0.44,
       0.97,
-      0.9939393939393939
+      1.0
     ],
     "per_class_f1": [
-      0.6055045871559633,
+      0.6111111111111112,
       0.9847715736040609,
-      0.870026525198939
+      0.873015873015873
     ],
     "per_class_support": [
       75,
       200,
       165
     ],
-    "macro_precision": 0.914724380318165,
-    "macro_recall": 0.8013131313131313,
-    "macro_f1": 0.8201008953196544,
-    "weighted_precision": 0.9100809706386843,
-    "weighted_recall": 0.8886363636363637,
-    "weighted_f1": 0.8770943986712144,
+    "macro_precision": 0.9248826291079811,
+    "macro_recall": 0.8033333333333333,
+    "macro_f1": 0.8229661859103484,
+    "weighted_precision": 0.9154929577464789,
+    "weighted_recall": 0.8909090909090909,
+    "weighted_f1": 0.8791710615949194,
     "confusion_matrix": [
       [
         33,
@@ -54,12 +54,12 @@
         6
       ],
       [
-        1,
         0,
-        164
+        0,
+        165
       ]
     ],
-    "loss": 0.10516031483150202
+    "loss": 0.1048999619028044
   },
   "metrics_threat_vs_benign": {
     "TP": 240,
@@ -78,35 +78,35 @@
   "branch_usage_summary": {
     "available": true,
     "overall_mean_weights": {
-      "semantic": 0.355356092480096,
-      "structural": 0.35263160277496686,
-      "temporal": 0.2920123055915941
+      "semantic": 0.3540523479607972,
+      "structural": 0.35323211940174754,
+      "temporal": 0.29271553460169925
     },
     "dominant_branch_counts": {
-      "structural": 256,
+      "structural": 257,
       "semantic": 139,
-      "temporal": 45
+      "temporal": 44
     },
     "dominant_branch_percent": {
-      "structural": 58.18181818181818,
+      "structural": 58.409090909090914,
       "semantic": 31.590909090909093,
-      "temporal": 10.227272727272728
+      "temporal": 10.0
     },
     "by_predicted_class": {
       "Ransomware": {
-        "count": 34,
-        "semantic_mean": 0.6880065325428458,
-        "structural_mean": 0.09442127035821185,
-        "temporal_mean": 0.21757220476865768,
+        "count": 33,
+        "semantic_mean": 0.6876355301250111,
+        "structural_mean": 0.09360028758193507,
+        "temporal_mean": 0.21876418590545654,
         "dominant_branch_counts": {
-          "semantic": 34
+          "semantic": 33
         }
       },
       "Benign": {
         "count": 194,
-        "semantic_mean": 0.20745679098613484,
-        "structural_mean": 0.4599002618918714,
-        "temporal_mean": 0.3326429485813859,
+        "semantic_mean": 0.20745678944993265,
+        "structural_mean": 0.45990026089333996,
+        "temporal_mean": 0.33264295196103066,
         "dominant_branch_counts": {
           "structural": 157,
           "temporal": 36,
@@ -114,23 +114,23 @@
         }
       },
       "Other Malwares": {
-        "count": 212,
-        "semantic_mean": 0.4373483072333741,
-        "structural_mean": 0.295881751046147,
-        "temporal_mean": 0.2667699409121612,
+        "count": 213,
+        "semantic_mean": 0.43588940589360786,
+        "structural_mean": 0.2963036264472165,
+        "temporal_mean": 0.2678069690583457,
         "dominant_branch_counts": {
-          "semantic": 104,
-          "structural": 99,
-          "temporal": 9
+          "semantic": 105,
+          "structural": 100,
+          "temporal": 8
         }
       }
     },
     "by_true_class": {
       "Ransomware": {
         "count": 75,
-        "semantic_mean": 0.6605658507347107,
-        "structural_mean": 0.13009972562392552,
-        "temporal_mean": 0.20933442811171213,
+        "semantic_mean": 0.6605658483505249,
+        "structural_mean": 0.13009972671667736,
+        "temporal_mean": 0.2093344255288442,
         "dominant_branch_counts": {
           "semantic": 74,
           "temporal": 1
@@ -138,9 +138,9 @@
       },
       "Benign": {
         "count": 200,
-        "semantic_mean": 0.22270852662622928,
-        "structural_mean": 0.4502404687926173,
-        "temporal_mean": 0.3270510058104992,
+        "semantic_mean": 0.2227085257321596,
+        "structural_mean": 0.450240467749536,
+        "temporal_mean": 0.32705100886523725,
         "dominant_branch_counts": {
           "structural": 157,
           "temporal": 36,
@@ -149,49 +149,49 @@
       },
       "Other Malwares": {
         "count": 165,
-        "semantic_mean": 0.37740931249026094,
-        "structural_mean": 0.3354686790343487,
-        "temporal_mean": 0.2871220072110494,
+        "semantic_mean": 0.3739326626062393,
+        "structural_mean": 0.3370700574733994,
+        "temporal_mean": 0.28899728204264785,
         "dominant_branch_counts": {
-          "structural": 99,
+          "structural": 100,
           "semantic": 58,
-          "temporal": 8
+          "temporal": 7
         }
       }
     },
     "correct_vs_wrong": {
       "wrong": {
-        "count": 49,
-        "semantic_mean": 0.6499143729404527,
-        "structural_mean": 0.15546176308880047,
-        "temporal_mean": 0.1946238635145888,
+        "count": 48,
+        "semantic_mean": 0.6488657109439373,
+        "structural_mean": 0.15616901979471245,
+        "temporal_mean": 0.19496526817480722,
         "dominant_branch_counts": {
-          "semantic": 48,
+          "semantic": 47,
           "temporal": 1
         }
       },
       "correct": {
-        "count": 391,
-        "semantic_mean": 0.31844213917432235,
-        "structural_mean": 0.3773408665719544,
-        "temporal_mean": 0.3042169952636485,
+        "count": 392,
+        "semantic_mean": 0.31795275249347393,
+        "structural_mean": 0.37736229486383344,
+        "temporal_mean": 0.3046849549805023,
         "dominant_branch_counts": {
-          "structural": 256,
-          "semantic": 91,
-          "temporal": 44
+          "structural": 257,
+          "semantic": 92,
+          "temporal": 43
         }
       }
     },
     "threat_vs_benign_groups": {
       "true_threat_pred_threat": {
         "count": 240,
-        "semantic_mean": 0.4658957306916515,
-        "structural_mean": 0.27129088109359145,
-        "temporal_mean": 0.2628133887425065,
+        "semantic_mean": 0.4635055331513286,
+        "structural_mean": 0.2723918291119238,
+        "temporal_mean": 0.2641026393820842,
         "dominant_branch_counts": {
           "semantic": 132,
-          "structural": 99,
-          "temporal": 9
+          "structural": 100,
+          "temporal": 8
         }
       },
       "true_threat_pred_benign_missed": {
@@ -203,9 +203,9 @@
       },
       "true_benign_pred_benign": {
         "count": 194,
-        "semantic_mean": 0.20745679098613484,
-        "structural_mean": 0.4599002618918714,
-        "temporal_mean": 0.3326429485813859,
+        "semantic_mean": 0.20745678944993265,
+        "structural_mean": 0.45990026089333996,
+        "temporal_mean": 0.33264295196103066,
         "dominant_branch_counts": {
           "structural": 157,
           "temporal": 36,
@@ -214,9 +214,9 @@
       },
       "true_benign_pred_threat_false_alarm": {
         "count": 6,
-        "semantic_mean": 0.7158479789892832,
-        "structural_mean": 0.13790715858340263,
-        "temporal_mean": 0.14624485621849695,
+        "semantic_mean": 0.7158479988574982,
+        "structural_mean": 0.13790715609987578,
+        "temporal_mean": 0.14624484876791635,
         "dominant_branch_counts": {
           "semantic": 6
         }
