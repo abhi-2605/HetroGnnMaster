@@ -189,7 +189,7 @@ LSTM_DROPOUT = 0.2          # LSTM dropout
 # "lstm"  -> current TemporalLSTM, byte-identical behaviour (existing checkpoint loads)
 # "mamba" -> TemporalMamba (state-space, native long-range, no chunking). New model,
 #            requires retrain + `pip install causal-conv1d mamba-ssm` on the CUDA box.
-TEMPORAL_BACKBONE = "mamba"
+TEMPORAL_BACKBONE = "lstm"  # Options: 'lstm', 'mamba'
 # Inject the 14-dim temporal edge features into the backbone as per-step timing
 # (signed-log per-dim + Time2Vec + learnable encoder, meaning-preserving).
 USE_TEMPORAL_TIME_FEATURES = False
@@ -215,7 +215,7 @@ EPOCHS = 125
 MAX_EPOCHS = 135
 
 # Early stopping
-EARLY_STOPPING_PATIENCE = 10
+EARLY_STOPPING_PATIENCE = 20
 CHECKPOINT_METRIC = "macro_f1"  # Options: 'macro_f1', 'val_loss', 'accuracy'
 
 # Gradient clipping
@@ -495,7 +495,7 @@ CUSTOM_EVAL_ENFORCE_NEW_UNSEEN_DISJOINT = True
 
 # zero-day evaluation configuration
 CUSTOM_EVAL_SOURCE_SPLITS = ["val", "test"]
-CUSTOM_EVAL_NEW_MALWARE_DIR = CACHE_DIR / "zero_day_unseen" / "all"
+CUSTOM_EVAL_NEW_MALWARE_DIR = CACHE_DIR / "zero_day_unseen" / "old"
 CUSTOM_EVAL_TARGET_BENIGN = 200
 CUSTOM_EVAL_TARGET_OLD_MALWARE = 55
 CUSTOM_EVAL_INCLUDE_ALL_RANSOMWARE = True

@@ -1,0 +1,26 @@
+{
+  "TGNN": {
+    "roc_clean": 0.9914,
+    "roc_combined": 0.989,
+    "pr_combined": 0.9853,
+    "missed_clean": 0,
+    "missed_combined": 0,
+    "threats": 275
+  },
+  "Static GCN": {
+    "roc_clean": 0.9953,
+    "roc_combined": 0.9876,
+    "pr_combined": 0.9887,
+    "missed_clean": 0,
+    "missed_combined": 152,
+    "threats": 275
+  },
+  "Static GAT": {
+    "roc_clean": 0.9956,
+    "roc_combined": 0.9597,
+    "pr_combined": 0.9619,
+    "missed_clean": 0,
+    "missed_combined": 168,
+    "threats": 275
+  }
+}

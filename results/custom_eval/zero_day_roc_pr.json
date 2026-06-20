@@ -1,0 +1,23 @@
+{
+  "set": "zero_day_all",
+  "n": 440,
+  "threat_vs_benign": {
+    "roc_auc": 0.9954,
+    "pr_auc": 0.995,
+    "prevalence": 0.5455
+  },
+  "one_vs_rest": {
+    "Ransom": {
+      "roc_auc": 0.9691,
+      "pr_auc": 0.8792
+    },
+    "Benign": {
+      "roc_auc": 0.9954,
+      "pr_auc": 0.9962
+    },
+    "Malware": {
+      "roc_auc": 0.981,
+      "pr_auc": 0.9695
+    }
+  }
+}

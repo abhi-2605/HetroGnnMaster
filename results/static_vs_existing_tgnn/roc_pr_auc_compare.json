@@ -1,0 +1,26 @@
+{
+  "TGNN (clean)": {
+    "roc_auc": 0.9983,
+    "pr_auc": 0.9987
+  },
+  "TGNN (attack)": {
+    "roc_auc": 0.9973,
+    "pr_auc": 0.9978
+  },
+  "Static GCN (clean)": {
+    "roc_auc": 0.9955,
+    "pr_auc": 0.9949
+  },
+  "Static GCN (attack)": {
+    "roc_auc": 0.9951,
+    "pr_auc": 0.9947
+  },
+  "Static GAT (clean)": {
+    "roc_auc": 0.9899,
+    "pr_auc": 0.9885
+  },
+  "Static GAT (attack)": {
+    "roc_auc": 0.9888,
+    "pr_auc": 0.9873
+  }
+}
