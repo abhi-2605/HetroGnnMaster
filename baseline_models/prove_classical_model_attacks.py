@@ -1073,6 +1073,13 @@ def apply_named_attack(graph, sample_id: str, attack_name: str):
     if attack_name == "bigram_attack":
         return apply_bigram_attack(graph, sample_id)
 
+    if attack_name == "reorder_attack":
+        # Pure reorder: permute the SAME calls (shuffle timestamps), insert nothing.
+        # Distinct from bigram_attack (benign_interleaving), which distributes/inserts
+        # calls. Both are realistic attacker moves; a sequence model is sensitive to
+        # order, so this isolates the ordering axis.
+        return apply_full_shuffle_attack(graph, sample_id)
+
     if attack_name == "combined_attack":
         if COMBINED_APPLY_UNIGRAM_FIRST:
             g = apply_frequency_dilution_attack(graph, sample_id)
@@ -1080,6 +1087,13 @@ def apply_named_attack(graph, sample_id: str, attack_name: str):
             return g
         g = apply_bigram_attack(graph, sample_id)
         g = apply_frequency_dilution_attack(g, sample_id)
+        return g
+
+    if attack_name == "combined_all_attack":
+        # Realistic worst case: rename (Tier-1) + reorder + distribute, all three axes.
+        g = apply_frequency_dilution_attack(graph, sample_id)   # rename (+ padding)
+        g = apply_full_shuffle_attack(g, sample_id)             # reorder the calls
+        g = apply_benign_interleaving_attack(g, sample_id)      # distribute/insert calls
         return g
 
     raise ValueError(f"Unknown attack_name: {attack_name}")

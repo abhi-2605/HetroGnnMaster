@@ -136,8 +136,21 @@ FORCE_RETRAIN_SEQ = False
 # run only the BiLSTM tracks locally.
 INCLUDE_TGNN = True
 
-# Only paradigm-relevant attacks (no structure attack for a sequence model).
-SEQ_EVAL_TRACKS = list(EVAL_TRACKS)
+# Paradigm-relevant attacks for a sequence model (no structure attack -- no graph).
+# Covers the three behaviour-preserving attacker axes plus a realistic worst case:
+#   unigram_attack        = rename, Tier-1 (meaning-preserving synonyms/suffix)
+#   random_rename_attack  = rename, Tier-2 (out-of-context, misleading names)
+#   reorder_attack        = pure reorder (shuffle the SAME calls, insert nothing)
+#   bigram_attack         = distribute/interleave (insert benign calls between real ones)
+#   combined_all_attack   = rename + reorder + distribute (all three at once)
+SEQ_EVAL_TRACKS = [
+    "clean",
+    "unigram_attack",
+    "random_rename_attack",
+    "reorder_attack",
+    "bigram_attack",
+    "combined_all_attack",
+]
 
 # --- BiLSTM hyperparameters ---
 SEQ_EPOCHS = 40
