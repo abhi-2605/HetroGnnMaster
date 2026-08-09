@@ -1,331 +1,331 @@
 sample_id,graph_path,label,class_name,origin,is_new_unseen
-80,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/80.pkl,1,Benign,old_test,False
-760,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/760.pkl,1,Benign,old_val,False
-713,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/713.pkl,1,Benign,old_test,False
-686,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/686.pkl,1,Benign,old_test,False
-786,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/786.pkl,1,Benign,old_test,False
-12f24fe99e5a19454233e71ce00f3133,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/12f24fe99e5a19454233e71ce00f3133.pkl,1,Benign,old_test,False
-820,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/820.pkl,1,Benign,old_val,False
-1de248bf6f4d2e09eddd208199d6e24b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1de248bf6f4d2e09eddd208199d6e24b.pkl,1,Benign,old_test,False
-37efdb65b9cdca9b4c553033c7c1c3d5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/37efdb65b9cdca9b4c553033c7c1c3d5.pkl,1,Benign,old_val,False
-4adaa6bf3e4658045f8c09b75956b83b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4adaa6bf3e4658045f8c09b75956b83b.pkl,1,Benign,old_val,False
-683,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/683.pkl,1,Benign,old_val,False
-9dda048e5bff1e5f233670cfa9bff1a6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/9dda048e5bff1e5f233670cfa9bff1a6.pkl,1,Benign,old_test,False
-557a681676c7a3a3a0d89544c509d633,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/557a681676c7a3a3a0d89544c509d633.pkl,1,Benign,old_val,False
-794,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/794.pkl,1,Benign,old_val,False
-869894ad6f4ce28f9ad8a97e811b3cab,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/869894ad6f4ce28f9ad8a97e811b3cab.pkl,1,Benign,old_val,False
-737,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/737.pkl,1,Benign,old_val,False
-448,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/448.pkl,1,Benign,old_val,False
-cacdd86923e9b9572fe804153de3be2a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/cacdd86923e9b9572fe804153de3be2a.pkl,1,Benign,old_test,False
-517,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/517.pkl,1,Benign,old_test,False
-886,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/886.pkl,1,Benign,old_val,False
-676,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/676.pkl,1,Benign,old_test,False
-785,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/785.pkl,1,Benign,old_test,False
-71bda7eea00c51262ae0533f4d5b9031,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/71bda7eea00c51262ae0533f4d5b9031.pkl,1,Benign,old_val,False
-395329498ce9088cf88cd69db4e3a9e3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/395329498ce9088cf88cd69db4e3a9e3.pkl,1,Benign,old_val,False
-11d6aa42756869d9556d163bba48410c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/11d6aa42756869d9556d163bba48410c.pkl,1,Benign,old_test,False
-e9b42270f9d7c5f8f11c1fccacdda2b8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/e9b42270f9d7c5f8f11c1fccacdda2b8.pkl,1,Benign,old_val,False
-957,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/957.pkl,1,Benign,old_test,False
-924,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/924.pkl,1,Benign,old_test,False
-605,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/605.pkl,1,Benign,old_val,False
-28365ecba0ca27c85634e8747b147730,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/28365ecba0ca27c85634e8747b147730.pkl,1,Benign,old_val,False
-108,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/108.pkl,1,Benign,old_test,False
-4e5c4aa1d85573783c78f3b7dbfe13d1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4e5c4aa1d85573783c78f3b7dbfe13d1.pkl,1,Benign,old_test,False
-04da78a30dbcf24f7ede52098c831316,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/04da78a30dbcf24f7ede52098c831316.pkl,1,Benign,old_test,False
-843,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/843.pkl,1,Benign,old_test,False
-1025,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1025.pkl,1,Benign,old_val,False
-61,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/61.pkl,1,Benign,old_test,False
-73f084d9113acb59c4009027d5fcf946,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/73f084d9113acb59c4009027d5fcf946.pkl,1,Benign,old_val,False
-7dc38c40c521f8f57b961c1fc1f808e5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7dc38c40c521f8f57b961c1fc1f808e5.pkl,1,Benign,old_test,False
-250,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/250.pkl,1,Benign,old_test,False
-122bf2c198bfb6f225b5f1a5d0a09733,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/122bf2c198bfb6f225b5f1a5d0a09733.pkl,1,Benign,old_val,False
-1008,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1008.pkl,1,Benign,old_test,False
-d711551959e05bf683e163378de2492e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/d711551959e05bf683e163378de2492e.pkl,1,Benign,old_val,False
-ecf4df5c442e1ff302473aa13a9f1c5c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/ecf4df5c442e1ff302473aa13a9f1c5c.pkl,1,Benign,old_val,False
-749,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/749.pkl,1,Benign,old_test,False
-3abc6454998cdf94293df652aa4b5080,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3abc6454998cdf94293df652aa4b5080.pkl,1,Benign,old_test,False
-405,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/405.pkl,1,Benign,old_val,False
-556,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/556.pkl,1,Benign,old_val,False
-553a2deead3671112db16f78328b28d5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/553a2deead3671112db16f78328b28d5.pkl,1,Benign,old_test,False
-106,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/106.pkl,1,Benign,old_test,False
-784,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/784.pkl,1,Benign,old_test,False
-a30897c37b12adf4d834791575d8e144,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a30897c37b12adf4d834791575d8e144.pkl,1,Benign,old_val,False
-7c37dc92088ae9ec102df7a4e4cf5aba,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7c37dc92088ae9ec102df7a4e4cf5aba.pkl,1,Benign,old_test,False
-504,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/504.pkl,1,Benign,old_test,False
-9d22d08179c8e9f3c68538fc38bbab24,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/9d22d08179c8e9f3c68538fc38bbab24.pkl,1,Benign,old_val,False
-753da24067a9978bd64d969ffaf6bb99,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/753da24067a9978bd64d969ffaf6bb99.pkl,1,Benign,old_val,False
-f9232ff1163607043624c77423766563,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/f9232ff1163607043624c77423766563.pkl,1,Benign,old_val,False
-446,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/446.pkl,1,Benign,old_test,False
-404,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/404.pkl,1,Benign,old_test,False
-365,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/365.pkl,1,Benign,old_val,False
-ff6ab174de694c751fe456fe93dadb36,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/ff6ab174de694c751fe456fe93dadb36.pkl,1,Benign,old_test,False
-123,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/123.pkl,1,Benign,old_test,False
-5dd5d6bc3a1b5c01b8d4503b8116477b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5dd5d6bc3a1b5c01b8d4503b8116477b.pkl,1,Benign,old_val,False
-ef760c4bf254b378c6ff60293b505130,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/ef760c4bf254b378c6ff60293b505130.pkl,1,Benign,old_val,False
-994,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/994.pkl,1,Benign,old_test,False
-770,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/770.pkl,1,Benign,old_val,False
-b2f3a33416a83666a59470539e9d3701,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/b2f3a33416a83666a59470539e9d3701.pkl,1,Benign,old_val,False
-330,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/330.pkl,1,Benign,old_val,False
-12e28cbd887cf4e6ae6c37a476a219f9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/12e28cbd887cf4e6ae6c37a476a219f9.pkl,1,Benign,old_test,False
-8980f26386a9568c36a43ad7f8eba068,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/8980f26386a9568c36a43ad7f8eba068.pkl,1,Benign,old_test,False
-223670e086632a1b7057f25b8a2c593c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/223670e086632a1b7057f25b8a2c593c.pkl,1,Benign,old_test,False
-771,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/771.pkl,1,Benign,old_val,False
-20bdd6a4e641aa3769aeb8722f92bde1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/20bdd6a4e641aa3769aeb8722f92bde1.pkl,1,Benign,old_test,False
-49,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/49.pkl,1,Benign,old_test,False
-087012822b313c7f013d3f22de33e3ac,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/087012822b313c7f013d3f22de33e3ac.pkl,1,Benign,old_test,False
-715,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/715.pkl,1,Benign,old_val,False
-246a819e549cd1bc998109e9c6b7d70d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/246a819e549cd1bc998109e9c6b7d70d.pkl,1,Benign,old_test,False
-62f170fb07fdbb79ceb7147101406eb8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/62f170fb07fdbb79ceb7147101406eb8.pkl,1,Benign,old_val,False
-58,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/58.pkl,1,Benign,old_test,False
-524,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/524.pkl,1,Benign,old_test,False
-502,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/502.pkl,1,Benign,old_test,False
-736,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/736.pkl,1,Benign,old_val,False
-110,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/110.pkl,1,Benign,old_val,False
-18,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/18.pkl,1,Benign,old_test,False
-f3b146b2fb2333c834c269d51b57e585,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/f3b146b2fb2333c834c269d51b57e585.pkl,1,Benign,old_val,False
-689,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/689.pkl,1,Benign,old_test,False
-1003,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1003.pkl,1,Benign,old_val,False
-861,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/861.pkl,1,Benign,old_test,False
-838,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/838.pkl,1,Benign,old_test,False
-550,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/550.pkl,1,Benign,old_test,False
-703,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/703.pkl,1,Benign,old_test,False
-fa7f5f109ba8a36817991e10880cb022,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/fa7f5f109ba8a36817991e10880cb022.pkl,1,Benign,old_test,False
-1030,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1030.pkl,1,Benign,old_test,False
-2f0050f870b2d49e0880334e4938d528,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2f0050f870b2d49e0880334e4938d528.pkl,1,Benign,old_val,False
-7794ed8826feda17f1044cc501463f55,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7794ed8826feda17f1044cc501463f55.pkl,1,Benign,old_val,False
-643,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/643.pkl,1,Benign,old_val,False
-b6850fbaf0652ebe3a0bb5a54932b834,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/b6850fbaf0652ebe3a0bb5a54932b834.pkl,1,Benign,old_test,False
-c07434de6dd55e765bf9d05aaf451d4e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/c07434de6dd55e765bf9d05aaf451d4e.pkl,1,Benign,old_test,False
-d1f18962d1720d342993d0f26e96ddae,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/d1f18962d1720d342993d0f26e96ddae.pkl,1,Benign,old_test,False
-831,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/831.pkl,1,Benign,old_test,False
-8bfc3272bd408849393cbfc58a06e670,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/8bfc3272bd408849393cbfc58a06e670.pkl,1,Benign,old_test,False
-b665733ffa2575cf55fe735b4dbe4daf,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/b665733ffa2575cf55fe735b4dbe4daf.pkl,1,Benign,old_val,False
-4a5efb20daee57d1ca64637c24fac8b7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4a5efb20daee57d1ca64637c24fac8b7.pkl,1,Benign,old_val,False
-819,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/819.pkl,1,Benign,old_val,False
-937,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/937.pkl,1,Benign,old_val,False
-852c065deaf53c02c37ca13a3cc61173,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/852c065deaf53c02c37ca13a3cc61173.pkl,1,Benign,old_val,False
-855,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/855.pkl,1,Benign,old_test,False
-414,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/414.pkl,1,Benign,old_val,False
-9a6089ee909d0f4d20a3e03dc1d681ac,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/9a6089ee909d0f4d20a3e03dc1d681ac.pkl,1,Benign,old_test,False
-c2938eb5ff932c2540a1514cc82c197c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/c2938eb5ff932c2540a1514cc82c197c.pkl,1,Benign,old_test,False
-954,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/954.pkl,1,Benign,old_test,False
-88f59fa501e1f34ddadaa7ad2e5c3bab,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/88f59fa501e1f34ddadaa7ad2e5c3bab.pkl,1,Benign,old_val,False
-8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/8.pkl,1,Benign,old_val,False
-063875d1549af53b587a829456b7f716,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/063875d1549af53b587a829456b7f716.pkl,1,Benign,old_val,False
-495,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/495.pkl,1,Benign,old_val,False
-322,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/322.pkl,1,Benign,old_val,False
-126a8c1643b2b3834b03ec69713dcc12,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/126a8c1643b2b3834b03ec69713dcc12.pkl,1,Benign,old_val,False
-bb03388131338158ea92b5408533a974,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/bb03388131338158ea92b5408533a974.pkl,1,Benign,old_val,False
-34,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/34.pkl,1,Benign,old_test,False
-103af5dafe7b1dda9494d94ce3337a4b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/103af5dafe7b1dda9494d94ce3337a4b.pkl,1,Benign,old_val,False
-328,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/328.pkl,1,Benign,old_test,False
-20af57bfff931229046ff52d2b2c7797,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/20af57bfff931229046ff52d2b2c7797.pkl,1,Benign,old_val,False
-5fc944b96b19ee35265e7578151160e6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5fc944b96b19ee35265e7578151160e6.pkl,1,Benign,old_val,False
-453,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/453.pkl,1,Benign,old_val,False
-371,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/371.pkl,1,Benign,old_val,False
-590,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/590.pkl,1,Benign,old_val,False
-484,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/484.pkl,1,Benign,old_test,False
-5af6b376e660805759683865437acbc0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5af6b376e660805759683865437acbc0.pkl,1,Benign,old_test,False
-57cac848fa14ae38f14f9441f8933282,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/57cac848fa14ae38f14f9441f8933282.pkl,1,Benign,old_val,False
-551,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/551.pkl,1,Benign,old_val,False
-964,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/964.pkl,1,Benign,old_val,False
-153,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/153.pkl,1,Benign,old_test,False
-0e1c3a6ee3a05b5c4cd3d43fce8311a1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0e1c3a6ee3a05b5c4cd3d43fce8311a1.pkl,1,Benign,old_test,False
-712,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/712.pkl,1,Benign,old_test,False
-22328ba82ec2642ca0fda742146a8477,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/22328ba82ec2642ca0fda742146a8477.pkl,1,Benign,old_test,False
-623,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/623.pkl,1,Benign,old_test,False
-530ebb87a01526c10197a23a3f33a5d5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/530ebb87a01526c10197a23a3f33a5d5.pkl,1,Benign,old_test,False
-7366668cc7eaa1068a38cc2761217fc4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7366668cc7eaa1068a38cc2761217fc4.pkl,1,Benign,old_test,False
-916,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/916.pkl,1,Benign,old_val,False
-244f3a79c653e7ed3c327f44d48bc8a7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/244f3a79c653e7ed3c327f44d48bc8a7.pkl,1,Benign,old_test,False
-a4414c6f58e30651d09643e7ef54ecf8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a4414c6f58e30651d09643e7ef54ecf8.pkl,1,Benign,old_val,False
-246,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/246.pkl,1,Benign,old_val,False
-817cb2d8d2f58648b7728b0c7c47c3d8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/817cb2d8d2f58648b7728b0c7c47c3d8.pkl,1,Benign,old_test,False
-70e9bf498059d6d966bccb5ff683bfef,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/70e9bf498059d6d966bccb5ff683bfef.pkl,1,Benign,old_test,False
-5cdf106bf92c65c5b73e4c87138a85df,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5cdf106bf92c65c5b73e4c87138a85df.pkl,1,Benign,old_test,False
-f2867bee7180cdc839f7636fddc1aa74,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/f2867bee7180cdc839f7636fddc1aa74.pkl,1,Benign,old_val,False
-874,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/874.pkl,1,Benign,old_val,False
-948,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/948.pkl,1,Benign,old_val,False
-304,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/304.pkl,1,Benign,old_val,False
-bfd6a7765dd0ead7bc8f89a55b5481ee,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/bfd6a7765dd0ead7bc8f89a55b5481ee.pkl,1,Benign,old_test,False
-ab0a854e7740a4e78e3e5e5e380353fa,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/ab0a854e7740a4e78e3e5e5e380353fa.pkl,1,Benign,old_val,False
-b8c801810a69845dcd8dee13703f97ac,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/b8c801810a69845dcd8dee13703f97ac.pkl,1,Benign,old_test,False
-f2e6c09bc48f5496523731d4ce3abdec,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/f2e6c09bc48f5496523731d4ce3abdec.pkl,1,Benign,old_test,False
-dda22b0cee0e7f742a5c4696e3b5a804,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/dda22b0cee0e7f742a5c4696e3b5a804.pkl,1,Benign,old_test,False
-442,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/442.pkl,1,Benign,old_val,False
-214,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/214.pkl,1,Benign,old_val,False
-768,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/768.pkl,1,Benign,old_val,False
-288,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/288.pkl,1,Benign,old_val,False
-86c18dfb8b30d7000a80b226dc57eaf4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/86c18dfb8b30d7000a80b226dc57eaf4.pkl,1,Benign,old_val,False
-368,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/368.pkl,1,Benign,old_test,False
-748,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/748.pkl,1,Benign,old_val,False
-391,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/391.pkl,1,Benign,old_val,False
-863,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/863.pkl,1,Benign,old_test,False
-298,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/298.pkl,1,Benign,old_val,False
-432f47f1e4b8d108d61526746b83af5c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/432f47f1e4b8d108d61526746b83af5c.pkl,1,Benign,old_test,False
-66,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/66.pkl,1,Benign,old_test,False
-696,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/696.pkl,1,Benign,old_val,False
-14,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/14.pkl,1,Benign,old_test,False
-606,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/606.pkl,1,Benign,old_test,False
-341,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/341.pkl,1,Benign,old_test,False
-347,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/347.pkl,1,Benign,old_test,False
-47245e8bba1b1ed68913c1a6c9d9ced7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/47245e8bba1b1ed68913c1a6c9d9ced7.pkl,1,Benign,old_val,False
-a56ea46b5530e60b1291eb41a63da229,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a56ea46b5530e60b1291eb41a63da229.pkl,1,Benign,old_val,False
-527,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/527.pkl,1,Benign,old_test,False
-615a6d10b80a821a293ef54935ef2cb5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/615a6d10b80a821a293ef54935ef2cb5.pkl,1,Benign,old_val,False
-953,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/953.pkl,1,Benign,old_val,False
-54607769283c879872c44cfef857806e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/54607769283c879872c44cfef857806e.pkl,1,Benign,old_test,False
-86fca7f150ddf96047ff35f3e39c63af,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/86fca7f150ddf96047ff35f3e39c63af.pkl,1,Benign,old_test,False
-63,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/63.pkl,1,Benign,old_test,False
-735,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/735.pkl,1,Benign,old_val,False
-120,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/120.pkl,1,Benign,old_val,False
-156,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/156.pkl,1,Benign,old_val,False
-1c1f8ed7316852f8248c62e0bd199c01,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1c1f8ed7316852f8248c62e0bd199c01.pkl,1,Benign,old_test,False
-5ab171e34ae233588334898964713652,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5ab171e34ae233588334898964713652.pkl,1,Benign,old_val,False
-10,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/10.pkl,1,Benign,old_test,False
-717,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/717.pkl,1,Benign,old_test,False
-a3f4107c68215616cebb0d787f66bcc9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/a3f4107c68215616cebb0d787f66bcc9.pkl,1,Benign,old_test,False
-4779f59e00bcb80826e3deb3fb4af52a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4779f59e00bcb80826e3deb3fb4af52a.pkl,1,Benign,old_val,False
-bc41c25862628aaac0221baa51175d8a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/bc41c25862628aaac0221baa51175d8a.pkl,1,Benign,old_val,False
-cc9d0697280c3a2bc93818be2074a2be,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/cc9d0697280c3a2bc93818be2074a2be.pkl,1,Benign,old_val,False
-dcaa9fd0f6da052f09bcaad87a2db219,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/dcaa9fd0f6da052f09bcaad87a2db219.pkl,1,Benign,old_test,False
-a1ee8b242045a6dd67d5067ac8045817,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/a1ee8b242045a6dd67d5067ac8045817.pkl,1,Benign,old_test,False
-613,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/613.pkl,1,Benign,old_test,False
-ec5c49f9fa8d871d1937148b9f55f01c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/ec5c49f9fa8d871d1937148b9f55f01c.pkl,1,Benign,old_test,False
-1023,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1023.pkl,1,Benign,old_val,False
-849,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/849.pkl,1,Benign,old_test,False
-586,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/586.pkl,1,Benign,old_test,False
-edcb816abe6bafd8db69d42692f0cbce,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/edcb816abe6bafd8db69d42692f0cbce.pkl,1,Benign,old_test,False
-136,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/136.pkl,1,Benign,old_val,False
-10287b93c2805618649e4cedf0268d4d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/10287b93c2805618649e4cedf0268d4d.pkl,1,Benign,old_val,False
-487,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/487.pkl,1,Benign,old_test,False
-1d4aa1768f9c7993d2e44f9693007bce,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1d4aa1768f9c7993d2e44f9693007bce.pkl,2,Other Malware,old_test,False
-91f34fb90adfd8581df9a25f7cb8a26c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/91f34fb90adfd8581df9a25f7cb8a26c.pkl,2,Other Malware,old_val,False
-2daf7dc5aee2ddcfba764e06a7afc399,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2daf7dc5aee2ddcfba764e06a7afc399.pkl,2,Other Malware,old_val,False
-54f27af5a5c85f867bd7f32f3121a527,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/54f27af5a5c85f867bd7f32f3121a527.pkl,2,Other Malware,old_test,False
-2314b150d8323f75243b6b76c8e07035,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2314b150d8323f75243b6b76c8e07035.pkl,2,Other Malware,old_val,False
-24f7c986e116ef085c3a7951c83a7c6d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/24f7c986e116ef085c3a7951c83a7c6d.pkl,2,Other Malware,old_test,False
-55409478a5b6b3dfd05cfd6fda47c519,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/55409478a5b6b3dfd05cfd6fda47c519.pkl,2,Other Malware,old_test,False
-eb4520b6cfc766821a2d6e155662ac41,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/eb4520b6cfc766821a2d6e155662ac41.pkl,2,Other Malware,old_val,False
-02c47fbc74c852f02f590a026f01c026,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/02c47fbc74c852f02f590a026f01c026.pkl,2,Other Malware,old_test,False
-043a1b5c2434b04a1b7156fc17dd2d6b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/043a1b5c2434b04a1b7156fc17dd2d6b.pkl,2,Other Malware,old_test,False
-e80e8ded001cba45724cd4e1b61c8dff,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/e80e8ded001cba45724cd4e1b61c8dff.pkl,2,Other Malware,old_val,False
-63c74e45cb4ba38e8ba6089425a6abd8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/63c74e45cb4ba38e8ba6089425a6abd8.pkl,2,Other Malware,old_val,False
-3c8c5b3d8c8fd65bf989f496df5e7002,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3c8c5b3d8c8fd65bf989f496df5e7002.pkl,2,Other Malware,old_test,False
-162314abb4b14186ecccf56ec2a5357c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/162314abb4b14186ecccf56ec2a5357c.pkl,2,Other Malware,old_test,False
-385d26128a2c117a2dda6c14dec840ed,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/385d26128a2c117a2dda6c14dec840ed.pkl,2,Other Malware,old_val,False
-7ac12d1984fedffd41b007fa48a8ec58,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7ac12d1984fedffd41b007fa48a8ec58.pkl,2,Other Malware,old_val,False
-7e1bdb2a312ea72c16e658fed46d7904,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7e1bdb2a312ea72c16e658fed46d7904.pkl,2,Other Malware,old_val,False
-10374da5b8dc4168e3c7661f06d18d0f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/10374da5b8dc4168e3c7661f06d18d0f.pkl,2,Other Malware,old_test,False
-3c4772eb0ec7cba088378e6a3c39e2ed,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/3c4772eb0ec7cba088378e6a3c39e2ed.pkl,2,Other Malware,old_val,False
-60fb3eabca9c9ac29f92ebf72f543c80,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/60fb3eabca9c9ac29f92ebf72f543c80.pkl,2,Other Malware,old_test,False
-776657d7620fba66c6e299ee531a7fef,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/776657d7620fba66c6e299ee531a7fef.pkl,2,Other Malware,old_val,False
-29c2621f92f6a31c4af833fb85cf0d50,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/29c2621f92f6a31c4af833fb85cf0d50.pkl,2,Other Malware,old_test,False
-1095409eb627f6dc3d3a99333fbc5363,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1095409eb627f6dc3d3a99333fbc5363.pkl,2,Other Malware,old_val,False
-c1b315f1e6f1a47b50ad8cd8825974d9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/c1b315f1e6f1a47b50ad8cd8825974d9.pkl,2,Other Malware,old_test,False
-d5d37c2522cb38a6b8bc60571ae13713,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/d5d37c2522cb38a6b8bc60571ae13713.pkl,2,Other Malware,old_test,False
-1ae6aaae7384dc8fab24cfcdfc1c4c00,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1ae6aaae7384dc8fab24cfcdfc1c4c00.pkl,2,Other Malware,old_test,False
-6112b2a840718b2cd97652c448d97a2d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/6112b2a840718b2cd97652c448d97a2d.pkl,2,Other Malware,old_test,False
-0d2f0b82e30fc58a0c5ea949b8d3b35d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0d2f0b82e30fc58a0c5ea949b8d3b35d.pkl,2,Other Malware,old_test,False
-35ac8b686068cbf05b7326d767e7731a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/35ac8b686068cbf05b7326d767e7731a.pkl,2,Other Malware,old_test,False
-1963a49d71f298c889228b79bcb6b3f2,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1963a49d71f298c889228b79bcb6b3f2.pkl,2,Other Malware,old_val,False
-8039c88f00de24e93a404e935339782a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/8039c88f00de24e93a404e935339782a.pkl,2,Other Malware,old_test,False
-7882a2e5895b99d912b35a79b5cb2432,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7882a2e5895b99d912b35a79b5cb2432.pkl,2,Other Malware,old_test,False
-cbad3ba490f8af351e68bd1c087032fc,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/cbad3ba490f8af351e68bd1c087032fc.pkl,2,Other Malware,old_val,False
-0ed4554e724510eabfaab654e7da90b4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0ed4554e724510eabfaab654e7da90b4.pkl,2,Other Malware,old_test,False
-dab5d970f5261b346185007f25d3e5db,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/dab5d970f5261b346185007f25d3e5db.pkl,2,Other Malware,old_test,False
-b82f453f91e18565385e4a7126506fa2,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/b82f453f91e18565385e4a7126506fa2.pkl,2,Other Malware,old_test,False
-20b5dd1a2b464dd14b77a70029bb78b5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/20b5dd1a2b464dd14b77a70029bb78b5.pkl,2,Other Malware,old_val,False
-e284b66376391635fbe1fe3aef5afa29,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/e284b66376391635fbe1fe3aef5afa29.pkl,2,Other Malware,old_val,False
-apt_181,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/apt_181.pkl,2,Other Malware,old_val,False
-35215bac13155d05d769b0311cc4f2e5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/35215bac13155d05d769b0311cc4f2e5.pkl,2,Other Malware,old_val,False
-1ce5e995272f8e529fe7cdde7eb14811,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1ce5e995272f8e529fe7cdde7eb14811.pkl,2,Other Malware,old_test,False
-3676ee22338579fe958c9bfde870f980,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/3676ee22338579fe958c9bfde870f980.pkl,2,Other Malware,old_val,False
-0f8064af9d8b3f11b1943d94f3f11f32,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0f8064af9d8b3f11b1943d94f3f11f32.pkl,2,Other Malware,old_test,False
-1bed6e89ea69083f86806923661d7b48,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1bed6e89ea69083f86806923661d7b48.pkl,2,Other Malware,old_val,False
-580050ce066f47515e94d370f3e1236d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/580050ce066f47515e94d370f3e1236d.pkl,2,Other Malware,old_test,False
-252c1dcdc76209358f4fc12d45d49a5a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/252c1dcdc76209358f4fc12d45d49a5a.pkl,2,Other Malware,old_test,False
-3488a3e29270d906e570e4129b45fcbb,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/3488a3e29270d906e570e4129b45fcbb.pkl,2,Other Malware,old_val,False
-4782ce31ef42706a4673e31c203cf7b6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4782ce31ef42706a4673e31c203cf7b6.pkl,2,Other Malware,old_test,False
-ff68cd00b926bb11a23ed6f2647d85f3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/ff68cd00b926bb11a23ed6f2647d85f3.pkl,2,Other Malware,old_val,False
-349fc5f381d1e4a23b4b6060a1c87baf,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/349fc5f381d1e4a23b4b6060a1c87baf.pkl,2,Other Malware,old_test,False
-654315297a795b3cd81a37c4f71ceba5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/654315297a795b3cd81a37c4f71ceba5.pkl,2,Other Malware,old_val,False
-f821a8e1e66edfa96f0d5c2359b51354,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/f821a8e1e66edfa96f0d5c2359b51354.pkl,2,Other Malware,old_test,False
-902ea409fd996e4f0cbfaecc26d78b5b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/902ea409fd996e4f0cbfaecc26d78b5b.pkl,2,Other Malware,old_test,False
-ac1dca700016b5e7552cbc765b5d0f22,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/ac1dca700016b5e7552cbc765b5d0f22.pkl,2,Other Malware,old_test,False
-0a802a5d66c1dd5b817f22c5f541c9b0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0a802a5d66c1dd5b817f22c5f541c9b0.pkl,2,Other Malware,old_test,False
-0532e250400ded8515f6d042d388ff07,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/0532e250400ded8515f6d042d388ff07.pkl,0,Ransomware,old_val,False
-08eedaa70ca384e76b4eac39ff2683e1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/08eedaa70ca384e76b4eac39ff2683e1.pkl,0,Ransomware,old_val,False
-0dd4bcb59beff511516725118e7b2f80,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/0dd4bcb59beff511516725118e7b2f80.pkl,0,Ransomware,old_val,False
-0f4cb4b34c4e8d75da02bf6536ec8563,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/0f4cb4b34c4e8d75da02bf6536ec8563.pkl,0,Ransomware,old_val,False
-136b3af29063f6c2f76b6e4ef6d3a755,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/136b3af29063f6c2f76b6e4ef6d3a755.pkl,0,Ransomware,old_val,False
-15572d97a140d38192e33442fbe9400d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/15572d97a140d38192e33442fbe9400d.pkl,0,Ransomware,old_val,False
-188561cadd5e63bdf5092929a551c35d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/188561cadd5e63bdf5092929a551c35d.pkl,0,Ransomware,old_val,False
-1886d05c64e5cb9325439782fe7f6556,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1886d05c64e5cb9325439782fe7f6556.pkl,0,Ransomware,old_val,False
-19ebbd5eb5fdb062a3c356dc535ca012,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/19ebbd5eb5fdb062a3c356dc535ca012.pkl,0,Ransomware,old_val,False
-1a14e7fcdb5666ffbd0005db70eeda45,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1a14e7fcdb5666ffbd0005db70eeda45.pkl,0,Ransomware,old_val,False
-1b68729f1f03c3d82b13abe38599f6c3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1b68729f1f03c3d82b13abe38599f6c3.pkl,0,Ransomware,old_val,False
-1c74690ed0ad28f73f1aa9c4e71ccafa,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1c74690ed0ad28f73f1aa9c4e71ccafa.pkl,0,Ransomware,old_val,False
-1eb6ba04fc00da6202d505930e427fc7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1eb6ba04fc00da6202d505930e427fc7.pkl,0,Ransomware,old_val,False
-1ffe7f8af56971a0710d6390231ed209,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1ffe7f8af56971a0710d6390231ed209.pkl,0,Ransomware,old_val,False
-2903e2c448e129fb0b09c1534d204c4a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2903e2c448e129fb0b09c1534d204c4a.pkl,0,Ransomware,old_val,False
-29660cb68690bad4dcc65345ea8727e7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/29660cb68690bad4dcc65345ea8727e7.pkl,0,Ransomware,old_val,False
-2d6aee94b05bf693e6d9ebc21fbfe128,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2d6aee94b05bf693e6d9ebc21fbfe128.pkl,0,Ransomware,old_val,False
-3185e6f627a6edca6bfb88f9cefa342d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/3185e6f627a6edca6bfb88f9cefa342d.pkl,0,Ransomware,old_val,False
-32b2c4fee38c01ca95c97c9b74b8b03d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/32b2c4fee38c01ca95c97c9b74b8b03d.pkl,0,Ransomware,old_val,False
-39684bb790b573d72dbce03f3607a31c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/39684bb790b573d72dbce03f3607a31c.pkl,0,Ransomware,old_val,False
-423ae24af438c46867d159a3247eea5d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/423ae24af438c46867d159a3247eea5d.pkl,0,Ransomware,old_val,False
-4dc6d0458f28d18b48cc41912c6282de,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4dc6d0458f28d18b48cc41912c6282de.pkl,0,Ransomware,old_val,False
-4edcdef4bf23b658964691bfc3c45537,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4edcdef4bf23b658964691bfc3c45537.pkl,0,Ransomware,old_val,False
-5941b3656aa230b2ce15f90835d48f7c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5941b3656aa230b2ce15f90835d48f7c.pkl,0,Ransomware,old_val,False
-5a78fad03a10d68ed566ac750ab3ab02,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5a78fad03a10d68ed566ac750ab3ab02.pkl,0,Ransomware,old_val,False
-5aef55d7170521999324f51d62a8ee30,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5aef55d7170521999324f51d62a8ee30.pkl,0,Ransomware,old_val,False
-5c63d44c2997a6b322cb2329552b6ea8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5c63d44c2997a6b322cb2329552b6ea8.pkl,0,Ransomware,old_val,False
-5eedf40d3546eb90b5423ae3ac1d3f32,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5eedf40d3546eb90b5423ae3ac1d3f32.pkl,0,Ransomware,old_val,False
-682ef4f2b66b1e447701fecfad15094c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/682ef4f2b66b1e447701fecfad15094c.pkl,0,Ransomware,old_val,False
-68e367dfd6de0b0a3c00b966423f196a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/68e367dfd6de0b0a3c00b966423f196a.pkl,0,Ransomware,old_val,False
-76d81c7735752088692897a00e529bbb,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/76d81c7735752088692897a00e529bbb.pkl,0,Ransomware,old_val,False
-7a7b798c0772cbbe3654174737d08542,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7a7b798c0772cbbe3654174737d08542.pkl,0,Ransomware,old_val,False
-7b14479b7226662af6beffba4854c2e7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7b14479b7226662af6beffba4854c2e7.pkl,0,Ransomware,old_val,False
-7f7f16a7dfad06ec4504220e4c130015,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7f7f16a7dfad06ec4504220e4c130015.pkl,0,Ransomware,old_val,False
-a95111407437bd851ae651f847b53e90,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a95111407437bd851ae651f847b53e90.pkl,0,Ransomware,old_val,False
-aef03ddd3134451e1efe137fb22e3a0c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/aef03ddd3134451e1efe137fb22e3a0c.pkl,0,Ransomware,old_val,False
-09b06fa3f1fadb21006c1fa79c75c536,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/09b06fa3f1fadb21006c1fa79c75c536.pkl,0,Ransomware,old_test,False
-0c7e59536a7be4a446bbe8b4f22e5880,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0c7e59536a7be4a446bbe8b4f22e5880.pkl,0,Ransomware,old_test,False
-109d60fbb4b1857429fc8019c800307b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/109d60fbb4b1857429fc8019c800307b.pkl,0,Ransomware,old_test,False
-10e9683de04292c617d2fba5b64a6b2f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/10e9683de04292c617d2fba5b64a6b2f.pkl,0,Ransomware,old_test,False
-1491e513fe739d64a3965d01758d97c6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1491e513fe739d64a3965d01758d97c6.pkl,0,Ransomware,old_test,False
-1705bd6b4c7a2fa4a046c5a7b2a0a8f6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1705bd6b4c7a2fa4a046c5a7b2a0a8f6.pkl,0,Ransomware,old_test,False
-184bb34d632aa3d52f23f4315918eb29,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/184bb34d632aa3d52f23f4315918eb29.pkl,0,Ransomware,old_test,False
-202bf9be9a4e45526e482f08104717ad,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/202bf9be9a4e45526e482f08104717ad.pkl,0,Ransomware,old_test,False
-2198677d22dd71f9e6108da020da059d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2198677d22dd71f9e6108da020da059d.pkl,0,Ransomware,old_test,False
-229d05ae6fa046339d34419216dd3bae,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/229d05ae6fa046339d34419216dd3bae.pkl,0,Ransomware,old_test,False
-243852fce02f4f7d77949d75ccfddbac,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/243852fce02f4f7d77949d75ccfddbac.pkl,0,Ransomware,old_test,False
-24ad1ac3ddd67f08cbdd26803b5539a1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/24ad1ac3ddd67f08cbdd26803b5539a1.pkl,0,Ransomware,old_test,False
-28c80c4739056f200818d221ddf5a496,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/28c80c4739056f200818d221ddf5a496.pkl,0,Ransomware,old_test,False
-2b744b113946f905a9526f9fb82b22d3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2b744b113946f905a9526f9fb82b22d3.pkl,0,Ransomware,old_test,False
-2e366bdc80e31e7678bf0681b8b6370c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2e366bdc80e31e7678bf0681b8b6370c.pkl,0,Ransomware,old_test,False
-2fc3b46c7be1a14ea7382cc8e85bfa96,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2fc3b46c7be1a14ea7382cc8e85bfa96.pkl,0,Ransomware,old_test,False
-34074a625609e156de42ca6e0405edb9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/34074a625609e156de42ca6e0405edb9.pkl,0,Ransomware,old_test,False
-3521e879e8068fc25d117365e11ff4f9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3521e879e8068fc25d117365e11ff4f9.pkl,0,Ransomware,old_test,False
-364d2445adf7be2c8e4fee906483c5cf,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/364d2445adf7be2c8e4fee906483c5cf.pkl,0,Ransomware,old_test,False
-3b36e0a2392ffec8ae656a95f56826ff,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3b36e0a2392ffec8ae656a95f56826ff.pkl,0,Ransomware,old_test,False
-3fb1b0800b4dbd0e19cb1aaebb6f4236,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3fb1b0800b4dbd0e19cb1aaebb6f4236.pkl,0,Ransomware,old_test,False
-4559d59bef79c762fccffb4b046f17cf,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4559d59bef79c762fccffb4b046f17cf.pkl,0,Ransomware,old_test,False
-48a673157da3940244ce0dfb3ecb58e9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/48a673157da3940244ce0dfb3ecb58e9.pkl,0,Ransomware,old_test,False
-497e558b37fd98ae27fc693a77eab16c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/497e558b37fd98ae27fc693a77eab16c.pkl,0,Ransomware,old_test,False
-4ba68cd8615429da8cc535515fbea549,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4ba68cd8615429da8cc535515fbea549.pkl,0,Ransomware,old_test,False
-55b3af46b98029adda05ef83baa0dc73,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/55b3af46b98029adda05ef83baa0dc73.pkl,0,Ransomware,old_test,False
-5a01c407a8be2ac6a004d2c40a75264e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5a01c407a8be2ac6a004d2c40a75264e.pkl,0,Ransomware,old_test,False
-5e7f1934bdbb4b4cd6bc30f49e455dc3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5e7f1934bdbb4b4cd6bc30f49e455dc3.pkl,0,Ransomware,old_test,False
-5f411ecddf2844721b48b6dc6aa19f3c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5f411ecddf2844721b48b6dc6aa19f3c.pkl,0,Ransomware,old_test,False
-61c897f5e326b166e160d63056d402a4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/61c897f5e326b166e160d63056d402a4.pkl,0,Ransomware,old_test,False
-6aa468aad5cfed969149dcaca4034b88,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/6aa468aad5cfed969149dcaca4034b88.pkl,0,Ransomware,old_test,False
-71a977bf33620055a7c2c6a273ef709c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/71a977bf33620055a7c2c6a273ef709c.pkl,0,Ransomware,old_test,False
-7354dde28d10e406b535677f6a43a98d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7354dde28d10e406b535677f6a43a98d.pkl,0,Ransomware,old_test,False
-73e2b69d759b9969300776c75f61c295,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/73e2b69d759b9969300776c75f61c295.pkl,0,Ransomware,old_test,False
-7909f4fb49579ad2df48f10d65804e49,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7909f4fb49579ad2df48f10d65804e49.pkl,0,Ransomware,old_test,False
-7ab0b603e4f2e8925928862ed32ec8d6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7ab0b603e4f2e8925928862ed32ec8d6.pkl,0,Ransomware,old_test,False
-a6e69950b93c9769188f2ff2bead52da,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/a6e69950b93c9769188f2ff2bead52da.pkl,0,Ransomware,old_test,False
-eaef25ab1f59492ffc735a386294b69f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/eaef25ab1f59492ffc735a386294b69f.pkl,0,Ransomware,old_test,False
-ef0aafefa653a36a33a9a8469f1e8159,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/ef0aafefa653a36a33a9a8469f1e8159.pkl,0,Ransomware,old_test,False
+80,/workspace/data/cache/enriched/test/80.pkl,1,Benign,old_test,False
+760,/workspace/data/cache/enriched/val/760.pkl,1,Benign,old_val,False
+713,/workspace/data/cache/enriched/test/713.pkl,1,Benign,old_test,False
+686,/workspace/data/cache/enriched/test/686.pkl,1,Benign,old_test,False
+786,/workspace/data/cache/enriched/test/786.pkl,1,Benign,old_test,False
+12f24fe99e5a19454233e71ce00f3133,/workspace/data/cache/enriched/test/12f24fe99e5a19454233e71ce00f3133.pkl,1,Benign,old_test,False
+820,/workspace/data/cache/enriched/val/820.pkl,1,Benign,old_val,False
+1de248bf6f4d2e09eddd208199d6e24b,/workspace/data/cache/enriched/test/1de248bf6f4d2e09eddd208199d6e24b.pkl,1,Benign,old_test,False
+37efdb65b9cdca9b4c553033c7c1c3d5,/workspace/data/cache/enriched/val/37efdb65b9cdca9b4c553033c7c1c3d5.pkl,1,Benign,old_val,False
+4adaa6bf3e4658045f8c09b75956b83b,/workspace/data/cache/enriched/val/4adaa6bf3e4658045f8c09b75956b83b.pkl,1,Benign,old_val,False
+683,/workspace/data/cache/enriched/val/683.pkl,1,Benign,old_val,False
+9dda048e5bff1e5f233670cfa9bff1a6,/workspace/data/cache/enriched/test/9dda048e5bff1e5f233670cfa9bff1a6.pkl,1,Benign,old_test,False
+557a681676c7a3a3a0d89544c509d633,/workspace/data/cache/enriched/val/557a681676c7a3a3a0d89544c509d633.pkl,1,Benign,old_val,False
+794,/workspace/data/cache/enriched/val/794.pkl,1,Benign,old_val,False
+869894ad6f4ce28f9ad8a97e811b3cab,/workspace/data/cache/enriched/val/869894ad6f4ce28f9ad8a97e811b3cab.pkl,1,Benign,old_val,False
+737,/workspace/data/cache/enriched/val/737.pkl,1,Benign,old_val,False
+448,/workspace/data/cache/enriched/val/448.pkl,1,Benign,old_val,False
+cacdd86923e9b9572fe804153de3be2a,/workspace/data/cache/enriched/test/cacdd86923e9b9572fe804153de3be2a.pkl,1,Benign,old_test,False
+517,/workspace/data/cache/enriched/test/517.pkl,1,Benign,old_test,False
+886,/workspace/data/cache/enriched/val/886.pkl,1,Benign,old_val,False
+676,/workspace/data/cache/enriched/test/676.pkl,1,Benign,old_test,False
+785,/workspace/data/cache/enriched/test/785.pkl,1,Benign,old_test,False
+71bda7eea00c51262ae0533f4d5b9031,/workspace/data/cache/enriched/val/71bda7eea00c51262ae0533f4d5b9031.pkl,1,Benign,old_val,False
+395329498ce9088cf88cd69db4e3a9e3,/workspace/data/cache/enriched/val/395329498ce9088cf88cd69db4e3a9e3.pkl,1,Benign,old_val,False
+11d6aa42756869d9556d163bba48410c,/workspace/data/cache/enriched/test/11d6aa42756869d9556d163bba48410c.pkl,1,Benign,old_test,False
+e9b42270f9d7c5f8f11c1fccacdda2b8,/workspace/data/cache/enriched/val/e9b42270f9d7c5f8f11c1fccacdda2b8.pkl,1,Benign,old_val,False
+957,/workspace/data/cache/enriched/test/957.pkl,1,Benign,old_test,False
+924,/workspace/data/cache/enriched/test/924.pkl,1,Benign,old_test,False
+605,/workspace/data/cache/enriched/val/605.pkl,1,Benign,old_val,False
+28365ecba0ca27c85634e8747b147730,/workspace/data/cache/enriched/val/28365ecba0ca27c85634e8747b147730.pkl,1,Benign,old_val,False
+108,/workspace/data/cache/enriched/test/108.pkl,1,Benign,old_test,False
+4e5c4aa1d85573783c78f3b7dbfe13d1,/workspace/data/cache/enriched/test/4e5c4aa1d85573783c78f3b7dbfe13d1.pkl,1,Benign,old_test,False
+04da78a30dbcf24f7ede52098c831316,/workspace/data/cache/enriched/test/04da78a30dbcf24f7ede52098c831316.pkl,1,Benign,old_test,False
+843,/workspace/data/cache/enriched/test/843.pkl,1,Benign,old_test,False
+1025,/workspace/data/cache/enriched/val/1025.pkl,1,Benign,old_val,False
+61,/workspace/data/cache/enriched/test/61.pkl,1,Benign,old_test,False
+73f084d9113acb59c4009027d5fcf946,/workspace/data/cache/enriched/val/73f084d9113acb59c4009027d5fcf946.pkl,1,Benign,old_val,False
+7dc38c40c521f8f57b961c1fc1f808e5,/workspace/data/cache/enriched/test/7dc38c40c521f8f57b961c1fc1f808e5.pkl,1,Benign,old_test,False
+250,/workspace/data/cache/enriched/test/250.pkl,1,Benign,old_test,False
+122bf2c198bfb6f225b5f1a5d0a09733,/workspace/data/cache/enriched/val/122bf2c198bfb6f225b5f1a5d0a09733.pkl,1,Benign,old_val,False
+1008,/workspace/data/cache/enriched/test/1008.pkl,1,Benign,old_test,False
+d711551959e05bf683e163378de2492e,/workspace/data/cache/enriched/val/d711551959e05bf683e163378de2492e.pkl,1,Benign,old_val,False
+ecf4df5c442e1ff302473aa13a9f1c5c,/workspace/data/cache/enriched/val/ecf4df5c442e1ff302473aa13a9f1c5c.pkl,1,Benign,old_val,False
+749,/workspace/data/cache/enriched/test/749.pkl,1,Benign,old_test,False
+3abc6454998cdf94293df652aa4b5080,/workspace/data/cache/enriched/test/3abc6454998cdf94293df652aa4b5080.pkl,1,Benign,old_test,False
+405,/workspace/data/cache/enriched/val/405.pkl,1,Benign,old_val,False
+556,/workspace/data/cache/enriched/val/556.pkl,1,Benign,old_val,False
+553a2deead3671112db16f78328b28d5,/workspace/data/cache/enriched/test/553a2deead3671112db16f78328b28d5.pkl,1,Benign,old_test,False
+106,/workspace/data/cache/enriched/test/106.pkl,1,Benign,old_test,False
+784,/workspace/data/cache/enriched/test/784.pkl,1,Benign,old_test,False
+a30897c37b12adf4d834791575d8e144,/workspace/data/cache/enriched/val/a30897c37b12adf4d834791575d8e144.pkl,1,Benign,old_val,False
+7c37dc92088ae9ec102df7a4e4cf5aba,/workspace/data/cache/enriched/test/7c37dc92088ae9ec102df7a4e4cf5aba.pkl,1,Benign,old_test,False
+504,/workspace/data/cache/enriched/test/504.pkl,1,Benign,old_test,False
+9d22d08179c8e9f3c68538fc38bbab24,/workspace/data/cache/enriched/val/9d22d08179c8e9f3c68538fc38bbab24.pkl,1,Benign,old_val,False
+753da24067a9978bd64d969ffaf6bb99,/workspace/data/cache/enriched/val/753da24067a9978bd64d969ffaf6bb99.pkl,1,Benign,old_val,False
+f9232ff1163607043624c77423766563,/workspace/data/cache/enriched/val/f9232ff1163607043624c77423766563.pkl,1,Benign,old_val,False
+446,/workspace/data/cache/enriched/test/446.pkl,1,Benign,old_test,False
+404,/workspace/data/cache/enriched/test/404.pkl,1,Benign,old_test,False
+365,/workspace/data/cache/enriched/val/365.pkl,1,Benign,old_val,False
+ff6ab174de694c751fe456fe93dadb36,/workspace/data/cache/enriched/test/ff6ab174de694c751fe456fe93dadb36.pkl,1,Benign,old_test,False
+123,/workspace/data/cache/enriched/test/123.pkl,1,Benign,old_test,False
+5dd5d6bc3a1b5c01b8d4503b8116477b,/workspace/data/cache/enriched/val/5dd5d6bc3a1b5c01b8d4503b8116477b.pkl,1,Benign,old_val,False
+ef760c4bf254b378c6ff60293b505130,/workspace/data/cache/enriched/val/ef760c4bf254b378c6ff60293b505130.pkl,1,Benign,old_val,False
+994,/workspace/data/cache/enriched/test/994.pkl,1,Benign,old_test,False
+770,/workspace/data/cache/enriched/val/770.pkl,1,Benign,old_val,False
+b2f3a33416a83666a59470539e9d3701,/workspace/data/cache/enriched/val/b2f3a33416a83666a59470539e9d3701.pkl,1,Benign,old_val,False
+330,/workspace/data/cache/enriched/val/330.pkl,1,Benign,old_val,False
+12e28cbd887cf4e6ae6c37a476a219f9,/workspace/data/cache/enriched/test/12e28cbd887cf4e6ae6c37a476a219f9.pkl,1,Benign,old_test,False
+8980f26386a9568c36a43ad7f8eba068,/workspace/data/cache/enriched/test/8980f26386a9568c36a43ad7f8eba068.pkl,1,Benign,old_test,False
+223670e086632a1b7057f25b8a2c593c,/workspace/data/cache/enriched/test/223670e086632a1b7057f25b8a2c593c.pkl,1,Benign,old_test,False
+771,/workspace/data/cache/enriched/val/771.pkl,1,Benign,old_val,False
+20bdd6a4e641aa3769aeb8722f92bde1,/workspace/data/cache/enriched/test/20bdd6a4e641aa3769aeb8722f92bde1.pkl,1,Benign,old_test,False
+49,/workspace/data/cache/enriched/test/49.pkl,1,Benign,old_test,False
+087012822b313c7f013d3f22de33e3ac,/workspace/data/cache/enriched/test/087012822b313c7f013d3f22de33e3ac.pkl,1,Benign,old_test,False
+715,/workspace/data/cache/enriched/val/715.pkl,1,Benign,old_val,False
+246a819e549cd1bc998109e9c6b7d70d,/workspace/data/cache/enriched/test/246a819e549cd1bc998109e9c6b7d70d.pkl,1,Benign,old_test,False
+62f170fb07fdbb79ceb7147101406eb8,/workspace/data/cache/enriched/val/62f170fb07fdbb79ceb7147101406eb8.pkl,1,Benign,old_val,False
+58,/workspace/data/cache/enriched/test/58.pkl,1,Benign,old_test,False
+524,/workspace/data/cache/enriched/test/524.pkl,1,Benign,old_test,False
+502,/workspace/data/cache/enriched/test/502.pkl,1,Benign,old_test,False
+736,/workspace/data/cache/enriched/val/736.pkl,1,Benign,old_val,False
+110,/workspace/data/cache/enriched/val/110.pkl,1,Benign,old_val,False
+18,/workspace/data/cache/enriched/test/18.pkl,1,Benign,old_test,False
+f3b146b2fb2333c834c269d51b57e585,/workspace/data/cache/enriched/val/f3b146b2fb2333c834c269d51b57e585.pkl,1,Benign,old_val,False
+689,/workspace/data/cache/enriched/test/689.pkl,1,Benign,old_test,False
+1003,/workspace/data/cache/enriched/val/1003.pkl,1,Benign,old_val,False
+861,/workspace/data/cache/enriched/test/861.pkl,1,Benign,old_test,False
+838,/workspace/data/cache/enriched/test/838.pkl,1,Benign,old_test,False
+550,/workspace/data/cache/enriched/test/550.pkl,1,Benign,old_test,False
+703,/workspace/data/cache/enriched/test/703.pkl,1,Benign,old_test,False
+fa7f5f109ba8a36817991e10880cb022,/workspace/data/cache/enriched/test/fa7f5f109ba8a36817991e10880cb022.pkl,1,Benign,old_test,False
+1030,/workspace/data/cache/enriched/test/1030.pkl,1,Benign,old_test,False
+2f0050f870b2d49e0880334e4938d528,/workspace/data/cache/enriched/val/2f0050f870b2d49e0880334e4938d528.pkl,1,Benign,old_val,False
+7794ed8826feda17f1044cc501463f55,/workspace/data/cache/enriched/val/7794ed8826feda17f1044cc501463f55.pkl,1,Benign,old_val,False
+643,/workspace/data/cache/enriched/val/643.pkl,1,Benign,old_val,False
+b6850fbaf0652ebe3a0bb5a54932b834,/workspace/data/cache/enriched/test/b6850fbaf0652ebe3a0bb5a54932b834.pkl,1,Benign,old_test,False
+c07434de6dd55e765bf9d05aaf451d4e,/workspace/data/cache/enriched/test/c07434de6dd55e765bf9d05aaf451d4e.pkl,1,Benign,old_test,False
+d1f18962d1720d342993d0f26e96ddae,/workspace/data/cache/enriched/test/d1f18962d1720d342993d0f26e96ddae.pkl,1,Benign,old_test,False
+831,/workspace/data/cache/enriched/test/831.pkl,1,Benign,old_test,False
+8bfc3272bd408849393cbfc58a06e670,/workspace/data/cache/enriched/test/8bfc3272bd408849393cbfc58a06e670.pkl,1,Benign,old_test,False
+b665733ffa2575cf55fe735b4dbe4daf,/workspace/data/cache/enriched/val/b665733ffa2575cf55fe735b4dbe4daf.pkl,1,Benign,old_val,False
+4a5efb20daee57d1ca64637c24fac8b7,/workspace/data/cache/enriched/val/4a5efb20daee57d1ca64637c24fac8b7.pkl,1,Benign,old_val,False
+819,/workspace/data/cache/enriched/val/819.pkl,1,Benign,old_val,False
+937,/workspace/data/cache/enriched/val/937.pkl,1,Benign,old_val,False
+852c065deaf53c02c37ca13a3cc61173,/workspace/data/cache/enriched/val/852c065deaf53c02c37ca13a3cc61173.pkl,1,Benign,old_val,False
+855,/workspace/data/cache/enriched/test/855.pkl,1,Benign,old_test,False
+414,/workspace/data/cache/enriched/val/414.pkl,1,Benign,old_val,False
+9a6089ee909d0f4d20a3e03dc1d681ac,/workspace/data/cache/enriched/test/9a6089ee909d0f4d20a3e03dc1d681ac.pkl,1,Benign,old_test,False
+c2938eb5ff932c2540a1514cc82c197c,/workspace/data/cache/enriched/test/c2938eb5ff932c2540a1514cc82c197c.pkl,1,Benign,old_test,False
+954,/workspace/data/cache/enriched/test/954.pkl,1,Benign,old_test,False
+88f59fa501e1f34ddadaa7ad2e5c3bab,/workspace/data/cache/enriched/val/88f59fa501e1f34ddadaa7ad2e5c3bab.pkl,1,Benign,old_val,False
+8,/workspace/data/cache/enriched/val/8.pkl,1,Benign,old_val,False
+063875d1549af53b587a829456b7f716,/workspace/data/cache/enriched/val/063875d1549af53b587a829456b7f716.pkl,1,Benign,old_val,False
+495,/workspace/data/cache/enriched/val/495.pkl,1,Benign,old_val,False
+322,/workspace/data/cache/enriched/val/322.pkl,1,Benign,old_val,False
+126a8c1643b2b3834b03ec69713dcc12,/workspace/data/cache/enriched/val/126a8c1643b2b3834b03ec69713dcc12.pkl,1,Benign,old_val,False
+bb03388131338158ea92b5408533a974,/workspace/data/cache/enriched/val/bb03388131338158ea92b5408533a974.pkl,1,Benign,old_val,False
+34,/workspace/data/cache/enriched/test/34.pkl,1,Benign,old_test,False
+103af5dafe7b1dda9494d94ce3337a4b,/workspace/data/cache/enriched/val/103af5dafe7b1dda9494d94ce3337a4b.pkl,1,Benign,old_val,False
+328,/workspace/data/cache/enriched/test/328.pkl,1,Benign,old_test,False
+20af57bfff931229046ff52d2b2c7797,/workspace/data/cache/enriched/val/20af57bfff931229046ff52d2b2c7797.pkl,1,Benign,old_val,False
+5fc944b96b19ee35265e7578151160e6,/workspace/data/cache/enriched/val/5fc944b96b19ee35265e7578151160e6.pkl,1,Benign,old_val,False
+453,/workspace/data/cache/enriched/val/453.pkl,1,Benign,old_val,False
+371,/workspace/data/cache/enriched/val/371.pkl,1,Benign,old_val,False
+590,/workspace/data/cache/enriched/val/590.pkl,1,Benign,old_val,False
+484,/workspace/data/cache/enriched/test/484.pkl,1,Benign,old_test,False
+5af6b376e660805759683865437acbc0,/workspace/data/cache/enriched/test/5af6b376e660805759683865437acbc0.pkl,1,Benign,old_test,False
+57cac848fa14ae38f14f9441f8933282,/workspace/data/cache/enriched/val/57cac848fa14ae38f14f9441f8933282.pkl,1,Benign,old_val,False
+551,/workspace/data/cache/enriched/val/551.pkl,1,Benign,old_val,False
+964,/workspace/data/cache/enriched/val/964.pkl,1,Benign,old_val,False
+153,/workspace/data/cache/enriched/test/153.pkl,1,Benign,old_test,False
+0e1c3a6ee3a05b5c4cd3d43fce8311a1,/workspace/data/cache/enriched/test/0e1c3a6ee3a05b5c4cd3d43fce8311a1.pkl,1,Benign,old_test,False
+712,/workspace/data/cache/enriched/test/712.pkl,1,Benign,old_test,False
+22328ba82ec2642ca0fda742146a8477,/workspace/data/cache/enriched/test/22328ba82ec2642ca0fda742146a8477.pkl,1,Benign,old_test,False
+623,/workspace/data/cache/enriched/test/623.pkl,1,Benign,old_test,False
+530ebb87a01526c10197a23a3f33a5d5,/workspace/data/cache/enriched/test/530ebb87a01526c10197a23a3f33a5d5.pkl,1,Benign,old_test,False
+7366668cc7eaa1068a38cc2761217fc4,/workspace/data/cache/enriched/test/7366668cc7eaa1068a38cc2761217fc4.pkl,1,Benign,old_test,False
+916,/workspace/data/cache/enriched/val/916.pkl,1,Benign,old_val,False
+244f3a79c653e7ed3c327f44d48bc8a7,/workspace/data/cache/enriched/test/244f3a79c653e7ed3c327f44d48bc8a7.pkl,1,Benign,old_test,False
+a4414c6f58e30651d09643e7ef54ecf8,/workspace/data/cache/enriched/val/a4414c6f58e30651d09643e7ef54ecf8.pkl,1,Benign,old_val,False
+246,/workspace/data/cache/enriched/val/246.pkl,1,Benign,old_val,False
+817cb2d8d2f58648b7728b0c7c47c3d8,/workspace/data/cache/enriched/test/817cb2d8d2f58648b7728b0c7c47c3d8.pkl,1,Benign,old_test,False
+70e9bf498059d6d966bccb5ff683bfef,/workspace/data/cache/enriched/test/70e9bf498059d6d966bccb5ff683bfef.pkl,1,Benign,old_test,False
+5cdf106bf92c65c5b73e4c87138a85df,/workspace/data/cache/enriched/test/5cdf106bf92c65c5b73e4c87138a85df.pkl,1,Benign,old_test,False
+f2867bee7180cdc839f7636fddc1aa74,/workspace/data/cache/enriched/val/f2867bee7180cdc839f7636fddc1aa74.pkl,1,Benign,old_val,False
+874,/workspace/data/cache/enriched/val/874.pkl,1,Benign,old_val,False
+948,/workspace/data/cache/enriched/val/948.pkl,1,Benign,old_val,False
+304,/workspace/data/cache/enriched/val/304.pkl,1,Benign,old_val,False
+bfd6a7765dd0ead7bc8f89a55b5481ee,/workspace/data/cache/enriched/test/bfd6a7765dd0ead7bc8f89a55b5481ee.pkl,1,Benign,old_test,False
+ab0a854e7740a4e78e3e5e5e380353fa,/workspace/data/cache/enriched/val/ab0a854e7740a4e78e3e5e5e380353fa.pkl,1,Benign,old_val,False
+b8c801810a69845dcd8dee13703f97ac,/workspace/data/cache/enriched/test/b8c801810a69845dcd8dee13703f97ac.pkl,1,Benign,old_test,False
+f2e6c09bc48f5496523731d4ce3abdec,/workspace/data/cache/enriched/test/f2e6c09bc48f5496523731d4ce3abdec.pkl,1,Benign,old_test,False
+dda22b0cee0e7f742a5c4696e3b5a804,/workspace/data/cache/enriched/test/dda22b0cee0e7f742a5c4696e3b5a804.pkl,1,Benign,old_test,False
+442,/workspace/data/cache/enriched/val/442.pkl,1,Benign,old_val,False
+214,/workspace/data/cache/enriched/val/214.pkl,1,Benign,old_val,False
+768,/workspace/data/cache/enriched/val/768.pkl,1,Benign,old_val,False
+288,/workspace/data/cache/enriched/val/288.pkl,1,Benign,old_val,False
+86c18dfb8b30d7000a80b226dc57eaf4,/workspace/data/cache/enriched/val/86c18dfb8b30d7000a80b226dc57eaf4.pkl,1,Benign,old_val,False
+368,/workspace/data/cache/enriched/test/368.pkl,1,Benign,old_test,False
+748,/workspace/data/cache/enriched/val/748.pkl,1,Benign,old_val,False
+391,/workspace/data/cache/enriched/val/391.pkl,1,Benign,old_val,False
+863,/workspace/data/cache/enriched/test/863.pkl,1,Benign,old_test,False
+298,/workspace/data/cache/enriched/val/298.pkl,1,Benign,old_val,False
+432f47f1e4b8d108d61526746b83af5c,/workspace/data/cache/enriched/test/432f47f1e4b8d108d61526746b83af5c.pkl,1,Benign,old_test,False
+66,/workspace/data/cache/enriched/test/66.pkl,1,Benign,old_test,False
+696,/workspace/data/cache/enriched/val/696.pkl,1,Benign,old_val,False
+14,/workspace/data/cache/enriched/test/14.pkl,1,Benign,old_test,False
+606,/workspace/data/cache/enriched/test/606.pkl,1,Benign,old_test,False
+341,/workspace/data/cache/enriched/test/341.pkl,1,Benign,old_test,False
+347,/workspace/data/cache/enriched/test/347.pkl,1,Benign,old_test,False
+47245e8bba1b1ed68913c1a6c9d9ced7,/workspace/data/cache/enriched/val/47245e8bba1b1ed68913c1a6c9d9ced7.pkl,1,Benign,old_val,False
+a56ea46b5530e60b1291eb41a63da229,/workspace/data/cache/enriched/val/a56ea46b5530e60b1291eb41a63da229.pkl,1,Benign,old_val,False
+527,/workspace/data/cache/enriched/test/527.pkl,1,Benign,old_test,False
+615a6d10b80a821a293ef54935ef2cb5,/workspace/data/cache/enriched/val/615a6d10b80a821a293ef54935ef2cb5.pkl,1,Benign,old_val,False
+953,/workspace/data/cache/enriched/val/953.pkl,1,Benign,old_val,False
+54607769283c879872c44cfef857806e,/workspace/data/cache/enriched/test/54607769283c879872c44cfef857806e.pkl,1,Benign,old_test,False
+86fca7f150ddf96047ff35f3e39c63af,/workspace/data/cache/enriched/test/86fca7f150ddf96047ff35f3e39c63af.pkl,1,Benign,old_test,False
+63,/workspace/data/cache/enriched/test/63.pkl,1,Benign,old_test,False
+735,/workspace/data/cache/enriched/val/735.pkl,1,Benign,old_val,False
+120,/workspace/data/cache/enriched/val/120.pkl,1,Benign,old_val,False
+156,/workspace/data/cache/enriched/val/156.pkl,1,Benign,old_val,False
+1c1f8ed7316852f8248c62e0bd199c01,/workspace/data/cache/enriched/test/1c1f8ed7316852f8248c62e0bd199c01.pkl,1,Benign,old_test,False
+5ab171e34ae233588334898964713652,/workspace/data/cache/enriched/val/5ab171e34ae233588334898964713652.pkl,1,Benign,old_val,False
+10,/workspace/data/cache/enriched/test/10.pkl,1,Benign,old_test,False
+717,/workspace/data/cache/enriched/test/717.pkl,1,Benign,old_test,False
+a3f4107c68215616cebb0d787f66bcc9,/workspace/data/cache/enriched/test/a3f4107c68215616cebb0d787f66bcc9.pkl,1,Benign,old_test,False
+4779f59e00bcb80826e3deb3fb4af52a,/workspace/data/cache/enriched/val/4779f59e00bcb80826e3deb3fb4af52a.pkl,1,Benign,old_val,False
+bc41c25862628aaac0221baa51175d8a,/workspace/data/cache/enriched/val/bc41c25862628aaac0221baa51175d8a.pkl,1,Benign,old_val,False
+cc9d0697280c3a2bc93818be2074a2be,/workspace/data/cache/enriched/val/cc9d0697280c3a2bc93818be2074a2be.pkl,1,Benign,old_val,False
+dcaa9fd0f6da052f09bcaad87a2db219,/workspace/data/cache/enriched/test/dcaa9fd0f6da052f09bcaad87a2db219.pkl,1,Benign,old_test,False
+a1ee8b242045a6dd67d5067ac8045817,/workspace/data/cache/enriched/test/a1ee8b242045a6dd67d5067ac8045817.pkl,1,Benign,old_test,False
+613,/workspace/data/cache/enriched/test/613.pkl,1,Benign,old_test,False
+ec5c49f9fa8d871d1937148b9f55f01c,/workspace/data/cache/enriched/test/ec5c49f9fa8d871d1937148b9f55f01c.pkl,1,Benign,old_test,False
+1023,/workspace/data/cache/enriched/val/1023.pkl,1,Benign,old_val,False
+849,/workspace/data/cache/enriched/test/849.pkl,1,Benign,old_test,False
+586,/workspace/data/cache/enriched/test/586.pkl,1,Benign,old_test,False
+edcb816abe6bafd8db69d42692f0cbce,/workspace/data/cache/enriched/test/edcb816abe6bafd8db69d42692f0cbce.pkl,1,Benign,old_test,False
+136,/workspace/data/cache/enriched/val/136.pkl,1,Benign,old_val,False
+10287b93c2805618649e4cedf0268d4d,/workspace/data/cache/enriched/val/10287b93c2805618649e4cedf0268d4d.pkl,1,Benign,old_val,False
+487,/workspace/data/cache/enriched/test/487.pkl,1,Benign,old_test,False
+1d4aa1768f9c7993d2e44f9693007bce,/workspace/data/cache/enriched/test/1d4aa1768f9c7993d2e44f9693007bce.pkl,2,Other Malware,old_test,False
+91f34fb90adfd8581df9a25f7cb8a26c,/workspace/data/cache/enriched/val/91f34fb90adfd8581df9a25f7cb8a26c.pkl,2,Other Malware,old_val,False
+2daf7dc5aee2ddcfba764e06a7afc399,/workspace/data/cache/enriched/val/2daf7dc5aee2ddcfba764e06a7afc399.pkl,2,Other Malware,old_val,False
+54f27af5a5c85f867bd7f32f3121a527,/workspace/data/cache/enriched/test/54f27af5a5c85f867bd7f32f3121a527.pkl,2,Other Malware,old_test,False
+2314b150d8323f75243b6b76c8e07035,/workspace/data/cache/enriched/val/2314b150d8323f75243b6b76c8e07035.pkl,2,Other Malware,old_val,False
+24f7c986e116ef085c3a7951c83a7c6d,/workspace/data/cache/enriched/test/24f7c986e116ef085c3a7951c83a7c6d.pkl,2,Other Malware,old_test,False
+55409478a5b6b3dfd05cfd6fda47c519,/workspace/data/cache/enriched/test/55409478a5b6b3dfd05cfd6fda47c519.pkl,2,Other Malware,old_test,False
+eb4520b6cfc766821a2d6e155662ac41,/workspace/data/cache/enriched/val/eb4520b6cfc766821a2d6e155662ac41.pkl,2,Other Malware,old_val,False
+02c47fbc74c852f02f590a026f01c026,/workspace/data/cache/enriched/test/02c47fbc74c852f02f590a026f01c026.pkl,2,Other Malware,old_test,False
+043a1b5c2434b04a1b7156fc17dd2d6b,/workspace/data/cache/enriched/test/043a1b5c2434b04a1b7156fc17dd2d6b.pkl,2,Other Malware,old_test,False
+e80e8ded001cba45724cd4e1b61c8dff,/workspace/data/cache/enriched/val/e80e8ded001cba45724cd4e1b61c8dff.pkl,2,Other Malware,old_val,False
+63c74e45cb4ba38e8ba6089425a6abd8,/workspace/data/cache/enriched/val/63c74e45cb4ba38e8ba6089425a6abd8.pkl,2,Other Malware,old_val,False
+3c8c5b3d8c8fd65bf989f496df5e7002,/workspace/data/cache/enriched/test/3c8c5b3d8c8fd65bf989f496df5e7002.pkl,2,Other Malware,old_test,False
+162314abb4b14186ecccf56ec2a5357c,/workspace/data/cache/enriched/test/162314abb4b14186ecccf56ec2a5357c.pkl,2,Other Malware,old_test,False
+385d26128a2c117a2dda6c14dec840ed,/workspace/data/cache/enriched/val/385d26128a2c117a2dda6c14dec840ed.pkl,2,Other Malware,old_val,False
+7ac12d1984fedffd41b007fa48a8ec58,/workspace/data/cache/enriched/val/7ac12d1984fedffd41b007fa48a8ec58.pkl,2,Other Malware,old_val,False
+7e1bdb2a312ea72c16e658fed46d7904,/workspace/data/cache/enriched/val/7e1bdb2a312ea72c16e658fed46d7904.pkl,2,Other Malware,old_val,False
+10374da5b8dc4168e3c7661f06d18d0f,/workspace/data/cache/enriched/test/10374da5b8dc4168e3c7661f06d18d0f.pkl,2,Other Malware,old_test,False
+3c4772eb0ec7cba088378e6a3c39e2ed,/workspace/data/cache/enriched/val/3c4772eb0ec7cba088378e6a3c39e2ed.pkl,2,Other Malware,old_val,False
+60fb3eabca9c9ac29f92ebf72f543c80,/workspace/data/cache/enriched/test/60fb3eabca9c9ac29f92ebf72f543c80.pkl,2,Other Malware,old_test,False
+776657d7620fba66c6e299ee531a7fef,/workspace/data/cache/enriched/val/776657d7620fba66c6e299ee531a7fef.pkl,2,Other Malware,old_val,False
+29c2621f92f6a31c4af833fb85cf0d50,/workspace/data/cache/enriched/test/29c2621f92f6a31c4af833fb85cf0d50.pkl,2,Other Malware,old_test,False
+1095409eb627f6dc3d3a99333fbc5363,/workspace/data/cache/enriched/val/1095409eb627f6dc3d3a99333fbc5363.pkl,2,Other Malware,old_val,False
+c1b315f1e6f1a47b50ad8cd8825974d9,/workspace/data/cache/enriched/test/c1b315f1e6f1a47b50ad8cd8825974d9.pkl,2,Other Malware,old_test,False
+d5d37c2522cb38a6b8bc60571ae13713,/workspace/data/cache/enriched/test/d5d37c2522cb38a6b8bc60571ae13713.pkl,2,Other Malware,old_test,False
+1ae6aaae7384dc8fab24cfcdfc1c4c00,/workspace/data/cache/enriched/test/1ae6aaae7384dc8fab24cfcdfc1c4c00.pkl,2,Other Malware,old_test,False
+6112b2a840718b2cd97652c448d97a2d,/workspace/data/cache/enriched/test/6112b2a840718b2cd97652c448d97a2d.pkl,2,Other Malware,old_test,False
+0d2f0b82e30fc58a0c5ea949b8d3b35d,/workspace/data/cache/enriched/test/0d2f0b82e30fc58a0c5ea949b8d3b35d.pkl,2,Other Malware,old_test,False
+35ac8b686068cbf05b7326d767e7731a,/workspace/data/cache/enriched/test/35ac8b686068cbf05b7326d767e7731a.pkl,2,Other Malware,old_test,False
+1963a49d71f298c889228b79bcb6b3f2,/workspace/data/cache/enriched/val/1963a49d71f298c889228b79bcb6b3f2.pkl,2,Other Malware,old_val,False
+8039c88f00de24e93a404e935339782a,/workspace/data/cache/enriched/test/8039c88f00de24e93a404e935339782a.pkl,2,Other Malware,old_test,False
+7882a2e5895b99d912b35a79b5cb2432,/workspace/data/cache/enriched/test/7882a2e5895b99d912b35a79b5cb2432.pkl,2,Other Malware,old_test,False
+cbad3ba490f8af351e68bd1c087032fc,/workspace/data/cache/enriched/val/cbad3ba490f8af351e68bd1c087032fc.pkl,2,Other Malware,old_val,False
+0ed4554e724510eabfaab654e7da90b4,/workspace/data/cache/enriched/test/0ed4554e724510eabfaab654e7da90b4.pkl,2,Other Malware,old_test,False
+dab5d970f5261b346185007f25d3e5db,/workspace/data/cache/enriched/test/dab5d970f5261b346185007f25d3e5db.pkl,2,Other Malware,old_test,False
+b82f453f91e18565385e4a7126506fa2,/workspace/data/cache/enriched/test/b82f453f91e18565385e4a7126506fa2.pkl,2,Other Malware,old_test,False
+20b5dd1a2b464dd14b77a70029bb78b5,/workspace/data/cache/enriched/val/20b5dd1a2b464dd14b77a70029bb78b5.pkl,2,Other Malware,old_val,False
+e284b66376391635fbe1fe3aef5afa29,/workspace/data/cache/enriched/val/e284b66376391635fbe1fe3aef5afa29.pkl,2,Other Malware,old_val,False
+apt_181,/workspace/data/cache/enriched/val/apt_181.pkl,2,Other Malware,old_val,False
+35215bac13155d05d769b0311cc4f2e5,/workspace/data/cache/enriched/val/35215bac13155d05d769b0311cc4f2e5.pkl,2,Other Malware,old_val,False
+1ce5e995272f8e529fe7cdde7eb14811,/workspace/data/cache/enriched/test/1ce5e995272f8e529fe7cdde7eb14811.pkl,2,Other Malware,old_test,False
+3676ee22338579fe958c9bfde870f980,/workspace/data/cache/enriched/val/3676ee22338579fe958c9bfde870f980.pkl,2,Other Malware,old_val,False
+0f8064af9d8b3f11b1943d94f3f11f32,/workspace/data/cache/enriched/test/0f8064af9d8b3f11b1943d94f3f11f32.pkl,2,Other Malware,old_test,False
+1bed6e89ea69083f86806923661d7b48,/workspace/data/cache/enriched/val/1bed6e89ea69083f86806923661d7b48.pkl,2,Other Malware,old_val,False
+580050ce066f47515e94d370f3e1236d,/workspace/data/cache/enriched/test/580050ce066f47515e94d370f3e1236d.pkl,2,Other Malware,old_test,False
+252c1dcdc76209358f4fc12d45d49a5a,/workspace/data/cache/enriched/test/252c1dcdc76209358f4fc12d45d49a5a.pkl,2,Other Malware,old_test,False
+3488a3e29270d906e570e4129b45fcbb,/workspace/data/cache/enriched/val/3488a3e29270d906e570e4129b45fcbb.pkl,2,Other Malware,old_val,False
+4782ce31ef42706a4673e31c203cf7b6,/workspace/data/cache/enriched/test/4782ce31ef42706a4673e31c203cf7b6.pkl,2,Other Malware,old_test,False
+ff68cd00b926bb11a23ed6f2647d85f3,/workspace/data/cache/enriched/val/ff68cd00b926bb11a23ed6f2647d85f3.pkl,2,Other Malware,old_val,False
+349fc5f381d1e4a23b4b6060a1c87baf,/workspace/data/cache/enriched/test/349fc5f381d1e4a23b4b6060a1c87baf.pkl,2,Other Malware,old_test,False
+654315297a795b3cd81a37c4f71ceba5,/workspace/data/cache/enriched/val/654315297a795b3cd81a37c4f71ceba5.pkl,2,Other Malware,old_val,False
+f821a8e1e66edfa96f0d5c2359b51354,/workspace/data/cache/enriched/test/f821a8e1e66edfa96f0d5c2359b51354.pkl,2,Other Malware,old_test,False
+902ea409fd996e4f0cbfaecc26d78b5b,/workspace/data/cache/enriched/test/902ea409fd996e4f0cbfaecc26d78b5b.pkl,2,Other Malware,old_test,False
+ac1dca700016b5e7552cbc765b5d0f22,/workspace/data/cache/enriched/test/ac1dca700016b5e7552cbc765b5d0f22.pkl,2,Other Malware,old_test,False
+0a802a5d66c1dd5b817f22c5f541c9b0,/workspace/data/cache/enriched/test/0a802a5d66c1dd5b817f22c5f541c9b0.pkl,2,Other Malware,old_test,False
+0532e250400ded8515f6d042d388ff07,/workspace/data/cache/enriched/val/0532e250400ded8515f6d042d388ff07.pkl,0,Ransomware,old_val,False
+08eedaa70ca384e76b4eac39ff2683e1,/workspace/data/cache/enriched/val/08eedaa70ca384e76b4eac39ff2683e1.pkl,0,Ransomware,old_val,False
+0dd4bcb59beff511516725118e7b2f80,/workspace/data/cache/enriched/val/0dd4bcb59beff511516725118e7b2f80.pkl,0,Ransomware,old_val,False
+0f4cb4b34c4e8d75da02bf6536ec8563,/workspace/data/cache/enriched/val/0f4cb4b34c4e8d75da02bf6536ec8563.pkl,0,Ransomware,old_val,False
+136b3af29063f6c2f76b6e4ef6d3a755,/workspace/data/cache/enriched/val/136b3af29063f6c2f76b6e4ef6d3a755.pkl,0,Ransomware,old_val,False
+15572d97a140d38192e33442fbe9400d,/workspace/data/cache/enriched/val/15572d97a140d38192e33442fbe9400d.pkl,0,Ransomware,old_val,False
+188561cadd5e63bdf5092929a551c35d,/workspace/data/cache/enriched/val/188561cadd5e63bdf5092929a551c35d.pkl,0,Ransomware,old_val,False
+1886d05c64e5cb9325439782fe7f6556,/workspace/data/cache/enriched/val/1886d05c64e5cb9325439782fe7f6556.pkl,0,Ransomware,old_val,False
+19ebbd5eb5fdb062a3c356dc535ca012,/workspace/data/cache/enriched/val/19ebbd5eb5fdb062a3c356dc535ca012.pkl,0,Ransomware,old_val,False
+1a14e7fcdb5666ffbd0005db70eeda45,/workspace/data/cache/enriched/val/1a14e7fcdb5666ffbd0005db70eeda45.pkl,0,Ransomware,old_val,False
+1b68729f1f03c3d82b13abe38599f6c3,/workspace/data/cache/enriched/val/1b68729f1f03c3d82b13abe38599f6c3.pkl,0,Ransomware,old_val,False
+1c74690ed0ad28f73f1aa9c4e71ccafa,/workspace/data/cache/enriched/val/1c74690ed0ad28f73f1aa9c4e71ccafa.pkl,0,Ransomware,old_val,False
+1eb6ba04fc00da6202d505930e427fc7,/workspace/data/cache/enriched/val/1eb6ba04fc00da6202d505930e427fc7.pkl,0,Ransomware,old_val,False
+1ffe7f8af56971a0710d6390231ed209,/workspace/data/cache/enriched/val/1ffe7f8af56971a0710d6390231ed209.pkl,0,Ransomware,old_val,False
+2903e2c448e129fb0b09c1534d204c4a,/workspace/data/cache/enriched/val/2903e2c448e129fb0b09c1534d204c4a.pkl,0,Ransomware,old_val,False
+29660cb68690bad4dcc65345ea8727e7,/workspace/data/cache/enriched/val/29660cb68690bad4dcc65345ea8727e7.pkl,0,Ransomware,old_val,False
+2d6aee94b05bf693e6d9ebc21fbfe128,/workspace/data/cache/enriched/val/2d6aee94b05bf693e6d9ebc21fbfe128.pkl,0,Ransomware,old_val,False
+3185e6f627a6edca6bfb88f9cefa342d,/workspace/data/cache/enriched/val/3185e6f627a6edca6bfb88f9cefa342d.pkl,0,Ransomware,old_val,False
+32b2c4fee38c01ca95c97c9b74b8b03d,/workspace/data/cache/enriched/val/32b2c4fee38c01ca95c97c9b74b8b03d.pkl,0,Ransomware,old_val,False
+39684bb790b573d72dbce03f3607a31c,/workspace/data/cache/enriched/val/39684bb790b573d72dbce03f3607a31c.pkl,0,Ransomware,old_val,False
+423ae24af438c46867d159a3247eea5d,/workspace/data/cache/enriched/val/423ae24af438c46867d159a3247eea5d.pkl,0,Ransomware,old_val,False
+4dc6d0458f28d18b48cc41912c6282de,/workspace/data/cache/enriched/val/4dc6d0458f28d18b48cc41912c6282de.pkl,0,Ransomware,old_val,False
+4edcdef4bf23b658964691bfc3c45537,/workspace/data/cache/enriched/val/4edcdef4bf23b658964691bfc3c45537.pkl,0,Ransomware,old_val,False
+5941b3656aa230b2ce15f90835d48f7c,/workspace/data/cache/enriched/val/5941b3656aa230b2ce15f90835d48f7c.pkl,0,Ransomware,old_val,False
+5a78fad03a10d68ed566ac750ab3ab02,/workspace/data/cache/enriched/val/5a78fad03a10d68ed566ac750ab3ab02.pkl,0,Ransomware,old_val,False
+5aef55d7170521999324f51d62a8ee30,/workspace/data/cache/enriched/val/5aef55d7170521999324f51d62a8ee30.pkl,0,Ransomware,old_val,False
+5c63d44c2997a6b322cb2329552b6ea8,/workspace/data/cache/enriched/val/5c63d44c2997a6b322cb2329552b6ea8.pkl,0,Ransomware,old_val,False
+5eedf40d3546eb90b5423ae3ac1d3f32,/workspace/data/cache/enriched/val/5eedf40d3546eb90b5423ae3ac1d3f32.pkl,0,Ransomware,old_val,False
+682ef4f2b66b1e447701fecfad15094c,/workspace/data/cache/enriched/val/682ef4f2b66b1e447701fecfad15094c.pkl,0,Ransomware,old_val,False
+68e367dfd6de0b0a3c00b966423f196a,/workspace/data/cache/enriched/val/68e367dfd6de0b0a3c00b966423f196a.pkl,0,Ransomware,old_val,False
+76d81c7735752088692897a00e529bbb,/workspace/data/cache/enriched/val/76d81c7735752088692897a00e529bbb.pkl,0,Ransomware,old_val,False
+7a7b798c0772cbbe3654174737d08542,/workspace/data/cache/enriched/val/7a7b798c0772cbbe3654174737d08542.pkl,0,Ransomware,old_val,False
+7b14479b7226662af6beffba4854c2e7,/workspace/data/cache/enriched/val/7b14479b7226662af6beffba4854c2e7.pkl,0,Ransomware,old_val,False
+7f7f16a7dfad06ec4504220e4c130015,/workspace/data/cache/enriched/val/7f7f16a7dfad06ec4504220e4c130015.pkl,0,Ransomware,old_val,False
+a95111407437bd851ae651f847b53e90,/workspace/data/cache/enriched/val/a95111407437bd851ae651f847b53e90.pkl,0,Ransomware,old_val,False
+aef03ddd3134451e1efe137fb22e3a0c,/workspace/data/cache/enriched/val/aef03ddd3134451e1efe137fb22e3a0c.pkl,0,Ransomware,old_val,False
+09b06fa3f1fadb21006c1fa79c75c536,/workspace/data/cache/enriched/test/09b06fa3f1fadb21006c1fa79c75c536.pkl,0,Ransomware,old_test,False
+0c7e59536a7be4a446bbe8b4f22e5880,/workspace/data/cache/enriched/test/0c7e59536a7be4a446bbe8b4f22e5880.pkl,0,Ransomware,old_test,False
+109d60fbb4b1857429fc8019c800307b,/workspace/data/cache/enriched/test/109d60fbb4b1857429fc8019c800307b.pkl,0,Ransomware,old_test,False
+10e9683de04292c617d2fba5b64a6b2f,/workspace/data/cache/enriched/test/10e9683de04292c617d2fba5b64a6b2f.pkl,0,Ransomware,old_test,False
+1491e513fe739d64a3965d01758d97c6,/workspace/data/cache/enriched/test/1491e513fe739d64a3965d01758d97c6.pkl,0,Ransomware,old_test,False
+1705bd6b4c7a2fa4a046c5a7b2a0a8f6,/workspace/data/cache/enriched/test/1705bd6b4c7a2fa4a046c5a7b2a0a8f6.pkl,0,Ransomware,old_test,False
+184bb34d632aa3d52f23f4315918eb29,/workspace/data/cache/enriched/test/184bb34d632aa3d52f23f4315918eb29.pkl,0,Ransomware,old_test,False
+202bf9be9a4e45526e482f08104717ad,/workspace/data/cache/enriched/test/202bf9be9a4e45526e482f08104717ad.pkl,0,Ransomware,old_test,False
+2198677d22dd71f9e6108da020da059d,/workspace/data/cache/enriched/test/2198677d22dd71f9e6108da020da059d.pkl,0,Ransomware,old_test,False
+229d05ae6fa046339d34419216dd3bae,/workspace/data/cache/enriched/test/229d05ae6fa046339d34419216dd3bae.pkl,0,Ransomware,old_test,False
+243852fce02f4f7d77949d75ccfddbac,/workspace/data/cache/enriched/test/243852fce02f4f7d77949d75ccfddbac.pkl,0,Ransomware,old_test,False
+24ad1ac3ddd67f08cbdd26803b5539a1,/workspace/data/cache/enriched/test/24ad1ac3ddd67f08cbdd26803b5539a1.pkl,0,Ransomware,old_test,False
+28c80c4739056f200818d221ddf5a496,/workspace/data/cache/enriched/test/28c80c4739056f200818d221ddf5a496.pkl,0,Ransomware,old_test,False
+2b744b113946f905a9526f9fb82b22d3,/workspace/data/cache/enriched/test/2b744b113946f905a9526f9fb82b22d3.pkl,0,Ransomware,old_test,False
+2e366bdc80e31e7678bf0681b8b6370c,/workspace/data/cache/enriched/test/2e366bdc80e31e7678bf0681b8b6370c.pkl,0,Ransomware,old_test,False
+2fc3b46c7be1a14ea7382cc8e85bfa96,/workspace/data/cache/enriched/test/2fc3b46c7be1a14ea7382cc8e85bfa96.pkl,0,Ransomware,old_test,False
+34074a625609e156de42ca6e0405edb9,/workspace/data/cache/enriched/test/34074a625609e156de42ca6e0405edb9.pkl,0,Ransomware,old_test,False
+3521e879e8068fc25d117365e11ff4f9,/workspace/data/cache/enriched/test/3521e879e8068fc25d117365e11ff4f9.pkl,0,Ransomware,old_test,False
+364d2445adf7be2c8e4fee906483c5cf,/workspace/data/cache/enriched/test/364d2445adf7be2c8e4fee906483c5cf.pkl,0,Ransomware,old_test,False
+3b36e0a2392ffec8ae656a95f56826ff,/workspace/data/cache/enriched/test/3b36e0a2392ffec8ae656a95f56826ff.pkl,0,Ransomware,old_test,False
+3fb1b0800b4dbd0e19cb1aaebb6f4236,/workspace/data/cache/enriched/test/3fb1b0800b4dbd0e19cb1aaebb6f4236.pkl,0,Ransomware,old_test,False
+4559d59bef79c762fccffb4b046f17cf,/workspace/data/cache/enriched/test/4559d59bef79c762fccffb4b046f17cf.pkl,0,Ransomware,old_test,False
+48a673157da3940244ce0dfb3ecb58e9,/workspace/data/cache/enriched/test/48a673157da3940244ce0dfb3ecb58e9.pkl,0,Ransomware,old_test,False
+497e558b37fd98ae27fc693a77eab16c,/workspace/data/cache/enriched/test/497e558b37fd98ae27fc693a77eab16c.pkl,0,Ransomware,old_test,False
+4ba68cd8615429da8cc535515fbea549,/workspace/data/cache/enriched/test/4ba68cd8615429da8cc535515fbea549.pkl,0,Ransomware,old_test,False
+55b3af46b98029adda05ef83baa0dc73,/workspace/data/cache/enriched/test/55b3af46b98029adda05ef83baa0dc73.pkl,0,Ransomware,old_test,False
+5a01c407a8be2ac6a004d2c40a75264e,/workspace/data/cache/enriched/test/5a01c407a8be2ac6a004d2c40a75264e.pkl,0,Ransomware,old_test,False
+5e7f1934bdbb4b4cd6bc30f49e455dc3,/workspace/data/cache/enriched/test/5e7f1934bdbb4b4cd6bc30f49e455dc3.pkl,0,Ransomware,old_test,False
+5f411ecddf2844721b48b6dc6aa19f3c,/workspace/data/cache/enriched/test/5f411ecddf2844721b48b6dc6aa19f3c.pkl,0,Ransomware,old_test,False
+61c897f5e326b166e160d63056d402a4,/workspace/data/cache/enriched/test/61c897f5e326b166e160d63056d402a4.pkl,0,Ransomware,old_test,False
+6aa468aad5cfed969149dcaca4034b88,/workspace/data/cache/enriched/test/6aa468aad5cfed969149dcaca4034b88.pkl,0,Ransomware,old_test,False
+71a977bf33620055a7c2c6a273ef709c,/workspace/data/cache/enriched/test/71a977bf33620055a7c2c6a273ef709c.pkl,0,Ransomware,old_test,False
+7354dde28d10e406b535677f6a43a98d,/workspace/data/cache/enriched/test/7354dde28d10e406b535677f6a43a98d.pkl,0,Ransomware,old_test,False
+73e2b69d759b9969300776c75f61c295,/workspace/data/cache/enriched/test/73e2b69d759b9969300776c75f61c295.pkl,0,Ransomware,old_test,False
+7909f4fb49579ad2df48f10d65804e49,/workspace/data/cache/enriched/test/7909f4fb49579ad2df48f10d65804e49.pkl,0,Ransomware,old_test,False
+7ab0b603e4f2e8925928862ed32ec8d6,/workspace/data/cache/enriched/test/7ab0b603e4f2e8925928862ed32ec8d6.pkl,0,Ransomware,old_test,False
+a6e69950b93c9769188f2ff2bead52da,/workspace/data/cache/enriched/test/a6e69950b93c9769188f2ff2bead52da.pkl,0,Ransomware,old_test,False
+eaef25ab1f59492ffc735a386294b69f,/workspace/data/cache/enriched/test/eaef25ab1f59492ffc735a386294b69f.pkl,0,Ransomware,old_test,False
+ef0aafefa653a36a33a9a8469f1e8159,/workspace/data/cache/enriched/test/ef0aafefa653a36a33a9a8469f1e8159.pkl,0,Ransomware,old_test,False
