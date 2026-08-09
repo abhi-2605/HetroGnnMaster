@@ -1,0 +1,2930 @@
+{
+  "sample_id": "dd7c4190eb4b21de1c8f9671110c1b7d",
+  "true_label": 2,
+  "true_name": "Other Malwares",
+  "true_binary": "Threat",
+  "pred_label": 2,
+  "pred_name": "Other Malwares",
+  "pred_binary": "Threat",
+  "correct_3class": true,
+  "correct_threat_vs_benign": true,
+  "probabilities": {
+    "ransomware": 0.08691016584634781,
+    "benign": 0.00792770367115736,
+    "other_malware": 0.9051620960235596
+  },
+  "logits": {
+    "ransomware": 0.08229272067546844,
+    "benign": -2.31221866607666,
+    "other_malware": 2.4255318641662598
+  },
+  "branch_gate_weights": {
+    "semantic": 0.3049657344818115,
+    "structural": 0.34770169854164124,
+    "temporal": 0.34733250737190247,
+    "dominant": "structural"
+  },
+  "hybrid_gat_sage_summary": {},
+  "graph_basic_stats": {
+    "node_counts": {
+      "api": 2072,
+      "file": 68,
+      "registry": 159,
+      "process": 7,
+      "network": 0,
+      "domains": 0,
+      "ips": 0,
+      "ip_addresses": 0,
+      "addresses": 0,
+      "ports": 0,
+      "urls": 0,
+      "hosts": 0,
+      "name": 0,
+      "labels": 0,
+      "label": 0,
+      "ids": 0,
+      "id": 0,
+      "node_ids": 0,
+      "raw_names": 0,
+      "raw_name": 0,
+      "objects": 0,
+      "object_names": 0,
+      "path": 0,
+      "values": 0,
+      "value": 0,
+      "key": 0,
+      "address": 0
+    },
+    "edge_counts": {
+      "api__temporal__api": 2071,
+      "api__operates_on__file": 0,
+      "api__modifies__registry": 0,
+      "process__executes__api": 2883
+    },
+    "api_count": 2072,
+    "total_nodes": 2306,
+    "total_edges": 4954,
+    "edge_node_ratio": 2.148308759757155
+  },
+  "node_metadata_sources": {
+    "api": {
+      "source": "node_store.api_names",
+      "available": true
+    },
+    "file": {
+      "source": "node_store.paths",
+      "available": true
+    },
+    "registry": {
+      "source": "node_store[keys]",
+      "available": true
+    },
+    "process": {
+      "source": "node_store.names",
+      "available": true
+    },
+    "network": {
+      "source": "fallback_node_id",
+      "available": false,
+      "note": "No per-node metadata/name sequence found for node type 'network'. Using stable node IDs from graph indices."
+    }
+  },
+  "top_salient_api_nodes": [
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 429,
+        "display_name": "NtSetInformationFile",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 1.0,
+      "timestamp": 11.40999984741211,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 426,
+          "display_name": "LoadResource",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.40999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.2089284211397171,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 427,
+          "display_name": "LockResource",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.40999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.1327960342168808,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 428,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.40999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6529265642166138,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 429,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.40999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 1.0,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 430,
+          "display_name": "NtReadFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.40999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.2467317283153534,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 431,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.40999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5376682877540588,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.015000343322753906,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 432,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.425000190734863,
+          "relative_time_from_salient_api": 0.015000343322753906,
+          "saliency": 0.6520916819572449,
+          "time_gap_from_previous_api": 0.015000343322753906,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (6 zero-time gaps) plus delayed transitions (largest observed local gap=0.015000343322753906)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 438,
+        "display_name": "NtSetInformationFile",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.8713147044181824,
+      "timestamp": 11.440999984741211,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 435,
+          "display_name": "NtReadFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.425000190734863,
+          "relative_time_from_salient_api": -0.015999794006347656,
+          "saliency": 0.25891315937042236,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.015999794006347656,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 436,
+          "display_name": "NtFreeVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.440999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.26498374342918396,
+          "time_gap_from_previous_api": 0.015999794006347656,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 437,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.440999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5477121472358704,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 438,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.440999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8713147044181824,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 439,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.440999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.17641130089759827,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 440,
+          "display_name": "NtAllocateVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.440999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.33218541741371155,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 441,
+          "display_name": "NtQueryAttributesFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.440999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.4196043014526367,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.015000343322753906,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (5 zero-time gaps) plus delayed transitions (largest observed local gap=0.015999794006347656)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 217,
+        "display_name": "NtSetInformationFile",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.7852798700332642,
+      "timestamp": 6.360000133514404,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 214,
+          "display_name": "NtCreateFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.218999862670898,
+          "relative_time_from_salient_api": -0.14100027084350586,
+          "saliency": 0.17407628893852234,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 215,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.218999862670898,
+          "relative_time_from_salient_api": -0.14100027084350586,
+          "saliency": 0.34849870204925537,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.14100027084350586,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 216,
+          "display_name": "NtReadFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.360000133514404,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.1940104365348816,
+          "time_gap_from_previous_api": 0.14100027084350586,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 217,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.360000133514404,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7852798700332642,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 218,
+          "display_name": "NtReadFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.360000133514404,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.20315617322921753,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 219,
+          "display_name": "NtAllocateVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.360000133514404,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.21047881245613098,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 220,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.360000133514404,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6166327595710754,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (6 zero-time gaps) plus delayed transitions (largest observed local gap=0.14100027084350586)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 453,
+        "display_name": "NtSetInformationFile",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.7399410605430603,
+      "timestamp": 11.581000328063965,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 450,
+          "display_name": "NtReadFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.581000328063965,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.23954203724861145,
+          "time_gap_from_previous_api": 0.125,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 451,
+          "display_name": "NtFreeVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.581000328063965,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.20594273507595062,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 452,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.581000328063965,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.44237226247787476,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 453,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.581000328063965,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7399410605430603,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 454,
+          "display_name": "NtWriteFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.581000328063965,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.15531089901924133,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 455,
+          "display_name": "NtFreeVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.581000328063965,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.21292956173419952,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 456,
+          "display_name": "NtClose",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.581000328063965,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.10211870819330215,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 7 immediate/zero-time API transitions."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 779,
+        "display_name": "NtSetInformationFile",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.7070955038070679,
+      "timestamp": 23.625,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 776,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 23.625,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.25570353865623474,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 777,
+          "display_name": "NtClose",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 23.625,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.12793390452861786,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 778,
+          "display_name": "NtCreateFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 23.625,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.21254567801952362,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 779,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 23.625,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7070955038070679,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 780,
+          "display_name": "NtReadFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 23.625,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.22117583453655243,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 781,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 23.625,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.62205970287323,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 782,
+          "display_name": "NtReadFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 23.625,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.32740160822868347,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 7 immediate/zero-time API transitions."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 222,
+        "display_name": "NtQueryInformationFile",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.6719380021095276,
+      "timestamp": 6.360000133514404,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 219,
+          "display_name": "NtAllocateVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.360000133514404,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.21047881245613098,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 220,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.360000133514404,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6166327595710754,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 221,
+          "display_name": "NtReadFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.360000133514404,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.20038802921772003,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 222,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.360000133514404,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6719380021095276,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 223,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.360000133514404,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.34028130769729614,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.07799959182739258,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 224,
+          "display_name": "NtProtectVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.437999725341797,
+          "relative_time_from_salient_api": 0.07799959182739258,
+          "saliency": 0.44436612725257874,
+          "time_gap_from_previous_api": 0.07799959182739258,
+          "time_gap_to_next_api": 0.031000137329101562,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 225,
+          "display_name": "NtProtectVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.468999862670898,
+          "relative_time_from_salient_api": 0.10899972915649414,
+          "saliency": 0.655415415763855,
+          "time_gap_from_previous_api": 0.031000137329101562,
+          "time_gap_to_next_api": 0.06300020217895508,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (4 zero-time gaps) plus delayed transitions (largest observed local gap=0.07799959182739258)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 233,
+        "display_name": "NtSetInformationFile",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.6630749106407166,
+      "timestamp": 6.843999862670898,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 230,
+          "display_name": "NtFreeVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.6570000648498535,
+          "relative_time_from_salient_api": -0.18699979782104492,
+          "saliency": 0.27562546730041504,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 231,
+          "display_name": "NtQueryAttributesFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.6570000648498535,
+          "relative_time_from_salient_api": -0.18699979782104492,
+          "saliency": 0.1801617443561554,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.18699979782104492,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 232,
+          "display_name": "NtCreateFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.843999862670898,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.17671185731887817,
+          "time_gap_from_previous_api": 0.18699979782104492,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 233,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.843999862670898,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6630749106407166,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 234,
+          "display_name": "NtReadFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.843999862670898,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.1658519059419632,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 235,
+          "display_name": "NtWriteFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.843999862670898,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.11831715703010559,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 236,
+          "display_name": "NtReadFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.843999862670898,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.17665687203407288,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (6 zero-time gaps) plus delayed transitions (largest observed local gap=0.18699979782104492)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 225,
+        "display_name": "NtProtectVirtualMemory",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.655415415763855,
+      "timestamp": 6.468999862670898,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 222,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.360000133514404,
+          "relative_time_from_salient_api": -0.10899972915649414,
+          "saliency": 0.6719380021095276,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 223,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.360000133514404,
+          "relative_time_from_salient_api": -0.10899972915649414,
+          "saliency": 0.34028130769729614,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.07799959182739258,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 224,
+          "display_name": "NtProtectVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.437999725341797,
+          "relative_time_from_salient_api": -0.031000137329101562,
+          "saliency": 0.44436612725257874,
+          "time_gap_from_previous_api": 0.07799959182739258,
+          "time_gap_to_next_api": 0.031000137329101562,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 225,
+          "display_name": "NtProtectVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.468999862670898,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.655415415763855,
+          "time_gap_from_previous_api": 0.031000137329101562,
+          "time_gap_to_next_api": 0.06300020217895508,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 226,
+          "display_name": "NtProtectVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.5320000648498535,
+          "relative_time_from_salient_api": 0.06300020217895508,
+          "saliency": 0.590857982635498,
+          "time_gap_from_previous_api": 0.06300020217895508,
+          "time_gap_to_next_api": 0.125,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 227,
+          "display_name": "NtAllocateVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.6570000648498535,
+          "relative_time_from_salient_api": 0.18800020217895508,
+          "saliency": 0.24782681465148926,
+          "time_gap_from_previous_api": 0.125,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 228,
+          "display_name": "NtFreeVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.6570000648498535,
+          "relative_time_from_salient_api": 0.18800020217895508,
+          "saliency": 0.2241673767566681,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (3 zero-time gaps) plus delayed transitions (largest observed local gap=0.125)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 331,
+        "display_name": "NtSetInformationFile",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.6536924839019775,
+      "timestamp": 6.921999931335449,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 328,
+          "display_name": "NtReadFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.860000133514404,
+          "relative_time_from_salient_api": -0.06199979782104492,
+          "saliency": 0.20295408368110657,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 329,
+          "display_name": "NtWriteFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.860000133514404,
+          "relative_time_from_salient_api": -0.06199979782104492,
+          "saliency": 0.12159378081560135,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.06199979782104492,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 330,
+          "display_name": "NtReadFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.921999931335449,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.245884507894516,
+          "time_gap_from_previous_api": 0.06199979782104492,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 331,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.921999931335449,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6536924839019775,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 332,
+          "display_name": "NtClose",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.921999931335449,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.10867653787136078,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 333,
+          "display_name": "NtQueryAttributesFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.921999931335449,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.1898474097251892,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 334,
+          "display_name": "RtlDosPathNameToNtPathName_U",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.921999931335449,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.10708802938461304,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (6 zero-time gaps) plus delayed transitions (largest observed local gap=0.06199979782104492)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 428,
+        "display_name": "NtQueryInformationFile",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.6529265642166138,
+      "timestamp": 11.40999984741211,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 425,
+          "display_name": "SizeofResource",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.40999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.24651142954826355,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 426,
+          "display_name": "LoadResource",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.40999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.2089284211397171,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 427,
+          "display_name": "LockResource",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.40999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.1327960342168808,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 428,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.40999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6529265642166138,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 429,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.40999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 1.0,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 430,
+          "display_name": "NtReadFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.40999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.2467317283153534,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 431,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 11.40999984741211,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5376682877540588,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.015000343322753906,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (6 zero-time gaps) plus delayed transitions (largest observed local gap=0.015000343322753906)."
+    }
+  ],
+  "salient_behavioral_neighborhoods": {
+    "global_relation_counts_touching_salient_api_nodes": {
+      "api__temporal__api": 19,
+      "process__executes__api": 14
+    },
+    "connected_resource_summary": {
+      "process": {
+        "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe": 7,
+        "VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe": 6,
+        "28b63734-bff6-44c5-8872-27da3b9c0cb9.tmp": 1
+      }
+    },
+    "relation_summaries": [
+      {
+        "edge_type": "api__temporal__api",
+        "relation_meaning": "API execution/order transition",
+        "num_edges_touching_salient_api_nodes": 19,
+        "sampled_examples": [
+          {
+            "edge_index_position": 216,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 216,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 217,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtReadFile was followed by NtSetInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 217,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 217,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 218,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by NtReadFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 221,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 221,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 222,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtReadFile was followed by NtQueryInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 222,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 222,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 223,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtQueryInformationFile was followed by LdrGetDllHandle in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 224,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 224,
+              "display_name": "NtProtectVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 225,
+              "display_name": "NtProtectVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtProtectVirtualMemory was followed by NtProtectVirtualMemory in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 225,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 225,
+              "display_name": "NtProtectVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 226,
+              "display_name": "NtProtectVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtProtectVirtualMemory was followed by NtProtectVirtualMemory in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 232,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 232,
+              "display_name": "NtCreateFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 233,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtCreateFile was followed by NtSetInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 233,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 233,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 234,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by NtReadFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 330,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 330,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 331,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtReadFile was followed by NtSetInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 331,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 331,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 332,
+              "display_name": "NtClose",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by NtClose in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 427,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 427,
+              "display_name": "LockResource",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 428,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LockResource was followed by NtQueryInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 428,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 428,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 429,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtQueryInformationFile was followed by NtSetInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 429,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 429,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 430,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by NtReadFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 437,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 437,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 438,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtQueryInformationFile was followed by NtSetInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 438,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 438,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 439,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by LdrGetDllHandle in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 452,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 452,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 453,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtQueryInformationFile was followed by NtSetInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 453,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 453,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 454,
+              "display_name": "NtWriteFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by NtWriteFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 778,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 778,
+              "display_name": "NtCreateFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 779,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtCreateFile was followed by NtSetInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 779,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 779,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 780,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by NtReadFile in the API temporal sequence."
+          }
+        ]
+      },
+      {
+        "edge_type": "process__executes__api",
+        "relation_meaning": "process executed or invoked API behavior",
+        "num_edges_touching_salient_api_nodes": 14,
+        "sampled_examples": [
+          {
+            "edge_index_position": 282,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 217,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe executed or invoked API node NtSetInformationFile."
+          },
+          {
+            "edge_index_position": 287,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 222,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe executed or invoked API node NtQueryInformationFile."
+          },
+          {
+            "edge_index_position": 291,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 225,
+              "display_name": "NtProtectVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe executed or invoked API node NtProtectVirtualMemory."
+          },
+          {
+            "edge_index_position": 292,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 225,
+              "display_name": "NtProtectVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe executed or invoked API node NtProtectVirtualMemory."
+          },
+          {
+            "edge_index_position": 307,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 233,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe executed or invoked API node NtSetInformationFile."
+          },
+          {
+            "edge_index_position": 405,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 331,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe executed or invoked API node NtSetInformationFile."
+          },
+          {
+            "edge_index_position": 538,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 428,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtQueryInformationFile."
+          },
+          {
+            "edge_index_position": 539,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 429,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtSetInformationFile."
+          },
+          {
+            "edge_index_position": 548,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 438,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtSetInformationFile."
+          },
+          {
+            "edge_index_position": 565,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 453,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtSetInformationFile."
+          },
+          {
+            "edge_index_position": 566,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 453,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtSetInformationFile."
+          },
+          {
+            "edge_index_position": 567,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 453,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtSetInformationFile."
+          },
+          {
+            "edge_index_position": 568,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 453,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtSetInformationFile."
+          },
+          {
+            "edge_index_position": 1018,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 2,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.tmp",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 779,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.tmp executed or invoked API node NtSetInformationFile."
+          }
+        ]
+      }
+    ],
+    "per_salient_api_neighborhoods": [
+      {
+        "api_index": 429,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 429,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 1,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 1,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 539,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 429,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtSetInformationFile."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 429,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 429,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 430,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by NtReadFile in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "NtSetInformationFile sits in model-salient relations: api__temporal__api:1, process__executes__api:1.",
+          "NtSetInformationFile is directly connected to node types: api:1, process:1.",
+          "Incoming context into NtSetInformationFile: process:1.",
+          "Outgoing context from NtSetInformationFile: api:1."
+        ]
+      },
+      {
+        "api_index": 438,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 438,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 437,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 437,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 438,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtQueryInformationFile was followed by NtSetInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 548,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 438,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtSetInformationFile."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 438,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 438,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 439,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by LdrGetDllHandle in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "NtSetInformationFile sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "NtSetInformationFile is directly connected to node types: api:2, process:1.",
+          "Incoming context into NtSetInformationFile: api:1, process:1.",
+          "Outgoing context from NtSetInformationFile: api:1."
+        ]
+      },
+      {
+        "api_index": 217,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 217,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 216,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 216,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 217,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtReadFile was followed by NtSetInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 282,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 217,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe executed or invoked API node NtSetInformationFile."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 217,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 217,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 218,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by NtReadFile in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "NtSetInformationFile sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "NtSetInformationFile is directly connected to node types: api:2, process:1.",
+          "Incoming context into NtSetInformationFile: api:1, process:1.",
+          "Outgoing context from NtSetInformationFile: api:1."
+        ]
+      },
+      {
+        "api_index": 453,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 453,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 4
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 4
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 452,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 452,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 453,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtQueryInformationFile was followed by NtSetInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 565,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 453,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtSetInformationFile."
+          },
+          {
+            "edge_index_position": 566,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 453,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtSetInformationFile."
+          },
+          {
+            "edge_index_position": 567,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 453,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtSetInformationFile."
+          },
+          {
+            "edge_index_position": 568,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 453,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtSetInformationFile."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 453,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 453,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 454,
+              "display_name": "NtWriteFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by NtWriteFile in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "NtSetInformationFile sits in model-salient relations: api__temporal__api:2, process__executes__api:4.",
+          "NtSetInformationFile is directly connected to node types: api:2, process:4.",
+          "Incoming context into NtSetInformationFile: api:1, process:4.",
+          "Outgoing context from NtSetInformationFile: api:1."
+        ]
+      },
+      {
+        "api_index": 779,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 779,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 778,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 778,
+              "display_name": "NtCreateFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 779,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtCreateFile was followed by NtSetInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1018,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 2,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.tmp",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 779,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.tmp executed or invoked API node NtSetInformationFile."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 779,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 779,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 780,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by NtReadFile in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "NtSetInformationFile sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "NtSetInformationFile is directly connected to node types: api:2, process:1.",
+          "Incoming context into NtSetInformationFile: api:1, process:1.",
+          "Outgoing context from NtSetInformationFile: api:1."
+        ]
+      },
+      {
+        "api_index": 222,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 222,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 221,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 221,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 222,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtReadFile was followed by NtQueryInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 287,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 222,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe executed or invoked API node NtQueryInformationFile."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 222,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 222,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 223,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtQueryInformationFile was followed by LdrGetDllHandle in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "NtQueryInformationFile sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "NtQueryInformationFile is directly connected to node types: api:2, process:1.",
+          "Incoming context into NtQueryInformationFile: api:1, process:1.",
+          "Outgoing context from NtQueryInformationFile: api:1."
+        ]
+      },
+      {
+        "api_index": 233,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 233,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 232,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 232,
+              "display_name": "NtCreateFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 233,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtCreateFile was followed by NtSetInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 307,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 233,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe executed or invoked API node NtSetInformationFile."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 233,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 233,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 234,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by NtReadFile in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "NtSetInformationFile sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "NtSetInformationFile is directly connected to node types: api:2, process:1.",
+          "Incoming context into NtSetInformationFile: api:1, process:1.",
+          "Outgoing context from NtSetInformationFile: api:1."
+        ]
+      },
+      {
+        "api_index": 225,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 225,
+          "display_name": "NtProtectVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 2
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 2
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 224,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 224,
+              "display_name": "NtProtectVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 225,
+              "display_name": "NtProtectVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtProtectVirtualMemory was followed by NtProtectVirtualMemory in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 291,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 225,
+              "display_name": "NtProtectVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe executed or invoked API node NtProtectVirtualMemory."
+          },
+          {
+            "edge_index_position": 292,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 225,
+              "display_name": "NtProtectVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe executed or invoked API node NtProtectVirtualMemory."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 225,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 225,
+              "display_name": "NtProtectVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 226,
+              "display_name": "NtProtectVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtProtectVirtualMemory was followed by NtProtectVirtualMemory in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "NtProtectVirtualMemory sits in model-salient relations: api__temporal__api:2, process__executes__api:2.",
+          "NtProtectVirtualMemory is directly connected to node types: api:2, process:2.",
+          "Incoming context into NtProtectVirtualMemory: api:1, process:2.",
+          "Outgoing context from NtProtectVirtualMemory: api:1."
+        ]
+      },
+      {
+        "api_index": 331,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 331,
+          "display_name": "NtSetInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 330,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 330,
+              "display_name": "NtReadFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 331,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtReadFile was followed by NtSetInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 405,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 331,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe executed or invoked API node NtSetInformationFile."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 331,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 331,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 332,
+              "display_name": "NtClose",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtSetInformationFile was followed by NtClose in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "NtSetInformationFile sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "NtSetInformationFile is directly connected to node types: api:2, process:1.",
+          "Incoming context into NtSetInformationFile: api:1, process:1.",
+          "Outgoing context from NtSetInformationFile: api:1."
+        ]
+      },
+      {
+        "api_index": 428,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 428,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 427,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 427,
+              "display_name": "LockResource",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 428,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LockResource was followed by NtQueryInformationFile in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 538,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 1,
+              "display_name": "28b63734-bff6-44c5-8872-27da3b9c0cb9.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 428,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node 28b63734-bff6-44c5-8872-27da3b9c0cb9.exe executed or invoked API node NtQueryInformationFile."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 428,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 428,
+              "display_name": "NtQueryInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 429,
+              "display_name": "NtSetInformationFile",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtQueryInformationFile was followed by NtSetInformationFile in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "NtQueryInformationFile sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "NtQueryInformationFile is directly connected to node types: api:2, process:1.",
+          "Incoming context into NtQueryInformationFile: api:1, process:1.",
+          "Outgoing context from NtQueryInformationFile: api:1."
+        ]
+      }
+    ]
+  },
+  "analyst_rationale": [
+    "The model predicted Other Malwares (Threat) with probability 0.9052.",
+    "The adaptive fusion leaned most on the structural branch (semantic=0.305, structural=0.348, temporal=0.347); this means the post-GNN graph structure around API/resource/process relations carried the strongest signal.",
+    "The highest-saliency API nodes were: NtSetInformationFile, NtSetInformationFile, NtSetInformationFile, NtSetInformationFile, NtSetInformationFile, NtQueryInformationFile, NtSetInformationFile, NtProtectVirtualMemory, NtSetInformationFile, NtQueryInformationFile. These are the API nodes whose feature vectors most influenced the selected class logit.",
+    "Those salient API nodes were embedded in these graph relations: api__temporal__api:19, process__executes__api:14.",
+    "The salient API regions touched external graph objects/resources: process nodes=['28b63734-bff6-44c5-8872-27da3b9c0cb9.exe', 'VirusShare_dd7c4190eb4b21de1c8f9671110c1b7d.exe', '28b63734-bff6-44c5-8872-27da3b9c0cb9.tmp'].",
+    "At whole-graph level, the dominant relation volumes were: process__executes__api:2883, api__temporal__api:2071.",
+    "Security interpretation: the model treated this graph as a threat because high-saliency API feature vectors occurred inside a structured behavioral context, especially temporal API transitions and process/API execution links. If file, registry, or network edges are present around salient APIs, those resource interactions strengthen the behavioral alert."
+  ],
+  "interpretability_basis": {
+    "saliency_method": "gradient_x_input over API node feature vectors",
+    "what_model_actually_used": [
+      "API node feature vectors",
+      "heterogeneous graph relations",
+      "hybrid GAT/SAGE spatial message passing",
+      "LSTM temporal sequence modeling",
+      "adaptive semantic/structural/temporal branch fusion",
+      "final classifier logits"
+    ],
+    "metadata_policy": "If real node names/metadata exist in the .pkl graph they are displayed. If not, stable graph node IDs such as api_1 or process_0 are used.",
+    "not_used_as_model_input": "No hand-written keyword suspiciousness labels are used to create the prediction."
+  },
+  "interpretation_note": "This explanation combines model saliency, graph connectivity, temporal context, adaptive branch weights, and available graph metadata. It is an analyst aid, not a formal causal proof."
+}

@@ -1167,6 +1167,11 @@ def explain_one_graph(
     window: int,
     include_metadata_inventory: bool,
 ) -> Dict[str, Any]:
+    # Build node name maps from the pristine graph BEFORE collation: hetero_collate
+    # mutates the graph in place and strips per-node metadata such as api_names,
+    # which would otherwise force a fallback to stable node IDs in the report.
+    node_name_maps = build_node_name_maps(graph)
+
     batch_data, labels = hetero_collate([(graph, int(label))], schema=schema, validate_batch=False)
     if batch_data is None:
         raise RuntimeError(f"Failed to collate graph {sample_id}")
@@ -1184,8 +1189,6 @@ def explain_one_graph(
     probs = result["probs"]
     pred_label = int(result["pred_label"])
     saliency = result["api_saliency"]
-
-    node_name_maps = build_node_name_maps(graph)
 
     timestamps = get_api_timestamps_from_graph(graph)
     if timestamps is None:
@@ -1288,13 +1291,19 @@ def main():
     parser.add_argument("--max_samples", type=int, default=10)
     parser.add_argument("--seed", type=int, default=getattr(config, "RANDOM_SEED", 42))
     parser.add_argument("--sample_mode", choices=["random", "first"], default="random")
+    parser.add_argument(
+        "--only_correct_threats",
+        action="store_true",
+        help="Only save reports for correctly-classified threat samples (skips benign "
+             "and misclassified); scans until --max_samples such reports are collected.",
+    )
     parser.add_argument("--top_k", type=int, default=10, help="Top salient API nodes per graph.")
     parser.add_argument("--window", type=int, default=3, help="Temporal context window around salient API nodes.")
     parser.add_argument(
         "--checkpoint",
         type=str,
-        default=str(config.CHECKPOINTS_DIR / "best_model.pt"),
-        help="Path to trained checkpoint.",
+        default=str(config.CHECKPOINTS_DIR / "best_model_1.pt"),
+        help="Path to trained checkpoint (reported BiLSTM model).",
     )
     parser.add_argument(
         "--out_dir",
@@ -1319,16 +1328,25 @@ def main():
 
     schema = ensure_active_schema()
     dataset = load_dataset_for_split(args.split, schema=schema)
-    indices = choose_indices(
-        dataset=dataset,
-        max_samples=args.max_samples,
-        seed=args.seed,
-        sample_mode=args.sample_mode,
-    )
+    if args.only_correct_threats:
+        # Scan a large shuffled candidate pool; stop once enough matching reports are saved.
+        indices = choose_indices(
+            dataset=dataset, max_samples=len(dataset), seed=args.seed, sample_mode="random",
+        )
+        target_reports = args.max_samples
+    else:
+        indices = choose_indices(
+            dataset=dataset,
+            max_samples=args.max_samples,
+            seed=args.seed,
+            sample_mode=args.sample_mode,
+        )
+        target_reports = len(indices)
 
     print(f"[INFO] Split       : {args.split}")
     print(f"[INFO] Dataset size: {len(dataset)}")
-    print(f"[INFO] Explaining  : {len(indices)} samples")
+    print(f"[INFO] Target reports: {target_reports}"
+          + ("  (correctly-classified threats only)" if args.only_correct_threats else ""))
     print(f"[INFO] Sample mode : {args.sample_mode}")
 
     vocab = load_vocab(config.RESULTS_DIR / "api_vocabulary.json")
@@ -1344,8 +1362,9 @@ def main():
     reports_dir.mkdir(parents=True, exist_ok=True)
 
     summary_rows = []
+    saved = 0
 
-    for rank, idx in enumerate(indices, start=1):
+    for idx in indices:
         try:
             graph, label = dataset[idx]
             sample_id = getattr(graph, "sample_id", None)
@@ -1354,8 +1373,6 @@ def main():
                     sample_id = dataset.graph_files[idx].stem
                 except Exception:
                     sample_id = f"{args.split}_{idx}"
-
-            print(f"[INFO] ({rank}/{len(indices)}) Explaining sample: {sample_id}")
 
             report = explain_one_graph(
                 graph=graph,
@@ -1369,6 +1386,16 @@ def main():
                 window=args.window,
                 include_metadata_inventory=args.include_metadata_inventory,
             )
+
+            # When requested, keep only correctly-classified threat explanations.
+            if args.only_correct_threats and not (
+                report["pred_binary"] == "Threat" and report["correct_threat_vs_benign"]
+            ):
+                continue
+
+            saved += 1
+            print(f"[INFO] ({saved}/{target_reports}) Saved explanation: {sample_id} "
+                  f"[{report['pred_name']}, dominant={((report.get('branch_gate_weights') or {}).get('dominant'))}]")
 
             report_path = reports_dir / f"{sample_id}_rq4_report.json"
             with open(report_path, "w", encoding="utf-8") as f:
@@ -1397,6 +1424,9 @@ def main():
                 "branch_dominant": branch.get("dominant"),
                 "report_path": str(report_path),
             })
+
+            if saved >= target_reports:
+                break
 
         except Exception as e:
             print(f"[ERROR] Failed sample index={idx}: {type(e).__name__}: {e}")

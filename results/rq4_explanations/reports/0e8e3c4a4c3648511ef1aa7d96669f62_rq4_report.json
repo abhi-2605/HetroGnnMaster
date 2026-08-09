@@ -1,0 +1,2815 @@
+{
+  "sample_id": "0e8e3c4a4c3648511ef1aa7d96669f62",
+  "true_label": 2,
+  "true_name": "Other Malwares",
+  "true_binary": "Threat",
+  "pred_label": 0,
+  "pred_name": "Ransomware",
+  "pred_binary": "Threat",
+  "correct_3class": false,
+  "correct_threat_vs_benign": true,
+  "probabilities": {
+    "ransomware": 0.5668784379959106,
+    "benign": 0.008064404129981995,
+    "other_malware": 0.42505723237991333
+  },
+  "logits": {
+    "ransomware": 1.7428398132324219,
+    "benign": -2.50984525680542,
+    "other_malware": 1.4549187421798706
+  },
+  "branch_gate_weights": {
+    "semantic": 0.3438067138195038,
+    "structural": 0.33826303482055664,
+    "temporal": 0.31793028116226196,
+    "dominant": "semantic"
+  },
+  "hybrid_gat_sage_summary": {},
+  "graph_basic_stats": {
+    "node_counts": {
+      "api": 1511,
+      "process": 4,
+      "file": 20,
+      "registry": 34,
+      "network": 70,
+      "process_names": 0,
+      "process_ids": 0,
+      "pids": 0,
+      "image_names": 0,
+      "cmdlines": 0,
+      "command_lines": 0,
+      "names": 0,
+      "ids": 0,
+      "name": 0,
+      "labels": 0,
+      "label": 0,
+      "id": 0,
+      "node_ids": 0,
+      "raw_names": 0,
+      "raw_name": 0,
+      "objects": 0,
+      "object_names": 0,
+      "paths": 0,
+      "path": 0,
+      "values": 0,
+      "value": 0,
+      "keys": 0,
+      "key": 0,
+      "addresses": 0,
+      "address": 0,
+      "file_names": 0,
+      "file_paths": 0,
+      "filenames": 0,
+      "registry_keys": 0,
+      "registry_paths": 0,
+      "reg_keys": 0,
+      "domains": 0,
+      "ips": 0,
+      "ip_addresses": 0,
+      "ports": 0,
+      "urls": 0,
+      "hosts": 0
+    },
+    "edge_counts": {
+      "process__executes__api": 1845,
+      "api__temporal__api": 1510,
+      "api__operates_on__file": 23,
+      "api__modifies__registry": 39,
+      "api__connects_to__network": 148
+    },
+    "api_count": 1511,
+    "total_nodes": 1639,
+    "total_edges": 3565,
+    "edge_node_ratio": 2.175106772422209
+  },
+  "node_metadata_sources": {
+    "api": {
+      "source": "node_store.api_names",
+      "available": true
+    },
+    "process": {
+      "source": "fallback_node_id",
+      "available": false,
+      "note": "No per-node metadata/name sequence found for node type 'process'. Using stable node IDs from graph indices."
+    },
+    "file": {
+      "source": "fallback_node_id",
+      "available": false,
+      "note": "No per-node metadata/name sequence found for node type 'file'. Using stable node IDs from graph indices."
+    },
+    "registry": {
+      "source": "fallback_node_id",
+      "available": false,
+      "note": "No per-node metadata/name sequence found for node type 'registry'. Using stable node IDs from graph indices."
+    },
+    "network": {
+      "source": "fallback_node_id",
+      "available": false,
+      "note": "No per-node metadata/name sequence found for node type 'network'. Using stable node IDs from graph indices."
+    }
+  },
+  "top_salient_api_nodes": [
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 112,
+        "display_name": "CryptAcquireContextA",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 1.0,
+      "timestamp": 0.5469999313354492,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 109,
+          "display_name": "NtProtectVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.5469999313354492,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.2538302540779114,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 110,
+          "display_name": "LdrLoadDll",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.5469999313354492,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.4796082675457001,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 111,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.5469999313354492,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7237227559089661,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 112,
+          "display_name": "CryptAcquireContextA",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.5469999313354492,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 1.0,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 113,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.5469999313354492,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.624610424041748,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.016000032424926758,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 114,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.562999963760376,
+          "relative_time_from_salient_api": 0.016000032424926758,
+          "saliency": 0.3803214430809021,
+          "time_gap_from_previous_api": 0.016000032424926758,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 115,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.562999963760376,
+          "relative_time_from_salient_api": 0.016000032424926758,
+          "saliency": 0.5298407077789307,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (6 zero-time gaps) plus delayed transitions (largest observed local gap=0.016000032424926758)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 95,
+        "display_name": "GetSystemMetrics",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.8947712779045105,
+      "timestamp": 0.4530000686645508,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 92,
+          "display_name": "NtOpenKey",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.4530000686645508,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.1663666069507599,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 93,
+          "display_name": "NtQueryValueKey",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.4530000686645508,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.2055155336856842,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 94,
+          "display_name": "NtClose",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.4530000686645508,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.22471687197685242,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 95,
+          "display_name": "GetSystemMetrics",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.4530000686645508,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8947712779045105,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.015999794006347656,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 96,
+          "display_name": "NtAllocateVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.015999794006347656,
+          "saliency": 0.6930822134017944,
+          "time_gap_from_previous_api": 0.015999794006347656,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 97,
+          "display_name": "GetSystemMetrics",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.015999794006347656,
+          "saliency": 0.6247192621231079,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 98,
+          "display_name": "NtProtectVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.015999794006347656,
+          "saliency": 0.24753782153129578,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (6 zero-time gaps) plus delayed transitions (largest observed local gap=0.015999794006347656)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 383,
+        "display_name": "LdrGetProcedureAddress",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.8593800663948059,
+      "timestamp": 6.562999725341797,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 380,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.3744617700576782,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 381,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8453502655029297,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 382,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.3970172107219696,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 383,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8593800663948059,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 384,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.3548821806907654,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 385,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5302301049232483,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.10900020599365234,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 386,
+          "display_name": "NtDelayExecution",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.671999931335449,
+          "relative_time_from_salient_api": 0.10900020599365234,
+          "saliency": 0.5648019909858704,
+          "time_gap_from_previous_api": 0.10900020599365234,
+          "time_gap_to_next_api": 0.015999794006347656,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (5 zero-time gaps) plus delayed transitions (largest observed local gap=0.10900020599365234)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 381,
+        "display_name": "LdrGetProcedureAddress",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.8453502655029297,
+      "timestamp": 6.562999725341797,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 378,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.3631540536880493,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 379,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8022963404655457,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 380,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.3744617700576782,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 381,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8453502655029297,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 382,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.3970172107219696,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 383,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8593800663948059,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 384,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.3548821806907654,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 7 immediate/zero-time API transitions."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 39,
+        "display_name": "LdrGetProcedureAddress",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.8287148475646973,
+      "timestamp": 0.2969999313354492,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 36,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.26600003242492676,
+          "relative_time_from_salient_api": -0.03099989891052246,
+          "saliency": 0.6078507900238037,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.016000032424926758,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 37,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.2820000648498535,
+          "relative_time_from_salient_api": -0.014999866485595703,
+          "saliency": 0.5294521450996399,
+          "time_gap_from_previous_api": 0.016000032424926758,
+          "time_gap_to_next_api": 0.014999866485595703,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 38,
+          "display_name": "LdrLoadDll",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.2969999313354492,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.32809552550315857,
+          "time_gap_from_previous_api": 0.014999866485595703,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 39,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.2969999313354492,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8287148475646973,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 40,
+          "display_name": "LdrLoadDll",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.2969999313354492,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.4268036484718323,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.016000032424926758,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 41,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.312999963760376,
+          "relative_time_from_salient_api": 0.016000032424926758,
+          "saliency": 0.608946681022644,
+          "time_gap_from_previous_api": 0.016000032424926758,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 42,
+          "display_name": "LdrLoadDll",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.312999963760376,
+          "relative_time_from_salient_api": 0.016000032424926758,
+          "saliency": 0.36351215839385986,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (4 zero-time gaps) plus delayed transitions (largest observed local gap=0.016000032424926758)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 101,
+        "display_name": "CreateToolhelp32Snapshot",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.8166491985321045,
+      "timestamp": 0.46899986267089844,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 98,
+          "display_name": "NtProtectVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.24753782153129578,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 99,
+          "display_name": "LdrLoadDll",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5088099241256714,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 100,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7680593132972717,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 101,
+          "display_name": "CreateToolhelp32Snapshot",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8166491985321045,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 102,
+          "display_name": "Process32NextW",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6930081248283386,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.016000032424926758,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 103,
+          "display_name": "Process32NextW",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.4849998950958252,
+          "relative_time_from_salient_api": 0.016000032424926758,
+          "saliency": 0.6569966673851013,
+          "time_gap_from_previous_api": 0.016000032424926758,
+          "time_gap_to_next_api": 0.015000104904174805,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 104,
+          "display_name": "Process32NextW",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.5,
+          "relative_time_from_salient_api": 0.031000137329101562,
+          "saliency": 0.7424546480178833,
+          "time_gap_from_previous_api": 0.015000104904174805,
+          "time_gap_to_next_api": 0.016000032424926758,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (4 zero-time gaps) plus delayed transitions (largest observed local gap=0.016000032424926758)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 379,
+        "display_name": "LdrGetProcedureAddress",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.8022963404655457,
+      "timestamp": 6.562999725341797,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 376,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.546999931335449,
+          "relative_time_from_salient_api": -0.015999794006347656,
+          "saliency": 0.4768965244293213,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.015999794006347656,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 377,
+          "display_name": "__exception__",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5183648467063904,
+          "time_gap_from_previous_api": 0.015999794006347656,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 378,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.3631540536880493,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 379,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8022963404655457,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 380,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.3744617700576782,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 381,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8453502655029297,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 382,
+          "display_name": "LdrGetDllHandle",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 6.562999725341797,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.3970172107219696,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (6 zero-time gaps) plus delayed transitions (largest observed local gap=0.015999794006347656)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 100,
+        "display_name": "LdrGetProcedureAddress",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.7680593132972717,
+      "timestamp": 0.46899986267089844,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 97,
+          "display_name": "GetSystemMetrics",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6247192621231079,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 98,
+          "display_name": "NtProtectVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.24753782153129578,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 99,
+          "display_name": "LdrLoadDll",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.5088099241256714,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 100,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7680593132972717,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 101,
+          "display_name": "CreateToolhelp32Snapshot",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8166491985321045,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 102,
+          "display_name": "Process32NextW",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.46899986267089844,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6930081248283386,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.016000032424926758,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 103,
+          "display_name": "Process32NextW",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.4849998950958252,
+          "relative_time_from_salient_api": 0.016000032424926758,
+          "saliency": 0.6569966673851013,
+          "time_gap_from_previous_api": 0.016000032424926758,
+          "time_gap_to_next_api": 0.015000104904174805,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (5 zero-time gaps) plus delayed transitions (largest observed local gap=0.016000032424926758)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 144,
+        "display_name": "GetComputerNameA",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.7540358901023865,
+      "timestamp": 5.765999794006348,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 141,
+          "display_name": "NtOpenKey",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 5.75,
+          "relative_time_from_salient_api": -0.015999794006347656,
+          "saliency": 0.15700310468673706,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 142,
+          "display_name": "NtQueryValueKey",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 5.75,
+          "relative_time_from_salient_api": -0.015999794006347656,
+          "saliency": 0.12305880337953568,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 143,
+          "display_name": "NtClose",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 5.75,
+          "relative_time_from_salient_api": -0.015999794006347656,
+          "saliency": 0.13674388825893402,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.015999794006347656,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 144,
+          "display_name": "GetComputerNameA",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 5.765999794006348,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7540358901023865,
+          "time_gap_from_previous_api": 0.015999794006347656,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 145,
+          "display_name": "GetSystemDirectoryA",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 5.765999794006348,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.4913226366043091,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.04699993133544922,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 146,
+          "display_name": "NtOpenFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 5.812999725341797,
+          "relative_time_from_salient_api": 0.04699993133544922,
+          "saliency": 0.18090879917144775,
+          "time_gap_from_previous_api": 0.04699993133544922,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 147,
+          "display_name": "NtQueryInformationFile",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 5.812999725341797,
+          "relative_time_from_salient_api": 0.04699993133544922,
+          "saliency": 0.3492056131362915,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (5 zero-time gaps) plus delayed transitions (largest observed local gap=0.04699993133544922)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 30,
+        "display_name": "LdrGetProcedureAddress",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.7443794012069702,
+      "timestamp": 0.2349998950958252,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 27,
+          "display_name": "NtQueryValueKey",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.2349998950958252,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.13493876159191132,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 28,
+          "display_name": "NtClose",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.2349998950958252,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.1668476015329361,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 29,
+          "display_name": "LdrLoadDll",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.2349998950958252,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.4132152497768402,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 30,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.2349998950958252,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7443794012069702,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 31,
+          "display_name": "LdrLoadDll",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.2349998950958252,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.4122565984725952,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 32,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.2349998950958252,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6041162014007568,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.015000104904174805,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 33,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 0.25,
+          "relative_time_from_salient_api": 0.015000104904174805,
+          "saliency": 0.5573756098747253,
+          "time_gap_from_previous_api": 0.015000104904174805,
+          "time_gap_to_next_api": 0.016000032424926758,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (5 zero-time gaps) plus delayed transitions (largest observed local gap=0.016000032424926758)."
+    }
+  ],
+  "salient_behavioral_neighborhoods": {
+    "global_relation_counts_touching_salient_api_nodes": {
+      "process__executes__api": 11,
+      "api__temporal__api": 19
+    },
+    "connected_resource_summary": {
+      "process": {
+        "process_3": 11
+      }
+    },
+    "relation_summaries": [
+      {
+        "edge_type": "process__executes__api",
+        "relation_meaning": "process executed or invoked API behavior",
+        "num_edges_touching_salient_api_nodes": 11,
+        "sampled_examples": [
+          {
+            "edge_index_position": 163,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 30,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          },
+          {
+            "edge_index_position": 190,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 39,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          },
+          {
+            "edge_index_position": 191,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 39,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          },
+          {
+            "edge_index_position": 304,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 95,
+              "display_name": "GetSystemMetrics",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node GetSystemMetrics."
+          },
+          {
+            "edge_index_position": 311,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 100,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          },
+          {
+            "edge_index_position": 312,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 101,
+              "display_name": "CreateToolhelp32Snapshot",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node CreateToolhelp32Snapshot."
+          },
+          {
+            "edge_index_position": 367,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 112,
+              "display_name": "CryptAcquireContextA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node CryptAcquireContextA."
+          },
+          {
+            "edge_index_position": 440,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 144,
+              "display_name": "GetComputerNameA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node GetComputerNameA."
+          },
+          {
+            "edge_index_position": 709,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 379,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          },
+          {
+            "edge_index_position": 711,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 381,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          },
+          {
+            "edge_index_position": 713,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 383,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          }
+        ]
+      },
+      {
+        "edge_type": "api__temporal__api",
+        "relation_meaning": "API execution/order transition",
+        "num_edges_touching_salient_api_nodes": 19,
+        "sampled_examples": [
+          {
+            "edge_index_position": 29,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 29,
+              "display_name": "LdrLoadDll",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 30,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrLoadDll was followed by LdrGetProcedureAddress in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 30,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 30,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 31,
+              "display_name": "LdrLoadDll",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by LdrLoadDll in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 38,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 38,
+              "display_name": "LdrLoadDll",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 39,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrLoadDll was followed by LdrGetProcedureAddress in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 39,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 39,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 40,
+              "display_name": "LdrLoadDll",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by LdrLoadDll in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 94,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 94,
+              "display_name": "NtClose",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 95,
+              "display_name": "GetSystemMetrics",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtClose was followed by GetSystemMetrics in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 95,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 95,
+              "display_name": "GetSystemMetrics",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 96,
+              "display_name": "NtAllocateVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "GetSystemMetrics was followed by NtAllocateVirtualMemory in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 99,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 99,
+              "display_name": "LdrLoadDll",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 100,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrLoadDll was followed by LdrGetProcedureAddress in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 100,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 100,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 101,
+              "display_name": "CreateToolhelp32Snapshot",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by CreateToolhelp32Snapshot in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 101,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 101,
+              "display_name": "CreateToolhelp32Snapshot",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 102,
+              "display_name": "Process32NextW",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CreateToolhelp32Snapshot was followed by Process32NextW in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 111,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 111,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 112,
+              "display_name": "CryptAcquireContextA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by CryptAcquireContextA in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 112,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 112,
+              "display_name": "CryptAcquireContextA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 113,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptAcquireContextA was followed by LdrGetProcedureAddress in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 143,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 143,
+              "display_name": "NtClose",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 144,
+              "display_name": "GetComputerNameA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtClose was followed by GetComputerNameA in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 144,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 144,
+              "display_name": "GetComputerNameA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 145,
+              "display_name": "GetSystemDirectoryA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "GetComputerNameA was followed by GetSystemDirectoryA in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 378,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 378,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 379,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetDllHandle was followed by LdrGetProcedureAddress in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 379,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 379,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 380,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by LdrGetDllHandle in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 380,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 380,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 381,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetDllHandle was followed by LdrGetProcedureAddress in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 381,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 381,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 382,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by LdrGetDllHandle in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 382,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 382,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 383,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetDllHandle was followed by LdrGetProcedureAddress in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 383,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 383,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 384,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by LdrGetDllHandle in the API temporal sequence."
+          }
+        ]
+      }
+    ],
+    "per_salient_api_neighborhoods": [
+      {
+        "api_index": 112,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 112,
+          "display_name": "CryptAcquireContextA",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "process__executes__api": 1,
+          "api__temporal__api": 2
+        },
+        "connected_node_type_counts": {
+          "process": 1,
+          "api": 2
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 367,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 112,
+              "display_name": "CryptAcquireContextA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node CryptAcquireContextA."
+          },
+          {
+            "edge_index_position": 111,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 111,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 112,
+              "display_name": "CryptAcquireContextA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by CryptAcquireContextA in the API temporal sequence."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 112,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 112,
+              "display_name": "CryptAcquireContextA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 113,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptAcquireContextA was followed by LdrGetProcedureAddress in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "CryptAcquireContextA sits in model-salient relations: process__executes__api:1, api__temporal__api:2.",
+          "CryptAcquireContextA is directly connected to node types: process:1, api:2.",
+          "Incoming context into CryptAcquireContextA: process:1, api:1.",
+          "Outgoing context from CryptAcquireContextA: api:1."
+        ]
+      },
+      {
+        "api_index": 95,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 95,
+          "display_name": "GetSystemMetrics",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "process__executes__api": 1,
+          "api__temporal__api": 2
+        },
+        "connected_node_type_counts": {
+          "process": 1,
+          "api": 2
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 304,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 95,
+              "display_name": "GetSystemMetrics",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node GetSystemMetrics."
+          },
+          {
+            "edge_index_position": 94,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 94,
+              "display_name": "NtClose",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 95,
+              "display_name": "GetSystemMetrics",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtClose was followed by GetSystemMetrics in the API temporal sequence."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 95,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 95,
+              "display_name": "GetSystemMetrics",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 96,
+              "display_name": "NtAllocateVirtualMemory",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "GetSystemMetrics was followed by NtAllocateVirtualMemory in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "GetSystemMetrics sits in model-salient relations: process__executes__api:1, api__temporal__api:2.",
+          "GetSystemMetrics is directly connected to node types: process:1, api:2.",
+          "Incoming context into GetSystemMetrics: process:1, api:1.",
+          "Outgoing context from GetSystemMetrics: api:1."
+        ]
+      },
+      {
+        "api_index": 383,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 383,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "process__executes__api": 1,
+          "api__temporal__api": 2
+        },
+        "connected_node_type_counts": {
+          "process": 1,
+          "api": 2
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 713,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 383,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          },
+          {
+            "edge_index_position": 382,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 382,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 383,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetDllHandle was followed by LdrGetProcedureAddress in the API temporal sequence."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 383,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 383,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 384,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by LdrGetDllHandle in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "LdrGetProcedureAddress sits in model-salient relations: process__executes__api:1, api__temporal__api:2.",
+          "LdrGetProcedureAddress is directly connected to node types: process:1, api:2.",
+          "Incoming context into LdrGetProcedureAddress: process:1, api:1.",
+          "Outgoing context from LdrGetProcedureAddress: api:1."
+        ]
+      },
+      {
+        "api_index": 381,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 381,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "process__executes__api": 1,
+          "api__temporal__api": 2
+        },
+        "connected_node_type_counts": {
+          "process": 1,
+          "api": 2
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 711,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 381,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          },
+          {
+            "edge_index_position": 380,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 380,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 381,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetDllHandle was followed by LdrGetProcedureAddress in the API temporal sequence."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 381,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 381,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 382,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by LdrGetDllHandle in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "LdrGetProcedureAddress sits in model-salient relations: process__executes__api:1, api__temporal__api:2.",
+          "LdrGetProcedureAddress is directly connected to node types: process:1, api:2.",
+          "Incoming context into LdrGetProcedureAddress: process:1, api:1.",
+          "Outgoing context from LdrGetProcedureAddress: api:1."
+        ]
+      },
+      {
+        "api_index": 39,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 39,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "process__executes__api": 2,
+          "api__temporal__api": 2
+        },
+        "connected_node_type_counts": {
+          "process": 2,
+          "api": 2
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 190,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 39,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          },
+          {
+            "edge_index_position": 191,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 39,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          },
+          {
+            "edge_index_position": 38,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 38,
+              "display_name": "LdrLoadDll",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 39,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrLoadDll was followed by LdrGetProcedureAddress in the API temporal sequence."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 39,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 39,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 40,
+              "display_name": "LdrLoadDll",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by LdrLoadDll in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "LdrGetProcedureAddress sits in model-salient relations: process__executes__api:2, api__temporal__api:2.",
+          "LdrGetProcedureAddress is directly connected to node types: process:2, api:2.",
+          "Incoming context into LdrGetProcedureAddress: process:2, api:1.",
+          "Outgoing context from LdrGetProcedureAddress: api:1."
+        ]
+      },
+      {
+        "api_index": 101,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 101,
+          "display_name": "CreateToolhelp32Snapshot",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "process__executes__api": 1,
+          "api__temporal__api": 1
+        },
+        "connected_node_type_counts": {
+          "process": 1,
+          "api": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 312,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 101,
+              "display_name": "CreateToolhelp32Snapshot",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node CreateToolhelp32Snapshot."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 101,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 101,
+              "display_name": "CreateToolhelp32Snapshot",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 102,
+              "display_name": "Process32NextW",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CreateToolhelp32Snapshot was followed by Process32NextW in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "CreateToolhelp32Snapshot sits in model-salient relations: process__executes__api:1, api__temporal__api:1.",
+          "CreateToolhelp32Snapshot is directly connected to node types: process:1, api:1.",
+          "Incoming context into CreateToolhelp32Snapshot: process:1.",
+          "Outgoing context from CreateToolhelp32Snapshot: api:1."
+        ]
+      },
+      {
+        "api_index": 379,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 379,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "process__executes__api": 1,
+          "api__temporal__api": 2
+        },
+        "connected_node_type_counts": {
+          "process": 1,
+          "api": 2
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 709,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 379,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          },
+          {
+            "edge_index_position": 378,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 378,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 379,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetDllHandle was followed by LdrGetProcedureAddress in the API temporal sequence."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 379,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 379,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 380,
+              "display_name": "LdrGetDllHandle",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by LdrGetDllHandle in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "LdrGetProcedureAddress sits in model-salient relations: process__executes__api:1, api__temporal__api:2.",
+          "LdrGetProcedureAddress is directly connected to node types: process:1, api:2.",
+          "Incoming context into LdrGetProcedureAddress: process:1, api:1.",
+          "Outgoing context from LdrGetProcedureAddress: api:1."
+        ]
+      },
+      {
+        "api_index": 100,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 100,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "process__executes__api": 1,
+          "api__temporal__api": 2
+        },
+        "connected_node_type_counts": {
+          "process": 1,
+          "api": 2
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 311,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 100,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          },
+          {
+            "edge_index_position": 99,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 99,
+              "display_name": "LdrLoadDll",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 100,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrLoadDll was followed by LdrGetProcedureAddress in the API temporal sequence."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 100,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 100,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 101,
+              "display_name": "CreateToolhelp32Snapshot",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by CreateToolhelp32Snapshot in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "LdrGetProcedureAddress sits in model-salient relations: process__executes__api:1, api__temporal__api:2.",
+          "LdrGetProcedureAddress is directly connected to node types: process:1, api:2.",
+          "Incoming context into LdrGetProcedureAddress: process:1, api:1.",
+          "Outgoing context from LdrGetProcedureAddress: api:1."
+        ]
+      },
+      {
+        "api_index": 144,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 144,
+          "display_name": "GetComputerNameA",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "process__executes__api": 1,
+          "api__temporal__api": 2
+        },
+        "connected_node_type_counts": {
+          "process": 1,
+          "api": 2
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 440,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 144,
+              "display_name": "GetComputerNameA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node GetComputerNameA."
+          },
+          {
+            "edge_index_position": 143,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 143,
+              "display_name": "NtClose",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 144,
+              "display_name": "GetComputerNameA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "NtClose was followed by GetComputerNameA in the API temporal sequence."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 144,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 144,
+              "display_name": "GetComputerNameA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 145,
+              "display_name": "GetSystemDirectoryA",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "GetComputerNameA was followed by GetSystemDirectoryA in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "GetComputerNameA sits in model-salient relations: process__executes__api:1, api__temporal__api:2.",
+          "GetComputerNameA is directly connected to node types: process:1, api:2.",
+          "Incoming context into GetComputerNameA: process:1, api:1.",
+          "Outgoing context from GetComputerNameA: api:1."
+        ]
+      },
+      {
+        "api_index": 30,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 30,
+          "display_name": "LdrGetProcedureAddress",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "process__executes__api": 1,
+          "api__temporal__api": 2
+        },
+        "connected_node_type_counts": {
+          "process": 1,
+          "api": 2
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 163,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 3,
+              "display_name": "process_3",
+              "metadata_available": false,
+              "metadata_source": "fallback_node_id"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 30,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node process_3 executed or invoked API node LdrGetProcedureAddress."
+          },
+          {
+            "edge_index_position": 29,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 29,
+              "display_name": "LdrLoadDll",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 30,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrLoadDll was followed by LdrGetProcedureAddress in the API temporal sequence."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 30,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 30,
+              "display_name": "LdrGetProcedureAddress",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 31,
+              "display_name": "LdrLoadDll",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "LdrGetProcedureAddress was followed by LdrLoadDll in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "LdrGetProcedureAddress sits in model-salient relations: process__executes__api:1, api__temporal__api:2.",
+          "LdrGetProcedureAddress is directly connected to node types: process:1, api:2.",
+          "Incoming context into LdrGetProcedureAddress: process:1, api:1.",
+          "Outgoing context from LdrGetProcedureAddress: api:1."
+        ]
+      }
+    ]
+  },
+  "analyst_rationale": [
+    "The model predicted Ransomware (Threat) with probability 0.5669.",
+    "The adaptive fusion leaned most on the semantic branch (semantic=0.344, structural=0.338, temporal=0.318); this means the raw/projected API-node feature summary carried the strongest graph-level signal.",
+    "The highest-saliency API nodes were: CryptAcquireContextA, GetSystemMetrics, LdrGetProcedureAddress, LdrGetProcedureAddress, LdrGetProcedureAddress, CreateToolhelp32Snapshot, LdrGetProcedureAddress, LdrGetProcedureAddress, GetComputerNameA, LdrGetProcedureAddress. These are the API nodes whose feature vectors most influenced the selected class logit.",
+    "Those salient API nodes were embedded in these graph relations: api__temporal__api:19, process__executes__api:11.",
+    "The salient API regions touched external graph objects/resources: process nodes=['process_3'].",
+    "At whole-graph level, the dominant relation volumes were: process__executes__api:1845, api__temporal__api:1510, api__connects_to__network:148, api__modifies__registry:39, api__operates_on__file:23.",
+    "Security interpretation: the model treated this graph as a threat because high-saliency API feature vectors occurred inside a structured behavioral context, especially temporal API transitions and process/API execution links. If file, registry, or network edges are present around salient APIs, those resource interactions strengthen the behavioral alert."
+  ],
+  "interpretability_basis": {
+    "saliency_method": "gradient_x_input over API node feature vectors",
+    "what_model_actually_used": [
+      "API node feature vectors",
+      "heterogeneous graph relations",
+      "hybrid GAT/SAGE spatial message passing",
+      "LSTM temporal sequence modeling",
+      "adaptive semantic/structural/temporal branch fusion",
+      "final classifier logits"
+    ],
+    "metadata_policy": "If real node names/metadata exist in the .pkl graph they are displayed. If not, stable graph node IDs such as api_1 or process_0 are used.",
+    "not_used_as_model_input": "No hand-written keyword suspiciousness labels are used to create the prediction."
+  },
+  "interpretation_note": "This explanation combines model saliency, graph connectivity, temporal context, adaptive branch weights, and available graph metadata. It is an analyst aid, not a formal causal proof."
+}

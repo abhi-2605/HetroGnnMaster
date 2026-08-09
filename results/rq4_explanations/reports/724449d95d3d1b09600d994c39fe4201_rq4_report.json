@@ -1,0 +1,2796 @@
+{
+  "sample_id": "724449d95d3d1b09600d994c39fe4201",
+  "true_label": 2,
+  "true_name": "Other Malwares",
+  "true_binary": "Threat",
+  "pred_label": 2,
+  "pred_name": "Other Malwares",
+  "pred_binary": "Threat",
+  "correct_3class": true,
+  "correct_threat_vs_benign": true,
+  "probabilities": {
+    "ransomware": 0.18728123605251312,
+    "benign": 0.004758593626320362,
+    "other_malware": 0.8079600930213928
+  },
+  "logits": {
+    "ransomware": 0.8898105621337891,
+    "benign": -2.782848596572876,
+    "other_malware": 2.3517117500305176
+  },
+  "branch_gate_weights": {
+    "semantic": 0.34642717242240906,
+    "structural": 0.3709535598754883,
+    "temporal": 0.28261926770210266,
+    "dominant": "structural"
+  },
+  "hybrid_gat_sage_summary": {},
+  "graph_basic_stats": {
+    "node_counts": {
+      "api": 2214,
+      "file": 52,
+      "registry": 125,
+      "process": 3,
+      "network": 0,
+      "domains": 0,
+      "ips": 0,
+      "ip_addresses": 0,
+      "addresses": 0,
+      "ports": 0,
+      "urls": 0,
+      "hosts": 0,
+      "name": 0,
+      "labels": 0,
+      "label": 0,
+      "ids": 0,
+      "id": 0,
+      "node_ids": 0,
+      "raw_names": 0,
+      "raw_name": 0,
+      "objects": 0,
+      "object_names": 0,
+      "path": 0,
+      "values": 0,
+      "value": 0,
+      "key": 0,
+      "address": 0
+    },
+    "edge_counts": {
+      "api__temporal__api": 2213,
+      "api__operates_on__file": 0,
+      "api__modifies__registry": 0,
+      "process__executes__api": 3357
+    },
+    "api_count": 2214,
+    "total_nodes": 2394,
+    "total_edges": 5570,
+    "edge_node_ratio": 2.3266499582289057
+  },
+  "node_metadata_sources": {
+    "api": {
+      "source": "node_store.api_names",
+      "available": true
+    },
+    "file": {
+      "source": "node_store.paths",
+      "available": true
+    },
+    "registry": {
+      "source": "node_store[keys]",
+      "available": true
+    },
+    "process": {
+      "source": "node_store.names",
+      "available": true
+    },
+    "network": {
+      "source": "fallback_node_id",
+      "available": false,
+      "note": "No per-node metadata/name sequence found for node type 'network'. Using stable node IDs from graph indices."
+    }
+  },
+  "top_salient_api_nodes": [
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 1785,
+        "display_name": "CryptDestroyHash",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 1.0,
+      "timestamp": 38.4370002746582,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 1782,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7804662585258484,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1783,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9779810905456543,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1784,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8013311624526978,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1785,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 1.0,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1786,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8156110048294067,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1787,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9900751113891602,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1788,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8056301474571228,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 7 immediate/zero-time API transitions."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 1787,
+        "display_name": "CryptDestroyHash",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.9900751113891602,
+      "timestamp": 38.4370002746582,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 1784,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8013311624526978,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1785,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 1.0,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1786,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8156110048294067,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1787,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9900751113891602,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1788,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8056301474571228,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1789,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9761368036270142,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1790,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7932421565055847,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 7 immediate/zero-time API transitions."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 1488,
+        "display_name": "CryptDestroyHash",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.9882123470306396,
+      "timestamp": 38.4370002746582,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 1485,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7293785214424133,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1486,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9669992923736572,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1487,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7207658886909485,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1488,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9882123470306396,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1489,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.3154253661632538,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1490,
+          "display_name": "NtAllocateVirtualMemory",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.10451109707355499,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1491,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.6199517846107483,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 7 immediate/zero-time API transitions."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 1783,
+        "display_name": "CryptDestroyHash",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.9779810905456543,
+      "timestamp": 38.4370002746582,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 1780,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7750540375709534,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1781,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9441219568252563,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1782,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7804662585258484,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1783,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9779810905456543,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1784,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8013311624526978,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1785,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 1.0,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1786,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8156110048294067,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 7 immediate/zero-time API transitions."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 1789,
+        "display_name": "CryptDestroyHash",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.9761368036270142,
+      "timestamp": 38.4370002746582,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 1786,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8156110048294067,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1787,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9900751113891602,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1788,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8056301474571228,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1789,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9761368036270142,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1790,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7932421565055847,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1791,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9689043164253235,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1792,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7919501066207886,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 7 immediate/zero-time API transitions."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 1791,
+        "display_name": "CryptDestroyHash",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.9689043164253235,
+      "timestamp": 38.4370002746582,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 1788,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8056301474571228,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1789,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9761368036270142,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1790,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7932421565055847,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1791,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9689043164253235,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1792,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7919501066207886,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1793,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.963599443435669,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1794,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.41397538781166077,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 7 immediate/zero-time API transitions."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 1486,
+        "display_name": "CryptDestroyHash",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.9669992923736572,
+      "timestamp": 38.4370002746582,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 1483,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7173008322715759,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1484,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9224172830581665,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1485,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7293785214424133,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1486,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9669992923736572,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1487,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7207658886909485,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1488,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9882123470306396,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1489,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.3154253661632538,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 7 immediate/zero-time API transitions."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 1793,
+        "display_name": "CryptDestroyHash",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.963599443435669,
+      "timestamp": 38.4370002746582,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 1790,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7932421565055847,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1791,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9689043164253235,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1792,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7919501066207886,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1793,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.963599443435669,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1794,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.41397538781166077,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1795,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.2668079435825348,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1796,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.174002006649971,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.01599884033203125,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window contains bursty repeated/immediate transitions (6 zero-time gaps) plus delayed transitions (largest observed local gap=0.01599884033203125)."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 1781,
+        "display_name": "CryptDestroyHash",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.9441219568252563,
+      "timestamp": 38.4370002746582,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 1778,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7713118195533752,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1779,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9333275556564331,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1780,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7750540375709534,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1781,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9441219568252563,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1782,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7804662585258484,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1783,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9779810905456543,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1784,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8013311624526978,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 7 immediate/zero-time API transitions."
+    },
+    {
+      "salient_api": {
+        "node_type": "api",
+        "node_index": 1753,
+        "display_name": "CryptDestroyHash",
+        "metadata_available": true,
+        "metadata_source": "node_store.api_names"
+      },
+      "saliency": 0.9385867714881897,
+      "timestamp": 38.4370002746582,
+      "local_sequence_window": [
+        {
+          "node_type": "api",
+          "node_index": 1750,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.7930200099945068,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1751,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.933667778968811,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1752,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8005428314208984,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1753,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9385867714881897,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1754,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8050825595855713,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1755,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.9380343556404114,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        },
+        {
+          "node_type": "api",
+          "node_index": 1756,
+          "display_name": "CryptCreateHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names",
+          "timestamp": 38.4370002746582,
+          "relative_time_from_salient_api": 0.0,
+          "saliency": 0.8055463433265686,
+          "time_gap_from_previous_api": 0.0,
+          "time_gap_to_next_api": 0.0,
+          "model_feature_basis": "This API node was evaluated through its graph node feature vector. If display_name is generic, the graph did not expose a real API name."
+        }
+      ],
+      "temporal_interpretation": "The local API window is burst-like, with 7 immediate/zero-time API transitions."
+    }
+  ],
+  "salient_behavioral_neighborhoods": {
+    "global_relation_counts_touching_salient_api_nodes": {
+      "api__temporal__api": 20,
+      "process__executes__api": 10
+    },
+    "connected_resource_summary": {
+      "process": {
+        "VirusShare_724449d95d3d1b09600d994c39fe4201.exe": 10
+      }
+    },
+    "relation_summaries": [
+      {
+        "edge_type": "api__temporal__api",
+        "relation_meaning": "API execution/order transition",
+        "num_edges_touching_salient_api_nodes": 20,
+        "sampled_examples": [
+          {
+            "edge_index_position": 1485,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1485,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1486,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1486,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1486,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1487,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1487,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1487,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1488,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1488,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1488,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1489,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1752,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1752,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1753,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1753,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1753,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1754,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1780,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1780,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1781,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1781,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1781,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1782,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1782,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1782,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1783,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1783,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1783,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1784,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1784,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1784,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1785,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1785,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1785,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1786,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1786,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1786,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1787,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1787,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1787,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1788,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1788,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1788,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1789,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1789,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1789,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1790,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1790,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1790,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1791,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1791,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1791,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1792,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1792,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1792,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1793,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 1793,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1793,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1794,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          }
+        ]
+      },
+      {
+        "edge_type": "process__executes__api",
+        "relation_meaning": "process executed or invoked API behavior",
+        "num_edges_touching_salient_api_nodes": 10,
+        "sampled_examples": [
+          {
+            "edge_index_position": 2171,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1486,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          },
+          {
+            "edge_index_position": 2173,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1488,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          },
+          {
+            "edge_index_position": 2438,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1753,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          },
+          {
+            "edge_index_position": 2466,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1781,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          },
+          {
+            "edge_index_position": 2468,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1783,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          },
+          {
+            "edge_index_position": 2470,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1785,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          },
+          {
+            "edge_index_position": 2472,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1787,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          },
+          {
+            "edge_index_position": 2474,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1789,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          },
+          {
+            "edge_index_position": 2476,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1791,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          },
+          {
+            "edge_index_position": 2478,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1793,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          }
+        ]
+      }
+    ],
+    "per_salient_api_neighborhoods": [
+      {
+        "api_index": 1785,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 1785,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 1784,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1784,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1785,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 2470,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1785,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 1785,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1785,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1786,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "CryptDestroyHash sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "CryptDestroyHash is directly connected to node types: api:2, process:1.",
+          "Incoming context into CryptDestroyHash: api:1, process:1.",
+          "Outgoing context from CryptDestroyHash: api:1."
+        ]
+      },
+      {
+        "api_index": 1787,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 1787,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 1786,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1786,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1787,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 2472,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1787,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 1787,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1787,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1788,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "CryptDestroyHash sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "CryptDestroyHash is directly connected to node types: api:2, process:1.",
+          "Incoming context into CryptDestroyHash: api:1, process:1.",
+          "Outgoing context from CryptDestroyHash: api:1."
+        ]
+      },
+      {
+        "api_index": 1488,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 1488,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 1487,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1487,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1488,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 2173,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1488,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 1488,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1488,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1489,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "CryptDestroyHash sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "CryptDestroyHash is directly connected to node types: api:2, process:1.",
+          "Incoming context into CryptDestroyHash: api:1, process:1.",
+          "Outgoing context from CryptDestroyHash: api:1."
+        ]
+      },
+      {
+        "api_index": 1783,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 1783,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 1782,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1782,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1783,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 2468,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1783,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 1783,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1783,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1784,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "CryptDestroyHash sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "CryptDestroyHash is directly connected to node types: api:2, process:1.",
+          "Incoming context into CryptDestroyHash: api:1, process:1.",
+          "Outgoing context from CryptDestroyHash: api:1."
+        ]
+      },
+      {
+        "api_index": 1789,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 1789,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 1788,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1788,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1789,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 2474,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1789,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 1789,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1789,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1790,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "CryptDestroyHash sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "CryptDestroyHash is directly connected to node types: api:2, process:1.",
+          "Incoming context into CryptDestroyHash: api:1, process:1.",
+          "Outgoing context from CryptDestroyHash: api:1."
+        ]
+      },
+      {
+        "api_index": 1791,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 1791,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 1790,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1790,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1791,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 2476,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1791,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 1791,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1791,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1792,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "CryptDestroyHash sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "CryptDestroyHash is directly connected to node types: api:2, process:1.",
+          "Incoming context into CryptDestroyHash: api:1, process:1.",
+          "Outgoing context from CryptDestroyHash: api:1."
+        ]
+      },
+      {
+        "api_index": 1486,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 1486,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 1485,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1485,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1486,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 2171,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1486,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 1486,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1486,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1487,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "CryptDestroyHash sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "CryptDestroyHash is directly connected to node types: api:2, process:1.",
+          "Incoming context into CryptDestroyHash: api:1, process:1.",
+          "Outgoing context from CryptDestroyHash: api:1."
+        ]
+      },
+      {
+        "api_index": 1793,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 1793,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 1792,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1792,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1793,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 2478,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1793,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 1793,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1793,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1794,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "CryptDestroyHash sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "CryptDestroyHash is directly connected to node types: api:2, process:1.",
+          "Incoming context into CryptDestroyHash: api:1, process:1.",
+          "Outgoing context from CryptDestroyHash: api:1."
+        ]
+      },
+      {
+        "api_index": 1781,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 1781,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 1780,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1780,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1781,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 2466,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1781,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 1781,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1781,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1782,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "CryptDestroyHash sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "CryptDestroyHash is directly connected to node types: api:2, process:1.",
+          "Incoming context into CryptDestroyHash: api:1, process:1.",
+          "Outgoing context from CryptDestroyHash: api:1."
+        ]
+      },
+      {
+        "api_index": 1753,
+        "api_node": {
+          "node_type": "api",
+          "node_index": 1753,
+          "display_name": "CryptDestroyHash",
+          "metadata_available": true,
+          "metadata_source": "node_store.api_names"
+        },
+        "relation_counts": {
+          "api__temporal__api": 2,
+          "process__executes__api": 1
+        },
+        "connected_node_type_counts": {
+          "api": 2,
+          "process": 1
+        },
+        "incoming_edges": [
+          {
+            "edge_index_position": 1752,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1752,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1753,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptCreateHash was followed by CryptDestroyHash in the API temporal sequence."
+          },
+          {
+            "edge_index_position": 2438,
+            "edge_type": "process__executes__api",
+            "relation_meaning": "process executed or invoked API behavior",
+            "direction_relative_to_salient_api": "incoming_to_salient_api",
+            "source": {
+              "node_type": "process",
+              "node_index": 0,
+              "display_name": "VirusShare_724449d95d3d1b09600d994c39fe4201.exe",
+              "metadata_available": true,
+              "metadata_source": "node_store.names"
+            },
+            "relation": "executes",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1753,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "Process node VirusShare_724449d95d3d1b09600d994c39fe4201.exe executed or invoked API node CryptDestroyHash."
+          }
+        ],
+        "outgoing_edges": [
+          {
+            "edge_index_position": 1753,
+            "edge_type": "api__temporal__api",
+            "relation_meaning": "API execution/order transition",
+            "direction_relative_to_salient_api": "outgoing_from_salient_api",
+            "source": {
+              "node_type": "api",
+              "node_index": 1753,
+              "display_name": "CryptDestroyHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "relation": "temporal",
+            "destination": {
+              "node_type": "api",
+              "node_index": 1754,
+              "display_name": "CryptCreateHash",
+              "metadata_available": true,
+              "metadata_source": "node_store.api_names"
+            },
+            "plain_english": "CryptDestroyHash was followed by CryptCreateHash in the API temporal sequence."
+          }
+        ],
+        "why_this_neighborhood_matters": [
+          "CryptDestroyHash sits in model-salient relations: api__temporal__api:2, process__executes__api:1.",
+          "CryptDestroyHash is directly connected to node types: api:2, process:1.",
+          "Incoming context into CryptDestroyHash: api:1, process:1.",
+          "Outgoing context from CryptDestroyHash: api:1."
+        ]
+      }
+    ]
+  },
+  "analyst_rationale": [
+    "The model predicted Other Malwares (Threat) with probability 0.8080.",
+    "The adaptive fusion leaned most on the structural branch (semantic=0.346, structural=0.371, temporal=0.283); this means the post-GNN graph structure around API/resource/process relations carried the strongest signal.",
+    "The highest-saliency API nodes were: CryptDestroyHash, CryptDestroyHash, CryptDestroyHash, CryptDestroyHash, CryptDestroyHash, CryptDestroyHash, CryptDestroyHash, CryptDestroyHash, CryptDestroyHash, CryptDestroyHash. These are the API nodes whose feature vectors most influenced the selected class logit.",
+    "Those salient API nodes were embedded in these graph relations: api__temporal__api:20, process__executes__api:10.",
+    "The salient API regions touched external graph objects/resources: process nodes=['VirusShare_724449d95d3d1b09600d994c39fe4201.exe'].",
+    "At whole-graph level, the dominant relation volumes were: process__executes__api:3357, api__temporal__api:2213.",
+    "Security interpretation: the model treated this graph as a threat because high-saliency API feature vectors occurred inside a structured behavioral context, especially temporal API transitions and process/API execution links. If file, registry, or network edges are present around salient APIs, those resource interactions strengthen the behavioral alert."
+  ],
+  "interpretability_basis": {
+    "saliency_method": "gradient_x_input over API node feature vectors",
+    "what_model_actually_used": [
+      "API node feature vectors",
+      "heterogeneous graph relations",
+      "hybrid GAT/SAGE spatial message passing",
+      "LSTM temporal sequence modeling",
+      "adaptive semantic/structural/temporal branch fusion",
+      "final classifier logits"
+    ],
+    "metadata_policy": "If real node names/metadata exist in the .pkl graph they are displayed. If not, stable graph node IDs such as api_1 or process_0 are used.",
+    "not_used_as_model_input": "No hand-written keyword suspiciousness labels are used to create the prediction."
+  },
+  "interpretation_note": "This explanation combines model saliency, graph connectivity, temporal context, adaptive branch weights, and available graph metadata. It is an analyst aid, not a formal causal proof."
+}
