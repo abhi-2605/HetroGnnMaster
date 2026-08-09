@@ -119,6 +119,16 @@ MODEL_DIR.mkdir(parents=True, exist_ok=True)
 SEQ_CKPT = MODEL_DIR / "sequential_bilstm_best.pt"
 EXISTING_TGNN_CKPT = Path(config.RESULTS_DIR) / "checkpoints" / "best_model_1.pt"
 
+# ---- Eval set = held-out VAL + TEST only (no zero-day) -----------------------
+# Match the canonical B3 baseline setup: the §5.6 paradigm comparison uses a clean
+# held-out val+test mix; the zero-day unseen malware belongs to the §5.8
+# generalisation experiment. Scope these overrides to THIS script only (config.py
+# on disk untouched) and redirect the manifest cache into OUT_DIR so the shared
+# manifest CSV is not clobbered.
+config.CUSTOM_EVAL_INCLUDE_ALL_NEW_MALWARE = False   # drop the 170 zero-day rows
+config.CUSTOM_EVAL_REBUILD_MANIFEST = True           # force a fresh val+test build
+config.CUSTOM_EVAL_MANIFEST_PATH = OUT_DIR / "custom_eval_manifest_valtest.csv"
+
 # Reuse the saved checkpoint if it exists (set True to force fresh training).
 FORCE_RETRAIN_SEQ = False
 

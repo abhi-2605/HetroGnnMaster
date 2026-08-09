@@ -1,0 +1,326 @@
+sample_id,graph_path,label,class_name,origin,is_new_unseen,attack_name,bigram_overlap_vs_clean,unigram_overlap_vs_clean,length_ratio_vs_clean
+80,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/80.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.25,126.0
+760,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/760.pkl,1,Benign,old_val,False,random_rename_attack,0.00967741935483871,0.0379746835443038,2.7277125086385627
+713,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/713.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.06666666666666667,3.0
+686,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/686.pkl,1,Benign,old_test,False,random_rename_attack,0.008968609865470852,0.05063291139240506,2.355013550135501
+786,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/786.pkl,1,Benign,old_test,False,random_rename_attack,1.0,0.0,501.0
+12f24fe99e5a19454233e71ce00f3133,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/12f24fe99e5a19454233e71ce00f3133.pkl,1,Benign,old_test,False,random_rename_attack,0.03773584905660377,0.1282051282051282,3.0
+820,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/820.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.1,8.8125
+1de248bf6f4d2e09eddd208199d6e24b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1de248bf6f4d2e09eddd208199d6e24b.pkl,1,Benign,old_test,False,random_rename_attack,0.022727272727272728,0.07042253521126761,1.9365049634763065
+37efdb65b9cdca9b4c553033c7c1c3d5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/37efdb65b9cdca9b4c553033c7c1c3d5.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.047619047619047616,6.681818181818182
+4adaa6bf3e4658045f8c09b75956b83b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4adaa6bf3e4658045f8c09b75956b83b.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.05263157894736842,9.771929824561404
+683,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/683.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.0625,5.8076923076923075
+9dda048e5bff1e5f233670cfa9bff1a6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/9dda048e5bff1e5f233670cfa9bff1a6.pkl,1,Benign,old_test,False,random_rename_attack,0.014634146341463415,0.07894736842105263,1.0
+557a681676c7a3a3a0d89544c509d633,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/557a681676c7a3a3a0d89544c509d633.pkl,1,Benign,old_val,False,random_rename_attack,0.018575851393188854,0.08955223880597014,1.9693679720822024
+794,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/794.pkl,1,Benign,old_val,False,random_rename_attack,0.0096,0.049019607843137254,1.578904712284358
+869894ad6f4ce28f9ad8a97e811b3cab,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/869894ad6f4ce28f9ad8a97e811b3cab.pkl,1,Benign,old_val,False,random_rename_attack,0.04591836734693878,0.1,2.820830298616169
+737,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/737.pkl,1,Benign,old_val,False,random_rename_attack,0.014727540500736377,0.04807692307692308,1.4618510992056162
+448,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/448.pkl,1,Benign,old_val,False,random_rename_attack,0.00749063670411985,0.04081632653061224,2.024170421958214
+cacdd86923e9b9572fe804153de3be2a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/cacdd86923e9b9572fe804153de3be2a.pkl,1,Benign,old_test,False,random_rename_attack,0.006756756756756757,0.056338028169014086,2.6404199475065617
+517,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/517.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.058823529411764705,3.293577981651376
+886,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/886.pkl,1,Benign,old_val,False,random_rename_attack,0.0136986301369863,0.10714285714285714,3.857142857142857
+676,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/676.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.07142857142857142,9.928571428571429
+785,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/785.pkl,1,Benign,old_test,False,random_rename_attack,1.0,0.0,501.0
+71bda7eea00c51262ae0533f4d5b9031,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/71bda7eea00c51262ae0533f4d5b9031.pkl,1,Benign,old_val,False,random_rename_attack,0.028089887640449437,0.08163265306122448,3.0
+395329498ce9088cf88cd69db4e3a9e3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/395329498ce9088cf88cd69db4e3a9e3.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.11428571428571428,3.0
+11d6aa42756869d9556d163bba48410c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/11d6aa42756869d9556d163bba48410c.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.05555555555555555,6.154639175257732
+e9b42270f9d7c5f8f11c1fccacdda2b8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/e9b42270f9d7c5f8f11c1fccacdda2b8.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.0,6.4945054945054945
+957,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/957.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.06818181818181818,3.0
+924,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/924.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.2,63.5
+605,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/605.pkl,1,Benign,old_val,False,random_rename_attack,0.003076923076923077,0.047619047619047616,1.1977222397975325
+28365ecba0ca27c85634e8747b147730,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/28365ecba0ca27c85634e8747b147730.pkl,1,Benign,old_val,False,random_rename_attack,1.0,0.0,501.0
+108,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/108.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.2,63.5
+4e5c4aa1d85573783c78f3b7dbfe13d1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4e5c4aa1d85573783c78f3b7dbfe13d1.pkl,1,Benign,old_test,False,random_rename_attack,0.046242774566473986,0.10869565217391304,1.8604371020478403
+04da78a30dbcf24f7ede52098c831316,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/04da78a30dbcf24f7ede52098c831316.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.05263157894736842,9.771929824561404
+843,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/843.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.25,126.0
+1025,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1025.pkl,1,Benign,old_val,False,random_rename_attack,1.0,0.0,501.0
+61,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/61.pkl,1,Benign,old_test,False,random_rename_attack,0.00847457627118644,0.1111111111111111,3.0
+73f084d9113acb59c4009027d5fcf946,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/73f084d9113acb59c4009027d5fcf946.pkl,1,Benign,old_val,False,random_rename_attack,1.0,0.0,501.0
+7dc38c40c521f8f57b961c1fc1f808e5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7dc38c40c521f8f57b961c1fc1f808e5.pkl,1,Benign,old_test,False,random_rename_attack,0.01597444089456869,0.06060606060606061,1.097426004949241
+250,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/250.pkl,1,Benign,old_test,False,random_rename_attack,1.0,0.0,501.0
+122bf2c198bfb6f225b5f1a5d0a09733,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/122bf2c198bfb6f225b5f1a5d0a09733.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.0625,10.615384615384615
+1008,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1008.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.06666666666666667,4.448275862068965
+d711551959e05bf683e163378de2492e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/d711551959e05bf683e163378de2492e.pkl,1,Benign,old_val,False,random_rename_attack,0.01601164483260553,0.05,1.408496732026144
+ecf4df5c442e1ff302473aa13a9f1c5c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/ecf4df5c442e1ff302473aa13a9f1c5c.pkl,1,Benign,old_val,False,random_rename_attack,0.016025641025641024,0.058823529411764705,1.4197095609837993
+749,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/749.pkl,1,Benign,old_test,False,random_rename_attack,0.034482758620689655,0.09803921568627451,1.1589926227423049
+3abc6454998cdf94293df652aa4b5080,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3abc6454998cdf94293df652aa4b5080.pkl,1,Benign,old_test,False,random_rename_attack,0.006134969325153374,0.10416666666666667,3.0
+405,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/405.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.058823529411764705,5.424778761061947
+556,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/556.pkl,1,Benign,old_val,False,random_rename_attack,0.0028089887640449437,0.039473684210526314,2.619695497246518
+553a2deead3671112db16f78328b28d5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/553a2deead3671112db16f78328b28d5.pkl,1,Benign,old_test,False,random_rename_attack,0.014035087719298246,0.07936507936507936,2.018537380321858
+106,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/106.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.047619047619047616,10.090909090909092
+784,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/784.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.1,32.25
+a30897c37b12adf4d834791575d8e144,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a30897c37b12adf4d834791575d8e144.pkl,1,Benign,old_val,False,random_rename_attack,0.010309278350515464,0.0625,1.3455186234538041
+7c37dc92088ae9ec102df7a4e4cf5aba,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7c37dc92088ae9ec102df7a4e4cf5aba.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.08695652173913043,4.676470588235294
+504,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/504.pkl,1,Benign,old_test,False,random_rename_attack,0.035175879396984924,0.10416666666666667,1.236317232252576
+9d22d08179c8e9f3c68538fc38bbab24,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/9d22d08179c8e9f3c68538fc38bbab24.pkl,1,Benign,old_val,False,random_rename_attack,0.00819672131147541,0.1111111111111111,3.0
+753da24067a9978bd64d969ffaf6bb99,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/753da24067a9978bd64d969ffaf6bb99.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.125,3.0161290322580645
+f9232ff1163607043624c77423766563,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/f9232ff1163607043624c77423766563.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.034482758620689655,4.90625
+446,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/446.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.07692307692307693,5.424778761061947
+404,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/404.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.058823529411764705,5.273504273504273
+365,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/365.pkl,1,Benign,old_val,False,random_rename_attack,1.0,0.0,501.0
+ff6ab174de694c751fe456fe93dadb36,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/ff6ab174de694c751fe456fe93dadb36.pkl,1,Benign,old_test,False,random_rename_attack,0.02185792349726776,0.06521739130434782,2.429796968830426
+123,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/123.pkl,1,Benign,old_test,False,random_rename_attack,1.0,0.0,501.0
+5dd5d6bc3a1b5c01b8d4503b8116477b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5dd5d6bc3a1b5c01b8d4503b8116477b.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.031746031746031744,3.0
+ef760c4bf254b378c6ff60293b505130,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/ef760c4bf254b378c6ff60293b505130.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.0,5.032258064516129
+994,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/994.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.043478260869565216,6.05050505050505
+770,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/770.pkl,1,Benign,old_val,False,random_rename_attack,0.013774104683195593,0.05102040816326531,1.1168306189686192
+b2f3a33416a83666a59470539e9d3701,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/b2f3a33416a83666a59470539e9d3701.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.05263157894736842,4.03030303030303
+330,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/330.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.07692307692307693,16.151515151515152
+12e28cbd887cf4e6ae6c37a476a219f9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/12e28cbd887cf4e6ae6c37a476a219f9.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.07692307692307693,26.0
+8980f26386a9568c36a43ad7f8eba068,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/8980f26386a9568c36a43ad7f8eba068.pkl,1,Benign,old_test,False,random_rename_attack,0.0019157088122605363,0.038461538461538464,1.5
+223670e086632a1b7057f25b8a2c593c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/223670e086632a1b7057f25b8a2c593c.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.05263157894736842,8.352941176470589
+771,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/771.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.09090909090909091,6.434782608695652
+20bdd6a4e641aa3769aeb8722f92bde1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/20bdd6a4e641aa3769aeb8722f92bde1.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.08333333333333333,3.0
+49,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/49.pkl,1,Benign,old_test,False,random_rename_attack,0.007736943907156673,0.053763440860215055,2.12943302462164
+087012822b313c7f013d3f22de33e3ac,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/087012822b313c7f013d3f22de33e3ac.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.09090909090909091,5.9504950495049505
+715,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/715.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.1111111111111111,7.4935064935064934
+246a819e549cd1bc998109e9c6b7d70d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/246a819e549cd1bc998109e9c6b7d70d.pkl,1,Benign,old_test,False,random_rename_attack,0.006756756756756757,0.043478260869565216,3.0
+62f170fb07fdbb79ceb7147101406eb8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/62f170fb07fdbb79ceb7147101406eb8.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.0,6.319148936170213
+58,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/58.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.05,7.097560975609756
+524,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/524.pkl,1,Benign,old_test,False,random_rename_attack,0.005076142131979695,0.038461538461538464,2.91131498470948
+502,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/502.pkl,1,Benign,old_test,False,random_rename_attack,0.02127659574468085,0.10714285714285714,1.5162089613875698
+736,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/736.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.1111111111111111,17.666666666666668
+110,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/110.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.1111111111111111,28.77777777777778
+18,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/18.pkl,1,Benign,old_test,False,random_rename_attack,0.0048543689320388345,0.05194805194805195,2.2465719272001996
+f3b146b2fb2333c834c269d51b57e585,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/f3b146b2fb2333c834c269d51b57e585.pkl,1,Benign,old_val,False,random_rename_attack,0.03940886699507389,0.09803921568627451,1.115446779034865
+689,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/689.pkl,1,Benign,old_test,False,random_rename_attack,0.011363636363636364,0.02857142857142857,3.4390243902439024
+1003,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1003.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.06060606060606061,3.808988764044944
+861,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/861.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.07142857142857142,13.820512820512821
+838,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/838.pkl,1,Benign,old_test,False,random_rename_attack,1.0,0.0,501.0
+550,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/550.pkl,1,Benign,old_test,False,random_rename_attack,0.008849557522123894,0.08108108108108109,1.7069136151562279
+703,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/703.pkl,1,Benign,old_test,False,random_rename_attack,0.007978723404255319,0.08108108108108109,1.1860949828792615
+fa7f5f109ba8a36817991e10880cb022,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/fa7f5f109ba8a36817991e10880cb022.pkl,1,Benign,old_test,False,random_rename_attack,0.028846153846153848,0.07042253521126761,2.485001485001485
+1030,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1030.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.06666666666666667,7.944444444444445
+2f0050f870b2d49e0880334e4938d528,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2f0050f870b2d49e0880334e4938d528.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.0,10.25925925925926
+7794ed8826feda17f1044cc501463f55,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7794ed8826feda17f1044cc501463f55.pkl,1,Benign,old_val,False,random_rename_attack,0.03070175438596491,0.08333333333333333,1.2255706938554543
+643,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/643.pkl,1,Benign,old_val,False,random_rename_attack,0.007104795737122558,0.05747126436781609,1.2553365335512205
+b6850fbaf0652ebe3a0bb5a54932b834,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/b6850fbaf0652ebe3a0bb5a54932b834.pkl,1,Benign,old_test,False,random_rename_attack,0.02622950819672131,0.08196721311475409,1.3188165529554294
+c07434de6dd55e765bf9d05aaf451d4e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/c07434de6dd55e765bf9d05aaf451d4e.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.0625,10.615384615384615
+d1f18962d1720d342993d0f26e96ddae,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/d1f18962d1720d342993d0f26e96ddae.pkl,1,Benign,old_test,False,random_rename_attack,0.0028328611898017,0.04054054054054054,2.465845793022574
+831,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/831.pkl,1,Benign,old_test,False,random_rename_attack,0.010570824524312896,0.06896551724137931,1.3624501631025734
+8bfc3272bd408849393cbfc58a06e670,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/8bfc3272bd408849393cbfc58a06e670.pkl,1,Benign,old_test,False,random_rename_attack,0.016359918200409,0.0594059405940594,1.0638235406747425
+b665733ffa2575cf55fe735b4dbe4daf,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/b665733ffa2575cf55fe735b4dbe4daf.pkl,1,Benign,old_val,False,random_rename_attack,0.02702702702702703,0.1,2.5738117721120553
+4a5efb20daee57d1ca64637c24fac8b7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4a5efb20daee57d1ca64637c24fac8b7.pkl,1,Benign,old_val,False,random_rename_attack,1.0,0.0,501.0
+819,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/819.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.04878048780487805,3.0
+937,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/937.pkl,1,Benign,old_val,False,random_rename_attack,0.034482758620689655,0.10810810810810811,1.0
+852c065deaf53c02c37ca13a3cc61173,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/852c065deaf53c02c37ca13a3cc61173.pkl,1,Benign,old_val,False,random_rename_attack,0.026385224274406333,0.0759493670886076,1.367701132519488
+855,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/855.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.043478260869565216,5.9504950495049505
+414,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/414.pkl,1,Benign,old_val,False,random_rename_attack,0.0075046904315197,0.05319148936170213,1.2143438933424786
+9a6089ee909d0f4d20a3e03dc1d681ac,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/9a6089ee909d0f4d20a3e03dc1d681ac.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.05263157894736842,8.462686567164178
+c2938eb5ff932c2540a1514cc82c197c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/c2938eb5ff932c2540a1514cc82c197c.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.01,1.8761170492377781
+954,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/954.pkl,1,Benign,old_test,False,random_rename_attack,0.027210884353741496,0.07317073170731707,3.0
+88f59fa501e1f34ddadaa7ad2e5c3bab,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/88f59fa501e1f34ddadaa7ad2e5c3bab.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.075,3.0
+8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/8.pkl,1,Benign,old_val,False,random_rename_attack,0.012048192771084338,0.06060606060606061,3.808988764044944
+063875d1549af53b587a829456b7f716,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/063875d1549af53b587a829456b7f716.pkl,1,Benign,old_val,False,random_rename_attack,0.013605442176870748,0.05128205128205128,1.9428625306430323
+495,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/495.pkl,1,Benign,old_val,False,random_rename_attack,0.005555555555555556,0.037037037037037035,3.0
+322,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/322.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.058823529411764705,5.464285714285714
+126a8c1643b2b3834b03ec69713dcc12,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/126a8c1643b2b3834b03ec69713dcc12.pkl,1,Benign,old_val,False,random_rename_attack,0.009900990099009901,0.07017543859649122,2.1964584828906437
+bb03388131338158ea92b5408533a974,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/bb03388131338158ea92b5408533a974.pkl,1,Benign,old_val,False,random_rename_attack,1.0,0.0,501.0
+34,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/34.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.09090909090909091,17.129032258064516
+103af5dafe7b1dda9494d94ce3337a4b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/103af5dafe7b1dda9494d94ce3337a4b.pkl,1,Benign,old_val,False,random_rename_attack,0.031818181818181815,0.1,2.650709805216243
+328,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/328.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.14285714285714285,15.285714285714286
+20af57bfff931229046ff52d2b2c7797,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/20af57bfff931229046ff52d2b2c7797.pkl,1,Benign,old_val,False,random_rename_attack,0.03482587064676617,0.10638297872340426,2.65892501658925
+5fc944b96b19ee35265e7578151160e6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5fc944b96b19ee35265e7578151160e6.pkl,1,Benign,old_val,False,random_rename_attack,0.041666666666666664,0.07692307692307693,1.702345835089198
+453,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/453.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.038461538461538464,3.0
+371,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/371.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.2,63.5
+590,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/590.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.030303030303030304,3.0
+484,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/484.pkl,1,Benign,old_test,False,random_rename_attack,0.012048192771084338,0.06060606060606061,3.808988764044944
+5af6b376e660805759683865437acbc0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5af6b376e660805759683865437acbc0.pkl,1,Benign,old_test,False,random_rename_attack,0.03524229074889868,0.08928571428571429,1.1819769981074393
+57cac848fa14ae38f14f9441f8933282,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/57cac848fa14ae38f14f9441f8933282.pkl,1,Benign,old_val,False,random_rename_attack,1.0,0.0,501.0
+551,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/551.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.029411764705882353,3.3255813953488373
+964,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/964.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.06666666666666667,14.157894736842104
+153,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/153.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.16666666666666666,51.0
+0e1c3a6ee3a05b5c4cd3d43fce8311a1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0e1c3a6ee3a05b5c4cd3d43fce8311a1.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.03488372093023256,2.0924186148131962
+712,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/712.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.09090909090909091,26.0
+22328ba82ec2642ca0fda742146a8477,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/22328ba82ec2642ca0fda742146a8477.pkl,1,Benign,old_test,False,random_rename_attack,0.0031645569620253164,0.05454545454545454,1.7533524182612625
+623,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/623.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.1,16.625
+530ebb87a01526c10197a23a3f33a5d5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/530ebb87a01526c10197a23a3f33a5d5.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.05555555555555555,8.692307692307692
+7366668cc7eaa1068a38cc2761217fc4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7366668cc7eaa1068a38cc2761217fc4.pkl,1,Benign,old_test,False,random_rename_attack,0.012121212121212121,0.057971014492753624,1.4440891731059597
+916,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/916.pkl,1,Benign,old_val,False,random_rename_attack,1.0,0.0,501.0
+244f3a79c653e7ed3c327f44d48bc8a7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/244f3a79c653e7ed3c327f44d48bc8a7.pkl,1,Benign,old_test,False,random_rename_attack,0.022058823529411766,0.1111111111111111,3.0
+a4414c6f58e30651d09643e7ef54ecf8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a4414c6f58e30651d09643e7ef54ecf8.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.05263157894736842,9.771929824561404
+246,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/246.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.05555555555555555,6.05050505050505
+817cb2d8d2f58648b7728b0c7c47c3d8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/817cb2d8d2f58648b7728b0c7c47c3d8.pkl,1,Benign,old_test,False,random_rename_attack,0.004595588235294118,0.03968253968253968,1.177695642902836
+70e9bf498059d6d966bccb5ff683bfef,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/70e9bf498059d6d966bccb5ff683bfef.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.125,14.88888888888889
+5cdf106bf92c65c5b73e4c87138a85df,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5cdf106bf92c65c5b73e4c87138a85df.pkl,1,Benign,old_test,False,random_rename_attack,0.03684210526315789,0.0851063829787234,1.0666036152442355
+f2867bee7180cdc839f7636fddc1aa74,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/f2867bee7180cdc839f7636fddc1aa74.pkl,1,Benign,old_val,False,random_rename_attack,0.0273972602739726,0.06060606060606061,3.0
+874,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/874.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.05714285714285714,3.9761904761904763
+948,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/948.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.045454545454545456,11.0
+304,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/304.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.034482758620689655,5.9504950495049505
+bfd6a7765dd0ead7bc8f89a55b5481ee,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/bfd6a7765dd0ead7bc8f89a55b5481ee.pkl,1,Benign,old_test,False,random_rename_attack,0.021367521367521368,0.08196721311475409,3.0
+ab0a854e7740a4e78e3e5e5e380353fa,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/ab0a854e7740a4e78e3e5e5e380353fa.pkl,1,Benign,old_val,False,random_rename_attack,0.03783783783783784,0.125,1.0
+b8c801810a69845dcd8dee13703f97ac,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/b8c801810a69845dcd8dee13703f97ac.pkl,1,Benign,old_test,False,random_rename_attack,0.010948905109489052,0.042735042735042736,1.348796651552145
+f2e6c09bc48f5496523731d4ce3abdec,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/f2e6c09bc48f5496523731d4ce3abdec.pkl,1,Benign,old_test,False,random_rename_attack,0.005235602094240838,0.06779661016949153,3.0
+dda22b0cee0e7f742a5c4696e3b5a804,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/dda22b0cee0e7f742a5c4696e3b5a804.pkl,1,Benign,old_test,False,random_rename_attack,0.049079754601226995,0.0975609756097561,2.0991426687184
+442,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/442.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.1111111111111111,30.41176470588235
+214,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/214.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.125,34.333333333333336
+768,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/768.pkl,1,Benign,old_val,False,random_rename_attack,0.004166666666666667,0.07017543859649122,3.0
+288,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/288.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.1,14.88888888888889
+86c18dfb8b30d7000a80b226dc57eaf4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/86c18dfb8b30d7000a80b226dc57eaf4.pkl,1,Benign,old_val,False,random_rename_attack,0.012345679012345678,0.05405405405405406,3.0
+368,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/368.pkl,1,Benign,old_test,False,random_rename_attack,0.013888888888888888,0.10256410256410256,3.0
+748,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/748.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.14285714285714285,21.833333333333332
+391,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/391.pkl,1,Benign,old_val,False,random_rename_attack,0.04294478527607362,0.0975609756097561,2.255020080321285
+863,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/863.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.13333333333333333,8.575757575757576
+298,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/298.pkl,1,Benign,old_val,False,random_rename_attack,0.030303030303030304,0.10909090909090909,1.572475383558507
+432f47f1e4b8d108d61526746b83af5c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/432f47f1e4b8d108d61526746b83af5c.pkl,1,Benign,old_test,False,random_rename_attack,0.015503875968992248,0.06329113924050633,1.6554798112218143
+66,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/66.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.08333333333333333,16.151515151515152
+696,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/696.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.25,126.0
+14,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/14.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.047619047619047616,9.19672131147541
+606,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/606.pkl,1,Benign,old_test,False,random_rename_attack,0.008385744234800839,0.04597701149425287,2.0285949393128986
+341,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/341.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.12,6.9523809523809526
+347,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/347.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.1111111111111111,23.727272727272727
+47245e8bba1b1ed68913c1a6c9d9ced7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/47245e8bba1b1ed68913c1a6c9d9ced7.pkl,1,Benign,old_val,False,random_rename_attack,0.004694835680751174,0.05333333333333334,1.9072763563781527
+a56ea46b5530e60b1291eb41a63da229,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a56ea46b5530e60b1291eb41a63da229.pkl,1,Benign,old_val,False,random_rename_attack,0.03571428571428571,0.10416666666666667,1.230191980111413
+527,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/527.pkl,1,Benign,old_test,False,random_rename_attack,0.0049504950495049506,0.05405405405405406,1.0
+615a6d10b80a821a293ef54935ef2cb5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/615a6d10b80a821a293ef54935ef2cb5.pkl,1,Benign,old_val,False,random_rename_attack,0.012919896640826873,0.0759493670886076,1.4468674591116275
+953,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/953.pkl,1,Benign,old_val,False,random_rename_attack,0.04516129032258064,0.13157894736842105,3.0
+54607769283c879872c44cfef857806e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/54607769283c879872c44cfef857806e.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.05555555555555555,8.352941176470589
+86fca7f150ddf96047ff35f3e39c63af,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/86fca7f150ddf96047ff35f3e39c63af.pkl,1,Benign,old_test,False,random_rename_attack,0.014669926650366748,0.0625,1.6467468632777131
+63,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/63.pkl,1,Benign,old_test,False,random_rename_attack,0.024193548387096774,0.10256410256410256,3.0
+735,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/735.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.037037037037037035,4.1645569620253164
+120,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/120.pkl,1,Benign,old_val,False,random_rename_attack,1.0,0.0,501.0
+156,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/156.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.06382978723404255,3.0
+1c1f8ed7316852f8248c62e0bd199c01,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1c1f8ed7316852f8248c62e0bd199c01.pkl,1,Benign,old_test,False,random_rename_attack,0.011235955056179775,0.0625,3.0
+5ab171e34ae233588334898964713652,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5ab171e34ae233588334898964713652.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.034482758620689655,4.90625
+10,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/10.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.06060606060606061,3.808988764044944
+717,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/717.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.1,18.24137931034483
+a3f4107c68215616cebb0d787f66bcc9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/a3f4107c68215616cebb0d787f66bcc9.pkl,1,Benign,old_test,False,random_rename_attack,0.007168458781362007,0.06896551724137931,1.471431265321516
+4779f59e00bcb80826e3deb3fb4af52a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4779f59e00bcb80826e3deb3fb4af52a.pkl,1,Benign,old_val,False,random_rename_attack,0.01675977653631285,0.07547169811320754,1.3085277057879798
+bc41c25862628aaac0221baa51175d8a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/bc41c25862628aaac0221baa51175d8a.pkl,1,Benign,old_val,False,random_rename_attack,0.008695652173913044,0.07317073170731707,3.0
+cc9d0697280c3a2bc93818be2074a2be,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/cc9d0697280c3a2bc93818be2074a2be.pkl,1,Benign,old_val,False,random_rename_attack,0.03296703296703297,0.11320754716981132,2.8719580681392736
+dcaa9fd0f6da052f09bcaad87a2db219,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/dcaa9fd0f6da052f09bcaad87a2db219.pkl,1,Benign,old_test,False,random_rename_attack,0.023255813953488372,0.11428571428571428,1.0
+a1ee8b242045a6dd67d5067ac8045817,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/a1ee8b242045a6dd67d5067ac8045817.pkl,1,Benign,old_test,False,random_rename_attack,0.06134969325153374,0.11904761904761904,3.0
+613,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/613.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.03333333333333333,3.0
+ec5c49f9fa8d871d1937148b9f55f01c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/ec5c49f9fa8d871d1937148b9f55f01c.pkl,1,Benign,old_test,False,random_rename_attack,0.0213903743315508,0.09302325581395349,1.1687535860137028
+1023,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1023.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.08,3.0
+849,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/849.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.09090909090909091,24.80952380952381
+586,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/586.pkl,1,Benign,old_test,False,random_rename_attack,0.0,0.07692307692307693,21.833333333333332
+edcb816abe6bafd8db69d42692f0cbce,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/edcb816abe6bafd8db69d42692f0cbce.pkl,1,Benign,old_test,False,random_rename_attack,0.03488372093023256,0.0975609756097561,3.0
+136,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/136.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.09090909090909091,16.151515151515152
+10287b93c2805618649e4cedf0268d4d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/10287b93c2805618649e4cedf0268d4d.pkl,1,Benign,old_val,False,random_rename_attack,0.0,0.05,9.928571428571429
+487,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/487.pkl,1,Benign,old_test,False,random_rename_attack,1.0,0.0,501.0
+91f34fb90adfd8581df9a25f7cb8a26c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/91f34fb90adfd8581df9a25f7cb8a26c.pkl,2,Other Malware,old_val,False,random_rename_attack,0.008695652173913044,0.04838709677419355,3.0
+2daf7dc5aee2ddcfba764e06a7afc399,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2daf7dc5aee2ddcfba764e06a7afc399.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0018214936247723133,0.01834862385321101,1.9310986964618249
+54f27af5a5c85f867bd7f32f3121a527,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/54f27af5a5c85f867bd7f32f3121a527.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.027777777777777776,3.0
+2314b150d8323f75243b6b76c8e07035,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2314b150d8323f75243b6b76c8e07035.pkl,2,Other Malware,old_val,False,random_rename_attack,0.002127659574468085,0.04,1.5
+24f7c986e116ef085c3a7951c83a7c6d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/24f7c986e116ef085c3a7951c83a7c6d.pkl,2,Other Malware,old_test,False,random_rename_attack,0.004081632653061225,0.03409090909090909,1.5
+55409478a5b6b3dfd05cfd6fda47c519,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/55409478a5b6b3dfd05cfd6fda47c519.pkl,2,Other Malware,old_test,False,random_rename_attack,0.004081632653061225,0.03508771929824561,2.193032689095681
+eb4520b6cfc766821a2d6e155662ac41,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/eb4520b6cfc766821a2d6e155662ac41.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0,0.038461538461538464,2.1330160888284615
+02c47fbc74c852f02f590a026f01c026,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/02c47fbc74c852f02f590a026f01c026.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.046511627906976744,3.0
+043a1b5c2434b04a1b7156fc17dd2d6b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/043a1b5c2434b04a1b7156fc17dd2d6b.pkl,2,Other Malware,old_test,False,random_rename_attack,0.00390625,0.05084745762711865,2.27000254000508
+e80e8ded001cba45724cd4e1b61c8dff,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/e80e8ded001cba45724cd4e1b61c8dff.pkl,2,Other Malware,old_val,False,random_rename_attack,0.004761904761904762,0.06382978723404255,3.0
+63c74e45cb4ba38e8ba6089425a6abd8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/63c74e45cb4ba38e8ba6089425a6abd8.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0,0.0,10.803921568627452
+3c8c5b3d8c8fd65bf989f496df5e7002,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3c8c5b3d8c8fd65bf989f496df5e7002.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0016260162601626016,0.02912621359223301,1.5
+162314abb4b14186ecccf56ec2a5357c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/162314abb4b14186ecccf56ec2a5357c.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0021008403361344537,0.02127659574468085,1.997207818109294
+385d26128a2c117a2dda6c14dec840ed,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/385d26128a2c117a2dda6c14dec840ed.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0,0.02857142857142857,2.1901928112354203
+7ac12d1984fedffd41b007fa48a8ec58,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7ac12d1984fedffd41b007fa48a8ec58.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0,0.022988505747126436,2.560549313358302
+7e1bdb2a312ea72c16e658fed46d7904,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7e1bdb2a312ea72c16e658fed46d7904.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0017985611510791368,0.020618556701030927,1.6721333512568894
+10374da5b8dc4168e3c7661f06d18d0f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/10374da5b8dc4168e3c7661f06d18d0f.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0020325203252032522,0.04,1.5
+3c4772eb0ec7cba088378e6a3c39e2ed,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/3c4772eb0ec7cba088378e6a3c39e2ed.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0035335689045936395,0.03571428571428571,1.5
+60fb3eabca9c9ac29f92ebf72f543c80,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/60fb3eabca9c9ac29f92ebf72f543c80.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.045454545454545456,3.0
+776657d7620fba66c6e299ee531a7fef,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/776657d7620fba66c6e299ee531a7fef.pkl,2,Other Malware,old_val,False,random_rename_attack,0.003937007874015748,0.034482758620689655,2.1663167716351763
+29c2621f92f6a31c4af833fb85cf0d50,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/29c2621f92f6a31c4af833fb85cf0d50.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.07142857142857142,22.73913043478261
+1095409eb627f6dc3d3a99333fbc5363,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1095409eb627f6dc3d3a99333fbc5363.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0,0.024691358024691357,1.8406186953597847
+c1b315f1e6f1a47b50ad8cd8825974d9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/c1b315f1e6f1a47b50ad8cd8825974d9.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.0,3.0
+d5d37c2522cb38a6b8bc60571ae13713,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/d5d37c2522cb38a6b8bc60571ae13713.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0019455252918287938,0.038461538461538464,1.5
+6112b2a840718b2cd97652c448d97a2d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/6112b2a840718b2cd97652c448d97a2d.pkl,2,Other Malware,old_test,False,random_rename_attack,0.006355932203389831,0.043478260869565216,1.7739938080495357
+0d2f0b82e30fc58a0c5ea949b8d3b35d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0d2f0b82e30fc58a0c5ea949b8d3b35d.pkl,2,Other Malware,old_test,False,random_rename_attack,0.005025125628140704,0.037037037037037035,3.0
+35ac8b686068cbf05b7326d767e7731a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/35ac8b686068cbf05b7326d767e7731a.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.03333333333333333,3.0
+1963a49d71f298c889228b79bcb6b3f2,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1963a49d71f298c889228b79bcb6b3f2.pkl,2,Other Malware,old_val,False,random_rename_attack,0.005494505494505495,0.03636363636363636,3.0
+8039c88f00de24e93a404e935339782a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/8039c88f00de24e93a404e935339782a.pkl,2,Other Malware,old_test,False,random_rename_attack,0.005494505494505495,0.03636363636363636,3.0
+7882a2e5895b99d912b35a79b5cb2432,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7882a2e5895b99d912b35a79b5cb2432.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.0,6.882352941176471
+0ed4554e724510eabfaab654e7da90b4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0ed4554e724510eabfaab654e7da90b4.pkl,2,Other Malware,old_test,False,random_rename_attack,0.005067567567567568,0.03614457831325301,1.6095330976472022
+dab5d970f5261b346185007f25d3e5db,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/dab5d970f5261b346185007f25d3e5db.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.04477611940298507,1.5
+b82f453f91e18565385e4a7126506fa2,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/b82f453f91e18565385e4a7126506fa2.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.019230769230769232,3.0
+20b5dd1a2b464dd14b77a70029bb78b5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/20b5dd1a2b464dd14b77a70029bb78b5.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0019083969465648854,0.0379746835443038,1.5
+e284b66376391635fbe1fe3aef5afa29,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/e284b66376391635fbe1fe3aef5afa29.pkl,2,Other Malware,old_val,False,random_rename_attack,0.005076142131979695,0.03571428571428571,3.0
+35215bac13155d05d769b0311cc4f2e5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/35215bac13155d05d769b0311cc4f2e5.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0,0.05,3.0
+1ce5e995272f8e529fe7cdde7eb14811,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1ce5e995272f8e529fe7cdde7eb14811.pkl,2,Other Malware,old_test,False,random_rename_attack,0.002564102564102564,0.023255813953488372,1.9686168151879118
+3676ee22338579fe958c9bfde870f980,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/3676ee22338579fe958c9bfde870f980.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0035971223021582736,0.03488372093023256,3.0
+0f8064af9d8b3f11b1943d94f3f11f32,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0f8064af9d8b3f11b1943d94f3f11f32.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.013157894736842105,3.0
+580050ce066f47515e94d370f3e1236d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/580050ce066f47515e94d370f3e1236d.pkl,2,Other Malware,old_test,False,random_rename_attack,0.007782101167315175,0.05084745762711865,2.2706480304955527
+252c1dcdc76209358f4fc12d45d49a5a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/252c1dcdc76209358f4fc12d45d49a5a.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.011904761904761904,2.889644746787604
+3488a3e29270d906e570e4129b45fcbb,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/3488a3e29270d906e570e4129b45fcbb.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0,0.024096385542168676,1.5
+4782ce31ef42706a4673e31c203cf7b6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4782ce31ef42706a4673e31c203cf7b6.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0016420361247947454,0.020202020202020204,1.5
+ff68cd00b926bb11a23ed6f2647d85f3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/ff68cd00b926bb11a23ed6f2647d85f3.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0016835016835016834,0.02830188679245283,1.5
+349fc5f381d1e4a23b4b6060a1c87baf,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/349fc5f381d1e4a23b4b6060a1c87baf.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.019230769230769232,3.0
+654315297a795b3cd81a37c4f71ceba5,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/654315297a795b3cd81a37c4f71ceba5.pkl,2,Other Malware,old_val,False,random_rename_attack,0.0,0.013513513513513514,3.0
+f821a8e1e66edfa96f0d5c2359b51354,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/f821a8e1e66edfa96f0d5c2359b51354.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0031545741324921135,0.026785714285714284,1.5
+902ea409fd996e4f0cbfaecc26d78b5b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/902ea409fd996e4f0cbfaecc26d78b5b.pkl,2,Other Malware,old_test,False,random_rename_attack,0.004132231404958678,0.03508771929824561,2.199040767386091
+ac1dca700016b5e7552cbc765b5d0f22,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/ac1dca700016b5e7552cbc765b5d0f22.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.03773584905660377,3.0
+0a802a5d66c1dd5b817f22c5f541c9b0,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0a802a5d66c1dd5b817f22c5f541c9b0.pkl,2,Other Malware,old_test,False,random_rename_attack,0.0,0.041666666666666664,3.0
+0532e250400ded8515f6d042d388ff07,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/0532e250400ded8515f6d042d388ff07.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.028169014084507043,3.0
+08eedaa70ca384e76b4eac39ff2683e1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/08eedaa70ca384e76b4eac39ff2683e1.pkl,0,Ransomware,old_val,False,random_rename_attack,0.010309278350515464,0.07317073170731707,3.0
+0dd4bcb59beff511516725118e7b2f80,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/0dd4bcb59beff511516725118e7b2f80.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0024813895781637717,0.029850746268656716,1.5
+0f4cb4b34c4e8d75da02bf6536ec8563,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/0f4cb4b34c4e8d75da02bf6536ec8563.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.011764705882352941,2.2774655084312725
+136b3af29063f6c2f76b6e4ef6d3a755,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/136b3af29063f6c2f76b6e4ef6d3a755.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.011235955056179775,2.262307498106539
+15572d97a140d38192e33442fbe9400d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/15572d97a140d38192e33442fbe9400d.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.011363636363636364,2.021659174499387
+188561cadd5e63bdf5092929a551c35d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/188561cadd5e63bdf5092929a551c35d.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.02040816326530612,1.5
+1886d05c64e5cb9325439782fe7f6556,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1886d05c64e5cb9325439782fe7f6556.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.047619047619047616,4.472222222222222
+19ebbd5eb5fdb062a3c356dc535ca012,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/19ebbd5eb5fdb062a3c356dc535ca012.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.011627906976744186,2.5659254619480114
+1a14e7fcdb5666ffbd0005db70eeda45,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1a14e7fcdb5666ffbd0005db70eeda45.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.011494252873563218,2.1233430689732646
+1b68729f1f03c3d82b13abe38599f6c3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1b68729f1f03c3d82b13abe38599f6c3.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.014705882352941176,3.0
+1c74690ed0ad28f73f1aa9c4e71ccafa,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1c74690ed0ad28f73f1aa9c4e71ccafa.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.022222222222222223,1.5
+1eb6ba04fc00da6202d505930e427fc7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1eb6ba04fc00da6202d505930e427fc7.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.022222222222222223,2.8395879323031643
+1ffe7f8af56971a0710d6390231ed209,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/1ffe7f8af56971a0710d6390231ed209.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.023809523809523808,1.5
+2903e2c448e129fb0b09c1534d204c4a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2903e2c448e129fb0b09c1534d204c4a.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.011494252873563218,2.322401481089659
+29660cb68690bad4dcc65345ea8727e7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/29660cb68690bad4dcc65345ea8727e7.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.011363636363636364,2.245019920318725
+2d6aee94b05bf693e6d9ebc21fbfe128,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/2d6aee94b05bf693e6d9ebc21fbfe128.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.011764705882352941,2.876172607879925
+3185e6f627a6edca6bfb88f9cefa342d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/3185e6f627a6edca6bfb88f9cefa342d.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.013888888888888888,2.5807777426493836
+32b2c4fee38c01ca95c97c9b74b8b03d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/32b2c4fee38c01ca95c97c9b74b8b03d.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.02,1.5
+39684bb790b573d72dbce03f3607a31c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/39684bb790b573d72dbce03f3607a31c.pkl,0,Ransomware,old_val,False,random_rename_attack,0.004310344827586207,0.038461538461538464,1.5
+423ae24af438c46867d159a3247eea5d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/423ae24af438c46867d159a3247eea5d.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.024390243902439025,3.0
+4dc6d0458f28d18b48cc41912c6282de,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4dc6d0458f28d18b48cc41912c6282de.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.03125,4.1847133757961785
+4edcdef4bf23b658964691bfc3c45537,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/4edcdef4bf23b658964691bfc3c45537.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.011363636363636364,2.4484356894553883
+5941b3656aa230b2ce15f90835d48f7c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5941b3656aa230b2ce15f90835d48f7c.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.046511627906976744,3.0
+5a78fad03a10d68ed566ac750ab3ab02,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5a78fad03a10d68ed566ac750ab3ab02.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.011494252873563218,2.267105930055753
+5aef55d7170521999324f51d62a8ee30,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5aef55d7170521999324f51d62a8ee30.pkl,0,Ransomware,old_val,False,random_rename_attack,0.004608294930875576,0.036585365853658534,1.8670019074041964
+5c63d44c2997a6b322cb2329552b6ea8,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5c63d44c2997a6b322cb2329552b6ea8.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.011494252873563218,2.141291942478886
+5eedf40d3546eb90b5423ae3ac1d3f32,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/5eedf40d3546eb90b5423ae3ac1d3f32.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.046511627906976744,3.0
+682ef4f2b66b1e447701fecfad15094c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/682ef4f2b66b1e447701fecfad15094c.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.013513513513513514,3.0
+68e367dfd6de0b0a3c00b966423f196a,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/68e367dfd6de0b0a3c00b966423f196a.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.020833333333333332,3.0
+76d81c7735752088692897a00e529bbb,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/76d81c7735752088692897a00e529bbb.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.011363636363636364,2.1887779362815025
+7a7b798c0772cbbe3654174737d08542,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7a7b798c0772cbbe3654174737d08542.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.0136986301369863,3.0
+7b14479b7226662af6beffba4854c2e7,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7b14479b7226662af6beffba4854c2e7.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.01282051282051282,1.5
+7f7f16a7dfad06ec4504220e4c130015,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/7f7f16a7dfad06ec4504220e4c130015.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.011363636363636364,2.2771392081736908
+a95111407437bd851ae651f847b53e90,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/a95111407437bd851ae651f847b53e90.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.0,1.5
+aef03ddd3134451e1efe137fb22e3a0c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/val/aef03ddd3134451e1efe137fb22e3a0c.pkl,0,Ransomware,old_val,False,random_rename_attack,0.0,0.02040816326530612,3.0
+09b06fa3f1fadb21006c1fa79c75c536,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/09b06fa3f1fadb21006c1fa79c75c536.pkl,0,Ransomware,old_test,False,random_rename_attack,0.015873015873015872,0.06818181818181818,1.5
+0c7e59536a7be4a446bbe8b4f22e5880,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/0c7e59536a7be4a446bbe8b4f22e5880.pkl,0,Ransomware,old_test,False,random_rename_attack,0.034482758620689655,0.09090909090909091,1.5
+109d60fbb4b1857429fc8019c800307b,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/109d60fbb4b1857429fc8019c800307b.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011235955056179775,2.017293997965412
+10e9683de04292c617d2fba5b64a6b2f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/10e9683de04292c617d2fba5b64a6b2f.pkl,0,Ransomware,old_test,False,random_rename_attack,0.002304147465437788,0.030927835051546393,1.6139489194499017
+1491e513fe739d64a3965d01758d97c6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1491e513fe739d64a3965d01758d97c6.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011363636363636364,2.272264631043257
+1705bd6b4c7a2fa4a046c5a7b2a0a8f6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/1705bd6b4c7a2fa4a046c5a7b2a0a8f6.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011363636363636364,2.4459224985540775
+184bb34d632aa3d52f23f4315918eb29,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/184bb34d632aa3d52f23f4315918eb29.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.0136986301369863,3.0
+202bf9be9a4e45526e482f08104717ad,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/202bf9be9a4e45526e482f08104717ad.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.013513513513513514,3.0
+2198677d22dd71f9e6108da020da059d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2198677d22dd71f9e6108da020da059d.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011627906976744186,2.1358473421172195
+229d05ae6fa046339d34419216dd3bae,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/229d05ae6fa046339d34419216dd3bae.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.06666666666666667,20.23076923076923
+243852fce02f4f7d77949d75ccfddbac,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/243852fce02f4f7d77949d75ccfddbac.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011363636363636364,2.237623762376238
+24ad1ac3ddd67f08cbdd26803b5539a1,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/24ad1ac3ddd67f08cbdd26803b5539a1.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.0,1.5
+28c80c4739056f200818d221ddf5a496,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/28c80c4739056f200818d221ddf5a496.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011235955056179775,2.2738853503184715
+2b744b113946f905a9526f9fb82b22d3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2b744b113946f905a9526f9fb82b22d3.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.023255813953488372,2.2768130745658834
+2e366bdc80e31e7678bf0681b8b6370c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2e366bdc80e31e7678bf0681b8b6370c.pkl,0,Ransomware,old_test,False,random_rename_attack,0.00423728813559322,0.037037037037037035,1.5
+2fc3b46c7be1a14ea7382cc8e85bfa96,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/2fc3b46c7be1a14ea7382cc8e85bfa96.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011235955056179775,2.3743815283122593
+34074a625609e156de42ca6e0405edb9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/34074a625609e156de42ca6e0405edb9.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.013333333333333334,3.0
+3521e879e8068fc25d117365e11ff4f9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3521e879e8068fc25d117365e11ff4f9.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.041666666666666664,1.5
+364d2445adf7be2c8e4fee906483c5cf,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/364d2445adf7be2c8e4fee906483c5cf.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011494252873563218,2.2738853503184715
+3b36e0a2392ffec8ae656a95f56826ff,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3b36e0a2392ffec8ae656a95f56826ff.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0021929824561403508,0.043478260869565216,2.034340091021928
+3fb1b0800b4dbd0e19cb1aaebb6f4236,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/3fb1b0800b4dbd0e19cb1aaebb6f4236.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011363636363636364,2.1887779362815025
+4559d59bef79c762fccffb4b046f17cf,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4559d59bef79c762fccffb4b046f17cf.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.021739130434782608,3.0
+48a673157da3940244ce0dfb3ecb58e9,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/48a673157da3940244ce0dfb3ecb58e9.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0020325203252032522,0.03488372093023256,1.5142974696564493
+497e558b37fd98ae27fc693a77eab16c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/497e558b37fd98ae27fc693a77eab16c.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.05,1.5
+4ba68cd8615429da8cc535515fbea549,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/4ba68cd8615429da8cc535515fbea549.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.06818181818181818,3.0
+55b3af46b98029adda05ef83baa0dc73,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/55b3af46b98029adda05ef83baa0dc73.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011627906976744186,2.2748597654258034
+5a01c407a8be2ac6a004d2c40a75264e,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5a01c407a8be2ac6a004d2c40a75264e.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.012345679012345678,1.5
+5e7f1934bdbb4b4cd6bc30f49e455dc3,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5e7f1934bdbb4b4cd6bc30f49e455dc3.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.023809523809523808,3.0
+5f411ecddf2844721b48b6dc6aa19f3c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/5f411ecddf2844721b48b6dc6aa19f3c.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011111111111111112,2.0384215991692627
+61c897f5e326b166e160d63056d402a4,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/61c897f5e326b166e160d63056d402a4.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0036968576709796672,0.03488372093023256,1.757002271006813
+6aa468aad5cfed969149dcaca4034b88,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/6aa468aad5cfed969149dcaca4034b88.pkl,0,Ransomware,old_test,False,random_rename_attack,0.001692047377326565,0.031914893617021274,1.801924619085806
+71a977bf33620055a7c2c6a273ef709c,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/71a977bf33620055a7c2c6a273ef709c.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.0125,3.0
+7354dde28d10e406b535677f6a43a98d,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7354dde28d10e406b535677f6a43a98d.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011627906976744186,2.42571998859424
+73e2b69d759b9969300776c75f61c295,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/73e2b69d759b9969300776c75f61c295.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011494252873563218,2.3347570742124932
+7909f4fb49579ad2df48f10d65804e49,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7909f4fb49579ad2df48f10d65804e49.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011627906976744186,2.2394645513138323
+7ab0b603e4f2e8925928862ed32ec8d6,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/7ab0b603e4f2e8925928862ed32ec8d6.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.011494252873563218,2.188212927756654
+a6e69950b93c9769188f2ff2bead52da,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/a6e69950b93c9769188f2ff2bead52da.pkl,0,Ransomware,old_test,False,random_rename_attack,0.002369668246445498,0.023809523809523808,1.6485925541574782
+eaef25ab1f59492ffc735a386294b69f,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/eaef25ab1f59492ffc735a386294b69f.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0,0.021739130434782608,3.0
+ef0aafefa653a36a33a9a8469f1e8159,/Volumes/SSD/TGNN/ransomware_tgnn/cache/enriched/test/ef0aafefa653a36a33a9a8469f1e8159.pkl,0,Ransomware,old_test,False,random_rename_attack,0.0017064846416382253,0.021505376344086023,1.5

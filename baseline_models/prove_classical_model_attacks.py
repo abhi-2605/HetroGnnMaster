@@ -793,6 +793,31 @@ def _alias_for_token(token: str, rng: random.Random) -> str:
     return rng.choice(choices)
 
 
+# --- Tier-2 out-of-context rename ------------------------------------------
+# A pool of real but behaviourally UNRELATED Windows API names (GUI / window /
+# cursor / locale / drawing / multimedia). Renaming a malware API to one of these
+# preserves the behaviour (the sample still does the same thing) but destroys the
+# recoverable semantics: a semantic model that re-encodes the name lands on the
+# WRONG behaviour rather than a near-synonym, so this stress-tests whether a
+# detector relies on genuine behavioural understanding vs recoverable API meaning.
+OUT_OF_CONTEXT_API_POOL = [
+    "getcursorpos", "setcursorpos", "getwindowrect", "showwindow",
+    "getdesktopwindow", "getforegroundwindow", "messagebeep", "loadcursorw",
+    "loadiconw", "getsystemmetrics", "getwindowtextw", "setwindowtextw",
+    "invalidaterect", "beginpaint", "endpaint", "getdc", "releasedc",
+    "textoutw", "createfontw", "selectobject", "getlocaleinfow",
+    "getdateformatw", "gettimeformatw", "charupperw", "charlowerw",
+    "lstrlenw", "wsprintfw", "playsoundw", "clienttoscreen", "screentoclient",
+]
+
+
+def _random_alias_for_token(token: str, rng: random.Random) -> str:
+    """Out-of-context rename: map a token to a random, behaviourally-unrelated
+    real API name (see OUT_OF_CONTEXT_API_POOL). Carries no recoverable
+    relationship to the original, unlike the meaning-preserving _alias_for_token."""
+    return rng.choice(OUT_OF_CONTEXT_API_POOL)
+
+
 def apply_full_shuffle_attack(graph, sample_id: str):
     graph = copy.deepcopy(graph)
     graph = ensure_api_timestamps_for_attack(graph)
@@ -825,12 +850,20 @@ def apply_full_shuffle_attack(graph, sample_id: str):
     return graph
 
 
-def apply_frequency_dilution_attack(graph, sample_id: str):
+def apply_frequency_dilution_attack(graph, sample_id: str, alias_fn=None):
     """
     Unigram-specific attack:
     1) rename many API tokens to alias/OOV-looking variants
     2) optionally add large benign-looking padding
+
+    alias_fn selects the rename style: the default `_alias_for_token` produces
+    meaning-preserving aliases (synonyms / suffix variants -- Tier-1); passing
+    `_random_alias_for_token` produces out-of-context names (Tier-2 stress test).
+    Everything else (rename fraction, padding) is identical, so the two tiers
+    differ ONLY in whether the renamed name keeps recoverable semantics.
     """
+    if alias_fn is None:
+        alias_fn = _alias_for_token
     graph = copy.deepcopy(graph)
     graph = ensure_api_timestamps_for_attack(graph)
 
@@ -864,7 +897,7 @@ def apply_frequency_dilution_attack(graph, sample_id: str):
     for i, tok in enumerate(names):
         norm_tok = _normalize_api_name(tok)
         if i in rename_idx_set:
-            renamed_names.append(_alias_for_token(norm_tok, rng))
+            renamed_names.append(alias_fn(norm_tok, rng))
         else:
             renamed_names.append(norm_tok)
 
@@ -913,6 +946,14 @@ def apply_frequency_dilution_attack(graph, sample_id: str):
         graph["api"].num_nodes = n
 
     return graph
+
+
+def apply_out_of_context_rename_attack(graph, sample_id: str):
+    """Tier-2 stress attack: identical to the Tier-1 rename+padding, but renames
+    to out-of-context (behaviourally-unrelated) real API names instead of
+    meaning-preserving aliases. Tests whether a detector survives when the
+    semantic channel is not just perturbed but actively misleading."""
+    return apply_frequency_dilution_attack(graph, sample_id, alias_fn=_random_alias_for_token)
 
 
 def apply_benign_interleaving_attack(graph, sample_id: str):
@@ -1025,6 +1066,9 @@ def apply_named_attack(graph, sample_id: str, attack_name: str):
 
     if attack_name == "unigram_attack":
         return apply_frequency_dilution_attack(graph, sample_id)
+
+    if attack_name == "random_rename_attack":
+        return apply_out_of_context_rename_attack(graph, sample_id)
 
     if attack_name == "bigram_attack":
         return apply_bigram_attack(graph, sample_id)

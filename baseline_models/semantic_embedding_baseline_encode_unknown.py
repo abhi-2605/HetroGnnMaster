@@ -102,14 +102,29 @@ from baseline_models.prove_classical_model_attacks import (
 
 RANDOM_STATE = 42
 
-OUT_DIR = Path(config.RESULTS_DIR) / "semantic_baseline_encode_unknown"
+# BiLSTM (reported model), val+test-only run -> write to a SEPARATE folder so the
+# earlier Mamba and zero-day-inclusive runs are all preserved.
+OUT_DIR = Path(config.RESULTS_DIR) / "semantic_baseline_encode_unknown_bilstm_valtest"
 MODEL_DIR = OUT_DIR / "models"
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
 
-SEM_CKPT = MODEL_DIR / "semantic_embedding_encode_unknown_best.pt"
-# Point this at the no-700 checkpoint (the BiLSTM run used best_model_1.pt).
-EXISTING_TGNN_CKPT = Path(config.RESULTS_DIR) / "checkpoints" / "best_model.pt"
+# ---- Eval set = held-out VAL + TEST only (no zero-day) -----------------------
+# For the §5.6 baseline comparison the eval set must be a clean held-out mix; the
+# zero-day unseen malware belongs to the separate generalisation experiment (§5.8).
+# Scope these overrides to THIS script (config.py on disk is untouched, so the
+# other baselines keep the default zero-day-inclusive manifest). Redirect the
+# manifest cache into OUT_DIR so the shared manifest CSV is not clobbered.
+config.CUSTOM_EVAL_INCLUDE_ALL_NEW_MALWARE = False   # drop the 170 zero-day rows
+config.CUSTOM_EVAL_REBUILD_MANIFEST = True           # force a fresh val+test build
+config.CUSTOM_EVAL_MANIFEST_PATH = OUT_DIR / "custom_eval_manifest_valtest.csv"
+
+# Reuse the already-trained semantic MLP from the original encode-unknown run so
+# the semantic side is byte-identical and ONLY the eval set / TGNN reference change.
+SEM_CKPT = (Path(config.RESULTS_DIR) / "semantic_baseline_encode_unknown"
+            / "models" / "semantic_embedding_encode_unknown_best.pt")
+# Reported model is the BiLSTM checkpoint best_model_1.pt (not the Mamba best_model.pt).
+EXISTING_TGNN_CKPT = Path(config.RESULTS_DIR) / "checkpoints" / "best_model_1.pt"
 
 API_EMB_PATH = PROJECT_ROOT / "cache" / "api_embeddings.pkl"
 
@@ -120,7 +135,9 @@ INCLUDE_TGNN = True
 # pipeline_v2 ENCODE_UNKNOWN_APIS_BY_NAME=True). Set False to fall back to zeros.
 ENCODE_UNKNOWN_BY_NAME = True
 
-SEM_EVAL_TRACKS = ["clean", "unigram_attack"]
+# clean = no attack; unigram_attack = Tier-1 meaning-preserving rename (+padding);
+# random_rename_attack = Tier-2 out-of-context rename (behaviourally-unrelated names).
+SEM_EVAL_TRACKS = ["clean", "unigram_attack", "random_rename_attack"]
 
 # --- MLP head hyperparameters (identical to the drop variant) ---
 SEM_EPOCHS = 60

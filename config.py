@@ -267,9 +267,9 @@ FOCAL_ALPHA = [0.39, 0.39, 0.42] # slight tweak to give more weight to ransomwar
 # Weighted Sampling (Oversampling)
 USE_WEIGHTED_SAMPLING = True
 OVERSAMPLE_WEIGHTS = {
-    0: 8, # RANSOMWARE: give it much higher weight to ensure it's well-represented in training batches
-    1: 3.6, # BENIGN: moderate weight to improve representation without overwhelming the model
-    2: 1, # OTHER MALWARE: some oversampling to help model learn better, but not as much as ransomware
+    0: 9.0, # RANSOMWARE: give it much higher weight to ensure it's well-represented in training batches
+    1: 3.5, # BENIGN: moderate weight to improve representation without overwhelming the model
+    2: 1.2, # OTHER MALWARE: some oversampling to help model learn better, but not as much as ransomware
 }
 
 # Class weights for loss function (alternative to Focal Loss)
@@ -519,7 +519,7 @@ OVERWRITE_ORIGINAL_METADATA = False
 USE_ADAPTIVE_BRANCH_FUSION = True
 
 # Small independent dropout on semantic / structural / temporal graph branches
-BRANCH_DROPOUT_P = 0.10
+BRANCH_DROPOUT_P = 0.05
 
 # Penalize only when gate entropy becomes too low
 BRANCH_GATE_TARGET_ENTROPY = 0.75
