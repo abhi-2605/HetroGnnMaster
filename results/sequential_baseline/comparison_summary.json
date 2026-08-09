@@ -1,0 +1,943 @@
+{
+  "description": "Sequential BiLSTM (order-only) vs existing TGNN under token-level attacks.",
+  "output_dir": "/workspace/project/TGNN/results/sequential_baseline",
+  "checkpoints": {
+    "sequential_bilstm": "/workspace/project/TGNN/results/sequential_baseline/models/sequential_bilstm_best.pt",
+    "existing_tgnn": "/workspace/project/TGNN/results/checkpoints/best_model_1.pt"
+  },
+  "seq_setup": {
+    "model": "BiLSTM token-ID, attention pooling (order-only, no graph, no MPNet)",
+    "train_size": 2946,
+    "val_size": 1356,
+    "excluded_augment_md5s": 700,
+    "apply_malware_subsample_to_train": false,
+    "token_vocab_size": 396,
+    "max_len": 2048,
+    "bidirectional": true,
+    "hidden_dim": 128,
+    "num_layers": 2
+  },
+  "tracks": [
+    "clean",
+    "unigram_attack",
+    "random_rename_attack",
+    "reorder_attack",
+    "bigram_attack",
+    "combined_all_attack"
+  ],
+  "tracks_note": "structure_attack intentionally excluded; attacks are matched to the sequence paradigm.",
+  "attack_stats": {
+    "clean": {
+      "bigram_overlap_mean": 1.0,
+      "bigram_overlap_median": 1.0,
+      "unigram_overlap_mean": 1.0,
+      "unigram_overlap_median": 1.0,
+      "length_ratio_mean": 1.0,
+      "length_ratio_median": 1.0
+    },
+    "unigram_attack": {
+      "bigram_overlap_mean": 0.047074018363795864,
+      "bigram_overlap_median": 0.0,
+      "unigram_overlap_mean": 0.03664901007133531,
+      "unigram_overlap_median": 0.02531645569620253,
+      "length_ratio_mean": 29.241655513195767,
+      "length_ratio_median": 3.0
+    },
+    "random_rename_attack": {
+      "bigram_overlap_mean": 0.052118128449918914,
+      "bigram_overlap_median": 0.0,
+      "unigram_overlap_mean": 0.05414985857123254,
+      "unigram_overlap_median": 0.04807692307692308,
+      "length_ratio_mean": 29.241655513195767,
+      "length_ratio_median": 3.0
+    },
+    "reorder_attack": {
+      "bigram_overlap_mean": 0.7884766625633889,
+      "bigram_overlap_median": 0.9056603773584906,
+      "unigram_overlap_mean": 0.9985991590202116,
+      "unigram_overlap_median": 1.0,
+      "length_ratio_mean": 1.0,
+      "length_ratio_median": 1.0
+    },
+    "bigram_attack": {
+      "bigram_overlap_mean": 0.5874625523183891,
+      "bigram_overlap_median": 0.9926470588235294,
+      "unigram_overlap_mean": 0.9959747853488499,
+      "unigram_overlap_median": 1.0,
+      "length_ratio_mean": 1.91622691994117,
+      "length_ratio_median": 1.999211356466877
+    },
+    "combined_all_attack": {
+      "bigram_overlap_mean": 0.04728409319848913,
+      "bigram_overlap_median": 0.0,
+      "unigram_overlap_mean": 0.03664901007133531,
+      "unigram_overlap_median": 0.02531645569620253,
+      "length_ratio_mean": 58.39588209820859,
+      "length_ratio_median": 5.997474747474747
+    }
+  },
+  "results": {
+    "Sequential BiLSTM": {
+      "clean": {
+        "metrics": {
+          "accuracy": 0.8923076923076924,
+          "per_class_precision": [
+            0.9803921568627451,
+            0.9794871794871794,
+            0.620253164556962
+          ],
+          "per_class_recall": [
+            0.6666666666666666,
+            0.955,
+            0.98
+          ],
+          "per_class_f1": [
+            0.7936507936507936,
+            0.9670886075949368,
+            0.7596899224806202
+          ],
+          "per_class_support": [
+            75,
+            200,
+            50
+          ],
+          "macro_precision": 0.8600441669689621,
+          "macro_recall": 0.8672222222222222,
+          "macro_f1": 0.8401431079087835,
+          "weighted_precision": 0.9244292488922764,
+          "weighted_recall": 0.8923076923076924,
+          "weighted_f1": 0.8951570066671628,
+          "confusion_matrix": [
+            [
+              50,
+              4,
+              21
+            ],
+            [
+              0,
+              191,
+              9
+            ],
+            [
+              1,
+              0,
+              49
+            ]
+          ],
+          "loss": 0.3091699316476782
+        },
+        "tvb": {
+          "TP": 121,
+          "FN": 4,
+          "TN": 191,
+          "FP": 9,
+          "threat_recall": 0.968,
+          "threat_precision": 0.9307692307692308,
+          "threat_f1": 0.9490196078431372,
+          "benign_recall": 0.955,
+          "benign_precision": 0.9794871794871794,
+          "benign_f1": 0.9670886075949366,
+          "accuracy_2class": 0.96,
+          "threats_missed": 4
+        },
+        "predictions_csv": "/workspace/project/TGNN/results/sequential_baseline/sequential_bilstm_clean_predictions.csv"
+      },
+      "unigram_attack": {
+        "metrics": {
+          "accuracy": 0.2276923076923077,
+          "per_class_precision": [
+            0.23397435897435898,
+            0.0,
+            0.07692307692307693
+          ],
+          "per_class_recall": [
+            0.9733333333333334,
+            0.0,
+            0.02
+          ],
+          "per_class_f1": [
+            0.3772609819121447,
+            0.0,
+            0.031746031746031744
+          ],
+          "per_class_support": [
+            75,
+            200,
+            50
+          ],
+          "macro_precision": 0.10363247863247864,
+          "macro_recall": 0.33111111111111113,
+          "macro_f1": 0.13633567121939213,
+          "weighted_precision": 0.06582840236686391,
+          "weighted_recall": 0.2276923076923077,
+          "weighted_f1": 0.09194423147911521,
+          "confusion_matrix": [
+            [
+              73,
+              0,
+              2
+            ],
+            [
+              190,
+              0,
+              10
+            ],
+            [
+              49,
+              0,
+              1
+            ]
+          ],
+          "loss": 1.1052479688078165
+        },
+        "tvb": {
+          "TP": 125,
+          "FN": 0,
+          "TN": 0,
+          "FP": 200,
+          "threat_recall": 1.0,
+          "threat_precision": 0.38461538461538464,
+          "threat_f1": 0.5555555555555556,
+          "benign_recall": 0.0,
+          "benign_precision": 0.0,
+          "benign_f1": 0.0,
+          "accuracy_2class": 0.38461538461538464,
+          "threats_missed": 0
+        },
+        "predictions_csv": "/workspace/project/TGNN/results/sequential_baseline/sequential_bilstm_unigram_attack_predictions.csv",
+        "drop_vs_clean": {
+          "accuracy_drop": 0.6646153846153846,
+          "macro_f1_drop": 0.7038074366893914,
+          "weighted_f1_drop": 0.8032127751880476,
+          "ransomware_recall_drop": -0.30666666666666675,
+          "benign_recall_drop": 0.955,
+          "other_malware_recall_drop": 0.96,
+          "threats_missed_increase": -4
+        }
+      },
+      "random_rename_attack": {
+        "metrics": {
+          "accuracy": 0.15076923076923077,
+          "per_class_precision": [
+            0.0,
+            0.0,
+            0.17883211678832117
+          ],
+          "per_class_recall": [
+            0.0,
+            0.0,
+            0.98
+          ],
+          "per_class_f1": [
+            0.0,
+            0.0,
+            0.30246913580246915
+          ],
+          "per_class_support": [
+            75,
+            200,
+            50
+          ],
+          "macro_precision": 0.05961070559610706,
+          "macro_recall": 0.32666666666666666,
+          "macro_f1": 0.10082304526748971,
+          "weighted_precision": 0.027512633352049412,
+          "weighted_recall": 0.15076923076923077,
+          "weighted_f1": 0.04653371320037987,
+          "confusion_matrix": [
+            [
+              0,
+              0,
+              75
+            ],
+            [
+              50,
+              0,
+              150
+            ],
+            [
+              1,
+              0,
+              49
+            ]
+          ],
+          "loss": 0.8697537084420522
+        },
+        "tvb": {
+          "TP": 125,
+          "FN": 0,
+          "TN": 0,
+          "FP": 200,
+          "threat_recall": 1.0,
+          "threat_precision": 0.38461538461538464,
+          "threat_f1": 0.5555555555555556,
+          "benign_recall": 0.0,
+          "benign_precision": 0.0,
+          "benign_f1": 0.0,
+          "accuracy_2class": 0.38461538461538464,
+          "threats_missed": 0
+        },
+        "predictions_csv": "/workspace/project/TGNN/results/sequential_baseline/sequential_bilstm_random_rename_attack_predictions.csv",
+        "drop_vs_clean": {
+          "accuracy_drop": 0.7415384615384616,
+          "macro_f1_drop": 0.7393200626412938,
+          "weighted_f1_drop": 0.8486232934667829,
+          "ransomware_recall_drop": 0.6666666666666666,
+          "benign_recall_drop": 0.955,
+          "other_malware_recall_drop": 0.0,
+          "threats_missed_increase": -4
+        }
+      },
+      "reorder_attack": {
+        "metrics": {
+          "accuracy": 0.8246153846153846,
+          "per_class_precision": [
+            0.918918918918919,
+            0.9743589743589743,
+            0.4731182795698925
+          ],
+          "per_class_recall": [
+            0.4533333333333333,
+            0.95,
+            0.88
+          ],
+          "per_class_f1": [
+            0.6071428571428571,
+            0.9620253164556962,
+            0.6153846153846154
+          ],
+          "per_class_support": [
+            75,
+            200,
+            50
+          ],
+          "macro_precision": 0.7887987242825952,
+          "macro_recall": 0.7611111111111111,
+          "macro_f1": 0.7281842629943895,
+          "weighted_precision": 0.884451162366795,
+          "weighted_recall": 0.8246153846153846,
+          "weighted_f1": 0.8268000256802593,
+          "confusion_matrix": [
+            [
+              34,
+              2,
+              39
+            ],
+            [
+              0,
+              190,
+              10
+            ],
+            [
+              3,
+              3,
+              44
+            ]
+          ],
+          "loss": 0.37887724054356414
+        },
+        "tvb": {
+          "TP": 120,
+          "FN": 5,
+          "TN": 190,
+          "FP": 10,
+          "threat_recall": 0.96,
+          "threat_precision": 0.9230769230769231,
+          "threat_f1": 0.9411764705882353,
+          "benign_recall": 0.95,
+          "benign_precision": 0.9743589743589743,
+          "benign_f1": 0.9620253164556962,
+          "accuracy_2class": 0.9538461538461539,
+          "threats_missed": 5
+        },
+        "predictions_csv": "/workspace/project/TGNN/results/sequential_baseline/sequential_bilstm_reorder_attack_predictions.csv",
+        "drop_vs_clean": {
+          "accuracy_drop": 0.06769230769230772,
+          "macro_f1_drop": 0.111958844914394,
+          "weighted_f1_drop": 0.06835698098690346,
+          "ransomware_recall_drop": 0.21333333333333332,
+          "benign_recall_drop": 0.0050000000000000044,
+          "other_malware_recall_drop": 0.09999999999999998,
+          "threats_missed_increase": 1
+        }
+      },
+      "bigram_attack": {
+        "metrics": {
+          "accuracy": 0.4123076923076923,
+          "per_class_precision": [
+            0.43137254901960786,
+            0.9761904761904762,
+            0.27071823204419887
+          ],
+          "per_class_recall": [
+            0.5866666666666667,
+            0.205,
+            0.98
+          ],
+          "per_class_f1": [
+            0.4971751412429379,
+            0.33884297520661155,
+            0.42424242424242425
+          ],
+          "per_class_support": [
+            75,
+            200,
+            50
+          ],
+          "macro_precision": 0.5594270857514276,
+          "macro_recall": 0.5905555555555555,
+          "macro_f1": 0.4200868468973246,
+          "weighted_precision": 0.7419290708208486,
+          "weighted_recall": 0.4123076923076923,
+          "weighted_f1": 0.38851954414358114,
+          "confusion_matrix": [
+            [
+              44,
+              1,
+              30
+            ],
+            [
+              57,
+              41,
+              102
+            ],
+            [
+              1,
+              0,
+              49
+            ]
+          ],
+          "loss": 0.6449056888620058
+        },
+        "tvb": {
+          "TP": 124,
+          "FN": 1,
+          "TN": 41,
+          "FP": 159,
+          "threat_recall": 0.992,
+          "threat_precision": 0.4381625441696113,
+          "threat_f1": 0.607843137254902,
+          "benign_recall": 0.205,
+          "benign_precision": 0.9761904761904762,
+          "benign_f1": 0.33884297520661155,
+          "accuracy_2class": 0.5076923076923077,
+          "threats_missed": 1
+        },
+        "predictions_csv": "/workspace/project/TGNN/results/sequential_baseline/sequential_bilstm_bigram_attack_predictions.csv",
+        "drop_vs_clean": {
+          "accuracy_drop": 0.48000000000000004,
+          "macro_f1_drop": 0.42005626101145893,
+          "weighted_f1_drop": 0.5066374625235817,
+          "ransomware_recall_drop": 0.07999999999999996,
+          "benign_recall_drop": 0.75,
+          "other_malware_recall_drop": 0.0,
+          "threats_missed_increase": -3
+        }
+      },
+      "combined_all_attack": {
+        "metrics": {
+          "accuracy": 0.2246153846153846,
+          "per_class_precision": [
+            0.23174603174603176,
+            0.0,
+            0.0
+          ],
+          "per_class_recall": [
+            0.9733333333333334,
+            0.0,
+            0.0
+          ],
+          "per_class_f1": [
+            0.37435897435897436,
+            0.0,
+            0.0
+          ],
+          "per_class_support": [
+            75,
+            200,
+            50
+          ],
+          "macro_precision": 0.07724867724867725,
+          "macro_recall": 0.3244444444444445,
+          "macro_f1": 0.12478632478632479,
+          "weighted_precision": 0.053479853479853484,
+          "weighted_recall": 0.2246153846153846,
+          "weighted_f1": 0.0863905325443787,
+          "confusion_matrix": [
+            [
+              73,
+              0,
+              2
+            ],
+            [
+              192,
+              0,
+              8
+            ],
+            [
+              50,
+              0,
+              0
+            ]
+          ],
+          "loss": 1.059410497546196
+        },
+        "tvb": {
+          "TP": 125,
+          "FN": 0,
+          "TN": 0,
+          "FP": 200,
+          "threat_recall": 1.0,
+          "threat_precision": 0.38461538461538464,
+          "threat_f1": 0.5555555555555556,
+          "benign_recall": 0.0,
+          "benign_precision": 0.0,
+          "benign_f1": 0.0,
+          "accuracy_2class": 0.38461538461538464,
+          "threats_missed": 0
+        },
+        "predictions_csv": "/workspace/project/TGNN/results/sequential_baseline/sequential_bilstm_combined_all_attack_predictions.csv",
+        "drop_vs_clean": {
+          "accuracy_drop": 0.6676923076923078,
+          "macro_f1_drop": 0.7153567831224588,
+          "weighted_f1_drop": 0.8087664741227841,
+          "ransomware_recall_drop": -0.30666666666666675,
+          "benign_recall_drop": 0.955,
+          "other_malware_recall_drop": 0.98,
+          "threats_missed_increase": -4
+        }
+      }
+    },
+    "Existing TGNN": {
+      "clean": {
+        "metrics": {
+          "accuracy": 0.8553846153846154,
+          "per_class_precision": [
+            0.9459459459459459,
+            1.0,
+            0.5212765957446809
+          ],
+          "per_class_recall": [
+            0.4666666666666667,
+            0.97,
+            0.98
+          ],
+          "per_class_f1": [
+            0.625,
+            0.9847715736040609,
+            0.6805555555555556
+          ],
+          "per_class_support": [
+            75,
+            200,
+            50
+          ],
+          "macro_precision": 0.8224075138968757,
+          "macro_recall": 0.8055555555555555,
+          "macro_f1": 0.7634423763865389,
+          "weighted_precision": 0.9138762330251692,
+          "weighted_recall": 0.8553846153846154,
+          "weighted_f1": 0.8549448999956615,
+          "confusion_matrix": [
+            [
+              35,
+              0,
+              40
+            ],
+            [
+              1,
+              194,
+              5
+            ],
+            [
+              1,
+              0,
+              49
+            ]
+          ],
+          "loss": 0.1028137303211181
+        },
+        "tvb": {
+          "TP": 125,
+          "FN": 0,
+          "TN": 194,
+          "FP": 6,
+          "threat_recall": 1.0,
+          "threat_precision": 0.9541984732824428,
+          "threat_f1": 0.9765625,
+          "benign_recall": 0.97,
+          "benign_precision": 1.0,
+          "benign_f1": 0.9847715736040609,
+          "accuracy_2class": 0.9815384615384616,
+          "threats_missed": 0
+        },
+        "predictions_csv": "/workspace/project/TGNN/results/sequential_baseline/existing_tgnn_clean_predictions.csv"
+      },
+      "unigram_attack": {
+        "metrics": {
+          "accuracy": 0.8430769230769231,
+          "per_class_precision": [
+            0.9411764705882353,
+            1.0,
+            0.5
+          ],
+          "per_class_recall": [
+            0.4266666666666667,
+            0.965,
+            0.98
+          ],
+          "per_class_f1": [
+            0.5871559633027523,
+            0.9821882951653944,
+            0.6621621621621622
+          ],
+          "per_class_support": [
+            75,
+            200,
+            50
+          ],
+          "macro_precision": 0.8137254901960785,
+          "macro_recall": 0.7905555555555556,
+          "macro_f1": 0.7438354735434363,
+          "weighted_precision": 0.909502262443439,
+          "weighted_recall": 0.8430769230769231,
+          "weighted_f1": 0.841792198119672,
+          "confusion_matrix": [
+            [
+              32,
+              0,
+              43
+            ],
+            [
+              1,
+              193,
+              6
+            ],
+            [
+              1,
+              0,
+              49
+            ]
+          ],
+          "loss": 0.13659179277012645
+        },
+        "tvb": {
+          "TP": 125,
+          "FN": 0,
+          "TN": 193,
+          "FP": 7,
+          "threat_recall": 1.0,
+          "threat_precision": 0.946969696969697,
+          "threat_f1": 0.9727626459143969,
+          "benign_recall": 0.965,
+          "benign_precision": 1.0,
+          "benign_f1": 0.9821882951653944,
+          "accuracy_2class": 0.9784615384615385,
+          "threats_missed": 0
+        },
+        "predictions_csv": "/workspace/project/TGNN/results/sequential_baseline/existing_tgnn_unigram_attack_predictions.csv",
+        "drop_vs_clean": {
+          "accuracy_drop": 0.012307692307692353,
+          "macro_f1_drop": 0.019606902843102625,
+          "weighted_f1_drop": 0.013152701875989492,
+          "ransomware_recall_drop": 0.03999999999999998,
+          "benign_recall_drop": 0.0050000000000000044,
+          "other_malware_recall_drop": 0.0,
+          "threats_missed_increase": 0
+        }
+      },
+      "random_rename_attack": {
+        "metrics": {
+          "accuracy": 0.8461538461538461,
+          "per_class_precision": [
+            0.9428571428571428,
+            1.0,
+            0.5051546391752577
+          ],
+          "per_class_recall": [
+            0.44,
+            0.965,
+            0.98
+          ],
+          "per_class_f1": [
+            0.6,
+            0.9821882951653944,
+            0.6666666666666666
+          ],
+          "per_class_support": [
+            75,
+            200,
+            50
+          ],
+          "macro_precision": 0.8160039273441336,
+          "macro_recall": 0.7949999999999999,
+          "macro_f1": 0.7496183206106869,
+          "weighted_precision": 0.910683131301688,
+          "weighted_recall": 0.8461538461538461,
+          "weighted_f1": 0.8454492072812683,
+          "confusion_matrix": [
+            [
+              33,
+              0,
+              42
+            ],
+            [
+              1,
+              193,
+              6
+            ],
+            [
+              1,
+              0,
+              49
+            ]
+          ],
+          "loss": 0.1409542257921809
+        },
+        "tvb": {
+          "TP": 125,
+          "FN": 0,
+          "TN": 193,
+          "FP": 7,
+          "threat_recall": 1.0,
+          "threat_precision": 0.946969696969697,
+          "threat_f1": 0.9727626459143969,
+          "benign_recall": 0.965,
+          "benign_precision": 1.0,
+          "benign_f1": 0.9821882951653944,
+          "accuracy_2class": 0.9784615384615385,
+          "threats_missed": 0
+        },
+        "predictions_csv": "/workspace/project/TGNN/results/sequential_baseline/existing_tgnn_random_rename_attack_predictions.csv",
+        "drop_vs_clean": {
+          "accuracy_drop": 0.009230769230769265,
+          "macro_f1_drop": 0.013824055775851996,
+          "weighted_f1_drop": 0.009495692714393211,
+          "ransomware_recall_drop": 0.026666666666666672,
+          "benign_recall_drop": 0.0050000000000000044,
+          "other_malware_recall_drop": 0.0,
+          "threats_missed_increase": 0
+        }
+      },
+      "reorder_attack": {
+        "metrics": {
+          "accuracy": 0.8523076923076923,
+          "per_class_precision": [
+            0.9714285714285714,
+            1.0,
+            0.5104166666666666
+          ],
+          "per_class_recall": [
+            0.4533333333333333,
+            0.97,
+            0.98
+          ],
+          "per_class_f1": [
+            0.6181818181818182,
+            0.9847715736040609,
+            0.6712328767123288
+          ],
+          "per_class_support": [
+            75,
+            200,
+            50
+          ],
+          "macro_precision": 0.827281746031746,
+          "macro_recall": 0.8011111111111111,
+          "macro_f1": 0.7580620894994027,
+          "weighted_precision": 0.9180860805860807,
+          "weighted_recall": 0.8523076923076923,
+          "weighted_f1": 0.8519372151386614,
+          "confusion_matrix": [
+            [
+              34,
+              0,
+              41
+            ],
+            [
+              0,
+              194,
+              6
+            ],
+            [
+              1,
+              0,
+              49
+            ]
+          ],
+          "loss": 0.11274067833849022
+        },
+        "tvb": {
+          "TP": 125,
+          "FN": 0,
+          "TN": 194,
+          "FP": 6,
+          "threat_recall": 1.0,
+          "threat_precision": 0.9541984732824428,
+          "threat_f1": 0.9765625,
+          "benign_recall": 0.97,
+          "benign_precision": 1.0,
+          "benign_f1": 0.9847715736040609,
+          "accuracy_2class": 0.9815384615384616,
+          "threats_missed": 0
+        },
+        "predictions_csv": "/workspace/project/TGNN/results/sequential_baseline/existing_tgnn_reorder_attack_predictions.csv",
+        "drop_vs_clean": {
+          "accuracy_drop": 0.003076923076923088,
+          "macro_f1_drop": 0.00538028688713621,
+          "weighted_f1_drop": 0.0030076848570000925,
+          "ransomware_recall_drop": 0.013333333333333364,
+          "benign_recall_drop": 0.0,
+          "other_malware_recall_drop": 0.0,
+          "threats_missed_increase": 0
+        }
+      },
+      "bigram_attack": {
+        "metrics": {
+          "accuracy": 0.8461538461538461,
+          "per_class_precision": [
+            0.9428571428571428,
+            1.0,
+            0.5051546391752577
+          ],
+          "per_class_recall": [
+            0.44,
+            0.965,
+            0.98
+          ],
+          "per_class_f1": [
+            0.6,
+            0.9821882951653944,
+            0.6666666666666666
+          ],
+          "per_class_support": [
+            75,
+            200,
+            50
+          ],
+          "macro_precision": 0.8160039273441336,
+          "macro_recall": 0.7949999999999999,
+          "macro_f1": 0.7496183206106869,
+          "weighted_precision": 0.910683131301688,
+          "weighted_recall": 0.8461538461538461,
+          "weighted_f1": 0.8454492072812683,
+          "confusion_matrix": [
+            [
+              33,
+              0,
+              42
+            ],
+            [
+              1,
+              193,
+              6
+            ],
+            [
+              1,
+              0,
+              49
+            ]
+          ],
+          "loss": 0.13316012650020206
+        },
+        "tvb": {
+          "TP": 125,
+          "FN": 0,
+          "TN": 193,
+          "FP": 7,
+          "threat_recall": 1.0,
+          "threat_precision": 0.946969696969697,
+          "threat_f1": 0.9727626459143969,
+          "benign_recall": 0.965,
+          "benign_precision": 1.0,
+          "benign_f1": 0.9821882951653944,
+          "accuracy_2class": 0.9784615384615385,
+          "threats_missed": 0
+        },
+        "predictions_csv": "/workspace/project/TGNN/results/sequential_baseline/existing_tgnn_bigram_attack_predictions.csv",
+        "drop_vs_clean": {
+          "accuracy_drop": 0.009230769230769265,
+          "macro_f1_drop": 0.013824055775851996,
+          "weighted_f1_drop": 0.009495692714393211,
+          "ransomware_recall_drop": 0.026666666666666672,
+          "benign_recall_drop": 0.0050000000000000044,
+          "other_malware_recall_drop": 0.0,
+          "threats_missed_increase": 0
+        }
+      },
+      "combined_all_attack": {
+        "metrics": {
+          "accuracy": 0.803076923076923,
+          "per_class_precision": [
+            0.95,
+            1.0,
+            0.4375
+          ],
+          "per_class_recall": [
+            0.25333333333333335,
+            0.965,
+            0.98
+          ],
+          "per_class_f1": [
+            0.4,
+            0.9821882951653944,
+            0.6049382716049383
+          ],
+          "per_class_support": [
+            75,
+            200,
+            50
+          ],
+          "macro_precision": 0.7958333333333334,
+          "macro_recall": 0.7327777777777778,
+          "macro_f1": 0.6623755222567776,
+          "weighted_precision": 0.9019230769230769,
+          "weighted_recall": 0.803076923076923,
+          "weighted_f1": 0.7897986849640795,
+          "confusion_matrix": [
+            [
+              19,
+              0,
+              56
+            ],
+            [
+              0,
+              193,
+              7
+            ],
+            [
+              1,
+              0,
+              49
+            ]
+          ],
+          "loss": 0.16007849542213426
+        },
+        "tvb": {
+          "TP": 125,
+          "FN": 0,
+          "TN": 193,
+          "FP": 7,
+          "threat_recall": 1.0,
+          "threat_precision": 0.946969696969697,
+          "threat_f1": 0.9727626459143969,
+          "benign_recall": 0.965,
+          "benign_precision": 1.0,
+          "benign_f1": 0.9821882951653944,
+          "accuracy_2class": 0.9784615384615385,
+          "threats_missed": 0
+        },
+        "predictions_csv": "/workspace/project/TGNN/results/sequential_baseline/existing_tgnn_combined_all_attack_predictions.csv",
+        "drop_vs_clean": {
+          "accuracy_drop": 0.05230769230769239,
+          "macro_f1_drop": 0.10106685412976124,
+          "weighted_f1_drop": 0.06514621503158202,
+          "ransomware_recall_drop": 0.21333333333333332,
+          "benign_recall_drop": 0.0050000000000000044,
+          "other_malware_recall_drop": 0.0,
+          "threats_missed_increase": 0
+        }
+      }
+    }
+  }
+}

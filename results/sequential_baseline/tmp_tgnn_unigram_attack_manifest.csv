@@ -83,8 +83,8 @@ b2f3a33416a83666a59470539e9d3701,/workspace/data/cache/enriched/val/b2f3a33416a8
 110,/workspace/data/cache/enriched/val/110.pkl,1,Benign,old_val,False,unigram_attack,0.0,0.1111111111111111,28.77777777777778
 18,/workspace/data/cache/enriched/test/18.pkl,1,Benign,old_test,False,unigram_attack,0.0,0.025974025974025976,2.2465719272001996
 f3b146b2fb2333c834c269d51b57e585,/workspace/data/cache/enriched/val/f3b146b2fb2333c834c269d51b57e585.pkl,1,Benign,old_val,False,unigram_attack,0.0049261083743842365,0.0392156862745098,1.115446779034865
-689,/workspace/data/cache/enriched/test/689.pkl,1,Benign,old_test,False,unigram_attack,0.0,0.02857142857142857,3.4390243902439024
-1003,/workspace/data/cache/enriched/val/1003.pkl,1,Benign,old_val,False,unigram_attack,0.012048192771084338,0.06060606060606061,3.808988764044944
+689,/workspace/data/cache/enriched/test/689.pkl,1,Benign,old_test,False,unigram_attack,0.011363636363636364,0.02857142857142857,3.4390243902439024
+1003,/workspace/data/cache/enriched/val/1003.pkl,1,Benign,old_val,False,unigram_attack,0.0,0.06060606060606061,3.808988764044944
 861,/workspace/data/cache/enriched/test/861.pkl,1,Benign,old_test,False,unigram_attack,0.0,0.07142857142857142,13.820512820512821
 838,/workspace/data/cache/enriched/test/838.pkl,1,Benign,old_test,False,unigram_attack,1.0,0.0,501.0
 550,/workspace/data/cache/enriched/test/550.pkl,1,Benign,old_test,False,unigram_attack,0.0,0.05405405405405406,1.7069136151562279
@@ -101,7 +101,7 @@ d1f18962d1720d342993d0f26e96ddae,/workspace/data/cache/enriched/test/d1f18962d17
 8bfc3272bd408849393cbfc58a06e670,/workspace/data/cache/enriched/test/8bfc3272bd408849393cbfc58a06e670.pkl,1,Benign,old_test,False,unigram_attack,0.00408997955010225,0.0297029702970297,1.0638235406747425
 b665733ffa2575cf55fe735b4dbe4daf,/workspace/data/cache/enriched/val/b665733ffa2575cf55fe735b4dbe4daf.pkl,1,Benign,old_val,False,unigram_attack,0.0045045045045045045,0.05,2.5738117721120553
 4a5efb20daee57d1ca64637c24fac8b7,/workspace/data/cache/enriched/val/4a5efb20daee57d1ca64637c24fac8b7.pkl,1,Benign,old_val,False,unigram_attack,1.0,0.0,501.0
-819,/workspace/data/cache/enriched/val/819.pkl,1,Benign,old_val,False,unigram_attack,0.007352941176470588,0.04878048780487805,3.0
+819,/workspace/data/cache/enriched/val/819.pkl,1,Benign,old_val,False,unigram_attack,0.014705882352941176,0.04878048780487805,3.0
 937,/workspace/data/cache/enriched/val/937.pkl,1,Benign,old_val,False,unigram_attack,0.0,0.02702702702702703,1.0
 852c065deaf53c02c37ca13a3cc61173,/workspace/data/cache/enriched/val/852c065deaf53c02c37ca13a3cc61173.pkl,1,Benign,old_val,False,unigram_attack,0.005277044854881266,0.0379746835443038,1.367701132519488
 855,/workspace/data/cache/enriched/test/855.pkl,1,Benign,old_test,False,unigram_attack,0.0,0.043478260869565216,5.9504950495049505
@@ -110,7 +110,7 @@ b665733ffa2575cf55fe735b4dbe4daf,/workspace/data/cache/enriched/val/b665733ffa25
 c2938eb5ff932c2540a1514cc82c197c,/workspace/data/cache/enriched/test/c2938eb5ff932c2540a1514cc82c197c.pkl,1,Benign,old_test,False,unigram_attack,0.0,0.01,1.8761170492377781
 954,/workspace/data/cache/enriched/test/954.pkl,1,Benign,old_test,False,unigram_attack,0.0,0.024390243902439025,3.0
 88f59fa501e1f34ddadaa7ad2e5c3bab,/workspace/data/cache/enriched/val/88f59fa501e1f34ddadaa7ad2e5c3bab.pkl,1,Benign,old_val,False,unigram_attack,0.0,0.025,3.0
-8,/workspace/data/cache/enriched/val/8.pkl,1,Benign,old_val,False,unigram_attack,0.012048192771084338,0.06060606060606061,3.808988764044944
+8,/workspace/data/cache/enriched/val/8.pkl,1,Benign,old_val,False,unigram_attack,0.0,0.06060606060606061,3.808988764044944
 063875d1549af53b587a829456b7f716,/workspace/data/cache/enriched/val/063875d1549af53b587a829456b7f716.pkl,1,Benign,old_val,False,unigram_attack,0.0045351473922902496,0.02564102564102564,1.9428625306430323
 495,/workspace/data/cache/enriched/val/495.pkl,1,Benign,old_val,False,unigram_attack,0.011111111111111112,0.037037037037037035,3.0
 322,/workspace/data/cache/enriched/val/322.pkl,1,Benign,old_val,False,unigram_attack,0.0,0.058823529411764705,5.464285714285714
@@ -165,7 +165,7 @@ dda22b0cee0e7f742a5c4696e3b5a804,/workspace/data/cache/enriched/test/dda22b0cee0
 432f47f1e4b8d108d61526746b83af5c,/workspace/data/cache/enriched/test/432f47f1e4b8d108d61526746b83af5c.pkl,1,Benign,old_test,False,unigram_attack,0.002583979328165375,0.02531645569620253,1.6554798112218143
 66,/workspace/data/cache/enriched/test/66.pkl,1,Benign,old_test,False,unigram_attack,0.0,0.08333333333333333,16.151515151515152
 696,/workspace/data/cache/enriched/val/696.pkl,1,Benign,old_val,False,unigram_attack,0.0,0.25,126.0
-14,/workspace/data/cache/enriched/test/14.pkl,1,Benign,old_test,False,unigram_attack,0.025,0.047619047619047616,9.19672131147541
+14,/workspace/data/cache/enriched/test/14.pkl,1,Benign,old_test,False,unigram_attack,0.0,0.047619047619047616,9.19672131147541
 606,/workspace/data/cache/enriched/test/606.pkl,1,Benign,old_test,False,unigram_attack,0.006289308176100629,0.034482758620689655,2.0285949393128986
 341,/workspace/data/cache/enriched/test/341.pkl,1,Benign,old_test,False,unigram_attack,0.0,0.08,6.9523809523809526
 347,/workspace/data/cache/enriched/test/347.pkl,1,Benign,old_test,False,unigram_attack,0.0,0.1111111111111111,23.727272727272727
@@ -188,7 +188,7 @@ a3f4107c68215616cebb0d787f66bcc9,/workspace/data/cache/enriched/test/a3f4107c682
 4779f59e00bcb80826e3deb3fb4af52a,/workspace/data/cache/enriched/val/4779f59e00bcb80826e3deb3fb4af52a.pkl,1,Benign,old_val,False,unigram_attack,0.0,0.03773584905660377,1.3085277057879798
 bc41c25862628aaac0221baa51175d8a,/workspace/data/cache/enriched/val/bc41c25862628aaac0221baa51175d8a.pkl,1,Benign,old_val,False,unigram_attack,0.0,0.024390243902439025,3.0
 cc9d0697280c3a2bc93818be2074a2be,/workspace/data/cache/enriched/val/cc9d0697280c3a2bc93818be2074a2be.pkl,1,Benign,old_val,False,unigram_attack,0.005494505494505495,0.05660377358490566,2.8719580681392736
-dcaa9fd0f6da052f09bcaad87a2db219,/workspace/data/cache/enriched/test/dcaa9fd0f6da052f09bcaad87a2db219.pkl,1,Benign,old_test,False,unigram_attack,0.005813953488372093,0.05714285714285714,1.0
+dcaa9fd0f6da052f09bcaad87a2db219,/workspace/data/cache/enriched/test/dcaa9fd0f6da052f09bcaad87a2db219.pkl,1,Benign,old_test,False,unigram_attack,0.0,0.05714285714285714,1.0
 a1ee8b242045a6dd67d5067ac8045817,/workspace/data/cache/enriched/test/a1ee8b242045a6dd67d5067ac8045817.pkl,1,Benign,old_test,False,unigram_attack,0.018404907975460124,0.047619047619047616,3.0
 613,/workspace/data/cache/enriched/test/613.pkl,1,Benign,old_test,False,unigram_attack,0.0,0.03333333333333333,3.0
 ec5c49f9fa8d871d1937148b9f55f01c,/workspace/data/cache/enriched/test/ec5c49f9fa8d871d1937148b9f55f01c.pkl,1,Benign,old_test,False,unigram_attack,0.016042780748663103,0.046511627906976744,1.1687535860137028
