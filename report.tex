@@ -181,15 +181,15 @@ I agree to have this thesis published on the Internet.   & $\square$ & $\square$
 \addcontentsline{toc}{chapter}{Abstract}
 
 \noindent
-Modern malware evades detection through obfuscation and the substitution of the
-application programming interface (API) calls it issues, so detection has shifted
-from static form to runtime behaviour. Existing behavioural detectors, however,
+Modern malware evades detection through obfuscation and application programming
+interface (API) call substitution, forcing a shift from static analysis to the
+monitoring of runtime behaviour. Existing behavioural detectors, however,
 capture only part of that behaviour: graph-based models discard execution timing
 and the meaning of calls, while approaches built on pretrained language models
 discard relational structure. This thesis presents a heterogeneous temporal graph
-neural network that reasons jointly over three complementary dimensions of behaviour, the meaning
-of each call, the relations between calls, and their execution order, within a
-single architecture. Sandbox execution traces were transformed into schema-aware
+neural network that weighs three complementary dimensions of behaviour, the meaning
+of each call, the relations between calls, and their execution order, against one
+another for every decision. Sandbox execution traces were transformed into schema-aware
 heterogeneous graphs whose typed nodes were enriched with pretrained semantic
 embeddings to resist API renaming, and a hybrid graph aggregator, a bidirectional
 long short-term memory network, and an adaptive fusion gate weighed the three views
@@ -252,11 +252,14 @@ meaning of individual operations. Despite this progress, accurately modelling
 evolving malicious behaviour remains challenging because the temporal, semantic,
 and structural characteristics of modern threats are rarely captured together
 within a single framework~\cite{haghshenas2023temporal}. The gap in the current
-landscape is therefore one of integration rather than capability: each of these
-dimensions is modelled well in isolation and poorly in combination, so no
-established representation reasons at once over what a program does, what its
-actions mean, and the order in which they unfold. Closing that gap, which the next
-chapter examines systematically, is the problem this thesis sets out to address.
+landscape is therefore not one of capability: each of these dimensions is already
+modelled well on its own. What no established approach does is reason over all three
+at once, within a single representation, judging together what a program does, what
+its actions mean, and the order in which they unfold. Closing that gap is the problem
+this thesis sets out to address, and it calls not for one more capable component set
+beside the others, but for a model in which the three are reasoned over jointly
+rather than combined after the fact. Why it is a problem worth solving, and what it
+costs a defender to leave it open, is taken up next.
 
 \section{Motivation}
 \label{sec:motivation}
@@ -350,52 +353,74 @@ already achieved is where the thesis turns next.
 \chapter{Related Work In Behavioural Threat Detection}
 \label{chap:literature}
 
-The gap identified in the previous chapter is a claim about the limits of current
-practice, and such a claim has to be earned against the literature rather than
-asserted. This chapter reads that literature as an argument rather than a
-catalogue: each family of methods captures part of behaviour convincingly, and the
-gap this thesis targets lies in the parts they leave out and, above all, never
-combine.
+The gap set out in the previous chapter is a claim about the limits of current
+practice, and a claim of that kind holds only once it has been weighed against what
+the field has actually built. This chapter is where that weighing is done. It reads
+the research on behavioural threat detection not as a catalogue of methods but as
+the evidence from which the gap is drawn, and it closes by turning that evidence
+into the specific questions the remainder of the thesis answers.
 
 The studies discussed were gathered by systematic search of the major academic
-databases and conference proceedings, extended by citation tracing. The review then
-works through the main methodological streams in turn, drawing out for each what it
-models and what it cannot, before consolidating these readings into a formal
-statement of the gap and the research questions that follow.
+databases and conference proceedings, extended by citation tracing. From there the
+chapter proceeds in three steps. It first works through the principal families of
+behavioural detection in turn, establishing for each what it models well and what it
+leaves unmodelled. It then consolidates those readings into a single, formal
+statement of the gap. It finally recasts that gap as the research questions around
+which the rest of the investigation is organised.
 
 \section{Existing Approaches to Behavioural Threat Detection}
 \label{sec:existing_studies}
 
 Each new family of behavioural detection methods has answered a shortcoming of the
-last by adding a dimension of behaviour the earlier ones ignored. Signature- and
-rule-based methods match fixed patterns; static machine learning replaces them with
-engineered features; sequential deep learning adds the order in which calls
-execute; graph neural networks add the relational structure between system
-entities, which heterogeneous and temporal variants then type and animate; and
-semantic approaches add the meaning of individual calls with pretrained transformer
-models, from the compact sentence-transformer embeddings this thesis builds on to
-the larger language models (LLMs) applied elsewhere. A separate line pursues early-stage
-detection from partial traces, and interpretability runs across them all. Each
-family is examined here for what it captures and, more tellingly, for what it
-leaves out, since it is the pattern of those omissions, rather than any single
-method's limits, that defines the gap this thesis sets out to close.
+last by adding a dimension of behaviour the earlier ones ignored. Read in the order
+they emerged, the families form a progression, and it is that progression, rather
+than any one method taken alone, that shows where the field still falls short. This
+section walks that progression, introducing each family in turn and drawing out both
+what it contributes and where it stops.
+
+It begins with signature- and rule-based detection, which recognises threats by
+matching fixed, previously catalogued patterns. Static machine learning replaces
+those patterns with features engineered from execution traces, and sequential deep
+learning adds the order in which calls execute. Graph neural networks recover the
+relational structure among the system entities a program touches, and heterogeneous
+and temporal variants enrich that structure with entity types and event timing.
+Semantic approaches add one further dimension, the meaning of individual calls,
+through pretrained transformer models, from the compact sentence-transformer
+embeddings this thesis builds on to the larger language models (LLMs) applied
+elsewhere. Two concerns then cut across the whole progression: detecting a threat
+early, from only a partial trace, and explaining a decision once it has been made.
+
+Each family is examined for what it captures and, more tellingly, for what it leaves
+out, since it is the pattern of those omissions, rather than any single method's
+limits, that defines the gap this thesis sets out to close.
 
 \subsection{Signature-Based and Rule-Based Detection}
 \label{subsec:signature}
 
 Signature-based detection has historically constituted the foundation of
 commercial anti-malware (antivirus) systems, identifying threats by matching
-code patterns,
-file hashes, or behavioural signatures against curated databases of previously
-catalogued threats~\cite{ucci2019survey}. The approach offers fast inference
-and low false positive rates for known threats, but it is fundamentally
-reactive: minor binary modifications (function renaming, code reordering,
-packing, or polymorphic engines) can invalidate a signature and bypass
-detection~\cite{guo2023zeroday}. Evolving threat variants additionally carry no
-existing signature, leaving signature-matching systems structurally unable to
-generalise to behaviours unobserved during training. The approach is therefore
-unsuited to environments in which new variants emerge daily and exposure to
-previously unobserved attacks constitutes the dominant operational risk.
+code patterns, file hashes, or behavioural signatures against curated databases
+of previously catalogued threats~\cite{ucci2019survey}. Rule-based detection
+generalises this idea a step further: instead of matching a single fixed
+artefact, hand-written rules describe families of suspicious indicators, such as
+a characteristic byte sequence or a particular combination of file and registry
+operations, and raise an alert for any sample that satisfies them. Both variants
+rest on the same assumption, that a threat can be recognised by a fixed,
+human-specified description authored after the threat has been observed and
+analysed.
+
+The approach offers fast inference and low false positive rates for known
+threats, and for that reason it endures as a first line of defence in layered
+detection systems. It is nonetheless fundamentally reactive. Every signature and
+rule is written only once a sample has been captured and studied, so a window of
+exposure separates the appearance of a new variant from the deployment of a
+description able to catch it. Within that window, minor binary modifications
+(function renaming, code reordering, packing, or polymorphic engines) are enough
+to invalidate a signature and bypass detection~\cite{guo2023zeroday}, and a
+genuinely new variant matches no existing description at all. Signature- and
+rule-based methods are therefore unsuited to environments in which new variants
+emerge daily and exposure to previously unseen attacks constitutes the dominant
+operational risk.
 
 \subsection{Static Machine Learning over Behavioural Features}
 \label{subsec:static_ml}
@@ -632,31 +657,41 @@ statistics computed over the full execution trace.
 \subsection{Interpretability for Security Operations}
 \label{subsec:interpretability}
 
-Interpretability of model decisions is a further dimension of behavioural
-threat detection in operational security environments. Attention-based GNN
-architectures such as the Graph Attention Network~\cite{velickovic2018gat} and
-HAN~\cite{han2019} provide attention coefficients that can be inspected post
-hoc to identify the most influential neighbours and relations. Bilot et
-al.~\cite{bilot2024survey} note in their survey of graph-based threat
-detection that interpretability remains an open challenge: while
-feature-importance methods such as SHAP can be applied to static-feature
-models, attributing a graph-level prediction to specific behavioural
-subgraphs, temporal events, or relation types is substantially more difficult.
-The absence of analyst-actionable explanations limits operational adoption of
-machine learning-based detection systems, since false positives carry
-significant operational costs and require rapid triage by human analysts.
+Interpretability of model decisions is a further dimension of behavioural threat
+detection, and an operationally decisive one: in a security operations centre an
+alert is acted on by a human analyst, who needs to see why a sample was flagged
+before committing time to it. Two broad approaches carry over from the wider machine
+learning literature. Attention-based graph architectures such as the Graph Attention
+Network~\cite{velickovic2018gat} and HAN~\cite{han2019} expose attention coefficients
+that can be inspected after the fact to reveal which neighbours and relations most
+influenced a node's representation. For static-feature models, model-agnostic
+feature-importance methods such as SHAP assign each engineered feature a share of the
+prediction. Both give a security team some purchase on an otherwise opaque decision.
 
-\subsection{Comparative Analysis of Existing Approaches}
-\label{subsec:comparison}
+The explanations they produce are only partial, however. Bilot et
+al.~\cite{bilot2024survey} observe that attributing a graph-level prediction to
+specific behavioural subgraphs, temporal events, or relation types is substantially
+harder than ranking a fixed set of features, and post-hoc attention over a graph
+reports where a model looked rather than a verdict an analyst can act on directly.
+Because false positives carry real operational cost and demand rapid triage, an
+explanation a security team can genuinely use remains hard to obtain. How large this
+shortfall is, alongside the omissions traced through the families before it, is what
+the next section draws together into a single statement of the gap.
 
-The studies surveyed above each address a subset of the behavioural dimensions
-required for robust threat analysis.
-Table~\ref{tab:literature_comparison} summarises representative approaches and
-compares their capabilities across five key criteria: semantic
-understanding, structural reasoning, temporal modelling, heterogeneous graph
-representation, and attribution support. No existing approach simultaneously
-satisfies all five criteria, a finding that motivates the gap formalised in
-Section~\ref{sec:research_gap}.
+\section{Research Gap}
+\label{sec:research_gap}
+
+\begingroup
+\sloppy
+
+Each of the families surveyed above captures part of behaviour well, and each
+leaves something out. Read one family at a time, they look like steady progress;
+read together, their omissions align. Table~\ref{tab:literature_comparison} places
+the representative approaches side by side against the five capabilities that robust
+behavioural detection requires, namely semantic understanding, structural reasoning,
+temporal modelling, heterogeneous representation, and attribution support. Each
+approach supplies some of these and none supplies all, and the shape of what is
+missing is consistent rather than incidental.
 
 \begin{table}[H]
 \centering
@@ -693,46 +728,46 @@ any single implementation.\par}
 \label{tab:literature_comparison}
 \end{table}
 
-\section{Research Gap}
-\label{sec:research_gap}
-
-\begingroup
-\sloppy
-
-Across the seven streams just surveyed, the field has advanced each behavioural
-dimension on its own, but not the problem of holding them together. Placed side by
-side, the approaches converge on a single structural limitation: \emph{no existing
+That consistency points to a single structural limitation: \emph{no existing
 framework simultaneously models the three behavioural dimensions that jointly
-characterise modern dynamic threats}. Two further gaps follow from it: the
-interpretability of multi-dimensional decisions, and the systematic ablation needed
-to establish what each dimension contributes.
+characterise modern dynamic threats}, the temporal pace at which behaviour unfolds,
+the semantic meaning of the operations it involves, and the heterogeneous relational
+structure among them. The remainder of this section takes each of the three in turn,
+establishing for each where current work reaches and where it stops, before turning
+to two further gaps that follow from the first: the difficulty of interpreting a
+decision made across several dimensions at once, and the absence of the systematic
+ablation needed to establish what each dimension contributes.
 
-\textbf{Temporal execution dynamics} (the evolution, pacing, and variability
-with which operations unfold) are inadequately represented in static GNN
-models~\cite{amer2025graphshield, bilot2024survey, nisa2020} and absent from
-flat-feature classical machine learning approaches~\cite{ucci2019survey,
-ye2017survey}. Foundational temporal graph frameworks such as
-TGN~\cite{tgn2020} and DyRep~\cite{dyrep2019} have been developed in the
-general machine learning literature, but existing cybersecurity-oriented TGNN
-work~\cite{guopope2023, haghshenas2023temporal} addresses graph evolution at a
-high level and has not been combined with the fine-grained behavioural
-characteristics most relevant to early-stage discrimination.
+\textbf{Temporal execution dynamics}, the evolution, pacing, and variability with
+which operations unfold, carry discriminative signal in their own right: the same
+file and cryptographic operations separate ransomware from a legitimate backup
+chiefly by the speed at which they are issued. This signal is absent from
+flat-feature classical machine learning~\cite{ucci2019survey, ye2017survey} and only
+weakly present in static GNN models, which encode topology but not
+time~\cite{amer2025graphshield, bilot2024survey, nisa2020}. Foundational temporal
+graph frameworks such as TGN~\cite{tgn2020} and DyRep~\cite{dyrep2019} do model time
+explicitly, but they were designed for general dynamic graphs, and the
+cybersecurity-oriented temporal work that adopts them~\cite{guopope2023,
+haghshenas2023temporal} tracks graph evolution at a coarse level rather than the
+fine-grained pacing that separates rapidly-acting threats from slower benign
+processes.
 
-\textbf{Semantic context} (the functional meaning of individual operations, so
-that syntactically different APIs can be recognised as equivalent) has been
-addressed by
-semantic embedding approaches~\cite{reimers2019sbert, lee2024gecko, mpnet2020}
-and by LLM-driven behavioural classifiers~\cite{perera2023beacon}. These
-approaches treat the execution trace as a linear textual sequence, however,
-and do not jointly model the relational structure between APIs, processes,
-files, registry objects, and network endpoints.
+\textbf{Semantic context}, the functional meaning of individual operations, lets a
+model recognise that syntactically different APIs do the same thing, and so resist
+the renaming and substitution that defeat symbolic matching. It has been addressed by
+semantic embedding approaches~\cite{reimers2019sbert, lee2024gecko, mpnet2020} and by
+LLM-driven behavioural classifiers~\cite{perera2023beacon}, but these read the
+execution trace as a linear textual sequence and do not model the relational
+structure between APIs, processes, files, registry objects, and network endpoints.
 
-\textbf{Heterogeneous structural relationships} (the explicit typing of
-behavioural nodes and the typed relations between them) are captured by
-heterogeneous GNN architectures~\cite{han2019, hetgnn2019} and applied in
-isolation to threat detection~\cite{wang2019matchgnet, li2024imbalanced}, but
-have not been combined with temporal reasoning and semantic enrichment within
-a single detection framework.
+\textbf{Heterogeneous structural relationships}, the explicit typing of behavioural
+nodes and of the relations between them, determine what a graph model can tell apart:
+a homogeneous graph treats a file write and a process spawn as the same kind of edge,
+collapsing distinctions that carry much of a behaviour's meaning. Heterogeneous GNN
+architectures restore these types~\cite{han2019, hetgnn2019} and have been applied to
+threat detection~\cite{wang2019matchgnet, li2024imbalanced}, but only apart from
+temporal and semantic modelling, so no detection framework yet types its entities
+while also reasoning over their timing and meaning.
 
 The operational consequence of this fragmentation is that current detection
 systems remain structurally unable to distinguish behaviours that differ along
@@ -749,15 +784,14 @@ artefacts. The absence of multi-dimensional, attributable
 interpretability limits adoption in security operations, where rapid triage
 of alerts is essential~\cite{bilot2024survey}.
 
-\textbf{Ablation analysis} is a final methodological gap. Existing
-studies rarely investigate the individual contribution of semantic,
-structural, and temporal information through systematic ablation, leaving the
-relative importance of each dimension insufficiently understood. Addressing
-this limitation yields a deeper, scientific understanding of which behavioural
-dimension contributes what to detection.
+\textbf{Ablation analysis} is a final, methodological gap. Studies that model several
+behavioural dimensions rarely test them apart, so it stays unclear whether all three
+are genuinely necessary or whether one carries most of the signal. Without that
+evidence, a multi-dimensional design cannot be shown to earn its added complexity,
+and the contribution each dimension makes to a decision goes unquantified.
 
 Closing these gaps calls for a single framework that models the three behavioural
-dimensions together, and that can both attribute its decisions across them and be
+dimensions jointly, and that can both attribute its decisions across them and be
 examined dimension by dimension. The research questions set out next turn that
 requirement into testable form.
 
@@ -2184,8 +2218,8 @@ whereas a resource node carries only a compact six-dimensional numerical
 descriptor. Passing representations this disparate into a shared aggregation
 stage unchanged would let one scale dominate the other, so each node type $\tau$
 is first mapped into its own hidden space through a dedicated projection
-consisting of a linear layer, layer normalisation, a ReLU non-linearity, and
-dropout, each type parameterised independently. The normalisation places the
+consisting of a linear layer, layer normalisation~\cite{ba2016layernorm}, a ReLU
+non-linearity, and dropout, each type parameterised independently. The normalisation places the
 heterogeneous inputs on a comparable footing before any cross-type mixing, and
 the dropout regularises the projection against the high dimensionality of the
 semantic input. API nodes are projected to a 128-dimensional hidden state and
@@ -2897,8 +2931,9 @@ the PyTorch~\cite{paszke2019pytorch} deep-learning framework, with heterogeneous
 graph construction and typed message passing provided by PyTorch
 Geometric~\cite{fey2019pyg}; the semantic embeddings of
 Section~\ref{subsec:semantic_enrichment} are produced through the
-\texttt{sentence-transformers} stack. The complete configuration is summarised
-in Table~\ref{tab:hw_sw_config}.
+\texttt{sentence-transformers} stack, while the classical baselines and evaluation
+metrics use scikit-learn~\cite{pedregosa2011scikit}. The complete configuration is
+summarised in Table~\ref{tab:hw_sw_config}.
 
 \begin{table}[htbp]
 \centering
@@ -2985,7 +3020,7 @@ to threat families never seen in training, and how interpretable its threat
 decisions are. Each section opens by stating the research question it addresses.
 
 
-\section{Experimental Setup}
+\section{Experimental Setup and Evaluation Protocol}
 \label{sec:exp_setup}
 
 The results reported in this chapter are only as trustworthy as the conditions
@@ -3000,7 +3035,7 @@ which all figures are taken, together with the criterion that selected it; the
 baseline configurations, evaluated on identical data so that any performance
 gap is attributable to representation rather than to unequal conditions; and
 the metric definitions and reproducibility settings under which every figure
-is computed. Each is detailed in the subsection that follows.
+is computed. Each is detailed in turn below.
 
 \subsection{Dataset and Splits}
 \label{subsec:exp_dataset}
@@ -3182,9 +3217,11 @@ framework's semantic branch \\
 \subsection{Metrics and Reproducibility}
 \label{subsec:exp_metrics}
 
-The metrics themselves are defined in Section~\ref{subsec:metrics}; what follows
-fixes how they are reported throughout this chapter. The binary threat decision is
-the primary lens, and threat recall together with the absolute count of missed
+The final element of the experimental setup governs how the results themselves are
+read. A figure carries meaning only under a fixed convention for how it is computed
+and reported, so those conventions are settled here before any results are shown;
+the metrics themselves are defined in Section~\ref{subsec:metrics}. The binary
+threat decision is the primary lens, and threat recall together with the absolute count of missed
 threats are treated as the headline figures, because the operational cost of the
 two error types is asymmetric: a single undetected ransomware sample is far more
 consequential than an isolated false alarm. Macro-averaged precision, recall, and
@@ -3200,7 +3237,9 @@ composition and the per-sample prediction records from which its metrics are
 computed. Every figure reported below, for the proposed framework and for the
 baselines alike, can therefore be regenerated exactly from the released checkpoint
 and these artefacts rather than merely re-estimated, which places the comparisons
-of this chapter on a verifiable footing.
+of this chapter on a verifiable footing. With the data, model, baselines, and
+reporting conventions now fixed, the evaluation opens with the framework's raw
+detection performance.
 
 
 \section{Threat Detection Performance}
@@ -4347,7 +4386,7 @@ smaller set carries far fewer other-malware traces, which sharpens the
 ransomware-versus-other-malware confusion that a macro average penalises; the
 shift reflects the composition of the evaluation set, not a change in the model.
 
-\begin{table}[H]
+\begin{table}[t]
 \centering
 \small
 \begin{tabular}{@{}lcccc@{}}
@@ -4400,7 +4439,7 @@ the group: the single-paradigm detectors trade a handful of missed threats for a
 slightly cleaner aggregate score, whereas the framework holds threat recall at its
 ceiling and accepts a marginally lower macro-F1 in return.
 
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{img/baseline_clean_comparison.pdf}
 \caption[Cross-paradigm macro-F1 on clean traces]{Three-class macro-F1 of the
@@ -4572,7 +4611,7 @@ branch re-encodes each unfamiliar name by meaning rather than discarding it as
 unknown, and the structure and timing of the calls stand behind that reading
 whatever the recorded names become.
 
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{img/baseline_robustness_comparison.pdf}
 \caption[Macro-F1 under behaviour-preserving attacks]{Macro-F1 of each baseline on
