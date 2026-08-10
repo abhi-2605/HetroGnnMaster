@@ -202,8 +202,8 @@ upon. It generalised to the unseen source, detecting every held-out threat with
 none missed, by reasoning over the structure and timing of behaviour rather than
 over specific call names. Each decision could be attributed to the behavioural
 dimension and the concrete calls that produced it, and the ablation confirmed that
-no single view sufficed alone. By modelling semantic meaning, execution timing, and
-structural relationships jointly in one interpretable model, the framework detects evolving
+no single view sufficed alone. By modelling behaviour along all three
+dimensions at once, in one interpretable model, the framework detects evolving
 threats robustly, transfers to previously unseen malware, and explains the grounds
 of its alerts, capabilities that behavioural detectors rarely provide together.
 
@@ -283,10 +283,9 @@ The stakes are asymmetric. A single threat that slips through can encrypt or
 exfiltrate an organisation's data, whereas a false alarm costs only analyst
 attention, so a detector that closes these evasion routes rather than leaving them
 open carries disproportionate operational value. This is the value the thesis
-pursues: by reasoning over the relational, semantic, and temporal facets of
-behaviour together, within one representation, a detector can no longer be evaded
-by altering a dimension it failed to model, and can recognise threats whose surface
-form it has never seen. The objectives that give this approach concrete form are
+pursues: a detector that cannot be evaded by tampering with a single dimension it
+failed to model, and that recognises threats whose surface form it has never seen,
+because its judgement never rests on any one facet of behaviour alone. The objectives that give this approach concrete form are
 set out next.
 
 \section{Thesis Objectives}
@@ -319,10 +318,10 @@ behaviour and strengthen robustness against API obfuscation, naming variation,
 and evolving execution patterns. This objective directly supports RQ1 and RQ2.
 
 \item[\textbf{Objective 3 -- Hybrid heterogeneous-temporal architecture.}]
-To design and evaluate a hybrid architecture that integrates heterogeneous
+To design and evaluate a hybrid architecture in which heterogeneous
 graph message passing, attention-based and inductive neighbourhood aggregation,
 and bidirectional long short-term memory (LSTM)-based temporal sequence modelling
-for dynamic threat detection. This objective supports RQ2 and RQ3 by investigating how structural
+operate together for dynamic threat detection. This objective supports RQ2 and RQ3 by investigating how structural
 and temporal reasoning interact within a single framework.
 
 \item[\textbf{Objective 4 -- Adaptive fusion and attribution.}]
@@ -825,8 +824,8 @@ additional insight beyond examining either dimension independently.
 
 \item[\textbf{RQ3 -- End-to-End Detection Performance.}]
 How does the proposed heterogeneous, schema-aware temporal graph-based
-framework (combining semantic, structural, and temporal reasoning within a
-single architecture) perform when compared with representative baselines
+framework (which reasons over semantic, structural, and temporal behaviour
+jointly within a single architecture) perform when compared with representative baselines
 drawn from classical machine learning, sequential deep learning, static graph
 neural network, and semantic-embedding classification families? This question
 evaluates whether joint modelling of semantic, structural, and temporal
@@ -864,7 +863,7 @@ Behavioural evidence carries several kinds of signal at once: relational, in how
 a program's operations connect to the objects they touch; temporal, in the order
 and pace at which they occur; and semantic, in what each operation actually
 means. No single family of machine-learning techniques captures all three, so the
-framework proposed in this thesis combines several, each supplying one facet:
+framework proposed in this thesis draws on several, each supplying one facet:
 graph representation learning and its heterogeneous and temporal extensions,
 attention and inductive aggregation, recurrent sequence models, and
 transformer-based semantic embeddings. These are the foundations the methodology
@@ -878,8 +877,8 @@ of that evidence. Each section motivates its concept from the problem it
 addresses, develops the concept with its grounding in the relevant literature,
 and indicates where it is used in the framework. The treatment is deliberately
 self-contained, assuming familiarity with general deep learning but introducing
-each specialised technique from first principles. The concrete architecture, and
-the way these components are combined, are deferred to
+each specialised technique from first principles. The concrete architecture that puts these
+foundations to work is deferred to
 Chapter~\ref{chap:methodology}; the aim here is to lay the groundwork on which it
 builds. That groundwork begins with the evidence itself, and with what a
 behavioural trace does and does not preserve for a detector to learn from.
@@ -3259,8 +3258,8 @@ behaviour beneath it follows.
 \subsection{Binary Threat Detection}
 \label{subsec:binary_detection}
 
-The question a deployed detector must answer is binary: whether a sample
-constitutes a threat. To measure how the framework answers it, the reported
+In practice the framework must return a single verdict, threat or not, and the
+evaluation begins with that decision. The reported
 checkpoint is applied once to every sample of the test split, and each
 three-class prediction is projected onto the binary decision by the fixed
 argmax rule of Equation~\ref{eq:binary_projection}, so the outcome reflects the
@@ -5044,9 +5043,8 @@ that separates benign automation from malice. The problem this thesis set out to
 solve was to detect threats from behaviour in a way that survived both, by reasoning
 jointly over the three dimensions along which behaviour is expressed: the relations
 between actions, the meaning of each action, and the order in which actions unfold.
-The proposed framework realises that objective as a single architecture in which a
-structural, a semantic and a temporal branch are combined through an adaptive gate
-that weighs their evidence separately for each decision.
+The proposed framework realises that objective in a single model that reasons over
+all three jointly rather than resting its judgement on any one alone.
 
 The evaluation showed that this joint formulation succeeds where its
 single-dimension counterparts do not. On unperturbed traces the framework detected
@@ -5057,7 +5055,7 @@ the meaning of calls rather than their literal tokens, answering RQ1; and that s
 behavioural grounding let it recognise threats from an independent source whose
 vocabulary diverged sharply from anything seen in training, answering RQ5. Examining
 the branches individually confirmed that the three views carry genuinely
-complementary, and partly redundant, signal, so that combining them is at once
+complementary, and partly redundant, signal, so that drawing on all three is at once
 beneficial and resilient, no single branch proving indispensable yet none
 sufficient on its own, which answers RQ2.
 
@@ -5076,12 +5074,12 @@ and temporal reasoning are learned together over one schema-aware heterogeneous
 graph and fused by an adaptive gate that reweighs the three for every individual
 decision. That gate, which lets the model itself decide how each behaviour is
 judged rather than applying a fixed blend, is the architectural novelty, and it is
-what makes the combination not only accurate but robust and self-explaining. Empirically, it demonstrates that behavioural
+what makes it not only accurate but robust and self-explaining. Empirically, it demonstrates that behavioural
 detection grounded in all three dimensions withstands the cheap, behaviour-preserving
 evasions that defeat single-paradigm detectors, and that it does so without the
 opacity such robustness usually costs. For practitioners this points towards a
 detector whose alerts survive obfuscation, transfer to previously unseen malware, and
-arrive with an account of the behaviour that triggered them, a combination that
+arrive with an account of the behaviour that triggered them, qualities that
 current tools rarely offer together.
 
 \section{Limitations}
