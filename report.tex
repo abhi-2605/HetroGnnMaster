@@ -119,7 +119,7 @@ and Temporal Features}\\[1.5cm]
 {\Large\scshape Master's Thesis}\\[0.55cm]
 
 {\normalsize
-Submitted in partial fulfillment of the requirements for\\[0.2em]
+Submitted in partial fulfilment of the requirements for\\[0.2em]
 the degree of Master of Science (M.Sc.)\\[0.2em]
 in Web and Data Science}\\[1.5cm]
 
@@ -187,7 +187,7 @@ from static form to runtime behaviour. Existing behavioural detectors, however,
 capture only part of that behaviour: graph-based models discard execution timing
 and the meaning of calls, while approaches built on pretrained language models
 discard relational structure. This thesis presents a heterogeneous temporal graph
-neural network that unites three complementary dimensions of behaviour, the meaning
+neural network that reasons jointly over three complementary dimensions of behaviour, the meaning
 of each call, the relations between calls, and their execution order, within a
 single architecture. Sandbox execution traces were transformed into schema-aware
 heterogeneous graphs whose typed nodes were enriched with pretrained semantic
@@ -202,15 +202,15 @@ upon. It generalised to the unseen source, detecting every held-out threat with
 none missed, by reasoning over the structure and timing of behaviour rather than
 over specific call names. Each decision could be attributed to the behavioural
 dimension and the concrete calls that produced it, and the ablation confirmed that
-no single view sufficed alone. By uniting semantic meaning, execution timing, and
-structural reasoning in one interpretable model, the framework detects evolving
+no single view sufficed alone. By modelling semantic meaning, execution timing, and
+structural relationships jointly in one interpretable model, the framework detects evolving
 threats robustly, transfers to previously unseen malware, and explains the grounds
 of its alerts, capabilities that behavioural detectors rarely provide together.
 
 \vspace{1em}
-\noindent\textbf{Keywords:} behavioural threat detection; temporal graph neural
-networks; heterogeneous graphs; semantic API embeddings; adversarial robustness;
-model interpretability.
+\noindent\textbf{Keywords:} Behavioural threat detection; Temporal graph neural
+networks; Heterogeneous graphs; Semantic API embeddings; Adversarial robustness;
+Model interpretability.
 
 % ============================================================
 \tableofcontents
@@ -291,8 +291,8 @@ set out next.
 
 Giving that approach concrete form is not a single task but a connected sequence,
 running from how behaviour is represented, through the architecture that reasons
-over it, to how the finished detector is judged. The framework combines several
-interacting components, and stating that sequence explicitly, as separate
+over it, to how the finished detector is judged. The framework's several components are closely
+interdependent, and stating that sequence explicitly, as separate
 objectives, allows the contribution of each to be evaluated and attributed on its
 own rather than lost in an aggregate result. The thesis pursues five such
 objectives, each paired with a research question, set out in the next chapter, that
@@ -324,7 +324,7 @@ and temporal reasoning interact within a single framework.
 
 \item[\textbf{Objective 4 -- Adaptive fusion and attribution.}]
 To develop an adaptive three-branch gated fusion mechanism that jointly
-integrates semantic, structural, and temporal representations within a unified
+integrates semantic, structural, and temporal representations within a single
 classifier, and to analyse the contribution of each branch to threat
 classification. This objective supports RQ4 by enabling attribution of model
 decisions across the three behavioural dimensions.
@@ -442,7 +442,7 @@ dynamically evolving threats.
 The inability of static models to preserve execution ordering motivated the
 adoption of sequential deep learning architectures capable of modelling API
 call dependencies over time. This shift reflected a broader transition in
-behavioural threat analysis from aggregate statistical descriptors toward
+behavioural threat analysis from aggregate statistical descriptors towards
 sequence-aware modelling. Pascanu et al.~\cite{pascanu2015} provide an early
 demonstration by applying recurrent neural networks to threat classification,
 establishing the feasibility of this approach and laying the groundwork for
@@ -473,7 +473,7 @@ embedding-based behavioural representations.
 \label{subsec:gnn}
 
 Graph-based behavioural modelling represented a conceptual transition from
-linear execution analysis toward relational reasoning over interacting system
+linear execution analysis towards relational reasoning over interacting system
 entities. Graph Neural Networks (GNNs)~\cite{scarselli2009, gilmer2017mpnn,
 kipf2017gcn} operate directly on graph-structured data and address several of
 the representational shortcomings of flat-feature and sequence-only
@@ -574,7 +574,7 @@ typically been developed over homogeneous graphs, however, and have not been
 integrated with semantic API understanding or with the fine-grained
 behavioural characteristics most relevant to early-stage threat
 discrimination. The joint integration of heterogeneous typing, temporal
-reasoning, and semantic enrichment within a unified framework therefore
+reasoning, and semantic enrichment within a single framework therefore
 remains underexplored.
 
 \subsection{Semantic and LLM-Based Behavioural Analysis}
@@ -732,7 +732,7 @@ behavioural nodes and the typed relations between them) are captured by
 heterogeneous GNN architectures~\cite{han2019, hetgnn2019} and applied in
 isolation to threat detection~\cite{wang2019matchgnet, li2024imbalanced}, but
 have not been combined with temporal reasoning and semantic enrichment within
-a unified detection framework.
+a single detection framework.
 
 The operational consequence of this fragmentation is that current detection
 systems remain structurally unable to distinguish behaviours that differ along
@@ -774,7 +774,7 @@ claim a specific experiment can confirm or refute.
 
 \item[\textbf{RQ1 -- Semantic Generalisation.}]
 Can pretrained transformer-based semantic embeddings improve the
-generalisation capability of behavioural threat detection models toward
+generalisation capability of behavioural threat detection models towards
 obfuscated or evolving threat behaviours that are previously unobserved during
 training? This question addresses the semantic context dimension of the
 gap and concerns whether contextual semantic understanding of API behaviour
@@ -789,7 +789,7 @@ investigates whether semantic context and temporal execution dynamics capture
 distinct behavioural properties, and whether their integration provides
 additional insight beyond examining either dimension independently.
 
-\item[\textbf{RQ3 -- Unified Temporal Graph-Based Performance.}]
+\item[\textbf{RQ3 -- End-to-End Detection Performance.}]
 How does the proposed heterogeneous, schema-aware temporal graph-based
 framework (combining semantic, structural, and temporal reasoning within a
 single architecture) perform when compared with representative baselines
@@ -826,16 +826,17 @@ then built.
 \chapter{Technical Background}
 \label{chap:theory}
 
-The detection framework proposed in this thesis draws on techniques from several
-distinct areas of machine learning: graph representation learning and its
-heterogeneous and temporal extensions, attention and inductive aggregation,
-recurrent and state-space sequence models, and transformer-based semantic
-embeddings. Each addresses a different facet of behavioural evidence, the
-relational, the temporal, and the semantic, and no single one of them is
-sufficient on its own for the detection task this thesis targets. These are the
-foundations the methodology of Chapter~\ref{chap:methodology} builds on, and this
-chapter sets them out first, so that the design decisions there can be read and
-justified in terms of concepts already in place.
+Behavioural evidence carries several kinds of signal at once: relational, in how
+a program's operations connect to the objects they touch; temporal, in the order
+and pace at which they occur; and semantic, in what each operation actually
+means. No single family of machine-learning techniques captures all three, so the
+framework proposed in this thesis combines several, each supplying one facet:
+graph representation learning and its heterogeneous and temporal extensions,
+attention and inductive aggregation, recurrent sequence models, and
+transformer-based semantic embeddings. These are the foundations the methodology
+of Chapter~\ref{chap:methodology} builds on, and this chapter sets them out first,
+so that the design decisions there can be read and justified in terms of concepts
+already in place.
 
 The material is organised in the order the framework uses it, from the
 behavioural evidence that forms its input through to the semantic representation
@@ -846,7 +847,8 @@ self-contained, assuming familiarity with general deep learning but introducing
 each specialised technique from first principles. The concrete architecture, and
 the way these components are combined, are deferred to
 Chapter~\ref{chap:methodology}; the aim here is to lay the groundwork on which it
-builds.
+builds. That groundwork begins with the evidence itself, and with what a
+behavioural trace does and does not preserve for a detector to learn from.
 
 \section{Behavioural Threat Analysis}
 \label{sec:behavioural_threat}
@@ -885,7 +887,8 @@ allocations, and network communications~\cite{mimura2022nlp}. Because behaviour
 cannot be entirely concealed if the program is to fulfil its purpose, dynamic
 traces tend to be more robust to surface-level obfuscation than static
 features. The proposed framework operates entirely in the dynamic regime,
-taking observable execution behaviour as its primary input.
+taking observable execution behaviour as its primary input, most of which arrives
+as the stream of API calls examined next.
 
 \subsection{API Call Traces as Behavioural Evidence}
 \label{subsec:api_traces}
@@ -920,31 +923,32 @@ embedding space (Section~\ref{sec:semantic}).
 \section{Graph Representation Learning}
 \label{sec:graph_rl}
 
-Graph representation learning is the study of models that operate directly on
-graph-structured data, where information resides not only in individual entities
-but in the topology of their connections. A behavioural trace fits this
-description naturally: its API calls, processes, files, registry objects, and
-network endpoints are entities joined by typed relations, and casting the trace
-as a graph preserves dependencies that a flat feature vector would discard. This
+A behavioural trace is a web of dependencies: which process touched which file, in
+what order, and through which call. Cast as a flat feature vector it becomes a bag
+of counts, and the structure that distinguishes one behaviour from another is
+lost. Graph representation learning studies models that operate on that structure
+directly, where information resides not only in the individual entities but in the
+topology of their connections. A behavioural trace fits this naturally: its API
+calls, processes, files, registry objects, and network endpoints are entities
+joined by typed relations that a graph preserves. This
 section builds the machinery for learning on such structure from the ground up.
-It first fixes the graph notation used throughout, then introduces graph neural
-networks as models that compute over graphs. It closes with the message-passing
-framework through which they operate, the abstraction on which every
-heterogeneous, temporal, and attention-based extension later in this chapter is
-built.
+It first introduces graphs and the neural networks that operate on them, then
+develops the message-passing framework through which those networks compute, the
+abstraction on which every heterogeneous, temporal, and attention-based extension
+later in this chapter is built.
 
 \subsection{Graphs and Graph Neural Networks}
 \label{subsec:gnn_general}
 
-A graph $\mathcal{G} = (\mathcal{V}, \mathcal{E})$ consists of a set of nodes
+That machinery begins with the graph itself. A graph
+$\mathcal{G} = (\mathcal{V}, \mathcal{E})$ consists of a set of nodes
 $\mathcal{V}$ and a set of edges $\mathcal{E} \subseteq \mathcal{V} \times
 \mathcal{V}$; each node $v \in \mathcal{V}$ may carry a feature vector
 $\mathbf{x}_v \in \mathbb{R}^d$ and each edge $(u, v) \in \mathcal{E}$ an
-attribute vector $\mathbf{e}_{uv} \in \mathbb{R}^{d'}$. This structure is a
-natural fit for systems of interacting entities, in which information resides not
-only in the entities themselves but in the topology of their interactions, a
-description behavioural traces meet: a running program does not execute isolated
-actions but interacts with operating-system resources through connected events.
+attribute vector $\mathbf{e}_{uv} \in \mathbb{R}^{d'}$. A running program fits this
+description directly: it does not execute isolated actions but interacts with
+operating-system resources through connected events, each of which becomes a node
+or an edge in such a graph.
 
 Graph Neural Networks (GNNs) are the family of neural architectures that learn
 directly over this structure. The original formulation by Scarselli et
@@ -958,8 +962,9 @@ neighbourhood, a property analogous to the growing receptive field of stacked
 convolutional layers in image-based deep learning. Graph-based learning has
 become widely adopted in threat analysis precisely because it preserves the
 structural dependencies that flat feature vectors
-discard~\cite{bilot2024survey, nisa2020}. Both homogeneous and heterogeneous
-variants of the framework have been investigated.
+discard~\cite{bilot2024survey, nisa2020}. That message-passing view, rather than
+the original recurrent formulation, is the abstraction the modern architectures in
+this chapter build on, and it is developed formally next.
 
 \subsection{The Message-Passing Framework}
 \label{subsec:mpnn}
@@ -1005,25 +1010,15 @@ reason about behaviour rather than mere connectivity. Collapsing every entity an
 interaction into a single abstract type would discard exactly the semantic
 structure that separates a process spawning a child from a process writing a
 file. Heterogeneous graph learning provides the apparatus for preserving these
-distinctions and learning from them. This section first defines the heterogeneous
-graph formally, extending the earlier notation with explicit node and relation
-types. It then develops relation-specific message passing, in which each relation
-carries its own learned message function, so that different kinds of interaction
+distinctions and learning from them. This section makes that precise: it extends the earlier graph definition with
+explicit node and relation types, then develops message passing in which each
+relation carries its own learned function, so that different kinds of interaction
 are aggregated by distinct parameters.
 
-\subsection{Heterogeneous Graphs}
-\label{subsec:hetero_def}
-
-A homogeneous graph treats all nodes and edges as instances of a single
-abstract type. Many real-world systems, however, contain qualitatively
-distinct entities connected by qualitatively distinct relations. Behavioural
-execution data contains API invocations, processes, files, registry objects,
-and network endpoints, joined by a variety of relations such as temporal
-succession, process hierarchy, and resource access. Modelling such data with
-a single relation type collapses semantically meaningful distinctions and
-weakens the inductive bias of the network.
-
-A heterogeneous (or typed) graph is formally defined as a tuple
+The graph introduced so far carries no notion of type: every node and every edge
+is an instance of the same abstract object. A heterogeneous, or typed, graph
+relaxes that assumption, attaching to each node and edge a label drawn from a
+finite set of types. It is formally defined as a tuple
 \begin{equation}
   \mathcal{G} = (\mathcal{V}, \mathcal{E}, \mathcal{T}_\mathcal{V}, \mathcal{T}_\mathcal{E},
   \phi_\mathcal{V}, \phi_\mathcal{E}),
@@ -1038,12 +1033,10 @@ thus carries an additional semantic dimension (the type information) that
 distinguishes it from its homogeneous
 counterpart~\cite{wang2019matchgnet, li2024imbalanced}.
 
-\subsection{Relation-Specific Message Passing}
-\label{subsec:type_aware_mp}
-
-Treating all relations identically is a strong and frequently inappropriate
-assumption, because different relations encode different statistical and
-semantic phenomena. Relation-specific message passing addresses this by
+A typed graph fixes what the entities and relations are; it does not yet prescribe
+how a model should compute over them. Treating all relations identically is a
+strong and frequently inappropriate assumption, because different relations encode
+different statistical and semantic phenomena. Relation-specific message passing addresses this by
 maintaining a separate message function $\psi_r$ for each relation type
 $r \in \mathcal{T}_\mathcal{E}$. The update for a node $v$ of type $\tau$
 becomes
@@ -1067,7 +1060,9 @@ Convolutional Network of Schlichtkrull et al.~\cite{schlichtkrull2018} to
 permit attention-based and inductive aggregators within each relation, and
 underlies many heterogeneous graph models including the Heterogeneous Graph
 Attention Network (HAN)~\cite{han2019} and the Heterogeneous Graph Neural
-Network (HetGNN)~\cite{hetgnn2019}.
+Network (HetGNN)~\cite{hetgnn2019}. What operators of this kind capture is which
+kinds of entity interact, but not when; the temporal dimension that ordering and
+pacing add is the subject of the next section.
 
 \section{Temporal Graph Learning}
 \label{sec:temporal_graph}
@@ -1081,62 +1076,49 @@ is evidence in its own right. Temporal graph learning restores that axis,
 attaching timestamps to the edges of a graph and processing the resulting
 time-ordered sequence, so that execution dynamics become a first-class signal a
 model can act on rather than a by-product it must infer from ordering alone. This
-section develops the conceptual basis for that idea in two parts. It first
-examines in more depth why time-dependent interactions carry behavioural signal
-that static topology cannot express. It then formalises temporal graph neural
-networks and the two complementary levels, edge and sequence, at which time can
-be injected into a graph model.
+section formalises that idea: it introduces the temporal graph and the neural
+models defined over it, separates those that let the graph evolve as events
+arrive from those that do not, and isolates the two complementary levels, the
+edge and the sequence, at which the proposed framework injects time.
 
-\subsection{Time-Dependent Interactions}
-\label{subsec:temporal_dependencies}
-
-Many real-world graphs are not static. Interactions among entities occur at
-specific times, and their ordering, density, and pacing convey information
-that the topological structure alone does not capture. In behavioural data,
-the same set of operations can correspond to qualitatively different intents
-depending on the temporal pattern with which they are issued: the pacing and
-burst structure of an operation sequence, rather than its composition alone,
-often separates routine activity from a malicious regime.
-
-Static graph representations preserve structural relationships between
-entities but do not explicitly model temporal ordering. Temporal graph
-learning extends graph representations by incorporating time-dependent
-interactions and execution dynamics as first-class quantities.
-
-\subsection{Temporal Graph Neural Networks}
-\label{subsec:tgnn}
-
-Temporal Graph Neural Networks (TGNNs) extend the static graph formalism by
-associating each edge (and, in some variants, each node) with a timestamp
-$t \in \mathbb{R}$. A temporal edge can be written as a quadruple
+A temporal graph neural network makes the timing of interactions part of the
+graph itself, rather than a property left to be inferred after the fact. Each
+edge is associated with a timestamp $t \in \mathbb{R}$, so that an interaction is
+written as a quadruple
 \begin{equation}
   e = (u,\; v,\; t,\; \mathbf{a}),
   \label{eq:temporal_edge}
 \end{equation}
-where $u$ and $v$ are the connected entities, $t$ is the time of interaction,
-and $\mathbf{a} \in \mathbb{R}^{d'}$ is an optional attribute vector. Two
-broad TGNN paradigms exist. Discrete-time models operate on a sequence of
-static graph snapshots, capturing temporal evolution as a sequence of
-topological updates. Continuous-time models treat the graph as an event
-stream and update node states asynchronously as new edges arrive.
-Representative architectures include the Temporal Graph Network (TGN) of
-Rossi et al.~\cite{tgn2020}, the JODIE model of Kumar et
-al.~\cite{kumar2019jodie}, and EvolveGCN of Pareja et
-al.~\cite{pareja2020evolvegcn}. Applications to cybersecurity are
-comparatively recent;
-Haghshenas et al.~\cite{haghshenas2023temporal} apply a temporal GNN to
-attack detection and localisation in smart grids, and Guo and
-Pope~\cite{guopope2023} apply a spatio-temporal GNN to container escape
-detection.
+where $u$ and $v$ are the connected entities, $t$ is the time of interaction, and
+$\mathbf{a} \in \mathbb{R}^{d'}$ is an optional attribute vector summarising that
+interaction and its derived properties.
 
-Temporal information may be introduced into a graph model at two distinct
-levels. At the edge level, each temporal edge carries an attribute vector
-that summarises the time of interaction and its derived properties
-(inter-event delay, pacing, burst indicators). At the sequence level, the
-ordered series of node interactions is processed by a model specifically
-designed for sequential data, such as a recurrent network or a self-attention
-encoder. The two strategies are complementary rather than mutually exclusive,
-and the proposed framework employs both.
+Architectures of this kind divide according to whether the graph is allowed to
+change as interactions accumulate. Discrete-time models operate on a sequence of
+static snapshots, capturing evolution as successive topological updates, whereas
+continuous-time models treat the graph as an event stream and update node states
+asynchronously as each new edge arrives; representative examples include the
+Temporal Graph Network of Rossi et al.~\cite{tgn2020}, the JODIE model of Kumar
+et al.~\cite{kumar2019jodie}, and EvolveGCN of Pareja et
+al.~\cite{pareja2020evolvegcn}. The framework developed in this thesis takes
+neither route at inference: it constructs the behavioural graph from a completed
+execution trace and maintains no evolving per-node memory. That continuous-time
+formulation is deferred rather than dismissed, since updating a behavioural graph
+as events arrive is the natural basis for detecting a threat while it is still
+running, a direction taken up in the future work of this thesis.
+
+Setting aside how the graph evolves, time can enter a graph model at two
+complementary levels, and the proposed framework exploits both. At the edge
+level, each temporal edge carries an attribute vector summarising the timing of
+an interaction and its derived properties, such as inter-event delay, pacing, and
+burst structure. At the sequence level, the ordered series of calls is processed
+by a model built for sequential data, so that order and rhythm are read directly
+rather than recovered from static topology alone. The two are complementary
+rather than mutually exclusive: the framework attaches engineered temporal
+features to the edges of its behavioural graph and, in parallel, passes the
+ordered trace through a dedicated sequence branch. How those temporal edges, and
+the heterogeneous neighbourhoods to which they belong, are aggregated in the
+first place is governed by the attention mechanism developed next.
 
 \section{Attention Mechanisms in Graph Learning}
 \label{sec:attention}
@@ -1245,7 +1227,10 @@ in which the edge attribute vector $\mathbf{e}_{uv}$ contributes directly to
 the message passed from $u$ to $v$. With this construction, two edges with
 identical endpoints but different attributes generate different messages, and
 the model can therefore distinguish between interactions that connect the
-same entities under different conditions.
+same entities under different conditions. That settles what each message
+carries; how a neighbourhood of such messages is aggregated, in a way that
+generalises to graphs never seen during training, is the inductive question
+taken up next.
 
 \subsection{GraphSAGE and Inductive Aggregation}
 \label{subsec:graphsage}
@@ -1276,7 +1261,7 @@ inference time without retraining.
 \label{subsec:hybrid}
 
 Attention-based and inductive aggregators offer complementary strengths.
-Attention learns per-neighbour importance, sharpens the inductive bias toward
+Attention learns per-neighbour importance, sharpens the inductive bias towards
 salient relations, and provides interpretable weights that support
 post-hoc attribution. Inductive aggregation supports generalisation to unseen
 nodes and unseen graph topologies, both of which arise routinely in
@@ -1370,8 +1355,20 @@ per-timestep representation is the concatenation
   \label{eq:bilstm}
 \end{equation}
 where $H$ is the per-direction hidden dimensionality. Each output position is
-thus contextualised by the entire sequence, not only its history.
+thus contextualised by the entire sequence, not only its history. This
+bidirectional encoding is the form the framework adopts for its temporal branch,
+reading each execution trace in full before summarising its behaviour.
 
+% ===== SECTION 3.8 (State-Space / Mamba) COMMENTED OUT 2026-08-10 =====
+% Reason: Mamba is NOT the reported model (reported = BiLSTM, sec 3.7 /
+%   best_model_1.pt) and Chapter 5 runs no BiLSTM-vs-Mamba comparison, so the
+%   full three-subsection SSM background gave a road-not-taken the same weight
+%   as the reported backbone. Kept in place (not deleted) so it can be restored.
+%   The former cross-references to sec:mamba were made self-contained (Ch3 intro,
+%   Ch3 summary, methodology temporal-branch paragraph), so nothing points here.
+%   TO RESTORE: delete this \iffalse and the matching \fi before sec:semantic,
+%   and revert those three self-contained edits back to referencing sec:mamba.
+\iffalse
 \section{State-Space Sequence Models and the Mamba Architecture}
 \label{sec:mamba}
 
@@ -1454,7 +1451,7 @@ where $s_{\mathbf{B}}, s_{\mathbf{C}}, s_{\Delta}$ are learned linear maps. The
 recurrence becomes input-dependent (time-varying), allowing the model to
 modulate how much each event writes to and reads from the latent state: a
 small $\Delta_t$ lets information pass through largely unchanged, while a large
-$\Delta_t$ resets the state toward the current input. This content-based gating
+$\Delta_t$ resets the state towards the current input. This content-based gating
 recovers the selectivity that attention and LSTM gates provide, but the
 resulting system no longer corresponds to a fixed convolution. Mamba therefore
 computes the recurrence with a hardware-aware parallel \emph{selective scan}
@@ -1484,6 +1481,8 @@ per-position representation is the concatenation
 so that each output is contextualised by the entire sequence rather than only
 its history, mirroring the role of bidirectional processing in the recurrent
 case of Section~\ref{subsec:bilstm}.
+\fi
+% ===== END of commented-out Section 3.8 (State-Space / Mamba) =====
 
 \section{Semantic Representation Learning}
 \label{sec:semantic}
@@ -1496,9 +1495,9 @@ as any two unrelated calls; a dense embedding instead places functionally simila
 operations near one another, so that a renamed or unfamiliar call is still
 interpreted by what it does. This section builds up to the kind of encoder that
 produces such embeddings. It first contrasts sparse and dense representations and
-why the difference matters for behavioural robustness. It then introduces
-transformer-based sentence embeddings and the pretrained encoders that produce
-them, culminating in the MPNet-based model adopted in this work.
+why the difference matters for behavioural robustness. It then develops
+transformer-based sentence encoders, from the Transformer and SBERT to the
+MPNet-based model adopted in this work.
 
 \subsection{Sparse and Dense Representations}
 \label{subsec:sparse_dense}
@@ -1524,46 +1523,42 @@ largely replaced sparse representations in modern natural-language processing
 and increasingly in domain-specific applications, including threat
 analysis~\cite{amer2025graphshield}.
 
-\subsection{Transformer-Based Sentence Embeddings}
+\subsection{Transformer-Based Sentence Encoders}
 \label{subsec:transformer}
 
-The Transformer architecture, introduced by Vaswani et
-al.~\cite{vaswani2017}, underpins modern natural-language representation
-learning. Transformer-based encoders such as BERT~\cite{devlin2019bert}
-produce contextualised representations of text by stacking self-attention
-layers; the resulting embeddings encode lexical, syntactic, and semantic
-similarity in their geometry. To obtain a fixed-length representation of an
-entire phrase, the contextualised token embeddings must be pooled. Na\"ive
-pooling of the output of a generic Transformer encoder, however, has been
-shown to produce semantically poor sentence-level vectors.
+The Transformer architecture, introduced by Vaswani et al.~\cite{vaswani2017},
+underpins modern natural-language representation learning. Transformer-based
+encoders such as BERT~\cite{devlin2019bert} produce contextualised
+representations of text by stacking self-attention layers, so that the resulting
+embeddings encode lexical, syntactic, and semantic similarity in their geometry.
+Obtaining a single fixed-length vector for an entire phrase, however, requires
+pooling these contextualised token embeddings, and na\"ive pooling of a generic
+Transformer encoder has been shown to yield semantically poor sentence-level
+vectors.
 
-Sentence-BERT (SBERT), proposed by Reimers and
-Gurevych~\cite{reimers2019sbert}, addresses this limitation by fine-tuning a
-Transformer encoder under a Siamese architecture with a contrastive or
-regression objective. The fine-tuned encoder produces a single fixed-length
-vector per input phrase such that cosine similarity in the embedding space
-correlates with semantic similarity. SBERT and its successors have become the
-dominant choice when dense sentence-level representations are required.
+Sentence-BERT (SBERT), proposed by Reimers and Gurevych~\cite{reimers2019sbert},
+addresses this limitation by fine-tuning a Transformer encoder under a Siamese
+architecture with a contrastive or regression objective. The fine-tuned encoder
+produces a single fixed-length vector per input phrase such that cosine similarity
+in the embedding space correlates with semantic similarity, which has made SBERT
+and its successors the dominant choice wherever dense sentence-level
+representations are required.
 
-\subsection{Pretrained Sentence Encoders}
-\label{subsec:sentence_transformer}
+Encoders in the SBERT family differ chiefly in their backbone language model and
+in the corpora and objectives used during fine-tuning. Representative backbones
+include the original BERT, RoBERTa, and DistilBERT, alongside
+MPNet~\cite{mpnet2020}, while more recent families such as the Gecko encoders of
+Lee et al.~\cite{lee2024gecko} distil larger language models towards compact,
+high-quality embeddings. The choice among them is largely empirical, balancing
+embedding quality against dimensionality and inference cost.
 
-Several sentence encoders descend from the SBERT methodology, differing
-chiefly in their backbone language model and in the corpora and objectives used
-during fine-tuning. Representative examples
-include encoders based on the original BERT~\cite{devlin2019bert}, on
-RoBERTa, on DistilBERT, and on MPNet~\cite{mpnet2020}. MPNet itself improves
-upon BERT by combining the bidirectional masked-language-model objective of
-BERT with the permuted-language-model objective of XLNet, addressing the
-input-discrepancy and position-bias limitations of each. The MPNet-based
-SBERT variant is widely used as a general-purpose semantic encoder and
-produces dense 768-dimensional embeddings.
-
-More recent encoder families, such as the Gecko family of Lee et
-al.~\cite{lee2024gecko}, explore distillation from larger language models as
-a route to compact, high-quality embeddings. The choice of encoder is largely
-empirical and depends on the trade-off between embedding quality,
-dimensionality, and inference cost.
+The encoder adopted in this work is the MPNet-based SBERT variant. MPNet improves
+upon BERT by combining the bidirectional masked-language-model objective of BERT
+with the permuted-language-model objective of XLNet, addressing the
+input-discrepancy and position-bias limitations of each. The resulting model is a
+widely used general-purpose semantic encoder that produces dense 768-dimensional
+embeddings, and it is these embeddings that give the framework's semantic branch
+its resilience to renamed and previously unseen calls.
 
 \section{Chapter Summary}
 \label{sec:theory_summary}
@@ -1578,10 +1573,9 @@ Attention Network, and at the level of multi-head specialisation. Edge-aware
 aggregation and inductive aggregation were presented as complementary
 operators and combined explicitly in the proposed hybrid relational
 aggregator. Recurrent sequence modelling was developed through the LSTM cell
-and its bidirectional variant, and complemented by a selective state-space
-alternative based on the Mamba architecture. Dense semantic representations were introduced
+and its bidirectional variant. Dense semantic representations were introduced
 through Transformer-based sentence encoders and the SBERT family of models.
-Chapter~\ref{chap:methodology} describes how the building blocks introduced here are composed into
+Chapter~\ref{chap:methodology} describes how these foundations are used to build
 the system evaluated in this thesis.
 
 % ============================================================
@@ -2292,7 +2286,7 @@ actual mixture is decided automatically at each node, and may favour either
 operator once training is under way. The initialisation merely prevents the
 attention pathway, whose scores are unreliable at the start of training, from
 dominating early optimisation, while leaving the network free to shift weight
-toward attention as its coefficients become informative. A small regularisation term
+towards attention as its coefficients become informative. A small regularisation term
 ($10^{-3}$) discourages premature gate collapse, and per-relation gate
 statistics are monitored throughout training.
 
@@ -2340,9 +2334,11 @@ projected to the common fusion dimension and forms the temporal branch input.
 
 The BiLSTM is the temporal backbone used throughout this work, chosen for its
 maturity and stable optimisation. The slot it occupies is, however, deliberately
-modular: any sequence model exposing the same per-call interface, such as the
-selective state-space (Mamba) model of Section~\ref{sec:mamba}, can be
-substituted without altering the rest of the architecture. This keeps the design
+modular: any sequence model exposing the same per-call interface, such as a
+selective state-space (Mamba) model~\cite{gu2023mamba}, which encodes long-range dependencies
+through a linear dynamical system that scales linearly rather than
+quadratically in sequence length, can be substituted without altering the rest
+of the architecture. This keeps the design
 open to experimentation with lower-complexity alternatives on long execution
 traces, while fixing the BiLSTM as the configuration evaluated in this thesis.
 With the semantic, structural, and temporal branches now each producing an
@@ -2487,7 +2483,7 @@ behaviours and graph sizes met during training
 
 Ransomware is the rarest class by more than an order of magnitude
 (Section~\ref{subsec:preprocessing}), and standard cross-entropy training
-therefore collapses toward the majority classes. Two complementary
+therefore collapses towards the majority classes. Two complementary
 countermeasures are applied.
 
 First, the task loss is the focal loss of Lin et al.~\cite{lin2017focal},
@@ -2511,7 +2507,7 @@ increases the frequency with which minority-class gradients are observed,
 while the focal loss shapes the per-sample gradient magnitude, so the two
 mechanisms address the imbalance at complementary points of the optimisation.
 This division of labour explains why the focal weights are nearly uniform rather
-than skewed toward ransomware. The oversampler already concentrates on the rare
+than skewed towards ransomware. The oversampler already concentrates on the rare
 classes, drawing ransomware several times more often than other malware, so the
 focal $\alpha$ coefficients do not also need to privilege ransomware; favouring
 the same class through both mechanisms at once would over-correct and
@@ -2937,26 +2933,30 @@ supported device.
 \section{Chapter Summary}
 \label{sec:methodology_summary}
 
-This chapter specified the complete experimental methodology: a behavioural
-corpus of malicious and benign execution traces transformed into schema-aware
-heterogeneous graphs with five typed node classes and five typed relations; semantic
-enrichment of API nodes through MPNet-based sentence embeddings; engineered
-temporal edge features capturing pacing, acceleration, and burst behaviour;
-and the proposed HeteroTemporalGNN architecture, which combines hybrid
-GAT--SAGE relational aggregation, bidirectional LSTM temporal modelling with
-attention pooling, and an adaptive three-branch gated fusion mechanism whose
-weights double as dimension-level attribution signals. Training employs focal
-loss and weighted oversampling against class imbalance, with branch
-balance regularisation, semantic perturbation, and a size-aware batching
-scheme. Evaluation combines a binary threat-versus-benign projection of the
-three-class output with imbalance-robust metrics, a leave-family-out protocol
-for cross-family generalisation, a behavioural-perturbation protocol that
-stress-tests robustness at inference time, four baseline families covering each
-single-paradigm alternative, and a systematic ablation design.
-Chapter~\ref{chap:results} reports the experimental results, covering the
+This chapter set out the methodology end to end, from how behaviour is captured to
+how the resulting model is judged. Execution traces of malicious and benign
+programs were cast as schema-aware heterogeneous graphs, whose five typed node
+classes and five typed relations preserve distinctions a flat representation would
+discard. Two enrichments give those graphs their discriminating power: MPNet-based
+sentence embeddings that ground each API node in the meaning of the call rather
+than its literal name, and engineered temporal edge features that record the
+pacing, acceleration, and burst structure of execution. Over this representation
+the proposed HeteroTemporalGNN reasons with a hybrid GAT--SAGE relational
+aggregator and a bidirectional LSTM with attention pooling, weighing their evidence
+against the semantic embeddings through an adaptive three-branch gate whose weights
+double as dimension-level attribution signals.
+
+The remaining choices followed from the shape of the problem. Training was built
+around the imbalance of the corpus, pairing focal loss and weighted oversampling
+with branch-balance regularisation, semantic perturbation, and a size-aware
+batching scheme. The evaluation was designed to test more than accuracy: a binary
+threat-versus-benign projection read through imbalance-robust metrics, a
+leave-family-out protocol for cross-family generalisation, a behaviour-preserving
+perturbation protocol that probes robustness at inference time, four baselines each
+isolating one single-paradigm alternative, and a systematic ablation.
+Chapter~\ref{chap:results} puts this methodology to work, reporting the
 component-attribution and ablation studies, the comparison against the four
-baseline families, and the generalisation and robustness evaluations defined
-above.
+baselines, and the generalisation and robustness evaluations.
 
 \chapter{Empirical Evaluation of the Proposed Framework}
 \label{chap:results}
@@ -4587,7 +4587,7 @@ Figure~\ref{fig:baseline_robustness} draws the four confrontations together. In
 grey stands each baseline on clean traces, competitive with the framework; in red
 the same baseline once its axis is attacked; in blue the framework subjected to the
 identical manipulation. The pattern is uniform in its consequence if not in its mechanism:
-three of the four red bars collapse toward the floor, the fourth, the sequence
+three of the four red bars collapse towards the floor, the fourth, the sequence
 model under reordering, dips but survives, and in every case the blue bar remains
 level with the clean grey. The single view each baseline embodies is load-bearing,
 and knocking it out brings the detector down; the framework, resting on three,
@@ -4886,7 +4886,7 @@ representative decision and puts to it the question that matters for
 interpretability: whether the behaviour it surfaces is recognisably malicious
 rather than incidental.
 
-\subsection{Worked Decision Explanations}
+\subsection{Explaining a Decision Through Behaviour}
 \label{subsec:worked_explanations}
 
 To make the reconstruction concrete, consider one threat decision in full. The
@@ -5032,10 +5032,12 @@ allows the specific calls, their order and the resources they touched to be
 recovered, supplying the attribution RQ4 requires.
 
 The contribution of the work is therefore both architectural and empirical.
-Architecturally, it shows that structural, semantic and temporal reasoning can be
-unified in one schema-aware, end-to-end model rather than assembled as a loose
-pipeline, and that an adaptive fusion gate makes that combination not only accurate
-but robust and self-explaining. Empirically, it demonstrates that behavioural
+Architecturally, it is a single, end-to-end model in which structural, semantic
+and temporal reasoning are learned together over one schema-aware heterogeneous
+graph and fused by an adaptive gate that reweighs the three for every individual
+decision. That gate, which lets the model itself decide how each behaviour is
+judged rather than applying a fixed blend, is the architectural novelty, and it is
+what makes the combination not only accurate but robust and self-explaining. Empirically, it demonstrates that behavioural
 detection grounded in all three dimensions withstands the cheap, behaviour-preserving
 evasions that defeat single-paradigm detectors, and that it does so without the
 opacity such robustness usually costs. For practitioners this points towards a
@@ -5052,13 +5054,23 @@ evaluation rests on behavioural traces collected from a single dynamic-analysis
 sandbox, and the malicious corpus is drawn from a limited range of sources with
 modest family diversity, the ransomware class in particular being represented by
 relatively few samples. The generalisation demonstrated in
-Chapter~\ref{chap:results} was accordingly anchored on a genuine shift of collection
-source and behavioural distribution rather than on breadth of families, and while
-that shift is substantial, it does not establish that the framework would transfer
-equally to sandboxes with different instrumentation or to platforms other than the
-one studied. A sample that detects the analysis environment and withholds its
+Chapter~\ref{chap:results} rested on a genuine shift in the origin and behavioural
+distribution of the malware rather than on breadth of families, and on that axis
+the framework transferred well. Every trace was nonetheless collected through that
+one sandbox and platform, so this does not establish that the same robustness would
+hold under different instrumentation or on other operating systems. A sample that detects the analysis environment and withholds its
 behaviour would, moreover, present the model with little to reason over, a
 constraint shared by any detector that learns from observed execution.
+
+The framework's scope is also bounded by design. It constructs its behavioural
+graph from a complete execution trace and classifies the finished artefact, so it
+reaches a verdict after a program has run rather than on the fly, while the program
+is still executing. This suits the retrospective triage the evaluation targets.
+Detecting on the fly, by growing the graph incrementally and revising the decision
+as events arrive, would mean reconstructing and re-evaluating the representation
+repeatedly as a trace unfolds; the computational resources and time available to
+this work did not extend to that, so it is left as a direction for further
+development rather than a bound the design cannot cross.
 
 Other choices were made for tractability rather than principle. Retaining a
 high-dimensional semantic embedding for every call renders the largest execution
@@ -5085,8 +5097,8 @@ Several of those boundaries suggest concrete next steps, and others follow from 
 framework's modular design rather than from its limits. The framework at present
 builds its behavioural graph offline, from a complete execution trace, and
 classifies the finished artefact. The most consequential extension would move
-detection online. A continuous-time dynamic graph formulation, in the manner of
-temporal graph networks, would let the same behavioural engine ingest events as they
+detection online. A continuous-time dynamic graph formulation, in the manner of the
+temporal graph networks set out in Section~\ref{sec:temporal_graph}, would let the same behavioural engine ingest events as they
 are emitted and update its representation incrementally, so that a verdict could be
 reached, and revised, while a program is still executing rather than only after it
 has run to completion. Detecting a threat part-way through its behaviour, rather than
