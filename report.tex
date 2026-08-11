@@ -186,10 +186,10 @@ interface (API) call substitution, forcing a shift from static analysis to the
 monitoring of runtime behaviour. Existing behavioural detectors, however,
 capture only part of that behaviour: graph-based models discard execution timing
 and the meaning of calls, while approaches built on pretrained language models
-discard relational structure. This thesis presents a heterogeneous temporal graph
-neural network that weighs three complementary dimensions of behaviour, the meaning
-of each call, the relations between calls, and their execution order, against one
-another for every decision. Sandbox execution traces were transformed into schema-aware
+discard relational structure. This thesis presents a heterogeneous graph
+neural network, enriched with semantic and temporal features, that weighs three
+complementary dimensions of behaviour, the meaning of each call, the relations
+between calls, and their execution order, against one another for every decision. Sandbox execution traces were transformed into schema-aware
 heterogeneous graphs whose typed nodes were enriched with pretrained semantic
 embeddings to resist API renaming, and a hybrid graph aggregator, a bidirectional
 long short-term memory network, and an adaptive fusion gate weighed the three views
@@ -208,8 +208,8 @@ threats robustly, transfers to previously unseen malware, and explains the groun
 of its alerts, capabilities that behavioural detectors rarely provide together.
 
 \vspace{1em}
-\noindent\textbf{Keywords:} Behavioural threat detection; Temporal graph neural
-networks; Heterogeneous graphs; Semantic API embeddings; Adversarial robustness;
+\noindent\textbf{Keywords:} Behavioural threat detection; Heterogeneous graph neural
+networks; Temporal behavioural features; Semantic API embeddings; Adversarial robustness;
 Model interpretability.
 
 % ============================================================
@@ -824,9 +824,10 @@ distinct behavioural properties, and whether their integration provides
 additional insight beyond examining either dimension independently.
 
 \item[\textbf{RQ3 -- End-to-End Detection Performance.}]
-How does the proposed heterogeneous, schema-aware temporal graph-based
-framework (which reasons over semantic, structural, and temporal behaviour
-jointly within a single architecture) perform when compared with representative baselines
+How does the proposed heterogeneous, schema-aware graph-based
+framework, which enriches a typed behavioural graph with semantic and temporal
+features and reasons over the three dimensions jointly within a single architecture,
+perform when compared with representative baselines
 drawn from classical machine learning, sequential deep learning, static graph
 neural network, and semantic-embedding classification families? This question
 evaluates whether joint modelling of semantic, structural, and temporal
@@ -1618,7 +1619,7 @@ the system evaluated in this thesis.
 % ============================================================
 % CHAPTER 4: METHODOLOGY
 % ============================================================
-\chapter{Methodology: A Heterogeneous Temporal Graph Framework for Threat Detection}
+\chapter{Methodology: A Heterogeneous Graph Framework with Semantic and Temporal Enrichment}
 \label{chap:methodology}
 \chaptermark{Methodology}
 
@@ -2043,7 +2044,8 @@ next section.
 \section{Proposed Architecture}
 \label{sec:architecture}
 
-The \emph{HeteroTemporalGNN} proposed here is the central architectural
+The \emph{HeteroTemporalGNN} proposed here, a heterogeneous graph neural network
+augmented with semantic and temporal features, is the central architectural
 contribution of this thesis, and it is designed to close the gap identified in
 Section~\ref{sec:research_gap}: that existing detectors model the semantic,
 structural, and temporal facets of behaviour only in isolation. The model maps
