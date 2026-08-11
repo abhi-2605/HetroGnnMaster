@@ -474,8 +474,8 @@ subsequent recurrent methods.
 Athiwaratkun and Stokes~\cite{athiwaratkun2017} extend this line with an LSTM-
 and GRU-based language model combined with a character-level CNN for threat
 classification, demonstrating that recurrent architectures encode short-range
-execution dependencies more effectively than bag-of-features models. Nguyen et
-al.~\cite{nguyen2023} extend the approach to system call sequences and report
+execution dependencies more effectively than bag-of-features models. Maulana and
+Kusuma~\cite{nguyen2023} apply deep learning to system call sequences and report
 improved discrimination of behaviourally similar families. Karbab and
 Debbabi~\cite{karbab2019} develop MalDy, a portable threat detection framework
 combining natural language processing with classical machine learning over
@@ -509,7 +509,7 @@ formally analysed by Xu et al.~\cite{xu2018powerful}, who establish their
 representational equivalence with the Weisfeiler-Lehman graph isomorphism test
 and motivate architectures capable of distinguishing graph structures that
 simpler aggregation functions cannot separate. Surveys by Bilot et
-al.~\cite{bilot2024survey} and Nisa et al.~\cite{nisa2020} document the rapid
+al.~\cite{bilot2024survey, bilot2023intrusion} document the rapid
 adoption of GNNs across threat analysis tasks, including system call graph
 classification, control flow graph analysis, and API interaction modelling.
 Amer et al.~\cite{amer2025graphshield} propose GraphShield, a dynamic
@@ -642,10 +642,11 @@ focused solely on overall accuracy. Anand et al.~\cite{anand2022hiper}
 introduce HiPeR, which leverages hardware performance counters to achieve
 sub-second threat detection, demonstrating that fine-grained temporal signals
 are both available and informative for early-stage classification. Almomani et
-al.~\cite{almomani2021} propose an end-to-end threat detection system
-integrating multiple behavioural signals, and Guo et al.~\cite{guo2023zeroday}
-survey machine learning approaches to zero-day attack detection, highlighting
-the persistent difficulty of generalising to held-out threat families.
+al.~\cite{almomani2021} propose an end-to-end ransomware detection system that
+pairs static machine-learning and vision-based deep-learning detectors, and
+Guo~\cite{guo2023zeroday} reviews machine learning approaches to zero-day attack
+detection, highlighting the persistent difficulty of generalising to held-out
+threat families.
 
 Two operational requirements emerge from these studies that academic detection
 systems frequently underspecify: low time-to-detect performance and robust
@@ -743,7 +744,7 @@ file and cryptographic operations separate ransomware from a legitimate backup
 chiefly by the speed at which they are issued. This signal is absent from
 flat-feature classical machine learning~\cite{ucci2019survey, ye2017survey} and only
 weakly present in static GNN models, which encode topology but not
-time~\cite{amer2025graphshield, bilot2024survey, nisa2020}. Foundational temporal
+time~\cite{amer2025graphshield, bilot2024survey}. Foundational temporal
 graph frameworks such as TGN~\cite{tgn2020} and DyRep~\cite{dyrep2019} do model time
 explicitly, but they were designed for general dynamic graphs, and the
 cybersecurity-oriented temporal work that adopts them~\cite{guopope2023,
@@ -995,7 +996,7 @@ neighbourhood, a property analogous to the growing receptive field of stacked
 convolutional layers in image-based deep learning. Graph-based learning has
 become widely adopted in threat analysis precisely because it preserves the
 structural dependencies that flat feature vectors
-discard~\cite{bilot2024survey, nisa2020}. That message-passing view, rather than
+discard~\cite{bilot2024survey, bilot2023intrusion}. That message-passing view, rather than
 the original recurrent formulation, is the abstraction the modern architectures in
 this chapter build on, and it is developed formally next.
 
@@ -1128,12 +1129,12 @@ interaction and its derived properties.
 
 Architectures of this kind divide according to whether the graph is allowed to
 change as interactions accumulate. Discrete-time models operate on a sequence of
-static snapshots, capturing evolution as successive topological updates, whereas
-continuous-time models treat the graph as an event stream and update node states
-asynchronously as each new edge arrives; representative examples include the
-Temporal Graph Network of Rossi et al.~\cite{tgn2020}, the JODIE model of Kumar
-et al.~\cite{kumar2019jodie}, and EvolveGCN of Pareja et
-al.~\cite{pareja2020evolvegcn}. The framework developed in this thesis takes
+static snapshots, capturing evolution as successive topological updates, as in
+EvolveGCN of Pareja et al.~\cite{pareja2020evolvegcn}, which evolves the weights of a
+graph convolution from one snapshot to the next; continuous-time models instead treat
+the graph as an event stream and update node states asynchronously as each new edge
+arrives, as in the Temporal Graph Network of Rossi et al.~\cite{tgn2020} and the
+JODIE model of Kumar et al.~\cite{kumar2019jodie}. The framework developed in this thesis takes
 neither route at inference: it constructs the behavioural graph from a completed
 execution trace and maintains no evolving per-node memory. That continuous-time
 formulation is deferred rather than dismissed, since updating a behavioural graph
@@ -1585,10 +1586,10 @@ Lee et al.~\cite{lee2024gecko} distil larger language models towards compact,
 high-quality embeddings. The choice among them is largely empirical, balancing
 embedding quality against dimensionality and inference cost.
 
-The encoder adopted in this work is the MPNet-based SBERT variant. MPNet improves
-upon BERT by combining the bidirectional masked-language-model objective of BERT
-with the permuted-language-model objective of XLNet, addressing the
-input-discrepancy and position-bias limitations of each. The resulting model is a
+The encoder adopted in this work is the MPNet-based SBERT variant. MPNet unifies the
+masked-language-model objective of BERT with the permuted-language-model objective of
+XLNet: it models the dependency among predicted tokens that BERT's objective ignores,
+while retaining the full-sentence position information that XLNet's objective lacks. The resulting model is a
 widely used general-purpose semantic encoder that produces dense 768-dimensional
 embeddings, and it is these embeddings that give the framework's semantic branch
 its resilience to renamed and previously unseen calls.
