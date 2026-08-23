@@ -17,3 +17,4 @@ venv/
 report.*
 !report.tex
 !report.pdf
+public_full_reports.zip
