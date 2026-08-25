@@ -184,29 +184,31 @@ I agree to have this thesis published on the Internet.   & $\square$ & $\square$
 Modern malware evades detection through obfuscation and application programming
 interface (API) call substitution, forcing a shift from static analysis to the
 monitoring of runtime behaviour. Existing behavioural detectors, however,
-capture only part of that behaviour: graph-based models discard execution timing
-and the meaning of calls, while approaches built on pretrained language models
-discard relational structure. This thesis presents a heterogeneous graph
-neural network, enriched with semantic and temporal features, that weighs three
-complementary dimensions of behaviour, the meaning of each call, the relations
-between calls, and their execution order, against one another for every decision. Sandbox execution traces were transformed into schema-aware
-heterogeneous graphs whose typed nodes were enriched with pretrained semantic
-embeddings to resist API refactoring, and a hybrid graph aggregator, a
-bidirectional long short-term memory network, and an adaptive fusion gate
-weighed the three views for each decision. The framework was evaluated against
-four single-paradigm baselines, under behaviour-preserving adversarial attacks,
-on held-out threats drawn from an independent source, and through an ablation
-isolating each dimension.
-On clean traces it matched strong single-paradigm detectors, but it alone kept its
-detection when a behaviour-preserving attack removed the dimension each rival relied
-upon. It generalised to the unseen source, detecting every held-out threat with
-none missed, by reasoning over the structure and timing of behaviour rather than
-over specific call names. Each decision could be attributed to the behavioural
-dimension and the concrete calls that produced it, and the ablation confirmed that
-no single view sufficed alone. By modelling behaviour along all three
-dimensions at once, in one interpretable model, the framework detects evolving
-threats robustly, transfers to previously unseen malware, and explains the grounds
-of its alerts, capabilities that behavioural detectors rarely provide together.
+capture only part of that behaviour: graph-based models discard execution
+timing and the meaning of calls, while approaches built on pretrained language
+models read the trace in order but discard relational structure. This thesis
+presents a heterogeneous graph neural network, enriched with semantic and
+temporal features, that weighs three complementary dimensions of behaviour, the
+meaning of each call, the relations between calls, and their execution order,
+against one another for every decision. Sandbox execution traces were
+transformed into schema-aware heterogeneous graphs whose typed nodes were
+enriched with pretrained semantic embeddings to resist API refactoring, and a
+hybrid graph aggregator, a bidirectional long short-term memory network, and an
+adaptive fusion gate weighed the three views for each decision. The framework
+was evaluated against four single-paradigm baselines, under
+behaviour-preserving adversarial attacks, on held-out threats drawn from an
+independent source, and through an ablation isolating each dimension. On clean
+traces it matched strong single-paradigm detectors, but it alone kept its
+detection when a behaviour-preserving attack removed the dimension each rival
+relied upon. It generalised to the unseen source, detecting every held-out
+threat with none missed, by reasoning over the structure and timing of
+behaviour rather than over specific call names. Each decision could be
+attributed to the behavioural dimension and the concrete calls that produced
+it, and the ablation confirmed that no single view sufficed alone. By modelling
+behaviour along all three dimensions at once, in one interpretable model, the
+framework detects evolving threats robustly, transfers to previously unseen
+malware, and explains the grounds of its alerts, capabilities that behavioural
+detectors rarely provide together.
 
 \vspace{1em}
 \noindent\textbf{Keywords:} Behavioural threat detection; Heterogeneous graph neural
