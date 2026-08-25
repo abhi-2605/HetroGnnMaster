@@ -191,11 +191,12 @@ neural network, enriched with semantic and temporal features, that weighs three
 complementary dimensions of behaviour, the meaning of each call, the relations
 between calls, and their execution order, against one another for every decision. Sandbox execution traces were transformed into schema-aware
 heterogeneous graphs whose typed nodes were enriched with pretrained semantic
-embeddings to resist API renaming, and a hybrid graph aggregator, a bidirectional
-long short-term memory network, and an adaptive fusion gate weighed the three views
-for each decision. The framework was evaluated against four single-paradigm
-baselines, under behaviour-preserving adversarial attacks, on held-out threats
-drawn from an independent source, and through an ablation isolating each dimension.
+embeddings to resist API refactoring, and a hybrid graph aggregator, a
+bidirectional long short-term memory network, and an adaptive fusion gate
+weighed the three views for each decision. The framework was evaluated against
+four single-paradigm baselines, under behaviour-preserving adversarial attacks,
+on held-out threats drawn from an independent source, and through an ablation
+isolating each dimension.
 On clean traces it matched strong single-paradigm detectors, but it alone kept its
 detection when a behaviour-preserving attack removed the dimension each rival relied
 upon. It generalised to the unseen source, detecting every held-out threat with
@@ -219,8 +220,11 @@ Model interpretability.
 \begingroup
 \setstretch{1.2}
 \tableofcontents
+\endgroup
+\begingroup
+\setstretch{1.1042}
 \listoffigures
-\bigskip
+\medskip
 \begingroup\let\clearpage\relax\let\cleardoublepage\relax
 \listoftables
 \endgroup
@@ -236,44 +240,45 @@ Model interpretability.
 \chapter{Introduction}
 \label{chap:introduction}
 
-As critical services move onto interconnected digital infrastructure, the cost of
-a single undetected intrusion has risen with them~\cite{bilot2024survey}. Malware
-detection is particularly challenging because malicious software does not need to
-preserve a fixed appearance to preserve its intent: through application
-programming interface (API) call renaming, code repacking, and execution
-reordering, it can alter its observable form while retaining the same underlying
-behaviour. This ability to change form without changing function
-exposes a fundamental limitation of signature- and static feature-based
+As critical services move onto interconnected digital infrastructure, the cost
+of a single undetected intrusion has risen with them. Malware detection is
+particularly challenging because malicious software does not need to preserve a
+fixed appearance to preserve its intent: through application programming
+interface (API) call refactoring, code repacking, and execution reordering, it
+can alter its observable form while retaining the same underlying behaviour.
+This ability to change form without changing function exposes a fundamental
+limitation of signature- and static feature-based
 detection~\cite{amer2025graphshield}. Ransomware, trojans, spyware, and related
-families exploit this freedom to encrypt or exfiltrate sensitive data and disrupt
-operations, and their rising frequency against healthcare, financial, government,
-and industrial systems has driven the shift towards behavioural
-detection~\cite{bilot2023intrusion}.
+families exploit this freedom to encrypt or exfiltrate sensitive data and
+disrupt operations across healthcare, financial, government, and industrial
+systems, and the growing volume and sophistication of such attacks has driven
+the shift towards behavioural detection~\cite{bilot2023intrusion}.
 
 Machine learning and deep learning techniques have been widely explored in
-response~\cite{li2024imbalanced}. Behavioural analysis identifies malicious
-activity through execution behaviour rather than static signatures, drawing on the
-interactions a program makes with the operating system: API calls, process
+response~\cite{bilot2024survey}. Behavioural analysis identifies malicious
+activity through execution behaviour rather than static signatures, drawing on
+the interactions a program makes with the operating system: API calls, process
 activity, file operations, registry modifications, and network
 communication~\cite{mimura2022nlp}. These interactions are observed by
-executing the sample in an instrumented sandbox and recording the trace it produces,
-so that analysis rests on what a program does when it runs rather than on how it
-looks at rest. Graph neural networks model the structural relationships between
-system entities by representing behavioural
-activity as graph-structured data~\cite{hamilton2017graphsage, wang2019matchgnet},
-while pretrained transformer-based semantic embeddings capture the contextual
-meaning of individual operations. Despite this progress, accurately modelling
-evolving malicious behaviour remains challenging because the temporal, semantic,
-and structural characteristics of modern threats are rarely captured together
-within a single framework~\cite{haghshenas2023temporal}. The gap in the current
-landscape is therefore not one of capability: each of these dimensions is already
-modelled well on its own. What no established approach does is reason over all three
-at once, within a single representation, judging together what a program does, what
-its actions mean, and the order in which they unfold. Closing that gap is the problem
-this thesis sets out to address, and it calls not for one more capable component set
-beside the others, but for a model in which the three are reasoned over jointly
-rather than combined after the fact. Why it is a problem worth solving, and what it
-costs a defender to leave it open, is taken up next.
+executing the sample in an instrumented sandbox and recording the trace it
+produces, so that analysis rests on what a program does when it runs rather
+than on how it looks at rest. Graph neural networks model the structural
+relationships between system entities by representing behavioural activity as
+graph-structured data~\cite{hamilton2017graphsage, wang2019matchgnet}, while
+pretrained transformer-based semantic embeddings capture the contextual meaning
+of individual operations. Despite this progress, accurately modelling evolving
+malicious behaviour remains challenging because the temporal, semantic, and
+structural characteristics of modern threats are rarely captured together
+within a single framework~\cite{bilot2024survey}. The gap in the current
+landscape is therefore not one of capability: each of these dimensions is
+already modelled well on its own. What no established approach does is reason
+over all three at once, within a single representation, judging together what a
+program does, what its actions mean, and the order in which they unfold.
+Closing that gap is the problem this thesis sets out to address, and it calls
+not for one more capable component set beside the others, but for a model in
+which the three are reasoned over jointly rather than combined after the fact.
+Why it is a problem worth solving, and what it costs a defender to leave it
+open, is taken up next.
 
 \section{Motivation}
 \label{sec:motivation}
@@ -379,16 +384,15 @@ detection systems. It is nonetheless fundamentally reactive. Every signature and
 rule is written only once a sample has been captured and studied, so a window of
 exposure separates the appearance of a new variant from the deployment of a
 description able to catch it. Within that window, minor binary modifications
-(function renaming, code reordering, packing, or polymorphic engines) are enough
-to invalidate a signature and bypass detection~\cite{guo2023zeroday}, and a
-genuinely new variant matches no existing description at all. Signature- and
-rule-based methods are therefore unsuited to environments in which new variants
-emerge daily and exposure to previously unseen attacks constitutes the dominant
-operational risk.
+(function refactoring, code reordering, packing, or polymorphic engines) are
+enough to invalidate a signature and bypass detection~\cite{guo2023zeroday},
+and a genuinely new variant matches no existing description at all. Signature-
+and rule-based methods are therefore unsuited to environments in which new
+variants emerge daily and exposure to previously unseen attacks constitutes the
+dominant operational risk.
 
 \subsection{Static Machine Learning over Behavioural Features}
 \label{subsec:static_ml}
-
 Static machine learning methods such as Random Forests, Support Vector
 Machines, and XGBoost improve upon raw signatures by learning from engineered
 features extracted from execution traces, including API call frequencies, file
@@ -398,7 +402,11 @@ survey threat detection using data mining techniques and demonstrate that
 classical algorithms can achieve high accuracy on balanced datasets of known
 threat families. Mimura and Ohminami~\cite{mimura2022nlp} apply natural
 language processing to threat detection and show that token-frequency
-representations of API traces carry meaningful discriminative information.
+representations of API traces carry meaningful discriminative information. The
+paradigm remains active. Reategui et al.~\cite{reategui2024} detect ransomware
+from block-level input/output statistics using decision-tree models over a
+deliberately lightweight feature set, chosen so that detection can run within
+the resource budget of a storage device.
 
 The appeal of classical machine learning lay in its operational practicality:
 handcrafted features could be extracted efficiently, models trained and
@@ -420,8 +428,7 @@ the same behaviour distributed over an extended period of legitimate activity.
 Reliance on handcrafted features additionally exposes these models to evasion
 through polymorphism, API substitution, and feature perturbation, with
 cross-distribution evaluations consistently reporting substantial degradation
-when models are tested against held-out threat families~\cite{reategui2024,
-guo2023zeroday}.
+when models are tested against held-out threat families~\cite{guo2023zeroday}.
 Static representations alone are therefore insufficient for robust detection of
 dynamically evolving threats.
 
@@ -469,17 +476,20 @@ the representational shortcomings of flat-feature and sequence-only
 approaches: each node repeatedly exchanges information with its neighbours
 and updates its own representation from what it receives, so the resulting
 representation of a node, or of an entire graph, reflects not only its own
-attributes but the relational context in which it is embedded. The expressive power of message-passing architectures has been
-formally analysed by Xu et al.~\cite{xu2018powerful}, who establish their
-representational equivalence with the Weisfeiler-Lehman graph isomorphism test
-and motivate architectures capable of distinguishing graph structures that
-simpler aggregation functions cannot separate. Surveys by Bilot et
-al.~\cite{bilot2024survey, bilot2023intrusion} document the rapid
-adoption of GNNs across threat analysis tasks, including system call graph
+attributes but the relational context in which it is embedded. The expressive
+power of message-passing architectures has been formally analysed by Xu et
+al.~\cite{xu2018powerful}, who show that the Weisfeiler-Lehman graph
+isomorphism test bounds what any such architecture can distinguish, a bound
+reached only when the aggregation is injective, and motivate architectures
+capable of distinguishing graph structures that simpler aggregation functions
+cannot separate. Surveys by Bilot et al.~\cite{bilot2024survey,
+bilot2023intrusion} document the rapid adoption of GNNs across threat analysis
+tasks, including system call graph
 classification, control flow graph analysis, and API interaction modelling.
-Amer et al.~\cite{amer2025graphshield} propose GraphShield, a dynamic
-graph-based threat detection framework that achieves competitive performance by
-leveraging graph attention over system call graphs.
+Amer et al.~\cite{amer2025graphshield} propose GraphShield, which converts API
+call sequences into graphs whose edges preserve execution order, groups call
+names with a BERT encoder to reduce vocabulary size, and reports strong accuracy
+across several graph architectures with a post-hoc explainer for transparency.
 Busch et al.~\cite{busch2022} apply GNNs to network flow graphs for threat
 classification, demonstrating that relational learning improves the detection
 of behaviourally complex attacks compared with traditional flow-statistic
@@ -509,12 +519,12 @@ and all relations are treated identically. This homogeneous abstraction
 collapses semantically meaningful distinctions between, for example, a
 file-write edge and a process-spawn edge, weakening the inductive bias of the
 network~\cite{bilot2024survey}. Static graph representations additionally
-capture topological structure but discard the temporal dimension along which
-malicious activity actually unfolds, and consequently cannot represent the
-fine-grained behavioural evolution that distinguishes rapidly-acting threats
-from structurally similar but slower benign processes. These limitations
-motivated subsequent heterogeneous and temporal extensions of the graph
-learning paradigm.
+capture topological structure while leaving the pace of execution
+unrepresented, so even where ordering survives as topology they cannot express
+the fine-grained behavioural evolution that distinguishes rapidly-acting
+threats from structurally similar but slower benign processes. These
+limitations motivated subsequent heterogeneous and temporal extensions of the
+graph learning paradigm.
 
 \subsection{Heterogeneous and Temporal Graph Neural Networks}
 \label{subsec:hetero_tgnn}
@@ -560,11 +570,10 @@ temporal evolution with spatial structural reasoning.
 These approaches confirm that temporal graph reasoning is a viable paradigm
 for cybersecurity applications. Existing TGNN studies in cybersecurity have
 typically been developed over homogeneous graphs, however, and have not been
-integrated with semantic API understanding or with the fine-grained
-behavioural characteristics most relevant to early-stage threat
-discrimination. The joint integration of heterogeneous typing, temporal
-reasoning, and semantic enrichment within a single framework therefore
-remains underexplored.
+integrated with semantic API understanding or with the fine-grained behavioural
+characteristics most relevant to early-stage threat discrimination. Reasoning
+over heterogeneous typing, temporal dynamics, and semantic meaning together
+within a single model therefore remains underexplored.
 
 \subsection{Semantic and LLM-Based Behavioural Analysis}
 \label{subsec:semantic_llm}
@@ -598,20 +607,21 @@ differ sharply along the temporal dimension.
 \label{subsec:early_stage}
 
 Early threat detection, particularly for rapidly destructive threats, is the
-focus of a further line of research. Min et al.~\cite{min2018content} propose a content-based threat
-detection mechanism integrated at the storage layer to enable early
-identification of encryption-based attacks. Cen et al.~\cite{cen2021ransomware}
-survey ransomware early-detection research and identify time-to-detect as a
-critical operational metric that is underrepresented in academic evaluations
-focused solely on overall accuracy. Anand et al.~\cite{anand2022hiper}
-introduce HiPeR, which leverages hardware performance counters to achieve
-sub-second threat detection, demonstrating that fine-grained temporal signals
-are both available and informative for early-stage classification. Almomani et
-al.~\cite{almomani2021} propose an end-to-end ransomware detection system that
-pairs static machine-learning and vision-based deep-learning detectors, and
-Guo~\cite{guo2023zeroday} reviews machine learning approaches to zero-day attack
-detection, highlighting the persistent difficulty of generalising to held-out
-threat families.
+focus of a further line of research. Min et al.~\cite{min2018content} propose a
+content-based threat detection mechanism integrated at the storage layer to
+enable early identification of encryption-based attacks. Cen et
+al.~\cite{cen2021ransomware} survey ransomware early-detection research and
+identify time-to-detect as a critical operational metric that is
+underrepresented in academic evaluations focused solely on overall accuracy.
+Anand et al.~\cite{anand2022hiper} introduce HiPeR, which leverages hardware
+performance counters to detect a ransomware attack within a few seconds of its
+onset, demonstrating that fine-grained temporal signals are both available and
+informative for early-stage classification. Almomani et al.~\cite{almomani2021}
+propose an end-to-end ransomware detection system that pairs static
+machine-learning and vision-based deep-learning detectors, and
+Guo~\cite{guo2023zeroday} reviews machine learning approaches to zero-day
+attack detection, highlighting the persistent difficulty of generalising to
+held-out threat families.
 
 Two operational requirements emerge from these studies that academic detection
 systems frequently underspecify: low time-to-detect performance and robust
@@ -654,13 +664,14 @@ leaves something out. Read one family at a time, they look like steady progress;
 read together, their omissions align. Table~\ref{tab:literature_comparison} places
 the representative approaches side by side against the five capabilities that robust
 behavioural detection requires, namely semantic understanding, structural reasoning,
-temporal modelling, heterogeneous representation, and attribution support. Each
-approach supplies some of these and none supplies all, and the shape of what is
-missing is consistent rather than incidental.
+temporal modelling, heterogeneous representation, and attribution support.
 
+\begingroup
+\setlength{\intextsep}{6pt plus 2pt minus 2pt}
 \begin{table}[H]
 \centering
 \small
+\renewcommand{\arraystretch}{0.95}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{@{}lccccc@{}}
 \toprule
@@ -669,17 +680,17 @@ missing is consistent rather than incidental.
 Signature-based~\cite{ucci2019survey}       & $\times$           & $\times$           & $\times$           & $\times$           & \checkmark       \\
 Static ML~\cite{ye2017survey}               & $\times$           & \textit{Limited}   & $\times$           & $\times$           & \textit{Partial} \\
 Sequential DL~\cite{athiwaratkun2017}       & \textit{Limited}   & $\times$           & \checkmark         & $\times$           & $\times$         \\
-GraphShield~\cite{amer2025graphshield}      & $\times$           & \checkmark         & $\times$           & $\times$           & \textit{Partial} \\
+GraphShield~\cite{amer2025graphshield}      & \textit{Limited}   & \checkmark         & \textit{Limited}   & $\times$           & \textit{Partial} \\
 HetGNN~\cite{hetgnn2019}                    & $\times$           & \checkmark         & $\times$           & \checkmark         & $\times$         \\
 TGN~\cite{tgn2020}                          & $\times$           & \checkmark         & \checkmark         & $\times$           & $\times$         \\
 BEACON~\cite{perera2023beacon}              & \checkmark         & $\times$           & $\times$           & $\times$           & \textit{Partial} \\
 \midrule
-\textbf{Proposed Framework}                 & \checkmark         & \checkmark         & \checkmark         & \checkmark         & \textit{Attention/Attribution-Based} \\
+\textbf{Proposed Framework}                 & \checkmark         & \checkmark         & \checkmark         & \checkmark         & \textit{Gate-Based Attribution} \\
 \bottomrule
 \end{tabular}
 }
 
-\vspace{0.5em}
+\vspace{0.2em}
 {\footnotesize\itshape
 Assessment criteria: \checkmark{} marks explicit, first-class support as a
 central design goal; \textit{Limited}/\textit{Partial} marks implicit or partial
@@ -689,24 +700,36 @@ method's canonical formulation rather than any single implementation.\par}
 \caption{Comparison of behavioural threat detection approaches.}
 \label{tab:literature_comparison}
 \end{table}
+\endgroup
 
-That consistency points to a single structural limitation: \emph{no existing
-framework simultaneously models the three behavioural dimensions that jointly
-characterise modern dynamic threats}, the temporal pace at which behaviour unfolds,
-the semantic meaning of the operations it involves, and the heterogeneous relational
-structure among them. The remainder of this section takes each of the three in turn,
-establishing for each where current work reaches and where it stops, before turning
-to two further gaps that follow from the first: the difficulty of interpreting a
-decision made across several dimensions at once, and the absence of the systematic
-ablation needed to establish what each dimension contributes.
+Each approach supplies some of these and none supplies all, and the shape of
+what is missing is consistent rather than incidental. That consistency points
+to a single structural limitation: \emph{no existing framework carries all
+three behavioural dimensions into the decision it makes}, the temporal pace at
+which behaviour unfolds, the semantic meaning of the operations it involves,
+and the heterogeneous relational structure among them. A dimension an approach
+leaves out is not always absent from it; more often it survives in a reduced
+form that never reaches the verdict, execution order retained while its pace is
+discarded, or a language model used to shrink a vocabulary rather than to give
+an operation a meaning the classifier can use. A survey of the same literature
+is consistent with this reading: Bilot et al.~\cite{bilot2024survey} describe
+current practice as pairing structural patterns with word-embedding semantics,
+and close by observing that widely used graph architectures are not optimised
+for malware detection and that models designed for the task remain to be
+developed. The remainder of this section takes each of the three in turn,
+establishing for each where current work reaches and where it stops, before
+turning to two further gaps that follow from the first: the difficulty of
+interpreting a decision made across several dimensions at once, and the absence
+of the systematic ablation needed to establish what each dimension contributes.
 
 \textbf{Temporal execution dynamics}, the evolution, pacing, and variability with
 which operations unfold, carry discriminative signal in their own right: the same
 file and cryptographic operations separate ransomware from a legitimate backup
 chiefly by the speed at which they are issued. This signal is absent from
 flat-feature classical machine learning~\cite{ucci2019survey, ye2017survey} and only
-weakly present in static GNN models, which encode topology but not
-time~\cite{amer2025graphshield, bilot2024survey}. Foundational temporal
+weakly present in graph models that encode execution order as topology while
+leaving the pace of execution unrepresented~\cite{amer2025graphshield,
+bilot2024survey}. Foundational temporal
 graph frameworks such as TGN~\cite{tgn2020} and DyRep~\cite{dyrep2019} do model time
 explicitly, but they were designed for general dynamic graphs, and the
 cybersecurity-oriented temporal work that adopts them~\cite{guopope2023,
@@ -716,11 +739,17 @@ processes.
 
 \textbf{Semantic context}, the functional meaning of individual operations, lets a
 model recognise that syntactically different APIs do the same thing, and so resist
-the renaming and substitution that defeat symbolic matching. It has been addressed by
-semantic embedding approaches~\cite{reimers2019sbert, lee2024gecko, mpnet2020} and by
-LLM-driven behavioural classifiers~\cite{perera2023beacon}, but these read the
-execution trace as a linear textual sequence and do not model the relational
-structure between APIs, processes, files, registry objects, and network endpoints.
+the refactoring and substitution that defeat symbolic matching. It has been
+addressed by semantic embedding approaches~\cite{reimers2019sbert,
+lee2024gecko, mpnet2020} and by LLM-driven behavioural
+classifiers~\cite{perera2023beacon}, but these read the execution trace as a
+linear textual sequence and do not model the relational structure between APIs,
+processes, files, registry objects, and network endpoints. Where a graph-based
+detector does use a pretrained encoder, it groups call names to shrink the
+vocabulary rather than keeping their meaning available to the classifier. A
+call issued under a refactored name therefore reaches the model as a symbol it
+does not know, and the substitution that semantic modelling was meant to defeat
+succeeds anyway~\cite{amer2025graphshield}.
 
 \textbf{Heterogeneous structural relationships}, the explicit typing of behavioural
 nodes and of the relations between them, determine what a graph model can tell apart:
@@ -737,13 +766,13 @@ one dimension while remaining indistinguishable along the others, as
 illustrated by the three failure modes already described in
 Section~\ref{sec:motivation}. The same fragmentation leaves them open to
 deliberate evasion: a detector resting on one dimension can be defeated by a
-behaviour-preserving rewrite of that dimension alone, the calls renamed, their
-order shuffled, or the graph perturbed, while the behaviour itself is untouched.
-A second failure follows from the same cause. A threat that is genuinely new
-rather than disguised does not repeat the calls or the structures seen during
-training, and is in that sense a zero-day threat for the detector facing it: a
-model that recognises only what it has met before has nothing left to work
-with.
+behaviour-preserving rewrite of that dimension alone, the calls refactored,
+their order shuffled, or the graph perturbed, while the behaviour itself is
+untouched. A second failure follows from the same cause. A threat that is
+genuinely new rather than disguised does not repeat the calls or the structures
+seen during training, and is in that sense a zero-day threat for the detector
+facing it: a model that recognises only what it has met before has nothing left
+to work with.
 
 \textbf{Interpretability} is a secondary but operationally important gap.
 Attention-based GNNs offer post-hoc inspection of
@@ -761,7 +790,8 @@ evidence, a multi-dimensional design cannot be shown to earn its added complexit
 and the contribution each dimension makes to a decision goes unquantified.
 
 Closing these gaps calls for a single framework that models the three behavioural
-dimensions jointly, and that can both attribute its decisions across them and be
+dimensions jointly, weighing them for each sample rather than in one fixed
+proportion, and that can both attribute its decisions across them and be
 examined dimension by dimension. What such a framework must accomplish is set out
 next, as the objectives this thesis pursues.
 
@@ -792,11 +822,10 @@ preserve the structural and relational dependencies that conventional
 vector-based representations discard.
 
 \item[\textbf{Objective 2 -- Semantic enrichment for behavioural generalisation.}]
-To integrate pretrained transformer-based (sentence-embedding) semantic
-representations into the
-behavioural representation in order to improve contextual understanding of API
-behaviour and strengthen robustness against API obfuscation, naming variation,
-and evolving execution patterns. This objective directly supports RQ1 and RQ2.
+To retain pretrained transformer-based (sentence-embedding) semantic
+representations as node features that the model reasons over, in order to
+improve contextual understanding of API behaviour and strengthen robustness
+against API obfuscation, naming variation, and evolving execution patterns. This objective directly supports RQ1 and RQ2.
 
 \item[\textbf{Objective 3 -- Hybrid heterogeneous-temporal architecture.}]
 To design and evaluate a hybrid architecture in which heterogeneous
@@ -806,10 +835,10 @@ operate together for dynamic threat detection. This objective supports RQ2 and R
 and temporal reasoning interact within a single framework.
 
 \item[\textbf{Objective 4 -- Adaptive fusion and attribution.}]
-To develop an adaptive three-branch gated fusion mechanism that jointly
-integrates semantic, structural, and temporal representations within a single
-classifier, and to analyse the contribution of each branch to threat
-classification. This objective supports RQ4 by enabling attribution of model
+To develop a gated fusion mechanism that weighs semantic, structural, and
+temporal representations within a single classifier, setting the balance among
+them for each sample rather than fixing one blend for all, and to analyse the
+contribution of each branch to threat classification. This objective supports RQ4 by enabling attribution of model
 decisions across the three behavioural dimensions.
 
 \item[\textbf{Objective 5 -- Evaluation and cross-source generalisation.}]
@@ -845,12 +874,12 @@ can substitute for, or complement, symbolic identity.
 
 \item[\textbf{RQ2 -- Complementarity of Semantic and Temporal Signals.}]
 To what extent do semantic API representations and temporal behavioural
-characteristics provide complementary information for distinguishing
-malicious and benign execution behaviour, and does their combined modelling
-yield gains not achievable by either dimension alone? This question
-investigates whether semantic context and temporal execution dynamics capture
-distinct behavioural properties, and whether their integration provides
-additional insight beyond examining either dimension independently.
+characteristics provide complementary information for distinguishing malicious
+and benign execution behaviour, and does modelling them together yield gains
+not achievable by either dimension alone? This question investigates whether
+semantic context and temporal execution dynamics capture distinct behavioural
+properties, and whether reasoning over them jointly provides additional insight
+beyond examining either dimension independently.
 
 \item[\textbf{RQ3 -- End-to-End Detection Performance.}]
 How does the proposed heterogeneous, schema-aware graph-based
@@ -872,10 +901,9 @@ informative rather than opaque.
 
 \item[\textbf{RQ5 -- Cross-Source Generalisation.}]
 Can the proposed framework generalise to threats drawn from an independent
-collection, and remain robust to deliberate perturbation of the behavioural
-trace, while maintaining stable detection performance? This question addresses
-the operational requirement of robustness to evolving threats identified in the
-research gap.
+collection, while maintaining stable detection performance? This question
+addresses the operational requirement of robustness to evolving threats
+identified in the research gap.
 
 \end{description}
 
@@ -935,11 +963,13 @@ Threat analysis is conventionally divided into two complementary paradigms.
 \textit{Static analysis} examines a program in its non-executing form: the
 binary, its disassembly, embedded strings, and structural metadata. Because no
 execution takes place, static analysis is computationally inexpensive and
-trivially parallelisable. Its representational fidelity, however, is bounded by
-the surface form of the program, and surface form can be modified through
-code-transformation techniques such as packing, encryption, polymorphism, and
-metamorphism while leaving runtime behaviour
-unchanged~\cite{ucci2019survey, ye2017survey}.
+trivially parallelisable, and machine learning over such representations
+remains actively pursued, including methods that classify a binary from
+image-texture descriptors combined with convolutional features~\cite{nisa2020}.
+Its representational fidelity, however, is bounded by the surface form of the
+program, and surface form can be modified through code-transformation
+techniques such as packing, encryption, polymorphism, and metamorphism while
+leaving runtime behaviour unchanged~\cite{ucci2019survey, ye2017survey}.
 
 \textit{Dynamic analysis} observes a program while it executes, typically
 inside an instrumented sandbox or a hypervisor-monitored virtual machine. The
@@ -1222,8 +1252,7 @@ where $\sigma$ is a non-linear activation. The learned coefficients
 $\alpha_{ij}$ are interpretable: a large value indicates that node $j$
 contributes strongly to the representation of node $i$, while a small value
 suppresses its influence. Attention weights are commonly used as a post-hoc
-interpretability signal, which the proposed framework exploits in the
-attribution analysis associated with RQ4.
+interpretability signal.
 
 \subsection{Multi-Head Attention}
 \label{subsec:multihead}
@@ -1232,19 +1261,15 @@ A single attention mechanism concentrates relational reasoning into one
 parameterised function and can be unstable when the training signal is sparse
 or noisy. Multi-head attention runs $H$ independent attention mechanisms in
 parallel, each with its own parameters, and concatenates their outputs:
-\begin{equation}
-  \mathbf{h}_i' = \Big\|_{h=1}^{H}\; \sigma\!\left(
-    \sum_{j \in \mathcal{N}(i)} \alpha_{ij}^{(h)}\, \mathbf{W}^{(h)} \mathbf{h}_j
-  \right),
-  \label{eq:multihead}
-\end{equation}
-where $\|$ denotes concatenation and $\alpha_{ij}^{(h)}, \mathbf{W}^{(h)}$ are
-the head-specific parameters. No single set of coefficients need serve every
-relational pattern, so the heads specialise, which is the source of their
-stability and expressive capacity~\cite{velickovic2018gat, vaswani2017}. The
-framework adopts this concatenating form twice, once where it aggregates the
-behavioural graph and again where it pools the call sequence, retaining the
-pooling weights as the evidence behind its explanations.
+\begin{equation} \mathbf{h}_i' = \Big\|_{h=1}^{H}\; \sigma\!\left( \sum_{j \in
+\mathcal{N}(i)} \alpha_{ij}^{(h)}\, \mathbf{W}^{(h)} \mathbf{h}_j \right),
+\label{eq:multihead} \end{equation} where $\|$ denotes concatenation and
+$\alpha_{ij}^{(h)}, \mathbf{W}^{(h)}$ are the head-specific parameters. No
+single set of coefficients need serve every relational pattern, so the heads
+specialise, which is the source of their stability and expressive
+capacity~\cite{velickovic2018gat, vaswani2017}. The framework adopts this
+concatenating form twice, once where it aggregates the behavioural graph and
+again where it pools the call sequence.
 
 \section{Edge-Aware Message Passing and Inductive Aggregation}
 \label{sec:edge_inductive}
@@ -1298,21 +1323,27 @@ mean aggregation has the form
   \right),
   \label{eq:graphsage}
 \end{equation}
-where $\mathrm{AGG}$ is a permutation-invariant aggregator (mean, max, LSTM,
-or pooling). Because the model learns how to aggregate neighbourhood
-information rather than memorising specific node embeddings, it applies
-without retraining to graphs containing entities absent at training time,
-which is the routine case in behavioural threat detection where the set of
-files, processes, and network endpoints encountered at test time is
+where $\mathrm{AGG}$ is a permutation-invariant aggregator such as the
+element-wise mean or max-pooling. Because the model learns how to aggregate
+neighbourhood information rather than memorising specific node embeddings, it
+applies without retraining to graphs containing entities absent at training
+time, which is the routine case in behavioural threat detection where the set
+of files, processes, and network endpoints encountered at test time is
 open-ended.
 
-That generalisation is complementary to what attention provides, which learns
-per-neighbour importance but carries no inductive guarantee of its own. The
-proposed framework therefore combines the two within a relation-specific
-aggregator: per-relation messages are first weighted by an attention
-mechanism, and the resulting per-relation embeddings are then combined through
-an inductive operator. The detailed instantiation of this hybrid is presented
-in Chapter~\ref{chap:methodology}.
+That generalisation is complementary to what attention provides. Attention
+learns which neighbours to weigh most heavily, which is what matters when one
+edge decides the case and an unweighted average would bury it. Those weights
+are learned from the training data, however, so they are least dependable on
+the neighbourhoods that resemble it least. An unweighted average makes no such
+choice, and so has less to get wrong when the neighbourhood is unfamiliar. The
+proposed framework therefore runs the two side by side within a
+relation-specific aggregator. Each reads the same messages independently, one
+weighting neighbours by learned importance and the other averaging them without
+preference, and a learned gate decides, for every node and every feature, how
+much of each to keep. The gate reads how far the two disagree, so the trade-off
+above is not inherited but resolved, node by node. The detailed instantiation
+of this hybrid is presented in Chapter~\ref{chap:methodology}.
 
 \section{Sequential Learning with Recurrent Networks}
 \label{sec:lstm}
@@ -1692,11 +1723,12 @@ representation before graph construction.
 
 The principal source of the corpus is the multi-stage malware dataset of
 Carpenter and Luo~\cite{carpenter2023}, a public collection of malware
-behavioural reports organised into three batches by year of collection, in
-which each sample is distributed as a sequence of API calls paired with one or
-more behavioural labels. The API sequences were produced by executing Windows
-binaries in the CAPE sandbox, an open-source environment derived from Cuckoo
-Sandbox, and the labels were derived from VirusTotal detections. No static
+behavioural reports released as three batches, one of benign software and two
+of malware, in which each sample is a sequence of API calls paired with one or
+more behavioural labels and carries the year in which it was collected. The API
+sequences were produced by executing Windows binaries in the CAPE sandbox, an
+open-source environment derived from Cuckoo Sandbox, and the labels were
+derived from VirusTotal detections. No static
 features of the binaries are used at any stage, in keeping with the behavioural
 focus of the thesis (Section~\ref{subsec:static_dynamic}).
 
@@ -1847,7 +1879,7 @@ directly realises Objective~1 of Section~\ref{sec:objectives}.
 \texttt{(api, connects\_to, network)}& Network communication \\
 \bottomrule
 \end{tabular}
-\caption{Node and relation types of the heterogeneous behavioural graph
+\caption[Heterogeneous graph schema]{Node and relation types of the heterogeneous behavioural graph
 schema.}
 \label{tab:schema}
 \end{table}
@@ -1880,7 +1912,10 @@ occurring in the corpus is encoded once with the \texttt{all-mpnet-base-v2}
 sentence-transformer~\cite{reimers2019sbert, mpnet2020}, an MPNet-based SBERT
 encoder that produces a 768-dimensional embedding per input string, and the
 resulting vectors are cached and assigned to all nodes bearing that API name.
-Because the encoder was pretrained on natural-language corpora, API
+The vectors are retained as the nodes' own features rather than used to collapse
+similar calls into a smaller vocabulary, so meaning stays available to every
+stage of the model. Because the encoder was pretrained on natural-language
+corpora, API
 identifiers composed of descriptive English fragments (for example,
 \texttt{CryptEncrypt} or \texttt{NtCreateFile}) are mapped to positions that
 reflect their functional meaning: cryptographic, file-system, and network
@@ -1924,7 +1959,7 @@ Table~\ref{tab:temporal_features}.
 \begin{table}[H]
 \centering
 \small
-\caption{The fourteen temporal edge features carried by each
+\caption[Temporal edge features]{The fourteen temporal edge features carried by each
 consecutive-call edge.}
 \label{tab:temporal_features}
 \begin{tabular}{lll}
@@ -2112,7 +2147,7 @@ of the component descriptions ahead.
 
   \node[branchbox,draw=cTmp,below=6mm of lstm] (tpool)
     {\textbf{Temporal attention pooling}\\[1pt]
-     {\scriptsize 6 heads $\cdot$ phase-level weights (RQ4)}};
+     {\scriptsize 6 heads $\cdot$ phase-level weights}};
 
   \node[block,draw=cTmp,fill=cBgTmp,below=8mm of tpool,minimum width=30mm] (ztmp)
     {$z_{\text{tmp}}\in\mathbb{R}^{128}$};
@@ -2231,8 +2266,7 @@ threat setting. Graph attention assigns learned importance weights to
 neighbours, which is essential in behavioural graphs where discriminative
 evidence is sparse: a single process-spawn or registry-persistence edge may
 matter far more than thousands of routine file reads, and uniform aggregation
-would dilute it. Attention coefficients additionally provide the
-neighbour-level attribution signal required by RQ4. Attention scores are,
+would dilute it. Attention scores are,
 however, learned against the training distribution, and their reliability
 degrades on neighbourhood patterns that differ from it, precisely the
 condition produced by threats unlike those seen in training. GraphSAGE exhibits
@@ -2254,13 +2288,15 @@ complementary. In the attention operator, the projected edge features enter the
 unnormalised attention score of Equation~\ref{eq:gat_score} as a third additive
 term alongside the source and target contributions, so that edge context
 directly modulates how strongly each neighbour is weighted. The GraphSAGE
-operator, by contrast, is a modified, edge-aware variant of the standard
-formulation in Equation~\ref{eq:graphsage}: rather than aggregating raw
-neighbour states, each neighbour message is first formed as
+operator, by contrast, offers no such pathway. In its standard formulation
+(Equation~\ref{eq:graphsage}) it aggregates neighbour states alone, so the timing
+carried on an edge never reaches it and the inductive pathway would read structure
+stripped of its pacing. This work therefore modifies the operator to be
+edge-aware, forming each neighbour message as
 $\mathbf{m}_{uv} = \mathbf{h}_u + \mathbf{W}_e\,\mathbf{e}_{uv}$, additively
 injecting the projected edge features before the mean aggregation, so the
 inductive pathway preserves the temporal edge signal without introducing any
-per-pair weighting. The two operator outputs are then reconciled through a
+per-pair weighting. This work reconciles the two operator outputs through a
 learned, feature-wise gate. Given the
 attention output $\mathbf{h}^{\mathrm{GAT}}_v$ and the inductive output
 $\mathbf{h}^{\mathrm{SAGE}}_v$ for node $v$, the gate is computed as
@@ -2341,21 +2377,20 @@ The per-call outputs are condensed into a graph-level temporal embedding by a
 multi-head temporal attention pooling layer with 6 heads, which learns to
 weight the calls by their discriminative relevance rather than averaging
 uniformly over sequences in which malicious activity may occupy only a small
-fraction of the trace. The attention weights produced by this layer are
-retained for the attribution analysis of RQ4, since they identify \emph{which
-phases} of execution drove a prediction. The pooled temporal embedding is
+fraction of the trace. The pooled temporal embedding is
 projected to the common fusion dimension and forms the temporal branch input.
 
 The BiLSTM is the temporal backbone used throughout this work, chosen for its
-maturity and stable optimisation. The slot it occupies is, however, deliberately
-modular: any sequence model exposing the same per-call interface, such as a
-selective state-space (Mamba) model~\cite{gu2023mamba}, which encodes long-range dependencies
-through a linear dynamical system that scales linearly rather than
+maturity and stable optimisation. The slot it occupies is, however,
+deliberately modular: any sequence model exposing the same per-call interface,
+such as a selective state-space (Mamba) model~\cite{gu2023mamba}, which builds
+on structured state-space sequence models~\cite{gu2022s4} to encode long-range
+dependencies through a linear dynamical system that scales linearly rather than
 quadratically in sequence length, can be substituted without altering the rest
-of the architecture. This keeps the design
-open to experimentation with lower-complexity alternatives on long execution
-traces, while fixing the BiLSTM as the configuration evaluated in this thesis.
-With the semantic, structural, and temporal branches now each producing an
+of the architecture. This keeps the design open to experimentation with
+lower-complexity alternatives on long execution traces, while fixing the BiLSTM
+as the configuration evaluated in this thesis. With the semantic, structural,
+and temporal branches now each producing an
 embedding in the shared fusion space, what remains is to combine their evidence,
 the role of the adaptive gated fusion described next.
 
@@ -2451,13 +2486,9 @@ stages that project it to 256 and then to 128 dimensions, each applying layer
 normalisation, a GELU non-linearity, and dropout. The trunk output feeds three
 parallel single-logit heads, one per class (ransomware, benign, and other
 malware), whose scalar outputs are concatenated into the final logit vector.
-Casting the decision as three independent one-versus-rest heads over a shared
-trunk, rather than a single three-way projection, lets the trunk learn a
-representation common to all three discriminations while each head fits its own
-decision boundary. The separation is deliberate given the uneven class
-frequencies handled in training: the ransomware boundary is refined by a head of
-its own and is not forced to share a final projection whose parameters are pulled
-towards the more frequent classes.
+The trunk is shared across all three, so the features that distinguish
+ransomware from other malware are learned in the same representation as those
+that separate either from benign.
 
 This completes the forward path. An enriched heterogeneous graph is projected
 per node type, refined by hybrid relational message passing, read in execution
@@ -2531,17 +2562,15 @@ $0.39$ for ransomware and benign) instead compensates for that class being the
 mechanisms combine.
 
 The total training objective combines the task loss with the branch balance
-penalty of Equation~\ref{eq:branch_balance} and the hybrid gate
-regularisation of Section~\ref{subsec:hybrid_mp}:
+penalty of Equation~\ref{eq:branch_balance}:
 \begin{equation}
   \mathcal{L}
   = \mathcal{L}_{\mathrm{focal}}
-  + \mathcal{L}_{\mathrm{bal}}
-  + \mathcal{L}_{\mathrm{gate}}.
+  + \mathcal{L}_{\mathrm{bal}}.
   \label{eq:total_loss}
 \end{equation}
-This combined objective is what training minimises. Its balance and gate terms
-are regularisers folded directly into the loss, but the model is regularised in
+This combined objective is what training minimises. Its balance term is a
+regulariser folded directly into the loss, but the model is regularised in
 other ways as well, and an optimiser must still be specified to minimise the
 objective stably across the wide range of graph sizes; these are the subject of
 the next part.
@@ -2559,10 +2588,11 @@ orders of magnitude, can destabilise the updates if left unmanaged. The
 regularisation and optimisation described here address these two risks in turn.
 
 Beyond the gate-level safeguards already described, three complementary
-regularisers act on the model. The first is dropout, applied at $0.3$ in the
-projection and aggregation layers and $0.2$ within the LSTM. The second is
-temporal-feature perturbation training: with probability $0.2$ per training batch,
-zero-mean Gaussian noise with standard deviation $0.05$ is added to the temporal
+regularisers act on the model. The first is
+dropout~\cite{srivastava2014dropout}, applied at $0.3$ in the projection and
+aggregation layers and $0.2$ within the LSTM. The second is temporal-feature
+perturbation training: with probability $0.2$ per training batch, zero-mean
+Gaussian noise with standard deviation $0.05$ is added to the temporal
 edge features. Because both aggregation operators of
 Section~\ref{subsec:hybrid_mp} consume these features, the perturbation
 discourages brittle dependence on exact timing values and simulates the
@@ -2746,12 +2776,13 @@ capability the framework is designed to provide.
 \subsection{Robustness to Behavioural Perturbation}
 \label{subsec:robustness_eval}
 
-Generalisation to an unseen source addresses only one half of RQ5; the other is
-robustness to deliberate perturbation of the behavioural trace itself. A
-complementary protocol therefore subjects the trained model, without any
-retraining, to a battery of adversarial transformations applied to the
-evaluation graphs at inference time, and measures the resulting change in threat
-recall relative to the clean corpus. Distinct from the temporal-feature
+Generalisation to an unseen source is one of the two ways a detector meets
+unfamiliar behaviour; the other is deliberate perturbation of the trace itself,
+the robustness RQ1 and RQ3 address. A complementary protocol therefore subjects
+the trained model, without any retraining, to a battery of adversarial
+transformations applied to the evaluation graphs at inference time, and
+measures the resulting change in threat recall relative to the clean corpus.
+Distinct from the temporal-feature
 perturbation applied during training (Section~\ref{subsec:regularisation}), which hardens the
 model, these transformations are introduced purely at evaluation time as a
 stress test. The same transformed graphs are presented to the classical and
@@ -2791,7 +2822,7 @@ only how that behaviour is identified. A model that encodes behavioural meaning
 rather than surface artefacts should degrade only marginally, whereas a
 counting- or order-based model should degrade sharply. This protocol therefore
 operationalises the semantic-robustness claim of RQ1 and the
-perturbation-robustness requirement of RQ5, with the concrete perturbation
+perturbation-robustness requirement of RQ3, with the concrete perturbation
 parameters and per-model degradation reported in Chapter~\ref{chap:results}.
 That contrast is only meaningful against the counting- and order-based detectors
 themselves, so the baseline families that represent the competing paradigms, and
@@ -2858,8 +2889,8 @@ removed or perturbed at evaluation time and the resulting change in detection
 performance is measured. The ablation set comprises:
 \begin{enumerate}[leftmargin=*]
   \item \emph{Drop-one branch removal.} Each fusion branch is removed in turn
-        (semantic, structural, temporal) by zeroing it through the
-        branch-dropout pathway, measuring the \emph{marginal} contribution of
+        (semantic, structural, temporal) by suppressing the evidence it
+        consumes, measuring the \emph{marginal} contribution of
         each dimension in the presence of the others.
   \item \emph{Keep-one branch isolation.} A single branch is retained with the
         other two suppressed (se\-mantic-only, struc\-tural-only,
@@ -2886,11 +2917,10 @@ component sensitivity analyses of the single trained model rather than
 separately retrained single-branch networks; they therefore quantify the
 model's \emph{reliance} on each component at inference time rather than the
 standalone capability of a component trained in isolation, and are reported and
-interpreted strictly on those terms. In addition, the
-per-sample fusion weights of Equation~\ref{eq:branch_gate}, the hybrid gate
-statistics, and the temporal attention distributions are analysed qualitatively
-on correctly and incorrectly classified samples to provide the attribution
-evidence required by RQ4. The measured effect of each ablation is reported in
+interpreted strictly on those terms. In addition, each prediction is
+attributed through the per-sample fusion weights of
+Equation~\ref{eq:branch_gate} and the gradient salience of the API calls that
+drove it, providing the attribution evidence required by RQ4. The measured effect of each ablation is reported in
 Chapter~\ref{chap:results}.
 
 With protocols now specified for all three evaluation questions, reliable
@@ -2985,15 +3015,14 @@ where finer behavioural granularity is informative.
 
 The chapter reads as a progression from what the framework achieves, to why it
 achieves it, and then to how far that achievement holds. It first establishes
-the headline detection performance on the held-out test set. It then decomposes
-the source of that performance, separating the individual and joint
-contributions of the semantic, structural, and temporal branches so that the
-result can be attributed to the architecture rather than assumed. It finally
-turns to the conditions that decide operational value: whether the semantic
-understanding is genuine rather than memorised, how the framework stands against
-single-paradigm baselines under adversarial perturbation, whether it generalises
-to threats never seen in training, and how interpretable its threat
-decisions are. Each section opens by stating the research question it addresses.
+the headline detection performance on the held-out test set. The sections that
+follow each take up one of the research questions of
+Section~\ref{sec:research_questions} in turn: whether the semantic, structural,
+and temporal branches contribute complementary evidence rather than one carrying
+the decision alone (RQ2), whether the semantic understanding is genuine rather
+than memorised (RQ1), how the framework stands against single-paradigm baselines
+under adversarial perturbation (RQ3), whether it generalises to threats never
+seen in training (RQ5), and how interpretable its threat decisions are (RQ4).
 
 
 \section{Experimental Setup and Evaluation Protocol}
@@ -3019,9 +3048,8 @@ is computed. Each is detailed in turn below.
 The experiments draw on the behavioural corpus and data partition established in
 Section~\ref{sec:dataset}. Within that partition, the training split is used to
 fit the model, the validation split to select the checkpoint and any tunable
-thresholds, and the held-out test split to measure final performance; unless a
-section states otherwise, every figure reported below is computed on the test
-split. This separation is maintained strictly: no hyperparameter,
+thresholds, and the held-out test split to measure final performance. This
+separation is maintained strictly: no hyperparameter,
 early-stopping decision, or decision threshold is informed by the test split,
 which is evaluated only after the model and all baselines are finalised.
 
@@ -3115,7 +3143,7 @@ Section~\ref{sec:baseline_comparison}.
 \begin{table}[htbp]
 \centering
 \small
-\caption{Configuration of the four baseline families. All models are trained on
+\caption[Baseline family configurations]{Configuration of the four baseline families. All models are trained on
 identical splits and reduced to the binary threat decision by the same argmax
 projection.}
 \label{tab:baseline_config}
@@ -3198,7 +3226,7 @@ deterministic execution already established for the training procedure, each
 experiment persists the evaluation manifest that fixes its exact sample
 composition and the per-sample prediction records from which its metrics are
 computed. Every figure reported below, for the proposed framework and for the
-baselines alike, can therefore be regenerated exactly from the released checkpoint
+baselines alike, can therefore be regenerated exactly from the trained checkpoint
 and these artefacts rather than merely re-estimated, which places the comparisons
 of this chapter on a verifiable footing. With the data, model, baselines, and
 reporting conventions now fixed, the evaluation opens with the framework's raw
@@ -3308,7 +3336,7 @@ F1-score on the test split, together with the macro averages.
 \begin{table}[H]
 \centering
 \small
-\caption{Per-class and macro-averaged precision, recall, and F1-score of the
+\caption[Per-class and macro-averaged test metrics]{Per-class and macro-averaged precision, recall, and F1-score of the
 reported checkpoint on the held-out test split.}
 \label{tab:threeclass_metrics}
 \begin{tabular}{l ccc c}
@@ -3470,7 +3498,7 @@ attributed samples.
 
 \begin{table}[htbp]
 \centering
-\caption{Contribution shares from leave-one-branch-out attribution. The upper
+\caption[Branch contribution shares]{Contribution shares from leave-one-branch-out attribution. The upper
 block resolves the test subset by class; the lower block averages each
 $300$-sample split and all $600$ attributed samples. Each share is the fraction
 of the prediction's confidence support carried by the branch.}
@@ -3550,8 +3578,9 @@ measure of how strongly its view enters that sample's decision, and since the
 triples are produced on every forward pass, whether the deciding is
 concentrated in one branch or shared across all three can be read from them
 without altering the model's behaviour. The weight triples were logged for each
-of the $440$ samples of the generalisation evaluation of
-Section~\ref{sec:generalisation_results};
+of the $440$ samples scored in the evaluation of
+Section~\ref{sec:generalisation_results}, the $330$ held-out samples of the
+primary corpus together with the $110$ threats from the unseen source;
 Table~\ref{tab:gate_weights} reports their means by true class, and
 Figure~\ref{fig:branch_usage} visualises them together with how often each
 branch receives the largest weight. Averaged over all samples the gate is
@@ -3562,7 +3591,7 @@ average over strongly class-adaptive behaviour rather than a static compromise.
 
 \begin{table}[htbp]
 \centering
-\caption{Mean adaptive-fusion gate weights by true class, recorded at inference
+\caption[Mean gate weights by true class]{Mean adaptive-fusion gate weights by true class, recorded at inference
 with nothing silenced. The gate weight measures how much the intact model draws
 on each branch when forming a decision.}
 \label{tab:gate_weights}
@@ -3953,10 +3982,7 @@ about the same architecture, and
 both are required. If the model used all three branches heavily but each
 carried unique information, the loss of any branch would collapse detection;
 if the branches merely duplicated one another, two of them would contribute
-nothing to the intact model. The measurements exclude both cases: the
-branches overlap on the threat decision, which is why removal degrades
-detection gracefully rather than breaking it, and specialise beyond it, which
-is why the intact ensemble classifies more precisely than any single branch.
+nothing to the intact model. The measurements exclude both cases.
 
 The keep-one results point beyond this section. A model left with one branch
 is close to a single-paradigm detector: the semantic branch alone works like
@@ -4011,8 +4037,8 @@ contrasted regimes: by the embedding of the operation's nearest functional
 neighbour, which preserves meaning while changing identity, and by a random
 vector, which destroys meaning altogether. A branch that memorised
 identities is damaged equally by both; one that reads meaning tolerates the
-first and is hurt only by the second. The substitution reaches between
-96\% and 99\% of the API nodes of a graph, so no outcome can be attributed
+first and is hurt only by the second. The substitution reaches at least
+96\% of the API nodes of a graph, so no outcome can be attributed
 to a residue of untouched vectors.
 
 The examination proceeds in two stages: substitution on the intact model
@@ -4099,8 +4125,8 @@ aggregate scores conceal.
 
 The left panel of Figure~\ref{fig:semantic_sub_intact} shows that even where
 aggregate scores stay flat, the two regimes do not act alike. Random
-substitution changes between three and ten times as many predictions as
-meaning-preserving substitution, 1.8\% against 0.2\% on the test subset and
+substitution changes between two and ten times as many predictions as
+meaning-preserving substitution, 1.8\% against 0.3\% on the test subset and
 7.0\% against 0.7\% on the training subset, with the same ordering on every
 split. The right panel repeats the pattern in confidence: destroying meaning
 depresses the confidence of originally correct predictions by up to 0.038,
@@ -4178,8 +4204,8 @@ changing 5.3\% of the predictions and more than doubling the missed threats.
 Accuracy tells the same story, falling by 0.007 under the synonym regime and
 by 0.053 under the random one.
 
-That even the harshest track still detects over ninety percent of the
-threats is no contradiction: the temporal branch remains fully intact, and
+Even the harshest track still detects over ninety percent of the
+threats, which is no contradiction: the temporal branch remains fully intact, and
 Section~\ref{sec:ablation_results} showed that temporal evidence alone
 carries the large majority of the threat decision. The observation deserves
 emphasis, because the earlier sections could leave the opposite impression.
@@ -4419,7 +4445,7 @@ remain discriminative. The figure therefore renders visually what the table
 records numerically, that unperturbed data does not separate these approaches from
 one another or from the framework.
 
-On clean traces, the framework performs strongly but holds no edge over the others. The
+The
 framework draws no advantage from clean traces, and a reader swayed by aggregate
 accuracy would find little reason to prefer it to a well-tuned tree ensemble. That
 verdict, however, depends on a silent assumption, that the recorded trace
@@ -4677,7 +4703,7 @@ Jensen--Shannon divergence ($0$--$1$) & $0.534$ \\
 Shared calls among the twenty most frequent & $6$ of $20$ \\
 \bottomrule
 \end{tabular}
-\caption{The unseen evaluation set against the training corpus, measured on the
+\caption[API distribution shift, training versus unseen]{The unseen evaluation set against the training corpus, measured on the
 distribution of API calls. The divergence and overlap figures treat each set as a
 distribution over calls and are therefore independent of the number of samples in
 each.}
@@ -4764,7 +4790,7 @@ Unseen threats & $110$ & $0$ & $100\%$ \\
 Seen threats (test and validation) & $130$ & $0$ & $100\%$ \\
 \bottomrule
 \end{tabular}
-\caption{Threat detection on the unseen set against the seen threats of the
+\caption[Detection on unseen versus seen threats]{Threat detection on the unseen set against the seen threats of the
 standard test protocol, for the reported framework. Benign specificity on the same
 evaluation is $97\%$: six false positives among two hundred benign traces.}
 \label{tab:zeroday_detection}
@@ -4928,10 +4954,9 @@ Section~\ref{sec:component_attribution}, this answers RQ4. A prediction of the
 framework is not an opaque number but a decision that can be opened: the branch
 weights say which kind of behaviour was decisive, and the saliency-and-graph
 reconstruction says which concrete calls, in which order and touching which
-resources, made the case. The property that gives the framework its robustness,
-that it reasons over a structured, semantically grounded and temporally ordered
-representation of behaviour, is the same property that allows that reasoning to be
-read back out. The evaluation is thereby complete: the framework detects threats
+resources, made the case. What makes the framework hard to evade is also what
+makes it possible to read: the representation it reasons over is the
+representation it reports. The evaluation is thereby complete: the framework detects threats
 accurately, holds that accuracy under behaviour-preserving manipulation and against
 threats from an unseen source, and can account for the behavioural grounds of each
 decision it reaches. What those results amount to, and where their limits lie,
@@ -4962,11 +4987,19 @@ reasoning
 jointly over the three dimensions along which behaviour is expressed: the relations
 between actions, the meaning of each action, and the order in which actions unfold.
 
-\textbf{The novelty of the work.} \emph{It is not just that three dimensions are
-used, but that their balance is learned rather than fixed, so that the framework
-settles case by case which kind of behaviour should carry a verdict.}
+\textbf{The novelty of the work.} The framework treats behaviour as one object
+seen three ways: what a call means, the relations among the entities it touches,
+and the order in which it was issued are reasoned over together within a single
+schema-aware heterogeneous graph, not recovered from a view that discarded them.
+Such a graph asks two things of an aggregator at once, where the deciding edge is
+often rare and its endpoints unseen in training, so attention is paired with a
+GraphSAGE aggregator modified to consume edge features directly and which to trust
+is learned per node and per feature. The gate that fuses the three branches works
+the same way: one sample gives itself away by what it calls, another by how fast it
+acts, so the model decides for each sample how much each of the three should
+count.
 
-That claim was put to the test in Chapter~\ref{chap:results}, whose experiments
+Chapter~\ref{chap:results} put the framework to the test, and its experiments
 support a definite conclusion on each of the five questions posed in
 Section~\ref{sec:research_questions}. The evidence for each was set out there in
 full, so what remains is to draw it together: to state what every question is now
@@ -5053,9 +5086,9 @@ than a formal causal proof of it.
 
 \textbf{RQ5, cross-source generalisation.} \emph{Does the framework generalise to
 threats from outside its training experience?} It does. Confronted in
-Section~\ref{sec:generalisation_results} with $110$ threat samples from an independent
-collection, established beforehand to be genuinely out of distribution and therefore
-new from the framework's standpoint, carrying calls absent from its training
+Section~\ref{sec:generalisation_results} with $110$ new threat samples from an
+independent collection, established beforehand to be genuinely out of distribution
+from the framework's standpoint, carrying calls absent from its training
 vocabulary and a behavioural profile shifted away from anything it had seen, the
 framework classified every one as a threat, with confidence comparable to the threats
 it already knew and without loss of discrimination on benign software. The mechanism matters as much as the outcome:
@@ -5105,24 +5138,27 @@ structural branch relates such events through the resources they share, which
 bounds the effect rather than removing it.
 
 The corpus is a snapshot, drawn from two sources at a fixed point in time, and
-behaviour it does not contain cannot be learned from it; the ransomware class in
-particular rests on relatively few samples. The transfer reported in
-Chapter~\ref{chap:results} already spans the two sandboxes, since the unseen
-samples were recorded by the second, so the framework's behavioural grounding is
-not tied to one instrumentation. Two sources are nonetheless few, and every trace was
-produced on Windows, so wider validation and periodic retraining are what a
-deployed setting would ask of it. Like any detector that learns from observed
-execution, it also depends on there being behaviour to observe: a sample that
-detects the analysis environment and withholds its activity presents little to
-reason over.
+behaviour it does not contain cannot be learned from it; the ransomware class
+in particular rests on relatively few samples, and its labels follow a
+VirusTotal consensus that vendors revise over time. The supplementary
+collection supplies most benign training samples, so provenance was available
+as a shortcut; the $110$ unseen threats of Chapter~\ref{chap:results} came from
+that same sandbox and none was missed, so the grounding is neither keyed to
+provenance nor tied to one instrumentation. Two sources are nonetheless few,
+and every trace was produced on Windows, so wider validation and periodic
+retraining are what a deployed setting would ask of it. Like any detector that
+learns from observed execution, it also depends on there being behaviour to
+observe: a sample that detects the analysis environment and withholds its
+activity presents little to reason over.
 
 Other choices were made for tractability rather than principle. Retaining a
-high-dimensional semantic embedding for every call renders the largest execution
-graphs expensive to store and to process, which shaped how much of the corpus could
-be exercised at once. The adversarial evaluation, though designed to cover the
-distinct axes an attacker can manipulate, tests a representative rather than
-exhaustive set of transformations and does not include an adaptive white-box
-adversary optimising directly against the model.
+high-dimensional semantic embedding for every call renders the largest
+execution graphs expensive to store and to process, which shaped how much of
+the corpus could be exercised at once. The adversarial evaluation, though
+designed to cover the distinct axes an attacker can manipulate, tests a
+representative rather than exhaustive set of transformations and does not
+include an adaptive white-box adversary optimising directly against the model,
+and every reported figure comes from one seeded training run.
 
 None of these bounds overturns the central findings. The robustness and
 generalisation results hold on the sets against which they were measured, the
@@ -5172,6 +5208,12 @@ but how surely. Pursued together, these directions would carry a framework that
 already detects, resists evasion, generalises and explains towards one that does so
 continuously, cheaply, and at scale.
 
+The model presented here is best understood as a first version: complete enough
+to stand on its own results, and open enough that every direction above extends
+it rather than replaces it. Later work can build on that model rather than
+around it, and each extension should leave a detector more capable than the one
+this thesis reports.
+
 % ============================================================
 % BIBLIOGRAPHY
 % ============================================================
@@ -5179,6 +5221,12 @@ continuously, cheaply, and at scale.
 % document-wide onehalfspacing would otherwise inflate.
 \begingroup
 \setstretch{1.2}
+\let\oldthebibliography\thebibliography
+\renewcommand{\thebibliography}[1]{%
+  \oldthebibliography{#1}%
+  \setlength{\itemsep}{7pt}%
+  \setlength{\parskip}{0pt}%
+}
 \bibliographystyle{IEEEtran}
 \bibliography{bibThesis}
 \endgroup
