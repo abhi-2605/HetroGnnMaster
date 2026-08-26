@@ -1,0 +1,28 @@
+\babel@toc {british}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {2.1}{\ignorespaces Comparison of behavioural threat detection approaches.}}{10}{table.caption.6}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces Heterogeneous graph schema}}{33}{table.caption.7}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces Temporal edge features}}{35}{table.caption.8}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces Hardware and software configuration used for training and evaluation.}}{54}{table.caption.10}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {5.1}{\ignorespaces Baseline family configurations}}{58}{table.caption.12}%
+\contentsline {table}{\numberline {5.2}{\ignorespaces Threat-versus-benign confusion matrix on the held-out test split.}}{60}{table.caption.17}%
+\contentsline {table}{\numberline {5.3}{\ignorespaces Per-class and macro-averaged test metrics}}{62}{table.caption.19}%
+\contentsline {table}{\numberline {5.4}{\ignorespaces Three-class confusion matrix on the held-out test split.}}{62}{table.caption.20}%
+\contentsline {table}{\numberline {5.5}{\ignorespaces Per-class precision and recall on the training split at the selected epoch.}}{63}{table.caption.21}%
+\contentsline {table}{\numberline {5.6}{\ignorespaces Branch contribution shares}}{65}{table.caption.22}%
+\contentsline {table}{\numberline {5.7}{\ignorespaces Mean gate weights by true class}}{67}{table.caption.23}%
+\contentsline {table}{\numberline {5.8}{\ignorespaces Branch-removal ablation results}}{70}{table.caption.25}%
+\contentsline {table}{\numberline {5.9}{\ignorespaces Relation- and feature-level ablation results}}{73}{table.caption.27}%
+\contentsline {table}{\numberline {5.10}{\ignorespaces Semantic-vector substitution in the intact model}}{77}{table.caption.29}%
+\contentsline {table}{\numberline {5.11}{\ignorespaces Substitution under forced semantic reliance}}{79}{table.caption.31}%
+\contentsline {table}{\numberline {5.12}{\ignorespaces Detection on clean, unperturbed traces.}}{83}{table.caption.33}%
+\contentsline {table}{\numberline {5.13}{\ignorespaces Robustness under behaviour-preserving attacks.}}{87}{table.caption.35}%
+\contentsline {table}{\numberline {5.14}{\ignorespaces API distribution shift, training versus unseen}}{91}{table.caption.37}%
+\contentsline {table}{\numberline {5.15}{\ignorespaces Detection on unseen versus seen threats}}{93}{table.caption.39}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

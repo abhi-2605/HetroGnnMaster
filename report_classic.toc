@@ -1,0 +1,104 @@
+\babel@toc {british}{}\relax 
+\contentsline {chapter}{Statement}{2}{chapter*.1}%
+\contentsline {chapter}{Abstract}{3}{chapter*.2}%
+\contentsline {chapter}{\nonumberline List of Figures}{7}{chapter*.4}%
+\contentsline {chapter}{\nonumberline List of Tables}{7}{chapter*.5}%
+\contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Motivation}{2}{section.1.1}%
+\contentsline {chapter}{\numberline {2}Related Work In Behavioural Threat Detection}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Existing Approaches to Behavioural Threat Detection}{3}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Signature-Based and Rule-Based Detection}{4}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Static Machine Learning over Behavioural Features}{4}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Sequential Deep Learning over API Traces}{5}{subsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.1.4}Graph Neural Networks for Behavioural Threat Detection}{6}{subsection.2.1.4}%
+\contentsline {subsection}{\numberline {2.1.5}Heterogeneous and Temporal Graph Neural Networks}{7}{subsection.2.1.5}%
+\contentsline {subsection}{\numberline {2.1.6}Semantic and LLM-Based Behavioural Analysis}{8}{subsection.2.1.6}%
+\contentsline {subsection}{\numberline {2.1.7}Early-Stage Detection and Operational Considerations}{9}{subsection.2.1.7}%
+\contentsline {subsection}{\numberline {2.1.8}Interpretability for Security Operations}{9}{subsection.2.1.8}%
+\contentsline {section}{\numberline {2.2}Research Gap}{10}{section.2.2}%
+\contentsline {section}{\numberline {2.3}Thesis Objectives}{13}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Research Questions}{14}{section.2.4}%
+\contentsline {chapter}{\numberline {3}Technical Background: Foundations for the Detection Approach}{16}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Behavioural Threat Analysis}{16}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Static and Dynamic Analysis}{17}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}API Call Traces as Behavioural Evidence}{17}{subsection.3.1.2}%
+\contentsline {section}{\numberline {3.2}Graph Representation Learning}{18}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Graphs and Graph Neural Networks}{18}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}The Message-Passing Framework}{18}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}Heterogeneous Graph Neural Networks}{19}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Temporal Enrichment of Graph Models}{20}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Attention Mechanisms in Graph Learning}{21}{section.3.5}%
+\contentsline {subsection}{\numberline {3.5.1}Graph Attention Networks}{22}{subsection.3.5.1}%
+\contentsline {subsection}{\numberline {3.5.2}Multi-Head Attention}{22}{subsection.3.5.2}%
+\contentsline {section}{\numberline {3.6}Edge-Aware Message Passing and Inductive Aggregation}{23}{section.3.6}%
+\contentsline {subsection}{\numberline {3.6.1}Edge Features in Message Passing}{23}{subsection.3.6.1}%
+\contentsline {subsection}{\numberline {3.6.2}Inductive Aggregation and the Hybrid Operator}{24}{subsection.3.6.2}%
+\contentsline {section}{\numberline {3.7}Sequential Learning with Recurrent Networks}{24}{section.3.7}%
+\contentsline {subsection}{\numberline {3.7.1}Long Short-Term Memory}{25}{subsection.3.7.1}%
+\contentsline {subsection}{\numberline {3.7.2}Bidirectional LSTM}{26}{subsection.3.7.2}%
+\contentsline {section}{\numberline {3.8}Semantic Representation Learning}{26}{section.3.8}%
+\contentsline {section}{\numberline {3.9}Chapter Summary}{27}{section.3.9}%
+\contentsline {chapter}{\numberline {4}Methodology: A Heterogeneous Graph Framework with Semantic and Temporal Enrichment}{28}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Research Design and Pipeline Overview}{28}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Behavioural Dataset Construction}{29}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Data Collection}{30}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Preprocessing and Quality Filtering}{31}{subsection.4.2.2}%
+\contentsline {section}{\numberline {4.3}Heterogeneous Graph Construction}{32}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Graph Schema}{32}{subsection.4.3.1}%
+\contentsline {subsection}{\numberline {4.3.2}Semantic Node Enrichment}{34}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}Temporal Edge Feature Engineering}{35}{subsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.3.4}Scalability Mechanisms}{36}{subsection.4.3.4}%
+\contentsline {section}{\numberline {4.4}Proposed Architecture}{37}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Type-Specific Input Projections and the Semantic Branch}{38}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Hybrid Relational Message Passing}{39}{subsection.4.4.2}%
+\contentsline {subsection}{\numberline {4.4.3}Temporal Sequence Modelling}{41}{subsection.4.4.3}%
+\contentsline {subsection}{\numberline {4.4.4}Adaptive Three-Branch Gated Fusion}{42}{subsection.4.4.4}%
+\contentsline {subsection}{\numberline {4.4.5}Behavioural Statistics and Classification Head}{43}{subsection.4.4.5}%
+\contentsline {section}{\numberline {4.5}Training Procedure}{44}{section.4.5}%
+\contentsline {subsection}{\numberline {4.5.1}Class Imbalance Handling}{45}{subsection.4.5.1}%
+\contentsline {subsection}{\numberline {4.5.2}Regularisation and Optimisation}{46}{subsection.4.5.2}%
+\contentsline {section}{\numberline {4.6}Evaluation Design}{47}{section.4.6}%
+\contentsline {subsection}{\numberline {4.6.1}Three-Class Training with Binary Threat Evaluation}{47}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.2}Evaluation Metrics}{49}{subsection.4.6.2}%
+\contentsline {subsection}{\numberline {4.6.3}Generalisation Protocol: An Unseen Threat Source}{49}{subsection.4.6.3}%
+\contentsline {subsection}{\numberline {4.6.4}Robustness to Behavioural Perturbation}{50}{subsection.4.6.4}%
+\contentsline {subsection}{\numberline {4.6.5}Baseline Families}{51}{subsection.4.6.5}%
+\contentsline {subsection}{\numberline {4.6.6}Ablation Design}{52}{subsection.4.6.6}%
+\contentsline {section}{\numberline {4.7}Hardware and Software Configuration}{53}{section.4.7}%
+\contentsline {section}{\numberline {4.8}Chapter Summary}{54}{section.4.8}%
+\contentsline {chapter}{\numberline {5}Empirical Evaluation of the Proposed Framework}{55}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Experimental Setup and Evaluation Protocol}{55}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Dataset and Splits}{55}{subsection.5.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Reported Model and Checkpoint Selection}{57}{subsection.5.1.2}%
+\contentsline {subsection}{\numberline {5.1.3}Baseline Configurations}{57}{subsection.5.1.3}%
+\contentsline {paragraph}{\nonumberline Classical machine learning.}{58}{paragraph*.13}%
+\contentsline {paragraph}{\nonumberline Sequential deep learning.}{58}{paragraph*.14}%
+\contentsline {paragraph}{\nonumberline Static graph neural networks.}{59}{paragraph*.15}%
+\contentsline {paragraph}{\nonumberline Semantic-embedding classification.}{59}{paragraph*.16}%
+\contentsline {subsection}{\numberline {5.1.4}Metrics and Reproducibility}{59}{subsection.5.1.4}%
+\contentsline {section}{\numberline {5.2}Threat Detection Performance}{60}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Binary Threat Detection}{60}{subsection.5.2.1}%
+\contentsline {subsection}{\numberline {5.2.2}Three-Class Performance}{62}{subsection.5.2.2}%
+\contentsline {section}{\numberline {5.3}Branch Contribution Analysis}{64}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Branch Contribution Shares}{64}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Adaptive Reliance Across Classes}{66}{subsection.5.3.2}%
+\contentsline {section}{\numberline {5.4}Ablation Study}{69}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Branch Removal}{70}{subsection.5.4.1}%
+\contentsline {subsection}{\numberline {5.4.2}Relation and Feature-Level Ablations}{72}{subsection.5.4.2}%
+\contentsline {section}{\numberline {5.5}Semantic Robustness}{76}{section.5.5}%
+\contentsline {subsection}{\numberline {5.5.1}Substitution in the Intact Model}{77}{subsection.5.5.1}%
+\contentsline {subsection}{\numberline {5.5.2}Substitution without Structural Support}{79}{subsection.5.5.2}%
+\contentsline {section}{\numberline {5.6}Baseline Comparison Against Single-Paradigm Baselines}{82}{section.5.6}%
+\contentsline {subsection}{\numberline {5.6.1}Cross-Paradigm Detection on Clean Traces}{83}{subsection.5.6.1}%
+\contentsline {subsection}{\numberline {5.6.2}Robustness Under Behaviour-Preserving Attacks}{85}{subsection.5.6.2}%
+\contentsline {section}{\numberline {5.7}Generalising to an Unseen Threat Source}{89}{section.5.7}%
+\contentsline {subsection}{\numberline {5.7.1}Profiling an Unseen Threat Distribution}{90}{subsection.5.7.1}%
+\contentsline {subsection}{\numberline {5.7.2}Detection Performance on Unseen Threats}{92}{subsection.5.7.2}%
+\contentsline {section}{\numberline {5.8}Interpretability and Decision Attribution}{94}{section.5.8}%
+\contentsline {subsection}{\numberline {5.8.1}Explaining a Decision Through Behaviour}{95}{subsection.5.8.1}%
+\contentsline {chapter}{\numberline {6}Conclusion, Limitations and Future Work}{98}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Conclusion}{98}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Limitations}{101}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Future Work}{102}{section.6.3}%
+\contentsline {chapter}{\nonumberline Bibliography}{104}{chapter*.42}%
+\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
