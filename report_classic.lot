@@ -20,9 +20,9 @@
 \contentsline {table}{\numberline {5.10}{\ignorespaces Semantic-vector substitution in the intact model}}{77}{table.caption.29}%
 \contentsline {table}{\numberline {5.11}{\ignorespaces Substitution under forced semantic reliance}}{79}{table.caption.31}%
 \contentsline {table}{\numberline {5.12}{\ignorespaces Detection on clean, unperturbed traces.}}{83}{table.caption.33}%
-\contentsline {table}{\numberline {5.13}{\ignorespaces Robustness under behaviour-preserving attacks.}}{87}{table.caption.35}%
-\contentsline {table}{\numberline {5.14}{\ignorespaces API distribution shift, training versus unseen}}{91}{table.caption.37}%
-\contentsline {table}{\numberline {5.15}{\ignorespaces Detection on unseen versus seen threats}}{93}{table.caption.39}%
+\contentsline {table}{\numberline {5.13}{\ignorespaces Robustness under behaviour-preserving attacks.}}{85}{table.caption.34}%
+\contentsline {table}{\numberline {5.14}{\ignorespaces API distribution shift, training versus unseen}}{89}{table.caption.36}%
+\contentsline {table}{\numberline {5.15}{\ignorespaces Detection on unseen versus seen threats}}{91}{table.caption.38}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

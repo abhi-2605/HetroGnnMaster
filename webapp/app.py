@@ -34,7 +34,10 @@ if str(PROJECT_ROOT) not in sys.path:
 from fastapi import FastAPI, File, UploadFile, HTTPException  # noqa: E402
 from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
 from fastapi.responses import JSONResponse, FileResponse  # noqa: E402
+from pydantic import BaseModel, Field  # noqa: E402
 
+from webapp import attacks as attack_catalogue  # noqa: E402
+from webapp import webapp_config  # noqa: E402
 from webapp.service import Analyzer, AnalysisError  # noqa: E402
 
 STATIC_DIR = Path(__file__).resolve().parent / "static"
@@ -84,6 +87,42 @@ def health() -> dict:
         "status": "ready" if analyzer is not None else "loading",
         "checkpoint": getattr(analyzer, "checkpoint_name", None),
     }
+
+
+@app.get("/capabilities")
+def capabilities() -> dict:
+    """What this build offers. The UI reads this once and renders only what is on,
+    so turning a flag off in webapp_config removes the feature from the page
+    entirely rather than leaving a control that fails when pressed."""
+    return {
+        "attack_demo": webapp_config.ENABLE_ATTACK_DEMO,
+        "baseline_race": webapp_config.ENABLE_BASELINE_RACE,
+        "attacks": attack_catalogue.list_attacks() if webapp_config.ENABLE_ATTACK_DEMO else [],
+    }
+
+
+class AttackRequest(BaseModel):
+    analysis_id: str = Field(..., description="id returned by /analyze")
+    attack: str = Field(..., description="attack key from /capabilities")
+
+
+@app.post("/attack")
+def attack(req: AttackRequest) -> JSONResponse:
+    """Re-score an already-analysed sample after a behaviour-preserving attack.
+
+    The behaviour of the sample is unchanged; only the way it was recorded moves.
+    Returns the clean and attacked verdicts side by side, together with how the
+    adaptive gate redistributed its weight between the three branches."""
+    if not webapp_config.ENABLE_ATTACK_DEMO:
+        raise HTTPException(status_code=404, detail="The attack demonstration is disabled in this build.")
+    if analyzer is None:
+        raise HTTPException(status_code=503, detail="Model still loading, try again in a moment.")
+    try:
+        return JSONResponse(analyzer.attack(req.analysis_id, req.attack))
+    except AnalysisError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    except Exception as e:  # noqa: BLE001
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {e}")
 
 
 @app.post("/analyze")

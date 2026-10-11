@@ -20,9 +20,12 @@ Public API:
 
 from __future__ import annotations
 
+import copy
 import sys
 import time
 import traceback
+import uuid
+from collections import OrderedDict
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -43,6 +46,9 @@ from pipeline_v2 import pipeline_config_v2 as pcfg  # noqa: E402
 from pipeline_v2.report_adapter_v2 import ReportAdapterV2  # noqa: E402
 from pipeline_v2.build_graphs_v2 import GraphBuilderV2  # noqa: E402
 from pipeline_v2.enrich_graphs_v2 import GraphEnricherV2  # noqa: E402
+
+from webapp import attacks as attack_catalogue  # noqa: E402
+from webapp import webapp_config  # noqa: E402
 
 DEFAULT_CHECKPOINT = "best_model_1.pt" 
 
@@ -70,6 +76,12 @@ class Analyzer:
         self.builder = GraphBuilderV2()
         self.enricher = GraphEnricherV2()
 
+        # Pristine enriched graphs, kept so a sample can be re-scored under attack
+        # without paying for adaptation and MPNet enrichment again. Scoring mutates
+        # a graph, so what is stored here is never scored directly; every score and
+        # every attack works on a deep copy.
+        self._graphs: "OrderedDict[str, Any]" = OrderedDict()
+
     # ------------------------------------------------------------------ #
     # entry points
     # ------------------------------------------------------------------ #
@@ -96,15 +108,23 @@ class Analyzer:
         except Exception as e:  # noqa: BLE001
             raise AnalysisError(f"Graph construction/enrichment failed: {e}") from e
 
-        sample_id = adapted.get("report_id") or json_path.stem
-        result = self.analyze_graph(enriched, sample_id=str(sample_id))
+        sample_id = str(adapted.get("report_id") or json_path.stem)
+        result = self.analyze_graph(enriched, sample_id=sample_id)
         result["timing_seconds"] = round(time.time() - t0, 2)
+
+        if webapp_config.ENABLE_ATTACK_DEMO:
+            result["analysis_id"] = self._remember(enriched, sample_id)
+
         return result
 
     def analyze_graph(self, graph, sample_id: str = "uploaded_sample") -> Dict[str, Any]:
-        """Score + explain an already-enriched graph object."""
+        """Score + explain an already-enriched graph object.
+
+        Scoring mutates the graph it is given, so it is always handed a copy and the
+        caller's graph is left untouched. That is what makes the same analysed sample
+        re-usable for any number of attacks."""
         report = explain_one_graph(
-            graph=graph,
+            graph=copy.deepcopy(graph),
             label=1,  # placeholder; the upload is unlabelled, correctness fields are dropped
             sample_id=str(sample_id),
             model=self.model,
@@ -116,6 +136,153 @@ class Analyzer:
             include_metadata_inventory=False,
         )
         return self._compress(report, sample_id)
+
+    # ------------------------------------------------------------------ #
+    # live behaviour-preserving attacks
+    # ------------------------------------------------------------------ #
+    def _remember(self, graph, sample_id: str) -> str:
+        """Keep the pristine enriched graph so it can be attacked later. Oldest out first."""
+        analysis_id = uuid.uuid4().hex[:12]
+        self._graphs[analysis_id] = (graph, sample_id)
+        while len(self._graphs) > max(1, webapp_config.GRAPH_CACHE_SIZE):
+            self._graphs.popitem(last=False)
+        return analysis_id
+
+    def attack(self, analysis_id: str, attack_key: str) -> Dict[str, Any]:
+        """Re-score a previously analysed sample after a behaviour-preserving attack,
+        and report what moved. The clean score is recomputed from the same pristine
+        graph rather than recalled, so both sides of the comparison are produced
+        under identical conditions."""
+        if not webapp_config.ENABLE_ATTACK_DEMO:
+            raise AnalysisError("The attack demonstration is disabled.")
+
+        entry = self._graphs.get(analysis_id)
+        if entry is None:
+            raise AnalysisError(
+                "That analysis is no longer held in memory. Re-upload the report and try again."
+            )
+        pristine, sample_id = entry
+        self._graphs.move_to_end(analysis_id)  # keep the sample under study alive
+
+        try:
+            attack = attack_catalogue.get(attack_key)
+        except KeyError as e:
+            raise AnalysisError(str(e)) from e
+
+        t0 = time.time()
+        clean = self.analyze_graph(pristine, sample_id=sample_id)
+
+        try:
+            attacked_graph, coverage = attack.apply(copy.deepcopy(pristine), sample_id)
+        except Exception as e:  # noqa: BLE001
+            raise AnalysisError(f"Attack '{attack_key}' failed: {e}") from e
+
+        attacked = self.analyze_graph(attacked_graph, sample_id=sample_id)
+
+        # Did the transformation actually change anything? On a short trace whose
+        # timestamps all carry the same second there is no order to shuffle, and the
+        # attack silently does nothing. Reporting that as a survived attack would
+        # claim a robustness this sample never tested.
+        no_effect, no_effect_reason = self._compare_graphs(pristine, attacked_graph, attack.key)
+
+        return {
+            "analysis_id": analysis_id,
+            "attack": {
+                "key": attack.key,
+                "label": attack.label,
+                "category": attack.category,
+                "targets": attack.targets,
+                "description": attack.description,
+            },
+            "no_effect": no_effect,
+            "no_effect_reason": no_effect_reason,
+            "coverage": coverage,
+            "held": clean.get("verdict") == attacked.get("verdict"),
+            "before": self._snapshot(clean),
+            "after": self._snapshot(attacked),
+            "threat_probability_delta": _round(
+                (attacked.get("threat_probability") or 0.0) - (clean.get("threat_probability") or 0.0)
+            ),
+            "gate_shift": self._gate_shift(clean, attacked),
+            "attacked_result": attacked,
+            "timing_seconds": round(time.time() - t0, 2),
+        }
+
+    @staticmethod
+    def _fingerprint(graph) -> Dict[str, Any]:
+        """Cheap signature of the parts an attack can move."""
+        fp: Dict[str, Any] = {}
+        try:
+            api = graph["api"]
+            fp["n_api"] = int(getattr(api, "num_nodes", 0) or 0)
+            x = getattr(api, "x", None)
+            if isinstance(x, torch.Tensor) and x.numel():
+                fp["x"] = (tuple(x.shape), round(float(x.sum()), 4))
+            ts = getattr(api, "timestamps", None)
+            if isinstance(ts, torch.Tensor) and ts.numel():
+                fp["ts"] = (int(ts.numel()), int(ts.unique().numel()), round(float((ts * torch.arange(
+                    ts.numel(), dtype=ts.dtype)).sum()), 4))
+            names = getattr(api, "api_names", None) or getattr(api, "names", None)
+            if isinstance(names, (list, tuple)):
+                fp["names"] = hash(tuple(map(str, names)))
+        except Exception:  # noqa: BLE001
+            pass
+        try:
+            fp["edges"] = {str(et): int(graph[et].edge_index.shape[1]) for et in graph.edge_types}
+        except Exception:  # noqa: BLE001
+            pass
+        return fp
+
+    @classmethod
+    def _compare_graphs(cls, before, after, attack_key: str):
+        """(no_effect, reason). Reason is written for a reader, not a log."""
+        fb, fa = cls._fingerprint(before), cls._fingerprint(after)
+        if fb != fa:
+            return False, None
+
+        reason = "This transformation left the sample unchanged, so nothing was tested here."
+        try:
+            ts = getattr(before["api"], "timestamps", None)
+            n = int(getattr(before["api"], "num_nodes", 0) or 0)
+            if attack_key in ("reorder", "interleave") and isinstance(ts, torch.Tensor) and ts.numel():
+                if int(ts.unique().numel()) <= 1:
+                    reason = (
+                        f"Every one of the {n} calls carries the same timestamp, so this trace has no "
+                        "recorded order to shuffle. The sandbox logged at second resolution."
+                    )
+        except Exception:  # noqa: BLE001
+            pass
+        return True, reason
+
+    @staticmethod
+    def _snapshot(result: Dict[str, Any]) -> Dict[str, Any]:
+        """The few fields the before/after comparison is read through."""
+        drivers = result.get("drivers") or {}
+        return {
+            "verdict": result.get("verdict"),
+            "predicted_class": result.get("predicted_class"),
+            "threat_probability": result.get("threat_probability"),
+            "class_probabilities": result.get("class_probabilities"),
+            "dominant_branch": result.get("dominant_branch"),
+            "gate": {b: (drivers.get(b) or {}).get("gate_weight") for b in ("semantic", "structural", "temporal")},
+            "graph_summary": result.get("graph_summary"),
+        }
+
+    @staticmethod
+    def _gate_shift(clean: Dict[str, Any], attacked: Dict[str, Any]) -> Dict[str, Any]:
+        """How the adaptive gate redistributed its weight once the trace was attacked.
+
+        This is the quantity worth watching: the verdict holding is the headline, but
+        the gate moving is the mechanism behind it."""
+        cd = clean.get("drivers") or {}
+        ad = attacked.get("drivers") or {}
+        shift = {}
+        for b in ("semantic", "structural", "temporal"):
+            before = (cd.get(b) or {}).get("gate_weight")
+            after = (ad.get(b) or {}).get("gate_weight")
+            if isinstance(before, (int, float)) and isinstance(after, (int, float)):
+                shift[b] = {"before": _round(before), "after": _round(after), "delta": _round(after - before)}
+        return shift
 
     # ------------------------------------------------------------------ #
     # RQ4 report -> compact 4-panel structure

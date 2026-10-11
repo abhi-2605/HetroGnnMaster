@@ -11,12 +11,11 @@
 \contentsline {figure}{\numberline {5.4}{\ignorespaces Branch-removal ablation: missed threats and exact-class accuracy}}{71}{figure.caption.26}%
 \contentsline {figure}{\numberline {5.5}{\ignorespaces Relation- and feature-level ablation effects}}{74}{figure.caption.28}%
 \contentsline {figure}{\numberline {5.6}{\ignorespaces Semantic-vector substitution: paired effects on the intact model}}{78}{figure.caption.30}%
-\contentsline {figure}{\numberline {5.7}{\ignorespaces Substitution under forced semantic reliance}}{81}{figure.caption.32}%
-\contentsline {figure}{\numberline {5.8}{\ignorespaces Cross-paradigm macro-F1 on clean traces}}{85}{figure.caption.34}%
-\contentsline {figure}{\numberline {5.9}{\ignorespaces Macro-F1 under behaviour-preserving attacks}}{89}{figure.caption.36}%
-\contentsline {figure}{\numberline {5.10}{\ignorespaces Behavioural vocabulary shift, training versus unseen}}{91}{figure.caption.38}%
-\contentsline {figure}{\numberline {5.11}{\ignorespaces Detection confidence on unseen threats}}{93}{figure.caption.40}%
-\contentsline {figure}{\numberline {5.12}{\ignorespaces Explanation of one threat decision}}{96}{figure.caption.41}%
+\contentsline {figure}{\numberline {5.7}{\ignorespaces Direction of change under forced semantic reliance}}{81}{figure.caption.32}%
+\contentsline {figure}{\numberline {5.8}{\ignorespaces Macro-F1 under behaviour-preserving attacks}}{87}{figure.caption.35}%
+\contentsline {figure}{\numberline {5.9}{\ignorespaces Behavioural vocabulary shift, training versus unseen}}{90}{figure.caption.37}%
+\contentsline {figure}{\numberline {5.10}{\ignorespaces Detection confidence on unseen threats}}{92}{figure.caption.39}%
+\contentsline {figure}{\numberline {5.11}{\ignorespaces Explanation of one threat decision}}{94}{figure.caption.40}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

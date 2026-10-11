@@ -1,20 +1,35 @@
 .venv/
+venv/
 ._*
 __pycache__/
 *.pyc
+.vscode/
+
 data/
 cache/
+enrichedB/
 # results/
 # checkpoints/
 enriched_graphs.zip
 enriched_graphs_new.7z
+public_full_reports.zip
 # *.pt
 *.pth
-EOF
-enrichedB/
-.vscode/
-venv/
+
 report.*
 !report.tex
 !report.pdf
-public_full_reports.zip
+
+# LaTeX backups and build artefacts (added 2026-10-11)
+*.bak
+*.bak[0-9]*
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.blg
+*.synctex.gz

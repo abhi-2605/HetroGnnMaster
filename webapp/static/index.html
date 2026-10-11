@@ -69,6 +69,35 @@
   details summary{cursor:pointer;font-weight:600;font-size:.9rem}
   .rationale li{padding:.35rem 0;border-bottom:1px solid var(--grid);font-size:.85rem;color:var(--ink2)}
   .err{color:var(--critical);font-size:.9rem}
+  /* --- attack demo --- */
+  .atk-groups{display:flex;flex-direction:column;gap:.55rem;margin-top:.6rem}
+  .atk-group>span{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);display:block;margin-bottom:.3rem}
+  .atk-btns{display:flex;gap:.4rem;flex-wrap:wrap}
+  .atk{background:var(--plane);color:var(--ink);border:1px solid var(--ring);border-radius:8px;
+       padding:.4rem .8rem;font-size:.85rem;cursor:pointer}
+  .atk:hover:not(:disabled){border-color:var(--ink2)}
+  .atk.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+  .atk.diag{border-style:dashed}
+  .verdict-banner{font-weight:700;font-size:.95rem;padding:.5rem .8rem;border-radius:8px;margin:.8rem 0 .2rem}
+  .held{background:color-mix(in srgb,var(--good) 14%,transparent);color:var(--good)}
+  .flipped{background:color-mix(in srgb,var(--critical) 14%,transparent);color:var(--critical)}
+  .noeffect{background:var(--plane);color:var(--ink2);border:1px dashed var(--ring)}
+  .cmp{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.7rem}
+  @media(max-width:620px){.cmp{grid-template-columns:1fr}}
+  .cmp .col{background:var(--plane);border:1px solid var(--ring);border-radius:8px;padding:.6rem .7rem}
+  .cmp .col h4{margin:0 0 .4rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);font-weight:600}
+  .cmp .big{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+  .gate-shift{margin-top:.9rem}
+  .gate-shift>b{font-size:.8rem;display:block;margin-bottom:.1rem}
+  .gate-shift>.hint{font-size:.75rem;color:var(--ink2);margin-bottom:.5rem;display:block}
+  .gs-row{display:grid;grid-template-columns:82px 1fr 128px;gap:.5rem;align-items:center;font-size:.8rem;margin:.32rem 0}
+  .gs-track{position:relative;height:12px;border-radius:6px;background:var(--plane);border:1px solid var(--ring);overflow:hidden}
+  .gs-track>i{position:absolute;top:0;bottom:0;border-radius:6px}
+  .gs-track>i.before{background:var(--ring)}
+  .gs-num{font-variant-numeric:tabular-nums;text-align:right;color:var(--ink2);font-size:.76rem}
+  .gs-num b{color:var(--ink)}
+  .up{color:var(--good)} .down{color:var(--critical)}
+  .atk-desc{font-size:.78rem;color:var(--ink2);margin-top:.7rem;padding-top:.6rem;border-top:1px solid var(--grid)}
 </style>
 </head>
 <body>
@@ -83,6 +112,17 @@
     <span class="status" id="status"></span>
   </div>
 
+    <!-- 1b. attack demo (only if enabled) -->
+    <div class="card hidden" id="attack-panel">
+      <h3 style="margin:.1rem 0 .2rem;font-size:.95rem">Attack this sample</h3>
+      <p style="margin:0;font-size:.8rem;color:var(--ink2)">
+        Each transformation changes how the execution was <em>recorded</em>, never what the
+        program did. The verdict should survive; watch the adaptive gate move its weight
+        to the views that still carry evidence.</p>
+      <div class="atk-groups" id="atk-groups"></div>
+      <p class="status" id="atk-hint" style="margin:.6rem 0 0"></p>
+      <div id="attack-result"></div>
+    </div>
   <div id="results" class="hidden">
     <!-- 1. classification -->
     <div class="card" id="classification"></div>
@@ -130,6 +170,10 @@ const el = id => document.getElementById(id);
 const pct = x => (x==null? '-' : (100*x).toFixed(1)+'%');
 
 async function analyse(){
+  if(location.protocol === 'file:'){
+    el('status').innerHTML = '<span class="err">Open this page at http://127.0.0.1:8000 '
+      + 'rather than from disk.</span>';
+  }
   const f = el('file').files[0];
   if(!f){alert('Choose a .json sandbox report'); return;}
   el('run').disabled = true; el('status').textContent = 'analysing…'; el('status').className='status';
@@ -144,8 +188,23 @@ async function analyse(){
   el('run').disabled = false;
 }
 
+// ---- capabilities: the page renders only what this build offers ----
+let CAPS = {attack_demo:false, baseline_race:false, attacks:[]};
+let CURRENT = null;   // last analysis (holds analysis_id)
+
+async function loadCapabilities(){
+  try{
+    const r = await fetch(API_BASE + '/capabilities');
+    if(r.ok) CAPS = await r.json();
+  }catch(e){ /* feature stays dark; core flow is unaffected */ }
+  renderAttackPanel(CURRENT);   // show the controls up front, disabled until there is a sample
+}
+loadCapabilities();
+
 function render(j){
   el('results').classList.remove('hidden');
+  CURRENT = j;
+  renderAttackPanel(j);
   renderClassification(j);
   renderGraph(j.graph);
   renderSemantic(j.drivers.semantic, j.dominant_branch);
@@ -234,6 +293,112 @@ function renderTemporal(d, dom){
     + '<div style="font-size:.78rem;color:var(--ink2);margin-bottom:.3rem">Local pattern &amp; timing around salient nodes</div>'
     + '<ul class="rlist">'+ (wins||'<li class="status">none</li>')
     + (sig? '<li style="border:0;padding-top:.4rem;color:var(--muted);font-size:.72rem">ordering</li>'+sig : '') +'</ul>';
+}
+
+// ---------------- attack demo ----------------
+const GROUPS = [
+  ['adversary',  'What an attacker can do to the sample'],
+  ['diagnostic', 'Probes of the model\'s own input (not available to an attacker)'],
+];
+
+function renderAttackPanel(j){
+  const panel = el('attack-panel');
+  if(!CAPS.attack_demo || !(CAPS.attacks||[]).length){ panel.classList.add('hidden'); return; }
+
+  // Visible from the start so the capability is discoverable; the buttons only
+  // become live once there is an analysed sample to attack.
+  const ready = !!(j && j.analysis_id);
+  panel.classList.remove('hidden');
+  el('attack-result').innerHTML = '';
+  el('atk-hint').textContent = ready ? '' : 'Analyse a report to enable these.';
+  el('atk-groups').innerHTML = GROUPS.map(([cat,heading])=>{
+    const items = CAPS.attacks.filter(a=>a.category===cat);
+    if(!items.length) return '';
+    const btns = items.map(a=>
+      `<button class="atk${cat==='diagnostic'?' diag':''}" data-key="${esc(a.key)}" ${ready?'':'disabled'}
+               title="${esc(a.description)}" onclick="runAttack('${esc(a.key)}',this)">${esc(a.label)}</button>`
+    ).join('');
+    return `<div class="atk-group"><span>${esc(heading)}</span><div class="atk-btns">${btns}</div></div>`;
+  }).join('');
+}
+
+async function runAttack(key, btn){
+  if(!CURRENT || !CURRENT.analysis_id) return;
+  document.querySelectorAll('.atk').forEach(b=>{b.disabled=true; b.classList.remove('on');});
+  btn.classList.add('on');
+  el('attack-result').innerHTML = '<p class="status" style="margin:.8rem 0 0">re-scoring under attack…</p>';
+  try{
+    const r = await fetch(API_BASE + '/attack', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({analysis_id: CURRENT.analysis_id, attack: key})
+    });
+    const j = await r.json();
+    if(!r.ok){ el('attack-result').innerHTML = '<p class="err">'+esc(j.detail||('HTTP '+r.status))+'</p>'; }
+    else renderAttackResult(j);
+  }catch(e){ el('attack-result').innerHTML = '<p class="err">request failed: '+esc(e)+'</p>'; }
+  document.querySelectorAll('.atk').forEach(b=>b.disabled=false);
+}
+
+function renderAttackResult(j){
+  const a = j.attack || {};
+  const desc = `<div class="atk-desc"><b>${esc(a.label)}</b> &mdash; targets ${esc(a.targets)}.
+                ${esc(a.description)}</div>`;
+
+  if(j.no_effect){
+    el('attack-result').innerHTML =
+      `<div class="verdict-banner noeffect">No change to this sample</div>
+       <p style="font-size:.82rem;color:var(--ink2);margin:.4rem 0 0">${esc(j.no_effect_reason||'')}</p>`
+      + desc;
+    return;
+  }
+
+  const b = j.before||{}, af = j.after||{};
+  const held = j.held;
+  const diag = a.category === 'diagnostic';
+  const banner = held
+    ? `<div class="verdict-banner held">Verdict held &mdash; still ${esc(af.verdict)}${
+        diag ? '' : ' after '+esc(a.label).toLowerCase()}</div>`
+    : `<div class="verdict-banner flipped">Verdict changed &mdash; ${esc(b.verdict)} &rarr; ${esc(af.verdict)}${
+        diag ? '. This is a probe of the model\'s input, not an attack an adversary could mount.' : ''}</div>`;
+
+  const d = j.threat_probability_delta;
+  const dTxt = (d==null) ? '' :
+    `<span class="${d<0?'down':'up'}">${d>0?'+':''}${(100*d).toFixed(1)} pts</span>`;
+
+  const cmp = `<div class="cmp">
+      <div class="col"><h4>as recorded</h4>
+        <div class="big">${pct(b.threat_probability)}</div>
+        <div style="font-size:.8rem;color:var(--ink2)">${esc(b.verdict||'-')} &middot; ${esc(b.predicted_class||'-')}</div></div>
+      <div class="col"><h4>after ${esc(a.label)}</h4>
+        <div class="big">${pct(af.threat_probability)} ${dTxt}</div>
+        <div style="font-size:.8rem;color:var(--ink2)">${esc(af.verdict||'-')} &middot; ${esc(af.predicted_class||'-')}</div></div>
+    </div>`;
+
+  el('attack-result').innerHTML = banner + cmp + gateShift(j.gate_shift) + desc;
+}
+
+// The mechanism behind the headline: where the gate moved its trust.
+function gateShift(gs){
+  if(!gs || !Object.keys(gs).length) return '';
+  const rows = ['semantic','structural','temporal'].filter(k=>gs[k]).map(k=>{
+    const g = gs[k], before = g.before||0, after = g.after||0, dd = g.delta||0;
+    const lo = Math.min(before,after), hi = Math.max(before,after);
+    const grew = after >= before;
+    return `<div class="gs-row">
+      <span style="color:var(--${k})">${k}</span>
+      <div class="gs-track">
+        <i class="before" style="left:0;width:${(100*lo).toFixed(1)}%"></i>
+        <i style="left:${(100*lo).toFixed(1)}%;width:${(100*(hi-lo)).toFixed(1)}%;
+                  background:var(--${grew?'good':'critical'})"></i>
+      </div>
+      <span class="gs-num">${before.toFixed(3)} &rarr; <b>${after.toFixed(3)}</b>
+        <span class="${dd>=0?'up':'down'}">${dd>0?'+':''}${dd.toFixed(3)}</span></span>
+    </div>`;
+  }).join('');
+  return `<div class="gate-shift"><b>How the gate reweighted its three views</b>
+    <span class="hint">Green marks a view the model leaned on more once the trace was altered,
+      red one it trusted less. The balance is decided per sample, which is what lets the
+      verdict survive when one view is degraded.</span>${rows}</div>`;
 }
 
 function shortName(s){ s=String(s); return s.length>30 ? '…'+s.slice(-28) : s; }

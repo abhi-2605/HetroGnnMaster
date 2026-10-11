@@ -4,7 +4,7 @@
 \contentsline {chapter}{\nonumberline List of Figures}{7}{chapter*.4}%
 \contentsline {chapter}{\nonumberline List of Tables}{7}{chapter*.5}%
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Motivation}{2}{section.1.1}%
+\contentsline {section}{\numberline {1.1}Motivation}{1}{section.1.1}%
 \contentsline {chapter}{\numberline {2}Related Work In Behavioural Threat Detection}{3}{chapter.2}%
 \contentsline {section}{\numberline {2.1}Existing Approaches to Behavioural Threat Detection}{3}{section.2.1}%
 \contentsline {subsection}{\numberline {2.1.1}Signature-Based and Rule-Based Detection}{4}{subsection.2.1.1}%
@@ -16,11 +16,11 @@
 \contentsline {subsection}{\numberline {2.1.7}Early-Stage Detection and Operational Considerations}{9}{subsection.2.1.7}%
 \contentsline {subsection}{\numberline {2.1.8}Interpretability for Security Operations}{9}{subsection.2.1.8}%
 \contentsline {section}{\numberline {2.2}Research Gap}{10}{section.2.2}%
-\contentsline {section}{\numberline {2.3}Thesis Objectives}{13}{section.2.3}%
+\contentsline {section}{\numberline {2.3}Thesis Objectives}{12}{section.2.3}%
 \contentsline {section}{\numberline {2.4}Research Questions}{14}{section.2.4}%
 \contentsline {chapter}{\numberline {3}Technical Background: Foundations for the Detection Approach}{16}{chapter.3}%
 \contentsline {section}{\numberline {3.1}Behavioural Threat Analysis}{16}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Static and Dynamic Analysis}{17}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.1}Static and Dynamic Analysis}{16}{subsection.3.1.1}%
 \contentsline {subsection}{\numberline {3.1.2}API Call Traces as Behavioural Evidence}{17}{subsection.3.1.2}%
 \contentsline {section}{\numberline {3.2}Graph Representation Learning}{18}{section.3.2}%
 \contentsline {subsection}{\numberline {3.2.1}Graphs and Graph Neural Networks}{18}{subsection.3.2.1}%
@@ -45,8 +45,8 @@
 \contentsline {subsection}{\numberline {4.2.2}Preprocessing and Quality Filtering}{31}{subsection.4.2.2}%
 \contentsline {section}{\numberline {4.3}Heterogeneous Graph Construction}{32}{section.4.3}%
 \contentsline {subsection}{\numberline {4.3.1}Graph Schema}{32}{subsection.4.3.1}%
-\contentsline {subsection}{\numberline {4.3.2}Semantic Node Enrichment}{34}{subsection.4.3.2}%
-\contentsline {subsection}{\numberline {4.3.3}Temporal Edge Feature Engineering}{35}{subsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.3.2}Semantic Node Enrichment}{33}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}Temporal Edge Feature Engineering}{34}{subsection.4.3.3}%
 \contentsline {subsection}{\numberline {4.3.4}Scalability Mechanisms}{36}{subsection.4.3.4}%
 \contentsline {section}{\numberline {4.4}Proposed Architecture}{37}{section.4.4}%
 \contentsline {subsection}{\numberline {4.4.1}Type-Specific Input Projections and the Semantic Branch}{38}{subsection.4.4.1}%
@@ -58,7 +58,7 @@
 \contentsline {subsection}{\numberline {4.5.1}Class Imbalance Handling}{45}{subsection.4.5.1}%
 \contentsline {subsection}{\numberline {4.5.2}Regularisation and Optimisation}{46}{subsection.4.5.2}%
 \contentsline {section}{\numberline {4.6}Evaluation Design}{47}{section.4.6}%
-\contentsline {subsection}{\numberline {4.6.1}Three-Class Training with Binary Threat Evaluation}{47}{subsection.4.6.1}%
+\contentsline {subsection}{\numberline {4.6.1}Three-Class Training with Binary Threat Evaluation}{48}{subsection.4.6.1}%
 \contentsline {subsection}{\numberline {4.6.2}Evaluation Metrics}{49}{subsection.4.6.2}%
 \contentsline {subsection}{\numberline {4.6.3}Generalisation Protocol: An Unseen Threat Source}{49}{subsection.4.6.3}%
 \contentsline {subsection}{\numberline {4.6.4}Robustness to Behavioural Perturbation}{50}{subsection.4.6.4}%
@@ -78,27 +78,27 @@
 \contentsline {subsection}{\numberline {5.1.4}Metrics and Reproducibility}{59}{subsection.5.1.4}%
 \contentsline {section}{\numberline {5.2}Threat Detection Performance}{60}{section.5.2}%
 \contentsline {subsection}{\numberline {5.2.1}Binary Threat Detection}{60}{subsection.5.2.1}%
-\contentsline {subsection}{\numberline {5.2.2}Three-Class Performance}{62}{subsection.5.2.2}%
+\contentsline {subsection}{\numberline {5.2.2}Three-Class Performance}{61}{subsection.5.2.2}%
 \contentsline {section}{\numberline {5.3}Branch Contribution Analysis}{64}{section.5.3}%
 \contentsline {subsection}{\numberline {5.3.1}Branch Contribution Shares}{64}{subsection.5.3.1}%
 \contentsline {subsection}{\numberline {5.3.2}Adaptive Reliance Across Classes}{66}{subsection.5.3.2}%
-\contentsline {section}{\numberline {5.4}Ablation Study}{69}{section.5.4}%
-\contentsline {subsection}{\numberline {5.4.1}Branch Removal}{70}{subsection.5.4.1}%
+\contentsline {section}{\numberline {5.4}Ablation Study}{68}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Branch Removal}{69}{subsection.5.4.1}%
 \contentsline {subsection}{\numberline {5.4.2}Relation and Feature-Level Ablations}{72}{subsection.5.4.2}%
 \contentsline {section}{\numberline {5.5}Semantic Robustness}{76}{section.5.5}%
-\contentsline {subsection}{\numberline {5.5.1}Substitution in the Intact Model}{77}{subsection.5.5.1}%
+\contentsline {subsection}{\numberline {5.5.1}Substitution in the Intact Model}{76}{subsection.5.5.1}%
 \contentsline {subsection}{\numberline {5.5.2}Substitution without Structural Support}{79}{subsection.5.5.2}%
 \contentsline {section}{\numberline {5.6}Baseline Comparison Against Single-Paradigm Baselines}{82}{section.5.6}%
-\contentsline {subsection}{\numberline {5.6.1}Cross-Paradigm Detection on Clean Traces}{83}{subsection.5.6.1}%
-\contentsline {subsection}{\numberline {5.6.2}Robustness Under Behaviour-Preserving Attacks}{85}{subsection.5.6.2}%
-\contentsline {section}{\numberline {5.7}Generalising to an Unseen Threat Source}{89}{section.5.7}%
-\contentsline {subsection}{\numberline {5.7.1}Profiling an Unseen Threat Distribution}{90}{subsection.5.7.1}%
-\contentsline {subsection}{\numberline {5.7.2}Detection Performance on Unseen Threats}{92}{subsection.5.7.2}%
-\contentsline {section}{\numberline {5.8}Interpretability and Decision Attribution}{94}{section.5.8}%
-\contentsline {subsection}{\numberline {5.8.1}Explaining a Decision Through Behaviour}{95}{subsection.5.8.1}%
-\contentsline {chapter}{\numberline {6}Conclusion, Limitations and Future Work}{98}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Conclusion}{98}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Limitations}{101}{section.6.2}%
-\contentsline {section}{\numberline {6.3}Future Work}{102}{section.6.3}%
-\contentsline {chapter}{\nonumberline Bibliography}{104}{chapter*.42}%
+\contentsline {subsection}{\numberline {5.6.1}Cross-Paradigm Detection on Clean Traces}{82}{subsection.5.6.1}%
+\contentsline {subsection}{\numberline {5.6.2}Robustness Under Behaviour-Preserving Attacks}{84}{subsection.5.6.2}%
+\contentsline {section}{\numberline {5.7}Generalising to an Unseen Threat Source}{88}{section.5.7}%
+\contentsline {subsection}{\numberline {5.7.1}Profiling an Unseen Threat Distribution}{89}{subsection.5.7.1}%
+\contentsline {subsection}{\numberline {5.7.2}Detection Performance on Unseen Threats}{91}{subsection.5.7.2}%
+\contentsline {section}{\numberline {5.8}Interpretability and Decision Attribution}{93}{section.5.8}%
+\contentsline {subsection}{\numberline {5.8.1}Explaining a Decision Through Behaviour}{94}{subsection.5.8.1}%
+\contentsline {chapter}{\numberline {6}Conclusion, Limitations and Future Work}{96}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Conclusion}{96}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Limitations}{99}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Future Work}{100}{section.6.3}%
+\contentsline {chapter}{\nonumberline Bibliography}{102}{chapter*.41}%
 \providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 

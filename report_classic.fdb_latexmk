@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex report_classic"] 1787739092.22496 "report_classic.aux" "report_classic.bbl" "report_classic" 1787739094.8341 0
+["bibtex report_classic"] 1790599579.55544 "report_classic.aux" "report_classic.bbl" "report_classic" 1790599582.32111 0
   "./bibThesis.bib" 1787663240.49 20343 9622fe63ab1b2214529159847b39c790 ""
   "/usr/local/texlive/2026basic/texmf-dist/bibtex/bst/ieeetran/IEEEtran.bst" 1440712899 57748 7c8250ecf02814ce6ddc0cdbb63df1dd ""
-  "report_classic.aux" 1787739094.64 80918 b6d208cdfd8f977217c5749e70bbe327 "pdflatex"
+  "report_classic.aux" 1790599582.18 80697 3d0c260da2763da67780e687cbed42c1 "pdflatex"
   (generated)
   "report_classic.bbl"
   "report_classic.blg"
   (rewritten before read)
-["pdflatex"] 1787739092.25717 "report_classic.tex" "report_classic.pdf" "report_classic" 1787739094.83451 0
+["pdflatex"] 1790599579.58435 "report_classic.tex" "report_classic.pdf" "report_classic" 1790599582.32132 0
   "/usr/local/texlive/2026basic/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/local/texlive/2026basic/texmf-dist/fonts/tfm/adobe/courier/pcrr8r.tfm" 1136768653 1292 bd42be2f344128bff6d35d98474adfe3 ""
   "/usr/local/texlive/2026basic/texmf-dist/fonts/tfm/adobe/courier/pcrr8t.tfm" 1136768653 1384 4632f5e54900a7dadbb83f555bc61e56 ""
@@ -255,7 +255,6 @@
   "/usr/local/texlive/2026basic/texmf-var/web2c/pdftex/pdflatex.fmt" 1780150087 2966191 a89957048a192dc0db0c88c1e1586dc8 ""
   "/usr/local/texlive/2026basic/texmf.cnf" 1772405582 628 bbc09d6d38872d53c11bb48dc9b14e88 ""
   "img/UK_Logo.jpeg" 1780151697.91 23101 811c514895b63214432a9cc99a2bc540 ""
-  "img/baseline_clean_comparison.pdf" 1786296213.51 24403 47618ea023cd29ee02635f3a781c4008 ""
   "img/baseline_robustness_comparison.pdf" 1786296686.6 22891 a6454e4f04c2f31216f8a2ac3aef9bf0 ""
   "img/branch_removal.pdf" 1783891419.26 14383 9e8fdf72d6f6a1daacc08aa49fcf3054 ""
   "img/branch_usage.pdf" 1783873051.7 13886 b995a19d33beb208c8f312a4b314332e ""
@@ -263,16 +262,17 @@
   "img/dataset_characterisation.pdf" 1783891094.71 16949 5737231ad68167d40b9a59b2918cc532 ""
   "img/decision_explanation.pdf" 1786310975.82 30548 310fc91296fd939ab313c4b1edeaad88 ""
   "img/fine_ablation.pdf" 1783891419.69 19297 513259d666bedb86790ebd3d1a23732b ""
-  "img/semantic_no_structure.pdf" 1783967764.23 14551 fcfb2b923ce4132cd5d6c2ae11da5248 ""
+  "img/semantic_no_structure.pdf" 1790538247.1 11957 66536626eeb0f09f79ef9dca7d20e791 ""
   "img/semantic_substitution.pdf" 1783967646.7 14214 2b88feff28598b97eb5a800bf583dc10 ""
+  "img/signature.png" 1790590047.29 38610 035daeda7a1f611db20d1a59e955a886 ""
   "img/unseen_distribution_shift.pdf" 1786298430.25 35352 5f37c81eb3aba7bd5d2aa122e5dde69d ""
   "img/zeroday_detection_confidence.pdf" 1786299668.29 25787 212391f824a42d6ab1036b5527abad29 ""
-  "report_classic.aux" 1787739094.64 80918 b6d208cdfd8f977217c5749e70bbe327 "pdflatex"
-  "report_classic.bbl" 1787739092.25 14113 208faf4c56456c29e46892c46aef4514 "bibtex report_classic"
-  "report_classic.lof" 1787739094.66 1908 65989845d634618db2131c5956d0db95 "pdflatex"
-  "report_classic.lot" 1787739094.66 2589 dc8e3369675b7c1acec62c93c69cf4a4 "pdflatex"
-  "report_classic.tex" 1787739092.14 304225 4949d9e89451cb3a557b797163850328 ""
-  "report_classic.toc" 1787739094.66 9915 ef44100be7abe45c0f7f97fe0ba6e376 "pdflatex"
+  "report_classic.aux" 1790599582.18 80697 3d0c260da2763da67780e687cbed42c1 "pdflatex"
+  "report_classic.bbl" 1790599579.58 14113 208faf4c56456c29e46892c46aef4514 "bibtex report_classic"
+  "report_classic.lof" 1790599582.19 1793 d5090e76d053d26c66213f7c11da8d0c "pdflatex"
+  "report_classic.lot" 1790599582.19 2589 c604d71aa2329d7b680b47543bd2629a "pdflatex"
+  "report_classic.tex" 1790599568.27 300440 1dd4c54be8f3e2bdfcc6a0903c29df36 ""
+  "report_classic.toc" 1790599582.19 9914 57ceb9ec6d6b9d0b0af47c1a256bb466 "pdflatex"
   (generated)
   "report_classic.aux"
   "report_classic.lof"
