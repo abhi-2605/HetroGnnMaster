@@ -86,6 +86,7 @@ from __future__ import annotations
 
 import json
 import re
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -323,6 +324,11 @@ class ReportAdapterV2:
         """
         if cfg.USE_CALL_TIME_IF_PRESENT:
             time_val = self._coerce_float(raw_time)
+            if time_val is None:
+                # CAPE writes call times as text ('2022-02-14 14:41:31,276'); parse them the
+                # way data_processing/parse_cape_json.py did for the training graphs, so real
+                # pacing survives instead of falling back to synthetic index-based times.
+                time_val = self._parse_datetime_text(raw_time)
             if time_val is not None:
                 return time_val, "call_time"
             if raw_time is not None and raw_time != "": 
@@ -580,6 +586,26 @@ class ReportAdapterV2:
                     return None
 
         return None
+
+    @staticmethod
+    def _parse_datetime_text(value: Any) -> Optional[float]:
+        """
+        Text timestamps -> Unix seconds, mirroring data_processing/parse_cape_json.py:
+        - '2022-02-14 14:41:31,276' / '2022-02-14 14:41:31' (comma or dot milliseconds)
+        - ISO '2022-02-14T14:41:31.276'
+        """
+        if not isinstance(value, str) or not value.strip():
+            return None
+        text = value.strip().replace(",", ".")
+        try:
+            fmt = "%Y-%m-%d %H:%M:%S.%f" if "." in text else "%Y-%m-%d %H:%M:%S"
+            return datetime.strptime(text, fmt).timestamp()
+        except ValueError:
+            pass
+        try:
+            return datetime.fromisoformat(text).timestamp()
+        except ValueError:
+            return None
 
     def _safe_string(self, value: Any) -> str:
         if value is None:

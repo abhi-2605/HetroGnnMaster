@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<title>Viva Technical Q&amp;A</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm 16mm 15mm; }
+  :root { --ink:#1d2230; --muted:#5b6272; --rule:#d9dde5; --red:#c61a27; --tint:#f6f7f9; --sem:#0072b2; --str:#9a6700; --tmp:#00805c; }
+  * { box-sizing: border-box; }
+  body { font-family: Calibri, "Segoe UI", Arial, sans-serif; color: var(--ink); font-size: 10.3pt; line-height: 1.42; margin: 0; }
+  h1 { font-family: Cambria, Georgia, serif; color: var(--red); font-size: 24pt; margin: 0 0 4pt; }
+  .subtitle { color: var(--muted); margin: 0 0 10pt; }
+  h2 { font-family: Cambria, Georgia, serif; color: var(--red); font-size: 15pt; margin: 18pt 0 6pt; border-bottom: 1.5pt solid var(--red); padding-bottom: 2pt; break-after: avoid; }
+  h3 { font-size: 11pt; margin: 0 0 3pt; break-after: avoid; }
+  .q { border: 0.75pt solid var(--rule); border-left: 3pt solid var(--red); border-radius: 3pt; padding: 6pt 9pt; margin: 0 0 8pt; break-inside: avoid; background: #fff; }
+  .q p { margin: 3pt 0; }
+  .say { background: var(--tint); border-radius: 3pt; padding: 4pt 7pt; margin: 4pt 0; font-style: italic; }
+  .say::before { content: "Say: "; font-style: normal; font-weight: 700; color: var(--red); }
+  .honest { font-size: 9.4pt; color: var(--muted); border-top: 0.5pt dashed var(--rule); padding-top: 3pt; margin-top: 4pt; }
+  .honest::before { content: "Be honest: "; font-weight: 700; color: var(--ink); }
+  table { border-collapse: collapse; width: 100%; margin: 4pt 0; font-size: 9.4pt; break-inside: avoid; }
+  th, td { border: 0.5pt solid var(--rule); padding: 2.5pt 5pt; text-align: left; vertical-align: top; }
+  th { background: #eef0f4; }
+  code, .mono { font-family: Consolas, Menlo, monospace; font-size: 9pt; }
+  pre { font-family: Consolas, Menlo, monospace; font-size: 8.6pt; background: var(--tint); padding: 5pt 7pt; border-radius: 3pt; margin: 4pt 0; white-space: pre-wrap; break-inside: avoid; }
+  ul, ol { margin: 3pt 0; padding-left: 16pt; }
+  li { margin: 1pt 0; }
+  .toc { columns: 2; font-size: 9.6pt; margin: 6pt 0 0; }
+  .toc div { break-inside: avoid; margin-bottom: 2pt; }
+  .rules { border: 1pt solid var(--red); border-radius: 4pt; padding: 7pt 10pt; margin: 8pt 0; background: #fdf3f4; }
+  .rules ol { margin: 2pt 0; }
+  .pb { break-before: page; }
+  .small { font-size: 9pt; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<h1>Viva Technical Q&amp;A</h1>
+<p class="subtitle">K. A. Menon · HeteroTemporalGNN defence · questions worked through on 25–26 October 2026. Numbers are from the thesis (report.tex) or, where marked, from the code and results files. Companion to <span class="mono">presentation/QA_prep.md</span> and deck v11.</p>
+
+<div class="rules">
+<strong>Rules that apply to every answer</strong>
+<ol>
+  <li>Say what was measured; never claim a number for something that was not run (GAT-only, SAGE-only, depth, encoders, thresholds).</li>
+  <li>A gate weight is a coefficient in the mix, not a share of the decision (§6.2).</li>
+  <li>Attention weights are a mechanism, never the explanation. RQ4 uses gate weights and gradient × input only.</li>
+  <li>One end-to-end model with one loss. Never "ensemble", "combination" or "unification".</li>
+  <li>For "why X and not Y": the reason in one line, what Y would lose here, then the honest scope ("I did not compare X with Y").</li>
+</ol>
+</div>
+
+<div class="toc">
+  <div><strong>A</strong> Reading the results (false positives, exact class, 5.3 % vs 9.3 %, crying wolf, Fig. 5.9)</div>
+  <div><strong>B</strong> Graph and features (775 numbers, metadata, flags, leakage, probe)</div>
+  <div><strong>C</strong> Structural branch (message passing, GAT, GraphSAGE, hybrid gate)</div>
+  <div><strong>D</strong> Hybrid operator follow-ups and GAT vs SAGE examples</div>
+  <div><strong>E</strong> Fusion, trunk and decision</div>
+  <div><strong>F</strong> Training, then prediction, step by step</div>
+  <div><strong>G</strong> RQ4 attribution (gate weights, gradient × input)</div>
+  <div><strong>H</strong> "Why X and not Y?" design questions</div>
+  <div><strong>I</strong> The classical baseline's features</div>
+  <div><strong>J</strong> Formula reference</div>
+</div>
+
+<!-- ===================================================== A -->
+<h2>A · Reading the results</h2>
+
+<div class="q">
+<h3>A1. "A 5.4 % false-positive rate is too high to deploy." (QA F7)</h3>
+<p>The FPR is the share of benign files wrongly flagged: 16 of 299 = 5.4 %. In practice, if 1,000 harmless programs run a day, that is about 54 false alarms a day.</p>
+<ol>
+  <li><strong>It moves a lot with few mistakes.</strong> With 299 benign files, each one is about 0.3 points. The 5.4 % is 16 files (§4.1.2 makes FPR a first-class metric because it is this sensitive).</li>
+  <li><strong>No threshold was tuned.</strong> The decision is a fixed argmax (Eq. 4.8, §5.1), so 5.4 % is the untuned operating point.</li>
+  <li><strong>The trade-off is deliberate.</strong> A missed threat can encrypt data; a false alarm costs analyst time (§1.1). Result: 0 of 1,085 threats missed.</li>
+  <li><strong>It holds on new data:</strong> 6 of 200 (3 %) on the unseen-source evaluation.</li>
+</ol>
+<p class="say">It's 16 files out of 299, at an untuned operating point, chosen because missing a threat costs far more than reviewing a false alarm. I didn't tune a threshold, so I won't claim what that would give.</p>
+<p class="honest">A real deployment would calibrate a threshold on its own traffic; confidence calibration is future work (§6.3).</p>
+</div>
+
+<div class="q">
+<h3>A2. "Exact-class accuracy falls from 285 to 228 without semantics. What does that mean?" (Table 5.8)</h3>
+<p><strong>Threat recall</strong> only asks whether a threat was called a threat. <strong>Exact class</strong> needs the precise label, so ransomware called "other malware" counts as wrong.</p>
+<table>
+<tr><th>300 test graphs (237 threats, 63 benign)</th><th>Intact</th><th>No semantic</th></tr>
+<tr><td>Exact class correct</td><td>285</td><td>228</td></tr>
+<tr><td>Wrong overall</td><td>15</td><td>72</td></tr>
+<tr><td>Threats missed (called benign)</td><td>0</td><td>0</td></tr>
+<tr><td>False alarms</td><td>4</td><td>15</td></tr>
+<tr><td>Threats caught but given the wrong threat type*</td><td>11</td><td>57</td></tr>
+</table>
+<p class="small">*Derived by subtraction (wrong − missed − false alarms); not printed in Table 5.8.</p>
+<p class="say">Without semantics the model still catches every threat, but it gets 57 more samples' exact class wrong and flags more benign software. Semantics names the threat; structure catches it. That costs analyst workload, not safety.</p>
+</div>
+
+<div class="q">
+<h3>A3. "21 of 226 is 9.3 %, not 5.3 %." (Table 5.11)</h3>
+<table>
+<tr><th>Structure silenced, 300 graphs (226 threats)</th><th>No structure</th><th>+ synonym swap</th><th>+ random swap</th></tr>
+<tr><td>Accuracy</td><td>0.960</td><td>0.953</td><td>0.907</td></tr>
+<tr><td>Threats missed (of 226)</td><td>8</td><td>10 (4.4 %)</td><td>21 (9.3 %)</td></tr>
+<tr><td>Predictions changed (of 300)</td><td>n/a</td><td>0.7 %</td><td>5.3 %</td></tr>
+</table>
+<p class="say">5.3 % is the share of all 300 predictions that changed. 21 missed is 9.3 % of the 226 threats, so over 90 % are still detected. The comparison that matters is synonym against random: 0.7 % against 5.3 % on the same footing.</p>
+<p class="honest">0.907 accuracy and ~90.7 % threat recall are the same by coincidence. Slide 9 (deck v6 onward) shows 4.4 % / 9.3 % of 226 with 0.7 % / 5.3 % of predictions underneath.</p>
+</div>
+
+<div class="q">
+<h3>A4. "The BiLSTM misses no threat under renaming, so it is robust?"</h3>
+<p>No. Under renaming it calls every trace a threat: all 200 benign traces flagged, macro-F1 0.136 (Table 5.13). §5.6.2: "an artefact of surrender rather than skill".</p>
+<p class="say">A detector that flags everything catches every threat trivially while distinguishing nothing. Its own attack, reordering, it does survive (0.728). Under renaming it cries wolf, and the framework flags only 7 of 200 with no threat missed.</p>
+</div>
+
+<div class="q">
+<h3>A5. "Where does the framework's 0.758 on slide 10 come from? It isn't in Table 5.13."</h3>
+<p>Slide 10's chart is thesis <strong>Figure 5.9</strong>. Its Sequential group is the <strong>reorder</strong> attack: BiLSTM 0.728, framework 0.758 (also in <span class="mono">results/sequential_baseline/comparison_summary.json</span>, reorder_attack, 0 missed). Table 5.13 prints only the framework's rename row (0.744).</p>
+<p class="say">That's the framework under the same reordering attack, plotted in Figure 5.9. Table 5.13 lists only its rename row. Under reordering it misses no threat.</p>
+</div>
+
+<!-- ===================================================== B -->
+<h2>B · Graph and features</h2>
+
+<div class="q">
+<h3>B1. "What do you mean by 775 numbers?"</h3>
+<p>A network reads numbers, not text, so every API-call node carries a vector of 775 numbers:</p>
+<pre>NtWriteFile  →  [0.021, −0.087, …, −0.031,   0.42, 0.284, 1, 0, 0, 0, 0]
+                 └──── 768 from MPNet ────┘   └────── 7 metadata ──────┘</pre>
+<ul>
+  <li><strong>768 MPNet numbers</strong> say what the call means. One number alone means nothing; similar calls get similar lists (CryptEncrypt ≈ CryptEncryptEx). Each distinct name is encoded once and reused.</li>
+  <li><strong>7 metadata numbers</strong> describe this occurrence (B2).</li>
+  <li>Resource nodes carry <strong>6</strong> numbers; each temporal edge carries <strong>14</strong> timing numbers (Table 4.2).</li>
+  <li>The first layer projects API nodes 775 → 128 and resource nodes 6 → 64.</li>
+</ul>
+<p class="say">Each API call becomes 775 numbers: 768 from MPNet that say what the call means, plus 7 that say when it happened, which process made it, and a coarse category.</p>
+</div>
+
+<div class="q">
+<h3>B2. "What are the 7 metadata numbers, and what are the flags?"</h3>
+<p>Two are numbers, five are yes/no flags (<span class="mono">enrich_graphs_v2.py:323–334</span>):</p>
+<table>
+<tr><th>Position</th><th>Feature</th><th>Set to 1 if the name contains…</th></tr>
+<tr><td>768</td><td>time (0 = start, 1 = end)</td><td>number</td></tr>
+<tr><td>769</td><td>process id ÷ 10,000</td><td>number</td></tr>
+<tr><td>770</td><td>file flag</td><td>"file", "read", "write"</td></tr>
+<tr><td>771</td><td>registry flag</td><td>"reg", "key"</td></tr>
+<tr><td>772</td><td>process flag</td><td>"process", "thread"</td></tr>
+<tr><td>773</td><td>network flag</td><td>"socket", "connect", "send"</td></tr>
+<tr><td>774</td><td>crypto flag</td><td>"crypt", "encrypt"</td></tr>
+</table>
+<p>The flags are crude word matches: WriteProcessMemory gets file + process; CryptGenKey gets registry ("key") + crypto; GetSystemTime gets none.</p>
+<p><strong>Why needed:</strong> every NtWriteFile has the same 768 numbers. Time and process separate the first write from the thousandth; the flags are a cheap category hint.</p>
+<p class="honest">In compressed test graphs, columns 770–772 sometimes hold values between 0 and 1; the cause was not traced. Say the flags are set as 0/1 at graph construction.</p>
+</div>
+
+<div class="q">
+<h3>B3. "Isn't adding the metadata cheating?"</h3>
+<ol>
+  <li><strong>No label leakage.</strong> All 7 come from the call record alone (name, time, process), by the same rule for every class, and are available at prediction time.</li>
+  <li><strong>Sandbox fingerprint risk</strong> (most benign samples come from Hybrid Analysis): the 110 unseen-source threats also come from Hybrid Analysis, and all 110 were caught. A model that had learned "this sandbox = benign" would have missed them.</li>
+  <li><strong>RQ1 substitution kept the flags</strong> (only <span class="mono">api.x[:, :768]</span> is swapped). But both regimes keep identical flags, so the 0.7 % vs 5.3 % gap comes from the embedding alone; and the random swap still raised missed threats from 8 to 21.</li>
+</ol>
+<p class="say">MPNet says what a call is; the metadata says which occurrence it is. It's computed from the call alone, carries no label, and the unseen-source result rules out the model learning the sandbox instead of the behaviour.</p>
+<p class="honest">How the §5.6 rename attack treats the 7 numbers was not traced; don't claim either way.</p>
+</div>
+
+<div class="q">
+<h3>B4. Informal probe: do the flags matter? (run 25 Oct 2026, not in the thesis)</h3>
+<p>100 test samples (76 threats, only 2 ransomware; 24 benign), <span class="mono">best_model_1.pt</span>, full model:</p>
+<table>
+<tr><th>Condition</th><th>Missed (of 76)</th><th>False alarms (of 24)</th><th>Exact (of 100)</th><th>Verdicts changed</th></tr>
+<tr><td>Clean</td><td>2</td><td>1</td><td>95</td><td>n/a</td></tr>
+<tr><td>5 flags off</td><td>1</td><td>2</td><td>95</td><td>2 / 100</td></tr>
+<tr><td>All 7 metadata off</td><td>4</td><td>0</td><td>94</td><td>3 / 100</td></tr>
+<tr><td>Random embedding swap (flags kept)</td><td>4</td><td>1</td><td>93</td><td>2 / 100</td></tr>
+<tr><td>Random swap + flags off</td><td>4</td><td>2</td><td>92</td><td>3 / 100</td></tr>
+</table>
+<p class="say">The flags are a weak hint. Switching them off changes about 2 % of verdicts, and removing them on top of a random swap changes one more sample in 100, so they weren't what protected the model.</p>
+<p class="honest">Informal: 100 samples, one run, structure present (the RQ1 claim is with structure silenced, which was not probed). The clean run misses 2 here because this harness and subset differ from the main 0-of-1,085 evaluation; don't compare them directly. Say "I checked afterwards", not "the thesis shows".</p>
+</div>
+
+<div class="q">
+<h3>B5. "Why does the 110-sample result not prove the flags don't matter?"</h3>
+<p>The 110 use mostly the same Windows API names, so their flags were computed and present as in training. They test the absence of a sandbox shortcut, not the absence of flags.</p>
+</div>
+
+<!-- ===================================================== C -->
+<h2 class="pb">C · Structural branch</h2>
+
+<div class="q">
+<h3>C1. "How does a graph neural network learn?" (message passing, Eq. 3.2–3.3)</h3>
+<p>Every node starts with its own vector. In each layer it collects messages from its neighbours, combines them, and updates itself. After two layers a node knows about neighbours two steps away.</p>
+<p class="say">Each node asks its neighbours what they are and updates its idea of itself from the answers. GAT and GraphSAGE are two rules for combining those answers.</p>
+</div>
+
+<div class="q">
+<h3>C2. "How does GAT work?" (Eq. 3.7–3.10)</h3>
+<ol>
+  <li>Score each neighbour j for relevance to node i: e<sub>ij</sub> = LeakyReLU(aᵀ[W h<sub>i</sub> ‖ W h<sub>j</sub>]).</li>
+  <li>Softmax the scores into weights α<sub>ij</sub> that sum to 1.</li>
+  <li>Take the weighted sum of the neighbours.</li>
+</ol>
+<p>Six heads run in parallel and are concatenated (API nodes: 128 × 6 = 768). In this model the projected edge (timing) features enter the score as a third additive term (§4.4.2), so timing changes how much each neighbour counts.</p>
+<p class="say">One process spawn or registry-persistence write can matter more than thousands of routine reads. A plain average would bury it; attention can pick it out.</p>
+</div>
+
+<div class="q">
+<h3>C3. "How does GraphSAGE work?" (Eq. 3.12)</h3>
+<p>Average the neighbours, join that with the node's own vector, and pass it through one learned layer. No per-neighbour weighting. It is <strong>inductive</strong>: it learns a rule, not a vector per specific node, so it works on files, processes and endpoints never seen in training.</p>
+<p><strong>Your modification:</strong> standard SAGE ignores edge features, so timing would never reach it. Here each message is m<sub>uv</sub> = h<sub>u</sub> + W<sub>e</sub> e<sub>uv</sub>, added before averaging. In SAGE timing changes <em>what</em> a message says; in GAT it changes <em>how much</em> it counts.</p>
+<p class="say">Attention scores are learned from the training data, so they are least reliable on neighbourhoods unlike it, which is what a new threat produces. A plain average has less to get wrong there.</p>
+</div>
+
+<div class="q">
+<h3>C4. "Why both? How are they combined?" (Eq. 4.1–4.2)</h3>
+<table>
+<tr><th></th><th>Strength</th><th>Weakness</th></tr>
+<tr><td>GAT</td><td>finds the one decisive edge</td><td>least reliable on unfamiliar graphs</td></tr>
+<tr><td>GraphSAGE</td><td>stable on unseen graphs</td><td>treats all neighbours the same</td></tr>
+</table>
+<pre>g_v = σ( MLP[ h_GAT ‖ h_SAGE ‖ 2.0 · |h_GAT − h_SAGE| ] )      one value per node AND per feature
+h_v = g_v ⊙ h_GAT + (1 − g_v) ⊙ h_SAGE</pre>
+<p>The gate bias starts at −0.85, so σ ≈ 0.30: training starts 70 % SAGE, because attention scores are random early on. It is only a starting point.</p>
+<p class="say">They fail in opposite ways, so both read the same messages, and a gate that looks at where they disagree decides, per node and per feature, how much of each to keep.</p>
+</div>
+
+<div class="q">
+<h3>C5. "Is it one GAT for the whole graph?" (Eq. 3.5)</h3>
+<p>No. Each of the 5 relation types has its own hybrid operator with its own weights, two layers, and the results are summed at each node. That is why structural message passing holds 87 % of the 16.1 M parameters: GAT 3.76 M, SAGE 3.73 M, gate 6.50 M (slide 5 carries this line and the formula).</p>
+</div>
+
+<div class="q">
+<h3>C6. "Why two layers?"</h3>
+<p>The report states two layers (§4.4.2; <span class="mono">NUM_GNN_LAYERS = 2</span>) but gives no depth study.</p>
+<ul>
+  <li>One hop: an API call sees its process, the resource it touched, and the calls just before and after.</li>
+  <li>Two hops: a call sees other calls that touched the same file or ran in the same process; a process sees which resources its calls touched (process → API → file).</li>
+  <li>The sequence-wide order is read by the BiLSTM, so the graph layers need not reach far along the chain.</li>
+  <li>Every layer adds weights for all five relations; graphs reach 1.5 M API nodes before capping.</li>
+  <li>The GCN and GAT baselines also use 2 layers (§5.1.3), so the comparison is like for like.</li>
+</ul>
+<p class="say">Two hops joins a process, through its calls, to the files, keys and endpoints they touch. Long-range order is the BiLSTM's job. I didn't tune depth, and I'd say so.</p>
+<p class="honest">Over-smoothing with many layers is general GNN background, not something the thesis tested.</p>
+</div>
+
+<div class="q">
+<h3>C7. "Why not only GraphSAGE?"</h3>
+<ol>
+  <li><strong>Sparse evidence.</strong> SAGE "treats all neighbours of a relation uniformly and therefore cannot emphasise the rare, salient interaction" (§4.4.2). One persistence write among thousands of reads is diluted.</li>
+  <li><strong>Timing enters GAT's weighting.</strong> In SAGE timing is only added to the message.</li>
+  <li><strong>The gate kept using GAT.</strong> The mean moves 0.30 → 0.28 but the spread doubles: GAT is used strongly on some nodes. If it were useless the gate could have switched it off.</li>
+</ol>
+<p class="say">GraphSAGE alone would average away the one edge that matters. GAT can single it out, and timing feeds its weighting. The gate starts mostly SAGE and learns, node by node, where attention is worth trusting.</p>
+<p class="honest">No SAGE-only or GAT-only variant was trained; there is no measured gain from adding either.</p>
+</div>
+
+<!-- ===================================================== D -->
+<h2>D · Hybrid operator follow-ups</h2>
+
+<table>
+<tr><th style="width:36%">Question</th><th>Answer</th></tr>
+<tr><td>Why not only GAT?</td><td>Attention is least reliable on unfamiliar neighbourhoods, which new threats produce; SAGE's average has less to get wrong. Hence the 70 % SAGE start.</td></tr>
+<tr><td>Why not GCN?</td><td>GCN averages with fixed degree-based weights, not learned, and reads no edge features, so it can neither single out an edge nor use timing. It is used as a baseline (§5.1).</td></tr>
+<tr><td>Why a learned gate, not concatenation or averaging?</td><td>Those fix one blend for every node. The gate blends per node and per feature.</td></tr>
+<tr><td>Why feed |GAT − SAGE| to the gate?</td><td>Where they agree the choice is immaterial; where they disagree the gate must decide, so the disagreement is given to it directly (λ<sub>d</sub> = 2.0).</td></tr>
+<tr><td>Why a sigmoid here?</td><td>Two options need one value: g of attention, 1 − g of SAGE, per feature.</td></tr>
+<tr><td>Why −0.85?</td><td>σ(−0.85) ≈ 0.30, so 70 % SAGE at the start, while attention scores are still random.</td></tr>
+<tr><td>Is the hybrid doing anything? (QA C7)</td><td>The mean barely moves but the spread doubles: it differentiates per node.</td></tr>
+<tr><td>Did you sample neighbours, as GraphSAGE normally does?</td><td>No; the aggregator is sampling-free and uses the full neighbourhood. Large graphs are handled by compression, capping above 100,000 nodes and size-aware batching.</td></tr>
+<tr><td>Why mean aggregation in SAGE, not max?</td><td>The mean is SAGE's role: the stable, unweighted summary. Picking the extreme neighbour is GAT's job. Aggregators were not compared.</td></tr>
+<tr><td>Why 6 heads?</td><td>A design choice, not tuned; 128 × 6 = 768 keeps API nodes wide enough for the semantic signal.</td></tr>
+<tr><td>Isn't running both expensive?</td><td>Yes: GAT 3.76 M, SAGE 3.73 M, the per-feature gate 6.50 M. That is the cost of arbitrating per node and feature across five relations and two layers.</td></tr>
+<tr><td>Can you show attention as the explanation? (QA C8)</td><td>No. Attention shows where the model looked, not what decided.</td></tr>
+<tr><td>Did you test GAT-only or SAGE-only?</td><td>No, and no measured gain is claimed. The case is the design argument plus the gate's behaviour. The static GAT baseline misses 144 of 275 under graph perturbation versus at most 2 for the framework, but that gap also comes from the other branches (QA D8).</td></tr>
+</table>
+
+<div class="q">
+<h3>D1. "Give an example of where GAT helps and where SAGE helps."</h3>
+<p class="small">Illustrative of the design intent; the thesis reports only the gate's mean and spread, not per-node usage.</p>
+<table>
+<tr><th>GAT: one edge decides, in a familiar neighbourhood</th><th>SAGE: unfamiliar neighbourhood, or volume is the evidence</th></tr>
+<tr><td>Process injection: hundreds of routine <em>executes</em> edges plus one WriteProcessMemory / CreateRemoteThread</td><td>A new threat from a new source (RQ5's 110 threats)</td></tr>
+<tr><td>Persistence: thousands of registry reads and one write to a Run key</td><td>Mass file activity: a process writing thousands of files the same way</td></tr>
+<tr><td>Encryption burst on the temporal spine: gaps under 0.1 s, weighted up via the edge features</td><td>New files, endpoints, processes never seen in training (inductive)</td></tr>
+<tr><td>One network contact among many file operations</td><td>Early training, while attention scores are still random</td></tr>
+</table>
+<p class="say">If one persistence write hides among a thousand reads, attention finds it. If the whole neighbourhood is new, or the evidence is a thousand similar writes, the average is the safer read. The gate decides which situation each node is in.</p>
+</div>
+
+<!-- ===================================================== E -->
+<h2 class="pb">E · Fusion, trunk and decision</h2>
+
+<div class="q">
+<h3>E1. "How are the branch weights computed? What is the MLP?" (Eq. 4.3–4.4)</h3>
+<p>MLP = multi-layer perceptron, a small ordinary network (<span class="mono">tgnn_model.py:373–379</span>):</p>
+<pre>[z_sem ‖ z_str ‖ z_tmp]  (128+128+128 = 384)
+  → Linear 384→128 → LayerNorm → GELU → Dropout → Linear 128→3 → softmax  =  w (3 weights, sum to 1)</pre>
+<p>The MLP only produces the weights. Fusion is plain arithmetic with no learned weights: each weight multiplies all 128 numbers of its branch.</p>
+<pre>z = w_sem·z_sem + w_str·z_str + w_tmp·z_tmp
+toy: 0.66·[0.9, 0.1] + 0.15·[0.2, 0.3] + 0.19·[0.4, 0.6] = [0.70, 0.225]</pre>
+<p><strong>How does the MLP "know the context"?</strong> Its input is this sample's own 384 numbers, and training taught it which weighting reduced the loss for inputs like these. Semantics averages 0.661 for ransomware and 0.223 for benign; nobody set those values.</p>
+<p class="say">For every sample, a small network reads the three branch summaries and outputs three weights that sum to one. The fused vector is their weighted mix.</p>
+</div>
+
+<div class="q">
+<h3>E2. "Doesn't the entropy penalty force balanced weights?" (Eq. 4.5, QA F2)</h3>
+<pre>L_bal = 0.01 · max(0, 0.75 − H(w)/log 3)        H(w) = −Σ w_i log w_i</pre>
+<p>The 0.75 is a threshold on normalised entropy (0 = all on one branch, 1 = even), not a 75 % weight.</p>
+<table>
+<tr><th>Gate weights</th><th>Entropy</th><th>Penalty</th></tr>
+<tr><td>(0.35, 0.35, 0.30)</td><td>≈ 0.998</td><td>0</td></tr>
+<tr><td>(0.66, 0.15, 0.19)</td><td>≈ 0.80</td><td>0</td></tr>
+<tr><td>(0.70, 0.15, 0.15)</td><td>≈ 0.745</td><td>≈ 0.00005 (where it starts)</td></tr>
+<tr><td>(0.80, 0.10, 0.10)</td><td>≈ 0.58</td><td>0.0017</td></tr>
+<tr><td>(0.98, 0.01, 0.01)</td><td>≈ 0.10</td><td>0.0065</td></tr>
+</table>
+<p><strong>How the model "amends" it:</strong> the penalty is added to the loss; its gradient nudges the gate MLP towards spreading weight. At λ = 0.01 it is tiny, so the classification loss overrides it whenever specialising actually helps.</p>
+<p class="say">It's zero unless the weights become almost one-hot, and the gate moves freely inside that range. I'll concede it rules out near one-hot weights like 0.8 / 0.1 / 0.1.</p>
+<p class="honest">The report's reason is preventing collapse "before the slower-converging branches have become informative" (§4.4.4); it does not name which branch is faster. Branch dropout (0.05) is drawn once per batch in the code, not per sample; say "per training step".</p>
+</div>
+
+<div class="q">
+<h3>E3. "What happens after fusion?" (§4.4.5; code lines 1066–1088)</h3>
+<pre>z (128) + 15 behavioural statistics  = x (143)
+  → TRUNK: Linear 143→256 → LayerNorm → GELU → Dropout → Linear 256→128 → LayerNorm → GELU → Dropout = t (128)
+  → 3 HEADS, each Linear 128→1:  ransomware | benign | other malware  = 3 logits
+  → softmax → 3 probabilities → argmax → binary projection</pre>
+<ul>
+  <li><strong>Behavioural statistics:</strong> for each of 5 node types, mean and spread of its hidden states (each one number) and log(1 + count) = 15 numbers. Averaging hides volume (5 files and 5,000 files can pool the same); these restore it. Not normalised in the reported checkpoint.</li>
+  <li><strong>Trunk:</strong> mixes z and the volume numbers into 128 features, e.g. "crypto-like <em>and</em> thousands of files". Shared by all heads.</li>
+  <li><strong>Heads:</strong> each is one weighted sum of the 128 features plus a bias, with its own 128 weights. Order is fixed: 0 ransomware, 1 benign, 2 other malware.</li>
+</ul>
+<table>
+<tr><th>Head (toy, t = [0.8, 0.3])</th><th>Weights · t + bias</th><th>Logit</th><th>e<sup>logit</sup></th><th>Probability</th></tr>
+<tr><td>ransomware</td><td>2.0×0.8 + 1.5×0.3 + 0.05</td><td>2.1</td><td>8.17</td><td>0.71</td></tr>
+<tr><td>benign</td><td>−1.0×0.8 + 0.5×0.3 + 0.15</td><td>−0.5</td><td>0.61</td><td>0.05</td></tr>
+<tr><td>other malware</td><td>1.0×0.8 + 0.5×0.3 + 0.05</td><td>1.0</td><td>2.72</td><td>0.24</td></tr>
+</table>
+<p>Argmax = ransomware, a threat class, so the verdict is THREAT. Either malicious class counts as a threat (Eq. 4.8).</p>
+<p class="say">The trunk gives 128 features; each of three heads takes its own weighted sum to get one score per class; softmax turns the scores into probabilities, and the highest decides.</p>
+</div>
+
+<div class="q">
+<h3>E4. "What is fixed in advance, and what is learned?"</h3>
+<table>
+<tr><th>Fixed by design</th><th>Learned in training</th></tr>
+<tr><td>3 heads, 128 → 1 each; class order; softmax + argmax + binary projection; all layer sizes</td><td>Every weight and bias: 129 per head (387 for all three), and all 16.1 M parameters; saved in <span class="mono">best_model_1.pt</span> and frozen</td></tr>
+</table>
+<p>Three Linear(128 → 1) heads are mathematically the same as one Linear(128 → 3); it is a code choice. The trunk's and heads' weights start random; the gradient of the loss pushes the true class's head score up and the others down.</p>
+</div>
+
+<!-- ===================================================== F -->
+<h2 class="pb">F · Training, then prediction, step by step</h2>
+
+<div class="q">
+<h3>Phase A · Build the dataset (once)</h3>
+<ol>
+  <li>Collect reports: Carpenter–Luo CAPE reports (VirusTotal labels) plus Hybrid Analysis (mainly benign, plus recent threats).</li>
+  <li>Normalise both formats into one; de-duplicate resource references; filter background network traffic.</li>
+  <li>Discard traces with fewer than 10 API calls; tag each as rich, low-activity or very sparse.</li>
+  <li>Build the graph: one node per call, temporal edges between consecutive calls, resource nodes linked by executes / operates_on / modifies / connects_to.</li>
+  <li>API nodes: MPNet(name) 768 + 7 metadata = 775. Resource nodes: 6.</li>
+  <li>Temporal edges: 14 timing features.</li>
+  <li>Compress identical back-to-back calls under 1 s apart; cap graphs over 100,000 nodes to 30,000, protecting cross-type and spike-adjacent nodes.</li>
+  <li>Split 9,333 graphs 70 / 15 / 15, stratified; withhold the extra held-out threats and the 110 unseen-source threats.</li>
+</ol>
+</div>
+
+<div class="q">
+<h3>Phase B · Create the model</h3>
+<p>Read the schema (node types, relations, feature sizes) and build every layer. All 16.1 M weights start random, except the GAT/SAGE gate bias, set to −0.85.</p>
+</div>
+
+<div class="q">
+<h3>Phase C · One training batch</h3>
+<ol>
+  <li><strong>Pick samples:</strong> oversampling weights 9.0 ransomware / 3.5 benign / 1.2 other malware; size-aware batches (64 small graphs, down to 1 above 100,000 nodes).</li>
+  <li><strong>Vary them (training only):</strong> graph augmentation (feature noise, some edges withheld, more often for rarer classes); timing noise with p = 0.2, σ = 0.05.</li>
+  <li><strong>Forward pass:</strong> projections (775 → 128, 6 → 64) → semantic mean → 2 hybrid message-passing layers → structural mean → BiLSTM (2 layers, 126 per direction) + 6-head attention pooling → branch dropout 0.05 → gate → fusion → +15 statistics → trunk → 3 heads → softmax.</li>
+  <li><strong>Loss:</strong> focal loss −α(1 − p)²·log p, α = (0.39, 0.39, 0.42), plus the balance penalty. Easy sample p = 0.9 → factor 0.01; hard p = 0.3 → 0.49.</li>
+  <li><strong>Backward pass:</strong> the gradient of the loss for every weight.</li>
+  <li><strong>Update:</strong> clip gradients to norm 1.0; AdamW step, learning rate 10⁻⁴, weight decay 10⁻³.</li>
+</ol>
+</div>
+
+<div class="q">
+<h3>Phase D · After each epoch</h3>
+<ol>
+  <li>Validate (no learning, no dropout, no noise): macro-F1 and per-class recall.</li>
+  <li>Save only if macro-F1 is the best so far <em>and</em> ransomware recall ≥ 0.40 and benign recall ≥ 0.52.</li>
+  <li>Reduce the learning rate on plateau.</li>
+  <li>Stop after 20 epochs without improvement, or at 125 epochs. The kept checkpoint is <span class="mono">best_model_1.pt</span>.</li>
+  <li>Test once on the untouched test split with the binary projection: 0 of 1,085 threats missed, 16 of 299 false alarms.</li>
+</ol>
+</div>
+
+<div class="q">
+<h3>Phase E · Prediction for a new report</h3>
+<ol>
+  <li>Get the sandbox JSON report.</li>
+  <li>Same preparation as Phase A (<span class="mono">pipeline_v2</span>: adapter → builder → enricher). An unseen API name is simply encoded by MPNet.</li>
+  <li>Load <span class="mono">best_model_1.pt</span> in evaluation mode: dropout, augmentation, noise and branch dropout off; no loss; weights frozen.</li>
+  <li>One forward pass → 3 probabilities → argmax → threat / benign. No tuned threshold.</li>
+  <li>Explain: gate weights plus gradient × input saliency (G).</li>
+</ol>
+<table>
+<tr><th></th><th>Training</th><th>Prediction</th></tr>
+<tr><td>Weights</td><td>change every batch</td><td>frozen</td></tr>
+<tr><td>Dropout, branch dropout, noise, augmentation</td><td>on</td><td>off</td></tr>
+<tr><td>Loss and backward pass</td><td>yes</td><td>no</td></tr>
+</table>
+<p class="say">Each trace becomes a typed graph with MPNet meaning on the calls and 14 timing features on the edges. The model starts random; batch by batch, focal loss plus a small gate penalty is back-propagated and AdamW updates all 16.1 M weights. The best validation checkpoint that clears the recall floors is kept. At prediction time a new report goes through the same pipeline into the frozen model.</p>
+</div>
+
+<!-- ===================================================== G -->
+<h2 class="pb">G · RQ4 attribution</h2>
+
+<div class="q">
+<h3>G1. "How is attribution calculated?"</h3>
+<p><strong>Level 1, gate weights:</strong> read directly from the forward pass (<span class="mono">model._last_branch_weights</span>). They are the exact coefficients used to build z for this sample. Thesis example (§5.8, Fig. 5.10, slide 12; held-out malware, threat at 0.95): <strong>temporal 0.39</strong>, structural 0.31, semantic 0.29.</p>
+<p><strong>Level 2, gradient × input saliency</strong> (<span class="mono">compute_gradient_x_input_saliency</span>, <span class="mono">explain_rq4_behavioral_decisions.py:595</span>):</p>
+<ol>
+  <li>Copy the API node features with gradient tracking on.</li>
+  <li>Forward pass; take the predicted-class logit.</li>
+  <li><span class="mono">score.backward()</span>: a gradient for each of the 775 numbers of every API node.</li>
+  <li>S<sub>v</sub> = Σ<sub>d</sub> | x<sub>v,d</sub> · ∂score/∂x<sub>v,d</sub> |, one score per call.</li>
+  <li>Divide by the largest, so the top call = 1.0.</li>
+</ol>
+<table>
+<tr><th>Toy call</th><th>x</th><th>gradient</th><th>x × gradient</th><th>S</th><th>normalised</th></tr>
+<tr><td>NtDuplicateObject</td><td>[0.10, −0.05, 1.0]</td><td>[2.0, 1.0, 0.8]</td><td>[0.20, −0.05, 0.80]</td><td>1.05</td><td>1.00</td></tr>
+<tr><td>GetSystemTime</td><td>[0.08, 0.02, 0.0]</td><td>[0.5, −1.0, 3.0]</td><td>[0.04, −0.02, 0.00]</td><td>0.06</td><td>0.06</td></tr>
+</table>
+<p>A large gradient on a feature whose value is 0 contributes nothing; that is why the gradient is multiplied by the input.</p>
+<p><strong>Thesis result:</strong> NtDuplicateObject (maximum), NtAddAtomEx / NtFindAtom, setsockopt, NtOpenEvent, CryptCreateHash / CryptDestroyHash, NtSetInformationFile; in bursts, from the sample's own process.</p>
+<p class="say">Level one reads the gate's three weights: which kind of evidence. Level two back-propagates the predicted-class score to every API node and multiplies gradient by input: which calls pushed it. Both are quantities the model computed for this decision, not a separate explainer.</p>
+<p class="honest">§5.8 describes "the gradient of the predicted-class score"; the code computes gradient × input, so use that term. It is an interpretability aid, not causal proof; one illustrative sample, but the method runs on every prediction (the webapp does it per upload).</p>
+</div>
+
+<div class="q">
+<h3>G2. "The gradient is for that sample? And what is the input?"</h3>
+<p>Yes: the gradient comes from this sample's own forward pass. The <strong>input</strong> is the 775 numbers on each API node as they enter the model (<span class="mono">api.x</span>, before projection), not the text and not the raw report. Only API nodes are scored; resource nodes and edge timing are not.</p>
+<p>Every NtWriteFile shares the same 768 MPNet numbers, yet occurrences get different saliency, because their gradients (graph position) and 7 metadata numbers differ. Saliency picks out which occurrence mattered.</p>
+</div>
+
+<!-- ===================================================== H -->
+<h2 class="pb">H · "Why X and not Y?" design questions</h2>
+<p class="small">Already in QA_prep.md: BiLSTM vs transformer / Mamba (C2), bidirectional (C3), semantic mean (C1), three classes (C4, G5), focal α (C5), recall floors (C6), regularisers (C9), batching (C10), heterogeneous (C12), R-GCN / HGT (F9), MPNet on names (F8), TF-IDF baseline (F6), attention as explanation (C8).</p>
+<table>
+<tr><th style="width:33%">Question</th><th>Answer</th></tr>
+<tr><td colspan="2"><strong>Representation</strong></td></tr>
+<tr><td>Why MPNet, not BERT, CodeBERT or word2vec?</td><td>As a sentence-transformer it is trained so similar meaning gives close vectors, which renaming robustness needs; plain BERT gives poor sentence-level vectors without that (§3.9). Encoders were not compared.</td></tr>
+<tr><td>Why not fine-tune MPNet?</td><td>Each name is encoded once and cached, so no language model runs inside the detector; frozen, it keeps general English meaning, which places a renamed or new call next to its equivalents. Fine-tuning not tested.</td></tr>
+<tr><td>Why embed only the name, not arguments?</td><td>The name carries the operation's meaning; paths and handles vary per run and machine. A fair extension, not tested.</td></tr>
+<tr><td>Why one node per call, not per distinct API?</td><td>It keeps order and timing; the temporal spine needs every occurrence. Merging into one node per API (as GraphShield's clusters do) loses when and how often.</td></tr>
+<tr><td>Why hand-crafted timing features?</td><td>Pacing becomes a number the model reads directly (§4.2.3); the BiLSTM still learns order on top, so timing is read twice.</td></tr>
+<tr><td>Why a 0.1 s burst threshold?</td><td>To catch many operations within a fraction of a second, as in mass encryption. Not tuned; burst intensity and windowed ratio add other views.</td></tr>
+<tr><td>Why cap at 30,000 nodes?</td><td>Only graphs over 100,000 are capped, protecting cross-type and spike-adjacent nodes (§4.2.4); compression only merges identical back-to-back calls under 1 s apart.</td></tr>
+<tr><td colspan="2"><strong>Architecture</strong></td></tr>
+<tr><td>Softmax for the branch gate, sigmoid for GAT/SAGE?</td><td>Three branches: softmax makes the weights compete and sum to 1. Two operators: one sigmoid value g and 1 − g, per feature.</td></tr>
+<tr><td>Why three heads, not one output layer?</td><td>Three Linear(128 → 1) equal one Linear(128 → 3), the same 387 numbers. A code choice; claim nothing for it.</td></tr>
+<tr><td>Why 128 dimensions?</td><td>Capacity against memory on graphs up to 30,000 nodes. Not tuned.</td></tr>
+<tr><td>Attention pooling in the temporal branch, mean elsewhere?</td><td>Malicious activity can be a short burst in a long trace; a mean would bury it. The semantic mean is deliberate (C1).</td></tr>
+<tr><td>Behavioural statistics: a hand-crafted shortcut?</td><td>Pooling hides volume. They are counts, means and spreads of the model's own node states, available for every sample, with no label (§4.4.5).</td></tr>
+<tr><td>Why log counts?</td><td>Counts span 10 to 30,000+; without the log the largest graphs dominate.</td></tr>
+<tr><td colspan="2"><strong>Training and evaluation</strong></td></tr>
+<tr><td>Focal loss, not weighted cross-entropy?</td><td>Weighting changes how much each class counts; focal also down-weights easy samples, so training focuses on hard ones, mostly minority-class (§4.5.1).</td></tr>
+<tr><td>Macro-F1 for checkpoints, not threat recall?</td><td>Threat recall alone rewards flagging everything (the BiLSTM's crying wolf). Macro-F1 weighs all classes; the floors guard the minority classes.</td></tr>
+<tr><td>Gradient × input, not SHAP, GNNExplainer, Integrated Gradients?</td><td>The model's own gradients, one backward pass, no separate explainer. Not compared; §5.8 calls it an aid, not causal proof.</td></tr>
+<tr><td>Random stratified split, not time-based?</td><td>A time-based split was not done. The distribution-shift test is RQ5 (different sandbox and source). For leakage, see QA B4.</td></tr>
+<tr><td>Why AdamW, learning rate 10⁻⁴?</td><td>Standard, stable settings, with gradient clipping at 1.0 for the wide range of graph sizes. Not tuned by search.</td></tr>
+</table>
+
+<!-- ===================================================== I -->
+<h2>I · The classical baseline's features</h2>
+<div class="q">
+<h3>I1. "You crippled the classical baseline by giving it only TF-IDF tokens." (QA F6)</h3>
+<p>The baseline uses TF-IDF unigrams and bigrams of the API sequence (<span class="mono">TfidfVectorizer(ngram_range=(1,2), max_features=3000)</span>).</p>
+<ol>
+  <li>TF-IDF n-grams are the standard published representation for this family, not a strawman.</li>
+  <li>The attack (behaviour-preserving renaming) is a real evasion technique.</li>
+  <li>The code also has a frequency-dilution attack (<span class="mono">prove_classical_model_attacks.py</span>) aimed at count-based features, so counts do not escape either.</li>
+  <li>Its real weakness is token identity: it collapses under rename (275 missed) and survives interleaving (4 missed).</li>
+</ol>
+<p><strong>"What else could it have used?"</strong> API call counts or frequency histograms; per-category counts (file, registry, network); behavioural totals (processes, files written, keys modified, endpoints contacted); timing statistics (mean gap, burst ratio); graph statistics (node counts per type, degrees). Static PE features were excluded by design (behavioural focus, §4.1.1).</p>
+<p class="say">Anything keyed to call names, counts included, falls to renaming or dilution, because the identity it counts is what the attack changes. The framework survives because it reads meaning, structure and timing together.</p>
+<p class="honest">None of those richer feature sets was tested; don't claim they would also fail, only that name- and count-keyed features are exposed to the attacks run.</p>
+</div>
+
+<!-- ===================================================== J -->
+<h2 class="pb">J · Formula reference</h2>
+<table>
+<tr><th style="width:13%">Eq.</th><th style="width:44%">Formula</th><th>What it does and why</th></tr>
+<tr><td>3.4</td><td class="mono">G = (V, E, T_V, T_E, φ_V, φ_E)</td><td>Typed graph: each node and edge has a type, so each relation gets its own weights.</td></tr>
+<tr><td>3.2–3.3</td><td class="mono">m_v = ⊕ ψ(h_u, h_v, e_uv);  h_v' = φ(h_v, m_v)</td><td>Message passing: neighbours send messages, combined order-independently, then the node updates.</td></tr>
+<tr><td>3.5</td><td class="mono">h_v' = φ_τ(h_v, ⊕_r AGG_r{ψ_r(…)})</td><td>One function per relation, summed at the node; here each AGG_r is the hybrid operator.</td></tr>
+<tr><td>3.7–3.9</td><td class="mono">e_ij = LeakyReLU(aᵀ[Wh_i ‖ Wh_j]);  α = softmax(e);  h_i' = σ(Σ α_ij W h_j)</td><td>GAT: learned weight per neighbour; edge timing added to the score in this model.</td></tr>
+<tr><td>3.10</td><td class="mono">h_i' = ‖_{h=1..6} σ(Σ α^(h) W^(h) h_j)</td><td>Six heads, concatenated: heads specialise, training steadier.</td></tr>
+<tr><td>3.12 + §4.4.2</td><td class="mono">h_v' = σ(W·[h_v ‖ mean_u m_uv]);  m_uv = h_u + W_e e_uv</td><td>Edge-aware GraphSAGE: inductive average; timing added to each message.</td></tr>
+<tr><td>4.1–4.2</td><td class="mono">g = σ(MLP[GAT ‖ SAGE ‖ 2|GAT − SAGE|]);  h = g⊙GAT + (1−g)⊙SAGE</td><td>Per node and feature mix of the two operators; starts 70 % SAGE.</td></tr>
+<tr><td>3.13</td><td class="mono">i,f,o = σ(Wx + Uh + b);  c_t = f⊙c_{t−1} + i⊙c̃;  h_t = o⊙tanh(c_t)</td><td>LSTM gates keep, write and show memory across long traces.</td></tr>
+<tr><td>3.14</td><td class="mono">h_t = [→h_t ‖ ←h_t] ∈ R^252</td><td>Bidirectional: the whole trace is available, so later context is fair to use.</td></tr>
+<tr><td>4.3</td><td class="mono">w = softmax(MLP[z_sem ‖ z_str ‖ z_tmp])</td><td>Per-sample branch weights; level 1 of RQ4.</td></tr>
+<tr><td>4.4</td><td class="mono">z = w_sem z_sem + w_str z_str + w_tmp z_tmp</td><td>Fusion; plain arithmetic.</td></tr>
+<tr><td>4.5</td><td class="mono">L_bal = 0.01·E[max(0, 0.75 − H(w)/log 3)]</td><td>Hinge: zero unless the gate nearly collapses.</td></tr>
+<tr><td>4.6</td><td class="mono">L_focal = −α_y (1 − p_y)² log p_y</td><td>Focus training on hard samples; α = (0.39, 0.39, 0.42).</td></tr>
+<tr><td>4.7</td><td class="mono">L = L_focal + L_bal</td><td>The single loss: one model, trained end to end.</td></tr>
+<tr><td>4.8</td><td class="mono">threat if argmax ∈ {ransomware, other malware}</td><td>Binary decision from three-class output; no tuned threshold.</td></tr>
+<tr><td>code (§5.8)</td><td class="mono">S_v = Σ_d |x_{v,d} · ∂ℓ_ŷ/∂x_{v,d}|</td><td>Gradient × input saliency per call; level 2 of RQ4.</td></tr>
+</table>
+<p class="small">Interactive version of the formula sheet: claude.ai/artifact/PSHWGSKFbt9Dg2cifvw49q</p>
+
+</body>
+</html>

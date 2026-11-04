@@ -41,6 +41,9 @@ from graph_construction.vocabulary import load_vocab  # noqa: E402
 from scripts.explain_rq4_behavioral_decisions import (  # noqa: E402
     load_model,
     explain_one_graph,
+    hetero_collate,
+    _extract_timestamps,
+    _extract_api_indices,
 )
 from pipeline_v2 import pipeline_config_v2 as pcfg  # noqa: E402
 from pipeline_v2.report_adapter_v2 import ReportAdapterV2  # noqa: E402
@@ -49,15 +52,16 @@ from pipeline_v2.enrich_graphs_v2 import GraphEnricherV2  # noqa: E402
 
 from webapp import attacks as attack_catalogue  # noqa: E402
 from webapp import webapp_config  # noqa: E402
+from webapp import api_meanings  # noqa: E402
 
-DEFAULT_CHECKPOINT = "best_model_1.pt" 
+DEFAULT_CHECKPOINT = "best_model_1.pt"
 
 class AnalysisError(Exception):
     """Raised when a report cannot be turned into a scored graph."""
 
 
 class Analyzer:
-    def __init__(self, checkpoint: str = DEFAULT_CHECKPOINT, top_k: int = 8, window: int = 5):
+    def __init__(self, checkpoint: str = DEFAULT_CHECKPOINT, top_k: int = 24, window: int = 5):
         self.top_k = top_k
         self.window = window
         self.device = torch.device(config.DEVICE)
@@ -81,6 +85,7 @@ class Analyzer:
         # a graph, so what is stored here is never scored directly; every score and
         # every attack works on a deep copy.
         self._graphs: "OrderedDict[str, Any]" = OrderedDict()
+
 
     # ------------------------------------------------------------------ #
     # entry points
@@ -135,7 +140,180 @@ class Analyzer:
             window=self.window,
             include_metadata_inventory=False,
         )
-        return self._compress(report, sample_id)
+        result = self._compress(report, sample_id)
+        # The caller's graph is still pristine here, so the explanation can read the exact
+        # inputs the branches consumed (call meanings, real time gaps, burst flags).
+        self._add_explanations(graph, report, result)
+        try:
+            self._add_gate_reasons(graph, result)
+        except Exception:  # noqa: BLE001 - the verdict must never fail because of this extra view
+            traceback.print_exc()
+        return result
+
+    # ------------------------------------------------------------------ #
+    # why the gate weighted each view as it did
+    # ------------------------------------------------------------------ #
+    def _add_gate_reasons(self, graph, result: Dict[str, Any], top: int = 4) -> None:
+        """Gradient x input of each GATE WEIGHT (not of the verdict) with respect to the node
+        features, kept signed: positive raised that view's weight, negative lowered it.
+        Summed per call name, so repeated calls count together. Same saliency procedure the
+        thesis uses (Section 5.8), aimed at the gate's output w = softmax(MLP[z_sem,z_str,z_tmp])."""
+        names = list(getattr(graph["api"], "api_names", []) or []) if "api" in graph.node_types else []
+        batch, _ = hetero_collate([(copy.deepcopy(graph), 1)], schema=self.schema, validate_batch=False)
+        if batch is None:
+            return
+        batch = batch.to(self.device)
+        x = {k: v.detach().clone().requires_grad_(True) for k, v in batch.x_dict.items()}
+        self.model.zero_grad(set_to_none=True)
+        self.model(
+            x_dict=x,
+            edge_index_dict=batch.edge_index_dict,
+            edge_attr_dict=batch.edge_attr_dict if hasattr(batch, "edge_attr_dict") else None,
+            batch_dict=batch.batch_dict if hasattr(batch, "batch_dict") else None,
+            timestamps_dict=_extract_timestamps(batch),
+            api_indices=_extract_api_indices(batch, self.vocab, self.device),
+            current_epoch=int(getattr(config, "EPOCHS", 0)),
+        )
+        weights = getattr(self.model, "_last_branch_weights", None)
+        if weights is None or not weights.requires_grad:
+            return
+        weights = weights[0]
+        keys = list(x.keys())
+        for bi, branch in enumerate(("semantic", "structural", "temporal")):
+            grads = torch.autograd.grad(weights[bi], [x[k] for k in keys], retain_graph=True, allow_unused=True)
+            per_call: Dict[str, float] = {}
+            counts: Dict[str, int] = {}
+            type_push: Dict[str, float] = {}
+            for k, g in zip(keys, grads):
+                if g is None:
+                    continue
+                contrib = (g * x[k].detach()).sum(dim=-1).cpu()
+                type_push[k] = float(contrib.abs().sum())
+                if k == "api":
+                    for i, v in enumerate(contrib.tolist()):
+                        n = names[i] if i < len(names) and names[i] else None
+                        if n:
+                            per_call[n] = per_call.get(n, 0.0) + v
+                            counts[n] = counts.get(n, 0) + 1
+            total = sum(abs(v) for v in per_call.values()) or 1.0
+
+            def entry(name, value):
+                gloss = api_meanings.describe(name)
+                return {"call": name, "count": counts[name], "share": _round(abs(value) / total, 3),
+                        "meaning": gloss["meaning"], "capability": gloss["capability"]}
+
+            ranked = sorted(per_call.items(), key=lambda kv: kv[1])
+            type_total = sum(type_push.values()) or 1.0
+            result["drivers"][branch]["gate_reasons"] = {
+                "raised_by": [entry(n, v) for n, v in reversed(ranked[-top:]) if v > 0],
+                "lowered_by": [entry(n, v) for n, v in ranked[:top] if v < 0],
+                "from_node_types": {k: _round(v / type_total, 2) for k, v in type_push.items() if v > 0},
+            }
+        self.model.zero_grad(set_to_none=True)
+
+
+    # ------------------------------------------------------------------ #
+    # readable explanations of what each branch read
+    # ------------------------------------------------------------------ #
+    def _add_explanations(self, graph, report: Dict[str, Any], result: Dict[str, Any]) -> None:
+        api = graph["api"] if "api" in graph.node_types else None
+        names = list(getattr(api, "api_names", []) or []) if api is not None else []
+        cats = list(getattr(api, "categories", []) or []) if api is not None else []
+
+        # salient API nodes, deduplicated by name, in saliency order
+        salient = []
+        seen = set()
+        for node in report.get("top_salient_api_nodes") or []:
+            info = node.get("salient_api") or {}
+            idx, name = info.get("node_index"), info.get("display_name")
+            if idx is None or name in seen:
+                continue
+            seen.add(name)
+            salient.append((int(idx), name, _round(node.get("saliency"))))
+
+        # --- semantic: what each decisive call does ---
+        sem = result["drivers"]["semantic"]
+        by_name = {name: idx for idx, name, _ in salient}
+        capabilities: Dict[str, float] = {}
+        for call in sem.get("top_calls", []):
+            idx = by_name.get(call["call"])
+            category = cats[idx] if idx is not None and idx < len(cats) else None
+            gloss = api_meanings.describe(call["call"], category)
+            call.update(gloss)
+            call["category"] = category
+            capabilities[gloss["capability"]] = capabilities.get(gloss["capability"], 0.0) + float(call.get("saliency") or 0)
+        sem["capabilities"] = [c for c, _ in sorted(capabilities.items(), key=lambda kv: -kv[1])]
+
+        # --- temporal: real gaps and bursts around each decisive call ---
+        tmp = result["drivers"]["temporal"]
+        et = ("api", "temporal", "api")
+        if et not in graph.edge_types or getattr(graph[et], "edge_attr", None) is None:
+            return
+        ei = graph[et].edge_index
+        ea = graph[et].edge_attr.float()
+        if ea.dim() != 2 or ea.shape[0] == 0 or ea.shape[1] < 10:
+            return
+        gaps = ea[:, 0].tolist()        # seconds since the previous call (same process)
+        bursts = ea[:, 2].tolist()      # 1 if that gap is under the burst threshold
+        positions = ea[:, 9].tolist()   # how far through the recorded trace (0..1)
+        incoming = {int(d): e for e, d in enumerate(ei[1].tolist())}
+        outgoing = {int(s): e for e, s in enumerate(ei[0].tolist())}
+        src = ei[0].tolist()
+        dst = ei[1].tolist()
+
+        def name_of(i):
+            return names[i] if i < len(names) and names[i] else f"api#{i}"
+
+        stories = []
+        for idx, name, sal in salient[:3]:
+            # walk up to 3 calls back and 3 forward along the call sequence
+            back, node = [], idx
+            while len(back) < 3 and node in incoming:
+                e = incoming[node]
+                back.append(e)
+                node = src[e]
+            ordered_back = list(reversed(back))
+            seq = []
+            for k, e in enumerate(ordered_back):
+                prev_gap = gaps[ordered_back[k - 1]] * 1000 if k > 0 else None
+                seq.append({"call": name_of(src[e]), "gap_ms": _round(prev_gap, 1)})
+            seq.append({"call": name, "gap_ms": _round(gaps[back[0]] * 1000, 1) if back else None, "focus": True})
+            node = idx
+            for _ in range(3):
+                if node not in outgoing:
+                    break
+                e = outgoing[node]
+                node = dst[e]
+                seq.append({"call": name_of(node), "gap_ms": _round(gaps[e] * 1000, 1)})
+
+            # the unbroken burst (gaps under the threshold) that contains this call
+            run_edges, node = [], idx
+            while node in incoming and bursts[incoming[node]] >= 0.5 and len(run_edges) < 5000:
+                run_edges.append(incoming[node])
+                node = src[incoming[node]]
+            node = idx
+            while node in outgoing and bursts[outgoing[node]] >= 0.5 and len(run_edges) < 10000:
+                run_edges.append(outgoing[node])
+                node = dst[outgoing[node]]
+            stories.append({
+                "focus": name,
+                "saliency": sal,
+                "sequence": seq,
+                "in_burst": bool(run_edges),
+                "burst_calls": len(run_edges) + 1 if run_edges else 1,
+                "burst_span_ms": _round(sum(gaps[e] for e in run_edges) * 1000, 1) if run_edges else 0.0,
+                "position": _round(positions[incoming[idx]] if idx in incoming else 0.0, 2),
+            })
+
+        ordered = sorted(gaps)
+        tmp["story"] = stories
+        tmp["trace"] = {
+            "transitions": len(gaps),
+            "burst_share": _round(sum(1 for b in bursts if b >= 0.5) / len(bursts), 3),
+            "median_gap_ms": _round(ordered[len(ordered) // 2] * 1000, 2),
+            "pauses_over_1s": sum(1 for g in gaps if g > 1.0),
+            "burst_threshold_ms": round(float(pcfg.BURST_DELTA_THRESHOLD) * 1000),
+        }
 
     # ------------------------------------------------------------------ #
     # live behaviour-preserving attacks
@@ -333,7 +511,7 @@ class Analyzer:
                 nodes[nid]["salient"] = True
             return nid
 
-        for node in (report.get("top_salient_api_nodes") or [])[:10]:
+        for node in (report.get("top_salient_api_nodes") or [])[:16]:
             api = node.get("salient_api") or {}
             add(api, salient=True, saliency=_round(node.get("saliency")))
 
@@ -390,7 +568,7 @@ class Analyzer:
             semantic_calls.append(
                 {"call": name, "saliency": _round(node.get("saliency")), "t": _round(node.get("timestamp"), 2)}
             )
-            if len(semantic_calls) >= self.top_k:
+            if len(semantic_calls) >= min(self.top_k, 6):  # distinct calls shown in the semantic box
                 break
 
         # --- temporal (api->api ordering) vs structural (other relations) ---
